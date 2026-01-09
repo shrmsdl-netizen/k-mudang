@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>K-MUDANG | Powerball & Mega Millions Fortune</title>
     <meta name="description" content="The Korean Shaman's Algorithm for Powerball & Mega Millions. Your personal destiny numbers based on birth energy.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shrmsdl-netizen.github.io/k-mudang/">
+    <meta property="og:title" content="K-MUDANG | 四柱八字 Lottery Oracle">
+    <meta property="og:description" content="Ancient Korean Saju wisdom meets modern lottery. Get your destiny numbers based on the Four Pillars of your birth.">
+    <meta property="og:image" content="https://shrmsdl-netizen.github.io/k-mudang/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://shrmsdl-netizen.github.io/k-mudang/">
+    <meta name="twitter:title" content="K-MUDANG | 四柱八字 Lottery Oracle">
+    <meta property="twitter:description" content="Ancient Korean Saju wisdom meets modern lottery. Get your destiny numbers based on the Four Pillars of your birth.">
+    <meta property="twitter:image" content="https://shrmsdl-netizen.github.io/k-mudang/og-image.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1374,7 +1390,7 @@ UklGRhRoAgBXRUJQVlA4WAoAAAAgAAAAXwQAzwcASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZ
                     a warm cup of tea keeps my spirit awake.
                 </p>
                 
-                <a href="https://buymeacoffee.com/shrmsdlh" target="_blank" class="btn-sanctuary">
+                <a href="https://www.buymeacoffee.com/YOUR_ID" target="_blank" class="btn-sanctuary">
                     🍵 Gift a Cup of Tea
                     <span class="btn-sanctuary-sub">Pure Heart Only</span>
                 </a>
@@ -1730,6 +1746,26 @@ UklGRhRoAgBXRUJQVlA4WAoAAAAgAAAAXwQAzwcASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZ
             const year = document.getElementById('birth-year').value;
             
             if (!month || !day || !year) {
+                return null;
+            }
+            
+            // Validate date
+            const m = parseInt(month);
+            const d = parseInt(day);
+            const y = parseInt(year);
+            
+            const testDate = new Date(y, m - 1, d);
+            if (testDate.getFullYear() !== y || 
+                testDate.getMonth() !== m - 1 || 
+                testDate.getDate() !== d) {
+                showToast("Invalid date! Please check your birth date.");
+                return null;
+            }
+            
+            // Check reasonable year range
+            const currentYear = new Date().getFullYear();
+            if (y < 1900 || y > currentYear) {
+                showToast("Please enter a valid birth year (1900-" + currentYear + ")");
                 return null;
             }
             
