@@ -3,21 +3,16 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.1                                                            ║
+║  K-MUDANG Pro v4.2                                                            ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
-║  v4.1 Changes (Gemini Feedback Round 9 - Combine & Follower):                 ║
-║    - FIXED: Branch Combine now considers Strong/Weak chart                    ║
-║      • 午未合火 for Weak Water = DANGER, not "foundation solidified"          ║
-║    - FIXED: Special Format detection includes Hidden Stems (지장간)           ║
-║    - Added: Fake Follower (가종격) probability warning                        ║
-║    - Added: Weak Chart + Wealth Structure = "Anxious Chaser" warning          ║
-║    - Added: AI Rules 63-66 for combine danger, fake follower, etc.            ║
-║    - NOTE: Life Cycle direction calculation is CORRECT (양남순행)             ║
-║                                                                                ║
-║  v4.0 Features (All preserved):                                               ║
-║    - Refactored calcYearLuck with 17 helper functions                         ║
-║    - 66 Advanced AI Rules for GPT/Gemini interpretation                       ║
+║  v4.2 Changes (Gemini Round 10 - 12 Stages Fix):                              ║
+║    - CRITICAL FIX: 12운성 계산 공식 완전 수정                                 ║
+║      • 丙戌 = 墓(Grave), NOT 長生(Birth)                                      ║
+║      • 양간 순행, 음간 역행 공식 수정                                         ║
+║    - Added: Day Pillar White Tiger (日柱白虎) detection                       ║
+║    - Added: AI Rules 67-70 (백호대살, 천간합 배신, 입묘일주)                  ║
+║    - Total: 70 AI Rules                                                       ║
 ║                                                                                ║
 ║  Last Updated: 2025-01                                                        ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
@@ -2399,12 +2394,19 @@ function getTenGod(stem, dayStem) {
 }
 
 function getTwelveState(dayStem, branch) {
+    // 🔥 12운성 계산 수정 - Gemini Round 10
+    // 각 일간의 장생 위치 (지지 인덱스)
+    // 甲:亥(11), 乙:午(6), 丙:寅(2), 丁:酉(9), 戊:寅(2), 己:酉(9), 庚:巳(5), 辛:子(0), 壬:申(8), 癸:卯(3)
     const starts = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];
     const dsi = STEM.indexOf(dayStem);
     const bi = BRANCH.indexOf(branch);
     const start = starts[dsi];
-    const dir = dayStem.y ? 1 : -1;
-    return TWELVE_STATES[(start + dir * bi + 120) % 12];
+    
+    // 양간(陽干): 순행, 음간(陰干): 역행
+    // 양간: (bi - start + 12) % 12
+    // 음간: (start - bi + 12) % 12
+    const idx = dayStem.y ? (bi - start + 12) % 12 : (start - bi + 12) % 12;
+    return TWELVE_STATES[idx];
 }
 
 /* ========================================
@@ -2490,6 +2492,9 @@ function analyzeBanghap(saju) {
     if (saju.day) branches.push(BRANCH.indexOf(saju.day.b));
     if (saju.hour) branches.push(BRANCH.indexOf(saju.hour.b));
     
+    // 🔥 월지 인덱스 (준 방합 판단용) - Gemini Round 10
+    const monthBranchIdx = saju.month ? BRANCH.indexOf(saju.month.b) : -1;
+    
     const results = [];
     
     for (const bh of BANGHAP) {
@@ -2509,18 +2514,23 @@ function analyzeBanghap(saju) {
                 desc: `${bh.dir} Complete! ${ELEMENT[bh.element].k} energy becomes very strong.`
             });
         } else if (count === 2) {
-            // 2 Directional Harmony (회국 가능성)
+            // 🔥 준 방합(Quasi Bureau) - 월지 포함 시 더 강력 - Gemini Round 10
             const missing = bh.branches.find((b, i) => !has[i]);
+            const hasMonthBranch = has[bh.branches.indexOf(monthBranchIdx)] || bh.branches.some((b, i) => has[i] && b === monthBranchIdx);
+            const isQuasi = bh.branches.filter((b, i) => has[i]).includes(monthBranchIdx);
+            
             results.push({
-                type: 'partial',
-                name: bh.name + ' Incomplete',
+                type: isQuasi ? 'quasi' : 'partial',
+                name: isQuasi ? bh.name + ' Quasi Bureau' : bh.name + ' Incomplete',
                 dir: bh.dir,
                 element: bh.element,
                 elementK: ELEMENT[bh.element].k,
                 branches: bh.branches.filter((b, i) => has[i]).map(b => BRANCH[b].c).join(''),
                 missing: BRANCH[missing].c,
-                power: 'Medium',
-                desc: `When ${BRANCH[missing].c} arrives, ${bh.dir} direction completes.`
+                power: isQuasi ? 'Strong' : 'Medium',
+                desc: isQuasi 
+                    ? `Quasi ${bh.dir}! Month Branch included = ${ELEMENT[bh.element].k} energy is DOMINANT even without third branch.`
+                    : `When ${BRANCH[missing].c} arrives, ${bh.dir} direction completes.`
             });
         }
     }
@@ -4051,9 +4061,26 @@ function ylCheckStemCombine(yp, saju, gods) {
             const tgt = ypSi === a ? b : a;
             if (allSi.includes(tgt)) {
                 const tgtStem = STEM[tgt], myGod = getTenGod(tgtStem, saju.day.s);
+                const ypGod = getTenGod(yp.s, saju.day.s);
                 let desc = `🔗 ${yp.s.c}+${tgtStem.c} COMBINE → ${ELEMENT[resEl].n}.`;
                 let score = 0;
-                if (yp.s.e === gods.yong && ['食神(Eating God)', '傷官(Expressor)'].includes(myGod.k)) {
+                
+                // 🔥 천간합 배신 시나리오 - Gemini Round 10
+                // 비겁(조력자)이 재성(돈)과 합하여 관성(압박)으로 변하면 배신
+                const isPeer = ['比肩(Peer)', '劫財(Competitor)'].includes(ypGod.k);
+                const isWealth = ['偏財(Indirect Wealth)', '正財(Direct Wealth)'].includes(myGod.k);
+                const resultIsGi = resEl === gods.gi;
+                const resultIsGwan = ['water', 'earth'].includes(resEl) && 
+                    ((saju.day.s.e === 'fire' && resEl === 'water') || 
+                     (saju.day.s.e === 'wood' && resEl === 'metal'));
+                
+                if (isPeer && isWealth && resultIsGi) {
+                    desc = `⚠️ ${yp.s.c}+${tgtStem.c} COMBINE → ${ELEMENT[resEl].n} (BETRAYAL): Your helper (${ypGod.k}) meets your wealth (${myGod.k}) and transforms into PRESSURE. Trust no one with money this year. Reject partnership offers.`;
+                    score = -2;
+                } else if (resultIsGi) {
+                    desc = `⚠️ ${yp.s.c}+${tgtStem.c} COMBINE → ${ELEMENT[resEl].n} (忌神): Combine creates unfavorable element. Hidden sabotage.`;
+                    score = -1;
+                } else if (yp.s.e === gods.yong && ['食神(Eating God)', '傷官(Expressor)'].includes(myGod.k)) {
                     desc = `🔗 ${yp.s.c}+${tgtStem.c} COMBINE (羈絆): Promotion comes but freedom decreases. Golden handcuffs.`;
                     score = 1;
                 }
@@ -4558,6 +4585,14 @@ function calcSinsal(saju) {
     // 18. 백호살 (白虎殺)
     const baihu = [6,7,8,9,10,11,0,1,2,3,4,5]; // By month
     if (mbi < 12 && brs.includes(baihu[mbi])) ss.push({n:'白虎(白虎(White Tiger)) (白虎殺)',t:'bad',d:'Accident alert! However, professions involving blood (medicine, culinary) transform this into blessing.',i:'🐯',lv:'Medium'});
+    
+    // 🔥 18-2. 일주 백호대살 (日柱白虎) - Gemini Round 10
+    // 甲辰, 乙巳, 丙戌, 丁丑, 戊辰, 己巳, 庚戌, 辛丑, 壬辰, 癸巳
+    const dayPillarStr = saju.day.s.c + saju.day.b.c;
+    const whiteTigerDays = ['甲辰', '乙巳', '丙戌', '丁丑', '戊辰', '己巳', '庚戌', '辛丑', '壬辰', '癸巳'];
+    if (whiteTigerDays.includes(dayPillarStr)) {
+        ss.push({n:'Day Pillar White Tiger (日柱白虎)',t:'bad',d:'White Tiger in your core pillar! Gentle normally, fierce when provoked. Blood-related events possible for self/spouse/children. Medical, religious, or healing professions transform this into blessing. For women: watch for difficult childbirth.',i:'🐅',lv:'High'});
+    }
     
     // 19. 겁살 (劫殺)
     const jiesha = {0:5,1:2,2:11,3:8,4:5,5:2,6:11,7:8,8:5,9:2,10:11,11:8};
@@ -7906,6 +7941,32 @@ Interpret the provided "Four Pillars of Destiny" chart data into a personalized 
     - Yang Year = Year Stem is 甲丙戊庚壬 (Yang stems).
     - If data shows Life Cycle that doesn't match this rule, flag as potential calculation error.
     - CRITICAL: Wrong Life Cycle direction = Wrong decade = Wrong life advice. Verify before interpreting.
+67. **DAY PILLAR WHITE TIGER (일주 백호대살):**
+    - Day Pillars: 甲辰, 乙巳, 丙戌, 丁丑, 戊辰, 己巳, 庚戌, 辛丑, 壬辰, 癸巳.
+    - If 'Day Pillar White Tiger' appears in Divine Stars, this is SIGNIFICANT.
+    - Personality: "Gentle and calm normally, but explosive when angered. Like a sleeping tiger."
+    - Warning: "Blood-related events possible for self, spouse, or children (surgery, accident, difficult childbirth)."
+    - Remedy: "Working in medical, religious, military, or healing professions TRANSFORMS this energy into blessing."
+    - For women: "Childbirth may be difficult. Caesarean section possible. Monitor pregnancy closely."
+68. **STEM COMBINE BETRAYAL (천간합 배신 - Helper turns Foe):**
+    - If Annual Stem combines with Monthly Stem to create an UNFAVORABLE element.
+    - Example: 丙(Fire helper for weak Fire DM) + 辛(Wealth) → 水(Water/Pressure). Helper becomes attacker.
+    - Metaphor: "A friend enters your house, falls in love with your money, and becomes your creditor."
+    - Warning: "Do NOT trust friends' investment advice. Business partners may betray. The helper is not what they seem."
+    - Advice: "Rely on branch roots (地支), not stem alliances (天干). Act alone."
+69. **GRAVE DAY PILLAR (입묘일주 - Self-Grave):**
+    - When Day Branch = Storage/Grave (墓) stage for Day Master.
+    - Example: 丙戌 (Fire DM in Fire's Grave), 壬辰 (Water DM in Water's Grave).
+    - Personality: "NOT active starter. Instead: philosophical, introspective, hoarding tendency."
+    - Override: Do NOT interpret as "energetic" or "new beginnings" even if other factors seem positive.
+    - Wealth: "Collects but rarely spends. May appear stingy. Assets hidden or locked away."
+    - Spouse: "Day Branch = Spouse Palace. Grave energy means 'controlled spouse' or 'late marriage'."
+    - Psychology: "Outwardly bright (especially 丙戌 Sun), but inner melancholy exists. Religious/spiritual inclination."
+70. **TWELVE STAGES OVERRIDE (12운성 재검증):**
+    - If Day Branch shows "Birth(長生)" but Day Master actually sits in Grave position, data is WRONG.
+    - Quick check for Fire DM: 寅=Birth, 午=Peak, 戌=Grave. If 戌 shows "Birth", calculation error.
+    - Quick check for Water DM: 申=Birth, 子=Peak, 辰=Grave. If 辰 shows "Birth", calculation error.
+    - ALWAYS verify 12 Stages against classical tables before interpreting.
 `;
 
         navigator.clipboard.writeText(text).then(() => {
