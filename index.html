@@ -3,16 +3,20 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.2                                                            ║
+║  K-MUDANG Pro v4.3                                                            ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
+║  v4.3 Changes (Lookup Table Verification System):                             ║
+║    - CRITICAL: 12운성 룩업 테이블 방식으로 전환 (계산 오류 원천 차단)         ║
+║      • 기존: dayStem.y 버그로 인해 항상 역행 공식 적용됨                       ║
+║      • 수정: 검증된 120개 값 룩업 테이블 사용 (43개 테스트 전부 통과)         ║
+║    - 검증 시스템 구축: saju-comprehensive-test.js                             ║
+║    - 정통 기준: 연해자평(淵海子平) 화토동법(火土同法)                          ║
+║    - Total: 70 AI Rules                                                       ║
+║                                                                                ║
 ║  v4.2 Changes (Gemini Round 10 - 12 Stages Fix):                              ║
-║    - CRITICAL FIX: 12운성 계산 공식 완전 수정                                 ║
-║      • 丙戌 = 墓(Grave), NOT 長生(Birth)                                      ║
-║      • 양간 순행, 음간 역행 공식 수정                                         ║
 ║    - Added: Day Pillar White Tiger (日柱白虎) detection                       ║
 ║    - Added: AI Rules 67-70 (백호대살, 천간합 배신, 입묘일주)                  ║
-║    - Total: 70 AI Rules                                                       ║
 ║                                                                                ║
 ║  Last Updated: 2025-01                                                        ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
@@ -32,17 +36,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-<script>
-(function(){
-    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && /^[IJCijc]$/.test(e.key)) || (e.ctrlKey && /^[USus]$/.test(e.key))) { e.preventDefault(); }
-    });
-    document.addEventListener('selectstart', function(e) { if (!/INPUT|TEXTAREA/.test(e.target.tagName)) e.preventDefault(); });
-    document.addEventListener('dragstart', function(e) { e.preventDefault(); });
-    document.addEventListener('copy', function(e) { e.preventDefault(); });
-})();
-</script>
 
 <style>
 /* ========================================
@@ -2394,18 +2387,27 @@ function getTenGod(stem, dayStem) {
 }
 
 function getTwelveState(dayStem, branch) {
-    // 🔥 12운성 계산 수정 - Gemini Round 10
-    // 각 일간의 장생 위치 (지지 인덱스)
-    // 甲:亥(11), 乙:午(6), 丙:寅(2), 丁:酉(9), 戊:寅(2), 己:酉(9), 庚:巳(5), 辛:子(0), 壬:申(8), 癸:卯(3)
-    const starts = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];
-    const dsi = STEM.indexOf(dayStem);
-    const bi = BRANCH.indexOf(branch);
-    const start = starts[dsi];
+    // ✅ v4.3: 검증된 룩업 테이블 방식 (계산 오류 원천 차단)
+    // 연해자평(淵海子平) 화토동법(火土同法) 기준
+    // 테스트: 43개 케이스 전부 통과
+    const TWELVE_STATES_TABLE = {
+        "甲": {"子":1,"丑":2,"寅":3,"卯":4,"辰":5,"巳":6,"午":7,"未":8,"申":9,"酉":10,"戌":11,"亥":0},
+        "乙": {"子":6,"丑":5,"寅":4,"卯":3,"辰":2,"巳":1,"午":0,"未":11,"申":10,"酉":9,"戌":8,"亥":7},
+        "丙": {"子":10,"丑":11,"寅":0,"卯":1,"辰":2,"巳":3,"午":4,"未":5,"申":6,"酉":7,"戌":8,"亥":9},
+        "丁": {"子":9,"丑":8,"寅":7,"卯":6,"辰":5,"巳":4,"午":3,"未":2,"申":1,"酉":0,"戌":11,"亥":10},
+        "戊": {"子":10,"丑":11,"寅":0,"卯":1,"辰":2,"巳":3,"午":4,"未":5,"申":6,"酉":7,"戌":8,"亥":9},
+        "己": {"子":9,"丑":8,"寅":7,"卯":6,"辰":5,"巳":4,"午":3,"未":2,"申":1,"酉":0,"戌":11,"亥":10},
+        "庚": {"子":7,"丑":8,"寅":9,"卯":10,"辰":11,"巳":0,"午":1,"未":2,"申":3,"酉":4,"戌":5,"亥":6},
+        "辛": {"子":0,"丑":11,"寅":10,"卯":9,"辰":8,"巳":7,"午":6,"未":5,"申":4,"酉":3,"戌":2,"亥":1},
+        "壬": {"子":4,"丑":5,"寅":6,"卯":7,"辰":8,"巳":9,"午":10,"未":11,"申":0,"酉":1,"戌":2,"亥":3},
+        "癸": {"子":3,"丑":2,"寅":1,"卯":0,"辰":11,"巳":10,"午":9,"未":8,"申":7,"酉":6,"戌":5,"亥":4}
+    };
     
-    // 양간(陽干): 순행, 음간(陰干): 역행
-    // 양간: (bi - start + 12) % 12
-    // 음간: (start - bi + 12) % 12
-    const idx = dayStem.y ? (bi - start + 12) % 12 : (start - bi + 12) % 12;
+    // 천간/지지 문자 추출 (객체인 경우 .c 속성 사용)
+    const stemChar = typeof dayStem === 'object' ? dayStem.c : dayStem;
+    const branchChar = typeof branch === 'object' ? branch.c : branch;
+    
+    const idx = TWELVE_STATES_TABLE[stemChar][branchChar];
     return TWELVE_STATES[idx];
 }
 
@@ -8348,6 +8350,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+</script>
+<script>
+// Security: Disable F12, right-click, copy
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key.toUpperCase()))||(e.ctrlKey&&['U','S'].includes(e.key.toUpperCase()))){e.preventDefault();return false;}
+});
+document.addEventListener('selectstart',e=>{if(!['INPUT','TEXTAREA'].includes(e.target.tagName))e.preventDefault();});
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('copy',e=>e.preventDefault());
 </script>
 </body>
 </html>
