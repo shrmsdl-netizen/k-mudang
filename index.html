@@ -1390,70 +1390,155 @@ footer a {
         </div>
 
         <div id="saju-result" style="display:none;">
-            <!-- Four Pillars Chart -->
+            <!-- Four Pillars Chart - FREE -->
             <div class="card">
                 <h3>📜 Four Pillars (Four Pillars Chart)</h3>
                 <div class="pillars" id="pillars"></div>
+                <!-- 12운성/강약은 Premium으로 이동 -->
+            </div>
+
+            <!-- Premium Upsell for Full Analysis -->
+            <div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,193,7,0.03));border:1px solid rgba(212,175,55,0.2);">
+                <p style="font-size:1.2rem;margin-bottom:10px;">🔮 Unlock Full Destiny Analysis</p>
+                <p style="font-size:0.85rem;color:var(--gray);margin-bottom:15px;">
+                    70+ Advanced interpretations · Life Cycles · Divine Stars · Monthly Fortune
+                </p>
+                <button class="premium-unlock-btn" onclick="openPremiumCheckout()">🙏 Offer 福債 · Unlock Premium</button>
+            </div>
+
+            <!-- Strength & 12 States - PREMIUM -->
+            <div class="card premium-section" id="card-strength">
+                <h3>💪 Day Master Strength <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="twelve-states"></div>
                 <div class="strength-box" id="strength-box"></div>
             </div>
 
-            <!-- 納音(Sound Element)/命宮(Life Palace)/Conception -->
-            <div class="card">
-                <h3>🎵 納音(Sound Element) & 命宮(Life Palace)</h3>
+            <!-- 納音(Sound Element)/命宮(Life Palace)/Conception - PREMIUM -->
+            <div class="card premium-section" id="card-napeum">
+                <h3>🎵 納音 & 命宮 <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="napeum-myunggung"></div>
             </div>
 
-            <!-- Hidden Stems Analysis -->
-            <div class="card">
-                <h3>🌿 支藏干 Hidden Stems</h3>
+            <!-- Hidden Stems Analysis - PREMIUM -->
+            <div class="card premium-section" id="card-jijanggan">
+                <h3>🌿 支藏干 Hidden Stems <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="jijanggan-analysis"></div>
             </div>
 
-            <!-- Root & Stem Analysis -->
-            <div class="card">
-                <h3>🌳 通根透干 Root & Stem</h3>
+            <!-- Root & Stem Analysis - PREMIUM -->
+            <div class="card premium-section" id="card-tonggeun">
+                <h3>🌳 通根透干 Root & Stem <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="tonggeun-analysis"></div>
             </div>
 
-            <!-- Five Elements (五行) -->
-            <div class="card">
-                <h3>🌟 Five Elements (五行)</h3>
+            <!-- Five Elements (五行) - PREMIUM -->
+            <div class="card premium-section" id="card-elements">
+                <h3>🌟 Five Elements (五行) <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div class="element-bar" id="element-bar"></div>
                 <div class="element-legend" id="element-legend"></div>
                 <div id="element-analysis"></div>
             </div>
 
-            <!-- Beneficial Elements (用神) -->
-            <div class="card gold">
-                <h3>⚖️ Beneficial Elements (用神) </h3>
+            <!-- Beneficial Elements (用神) - PREMIUM -->
+            <div class="card gold premium-section" id="card-gods">
+                <h3>⚖️ Beneficial Elements (用神) <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="gods" class="gods-grid"></div>
                 <div id="gods-detail"></div>
                 <div id="gods-analysis"></div>
             </div>
 
-            <!-- Six Relations (六親) Analysis -->
-            <div class="card">
-                <h3>👨‍👩‍👧‍👦 Six Relations (六親) </h3>
+            <!-- Six Relations (六親) Analysis - PREMIUM -->
+            <div class="card premium-section" id="card-yukcheon">
+                <h3>👨‍👩‍👧‍👦 Six Relations (六親) <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="yukcheon-analysis"></div>
             </div>
 
-            <!-- Structure -->
-            <div class="card">
-                <h3>🏛️ 格局 Structure</h3>
+            <!-- Structure - PREMIUM -->
+            <div class="card premium-section" id="card-format">
+                <h3>🏛️ 格局 Structure <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="format"></div>
                 <div id="format-analysis"></div>
             </div>
 
-            <!-- Day Pillar Analysis -->
-            <div class="card">
-                <h3>📅 日柱 Day Pillar Analysis</h3>
+            <!-- Day Pillar Analysis - PREMIUM -->
+            <div class="card premium-section" id="card-ilju">
+                <h3>📅 日柱 Day Pillar Analysis <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="ilju"></div>
             </div>
 
-            <!-- Position & Life Stages -->
-            <div class="card">
-                <h3>🏠 Palace & Twelve States</h3>
+            <!-- Position & Life Stages - PREMIUM -->
+            <div class="card premium-section" id="card-gungwi">
+                <h3>🏠 Palace & Twelve States <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="gungwi-analysis"></div>
                 <div id="twelve-states-full"></div>
             </div>
@@ -1499,38 +1584,73 @@ footer a {
                 <div id="monthly-luck"></div>
             </div>
 
-            <!-- Harmony/Clash Analysis -->
-            <div class="card">
-                <h3>🔗 Harmony & Clash </h3>
+            <!-- Harmony/Clash Analysis - PREMIUM -->
+            <div class="card premium-section" id="card-interactions">
+                <h3>🔗 Harmony & Clash <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="interactions"></div>
                 <div id="banghap-amhap"></div>
                 <div id="advanced-interactions"></div>
             </div>
 
-            <!-- 공망 -->
-            <div class="card">
-                <h3>⭕ Empty Void (空亡) </h3>
+            <!-- 공망 - PREMIUM -->
+            <div class="card premium-section" id="card-gongmang">
+                <h3>⭕ Empty Void (空亡) <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="gongmang"></div>
                 <div id="gongmang-haeso"></div>
             </div>
 
-            <!-- 신살 -->
-            <div class="card">
-                <h3>✨ Divine Stars (神殺) </h3>
+            <!-- 신살 - PREMIUM -->
+            <div class="card premium-section" id="card-sinsal">
+                <h3>✨ Divine Stars (神殺) <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="sinsal"></div>
                 <div id="sinsal-position"></div>
                 <div class="sinsal-grid" id="sinsal-grid"></div>
             </div>
 
-            <!-- Today's Fortune -->
-            <div class="card gold">
-                <h3>🌅 Today's Fortune</h3>
+            <!-- Today's Fortune - PREMIUM -->
+            <div class="card gold premium-section" id="card-today">
+                <h3>🌅 Today's Fortune <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="today-fortune"></div>
             </div>
 
-            <!-- AI Comprehensive Interpretation -->
-            <div class="card gold">
-                <h3>🤖 AI Interpretation</h3>
+            <!-- AI Comprehensive Interpretation - PREMIUM -->
+            <div class="card gold premium-section" id="card-ai">
+                <h3>🤖 AI Interpretation <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="ai-interpretation"></div>
                 <div style="margin-top:25px;text-align:center;padding:20px;background:linear-gradient(135deg,rgba(103,58,183,0.1),rgba(156,39,176,0.05));border-radius:12px;">
                     <p style="font-size:0.95rem;color:var(--gold);margin-bottom:8px;font-weight:bold;">
@@ -1549,9 +1669,16 @@ footer a {
                 </div>
             </div>
 
-            <!-- 종합 해석 -->
-            <div class="card gold">
-                <h3>📖 Summary Analysis</h3>
+            <!-- 종합 해석 - PREMIUM -->
+            <div class="card gold premium-section" id="card-summary">
+                <h3>📖 Summary Analysis <span class="premium-tag">👑 Premium</span></h3>
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🙏 福債 (Karma Offering)</p>
+                        <p class="premium-price">$10 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                    </div>
+                </div>
                 <div id="summary-analysis"></div>
             </div>
 
@@ -1661,8 +1788,13 @@ footer a {
                 <div class="form-group"><label>Day</label><select id="pb-day"></select></div>
                 <div class="form-group"><label>Year</label><select id="pb-year"></select></div>
             </div>
-            <button class="btn" onclick="generatePowerball('destiny')">🔮 Destiny Numbers</button>
-            <button class="btn btn-secondary" style="margin-top:10px;" onclick="generatePowerball('quick')">🎲 Quick Pick</button>
+            <button class="btn btn-secondary" onclick="generatePowerball('quick')">🎲 Quick Pick (Random)</button>
+            <div style="margin-top:15px;padding:12px;background:rgba(255,215,0,0.05);border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
+                <p style="font-size:0.8rem;color:var(--gold);margin-bottom:8px;">🔮 Want destiny-based numbers?</p>
+                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:8px 16px;font-size:12px;">
+                    👑 Unlock Destiny Numbers
+                </button>
+            </div>
         </div>
 
         <div class="card" id="pb-result" style="display:none;">
@@ -1714,8 +1846,13 @@ footer a {
                 <div class="form-group"><label>Day</label><select id="mega-day"></select></div>
                 <div class="form-group"><label>Year</label><select id="mega-year"></select></div>
             </div>
-            <button class="btn" onclick="generateMega('destiny')">🔮 Destiny Numbers</button>
-            <button class="btn btn-secondary" style="margin-top:10px;" onclick="generateMega('quick')">🎲 Quick Pick</button>
+            <button class="btn btn-secondary" onclick="generateMega('quick')">🎲 Quick Pick (Random)</button>
+            <div style="margin-top:15px;padding:12px;background:rgba(255,215,0,0.05);border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
+                <p style="font-size:0.8rem;color:var(--gold);margin-bottom:8px;">🔮 Want destiny-based numbers?</p>
+                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:8px 16px;font-size:12px;">
+                    👑 Unlock Destiny Numbers
+                </button>
+            </div>
         </div>
 
         <div class="card" id="mega-result" style="display:none;">
@@ -8656,6 +8793,13 @@ function getYongsinElement(saju) {
 }
 
 function generatePowerball(type) {
+    // Premium check for destiny-based numbers
+    if (type === 'destiny' && !isPremium) {
+        toast('👑 Destiny Numbers require Premium. Please offer 福債.');
+        openPremiumCheckout();
+        return;
+    }
+    
     const y = +document.getElementById('pb-year').value;
     const m = +document.getElementById('pb-month').value;
     const d = +document.getElementById('pb-day').value;
@@ -8778,6 +8922,13 @@ function renderPbHistory() {
 }
 
 function generateMega(type) {
+    // Premium check for destiny-based numbers
+    if (type === 'destiny' && !isPremium) {
+        toast('👑 Destiny Numbers require Premium. Please offer 福債.');
+        openPremiumCheckout();
+        return;
+    }
+    
     const y = +document.getElementById('mega-year').value;
     const m = +document.getElementById('mega-month').value;
     const d = +document.getElementById('mega-day').value;
