@@ -50,7 +50,7 @@ function toast(msg) {
     if (t) {
         t.textContent = msg;
         t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 3000);
+        setTimeout(() => t.classList.remove('show'), 10000);
     } else {
         console.log('Toast:', msg);
         alert(msg); // Fallback if toast element not ready
@@ -252,8 +252,11 @@ async function googleSignIn() {
             toast('🚫 Popup blocked. Please allow popups for this site.');
         } else if (e.code === 'auth/cancelled-popup-request') {
             toast('Login cancelled.');
+        } else if (e.code === 'auth/unauthorized-domain') {
+            toast('❌ Domain not authorized! Add domain in Firebase Console.');
         } else {
-            toast('❌ Login failed: ' + (e.message || 'Unknown error'));
+            // 에러 코드와 메시지 둘 다 표시
+            toast('❌ Login failed [' + (e.code || 'NO_CODE') + ']: ' + (e.message || 'Unknown error'));
         }
     }
 }
@@ -2925,7 +2928,7 @@ function calcDayPillar(y, m, d) {
     const adjY = y + 4800 - a;
     const adjM = m + 12 * a - 3;
     const jdn = d + Math.floor((153 * adjM + 2) / 5) + 365 * adjY + Math.floor(adjY / 4) - Math.floor(adjY / 100) + Math.floor(adjY / 400) - 32045;
-    const baseJdn = 2415021;
+    const baseJdn = 2415011; // Fixed: 1900-01-01 = 甲戌
     const diff = jdn - baseJdn;
     return { s: STEM[((diff % 10) + 10) % 10], b: BRANCH[((diff % 12) + 12) % 12] };
 }
