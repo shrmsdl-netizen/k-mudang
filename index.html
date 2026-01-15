@@ -3,21 +3,19 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.3                                                            ║
+║  K-MUDANG Pro v4.6                                                            ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
-║  v4.3 Changes (Lookup Table Verification System):                             ║
-║    - CRITICAL: 12운성 룩업 테이블 방식으로 전환 (계산 오류 원천 차단)         ║
-║      • 기존: dayStem.y 버그로 인해 항상 역행 공식 적용됨                       ║
-║      • 수정: 검증된 120개 값 룩업 테이블 사용 (43개 테스트 전부 통과)         ║
-║    - 검증 시스템 구축: saju-comprehensive-test.js                             ║
-║    - 정통 기준: 연해자평(淵海子平) 화토동법(火土同法)                          ║
+║  v4.6 Changes:                                                                ║
+║    - CRITICAL FIX: 금수상관격(金水傷官格) 조후용신 우선 적용                   ║
+║      • Winter Metal (庚/辛) + Water excess = Fire is BENEFICIAL, not harmful  ║
+║      • "金水傷官喜見官" - Classical theory now properly implemented           ║
+║    - Firebase SDK initialization safety (DOMContentLoaded)                    ║
+║    - Paddle initialization safety checks                                      ║
 ║    - Total: 70 AI Rules                                                       ║
 ║                                                                                ║
-║  v4.2 Changes (Gemini Round 10 - 12 Stages Fix):                              ║
-║    - Added: Day Pillar White Tiger (日柱白虎) detection                       ║
-║    - Added: AI Rules 67-70 (백호대살, 천간합 배신, 입묘일주)                  ║
-║                                                                                ║
+║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
+║  Contact: kmudang.official@gmail.com                                          ║
 ║  Last Updated: 2025-01                                                        ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 -->
@@ -36,6 +34,269 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<!-- Paddle.js -->
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+
+<script>
+/* ========================================
+   Firebase & Paddle Configuration
+   ======================================== */
+const firebaseConfig = {
+    apiKey: "AIzaSyBG8P5KYAo3vTcJBm0rNsAmTgRm8Nt3Rgw",
+    authDomain: "k-mudang-pro.firebaseapp.com",
+    projectId: "k-mudang-pro",
+    storageBucket: "k-mudang-pro.firebasestorage.app",
+    messagingSenderId: "287683280564",
+    appId: "1:287683280564:web:6168a13d4f1302f0fe21e1",
+    measurementId: "G-044J002H6P"
+};
+
+const PADDLE_PRICE_ID = 'pri_01kf06tck44xzkavtqz38gkmk2';
+const PREMIUM_DURATION_HOURS = 24;
+
+/* ========================================
+   Premium State Management
+   ======================================== */
+let auth = null;
+let db = null;
+let currentUser = null;
+let isPremium = false;
+let premiumExpiry = null;
+let firebaseReady = false;
+let paddleReady = false;
+
+// Initialize Firebase when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Firebase
+    try {
+        if (typeof firebase !== 'undefined') {
+            firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.firestore();
+            firebaseReady = true;
+            console.log('Firebase initialized successfully');
+            
+            // Auth state listener
+            auth.onAuthStateChanged(async (user) => {
+                currentUser = user;
+                if (user) {
+                    await checkPremiumStatus(user.uid);
+                    // Create/update user document
+                    db.collection('users').doc(user.uid).set({
+                        email: user.email,
+                        displayName: user.displayName,
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                } else {
+                    isPremium = false;
+                    premiumExpiry = null;
+                }
+                updateAuthUI();
+            });
+        } else {
+            console.warn('Firebase SDK not loaded');
+        }
+    } catch (e) {
+        console.error('Firebase init error:', e);
+    }
+    
+    // Initialize Paddle
+    try {
+        if (typeof Paddle !== 'undefined') {
+            Paddle.Initialize({ 
+                token: 'live_8cdfa23600d1d845a7ede32e1be'
+            });
+            paddleReady = true;
+            console.log('Paddle initialized successfully');
+            
+            // Listen for Paddle events
+            if (Paddle.Checkout) {
+                Paddle.Checkout.on('completed', (data) => {
+                    if (currentUser) {
+                        activatePremium(currentUser.uid);
+                    }
+                });
+            }
+        } else {
+            console.warn('Paddle SDK not loaded');
+        }
+    } catch (e) {
+        console.error('Paddle init error:', e);
+    }
+});
+
+// Check premium status from Firestore
+async function checkPremiumStatus(uid) {
+    if (!db) return false;
+    try {
+        const doc = await db.collection('users').doc(uid).get();
+        if (doc.exists) {
+            const data = doc.data();
+            if (data.premiumExpiry) {
+                const expiry = data.premiumExpiry.toDate();
+                if (expiry > new Date()) {
+                    isPremium = true;
+                    premiumExpiry = expiry;
+                    return true;
+                }
+            }
+        }
+        isPremium = false;
+        premiumExpiry = null;
+        return false;
+    } catch (e) {
+        console.error('Premium check error:', e);
+        return false;
+    }
+}
+
+// Update UI based on auth/premium state
+function updateAuthUI() {
+    const authBar = document.getElementById('auth-bar');
+    const loginBtn = document.getElementById('login-btn');
+    const userInfo = document.getElementById('user-info');
+    const userName = document.getElementById('user-name');
+    const premiumBadge = document.getElementById('premium-badge');
+    const premiumBtns = document.querySelectorAll('.premium-unlock-btn');
+    const premiumLocks = document.querySelectorAll('.premium-lock');
+    
+    if (currentUser) {
+        loginBtn.style.display = 'none';
+        userInfo.style.display = 'flex';
+        userName.textContent = currentUser.displayName || currentUser.email;
+        
+        if (isPremium) {
+            premiumBadge.style.display = 'inline-block';
+            premiumBadge.textContent = '👑 Premium';
+            premiumBtns.forEach(btn => btn.style.display = 'none');
+            premiumLocks.forEach(lock => lock.style.display = 'none');
+        } else {
+            premiumBadge.style.display = 'none';
+            premiumBtns.forEach(btn => btn.style.display = 'inline-block');
+            premiumLocks.forEach(lock => lock.style.display = 'flex');
+        }
+    } else {
+        loginBtn.style.display = 'inline-flex';
+        userInfo.style.display = 'none';
+        premiumBadge.style.display = 'none';
+        premiumBtns.forEach(btn => btn.style.display = 'none');
+        premiumLocks.forEach(lock => {
+            lock.style.display = 'flex';
+            lock.innerHTML = '<span style="color:var(--gold);">🔒 Login required</span>';
+        });
+    }
+}
+
+// Google Sign In
+async function googleSignIn() {
+    if (!firebaseReady || !auth) {
+        toast('Login service is loading. Please try again.');
+        return;
+    }
+    try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        const result = await auth.signInWithPopup(provider);
+        toast('Welcome, ' + result.user.displayName + '!');
+    } catch (e) {
+        console.error('Login error:', e);
+        toast('Login failed. Please try again.');
+    }
+}
+
+// Sign Out
+async function signOut() {
+    if (!auth) return;
+    try {
+        await auth.signOut();
+        toast('Signed out successfully');
+    } catch (e) {
+        console.error('Logout error:', e);
+    }
+}
+
+// Paddle Checkout
+function openPremiumCheckout() {
+    if (!currentUser) {
+        toast('Please login first to purchase premium');
+        googleSignIn();
+        return;
+    }
+    
+    if (!paddleReady) {
+        toast('Payment service is loading. Please try again.');
+        return;
+    }
+    
+    Paddle.Checkout.open({
+        items: [{ priceId: PADDLE_PRICE_ID, quantity: 1 }],
+        customer: { email: currentUser.email },
+        customData: { 
+            uid: currentUser.uid,
+            purchaseTime: new Date().toISOString()
+        },
+        settings: {
+            displayMode: 'overlay',
+            theme: 'dark',
+            locale: 'en'
+        }
+    });
+}
+
+// Handle successful payment (called by webhook or client-side)
+async function activatePremium(uid) {
+    if (!db) return;
+    const expiry = new Date();
+    expiry.setHours(expiry.getHours() + PREMIUM_DURATION_HOURS);
+    
+    try {
+        await db.collection('users').doc(uid).set({
+            premiumExpiry: firebase.firestore.Timestamp.fromDate(expiry),
+            lastPurchase: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        
+        isPremium = true;
+        premiumExpiry = expiry;
+        updateAuthUI();
+        toast('🎉 Premium activated for 24 hours!');
+    } catch (e) {
+        console.error('Premium activation error:', e);
+    }
+}
+
+/* ========================================
+   Premium Feature Gating
+   ======================================== */
+function requirePremium(feature) {
+    if (!currentUser) {
+        toast('🔒 Please login to access ' + feature);
+        return false;
+    }
+    if (!isPremium) {
+        toast('👑 Premium required for ' + feature);
+        return false;
+    }
+    return true;
+}
+
+</script>
+
+<script>
+(function(){
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && /^[IJCijc]$/.test(e.key)) || (e.ctrlKey && /^[USus]$/.test(e.key))) { e.preventDefault(); }
+    });
+    document.addEventListener('selectstart', function(e) { if (!/INPUT|TEXTAREA/.test(e.target.tagName)) e.preventDefault(); });
+    document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    document.addEventListener('copy', function(e) { e.preventDefault(); });
+})();
+</script>
 
 <style>
 /* ========================================
@@ -483,6 +744,143 @@ header h1 {
 }
 
 /* ========================================
+   Auth Bar & Premium UI
+   ======================================== */
+.auth-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(26,35,50,0.8) 100%);
+    border-bottom: 1px solid rgba(212,175,55,0.2);
+}
+
+.login-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #fff;
+    border: none;
+    border-radius: 20px;
+    color: #333;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.login-btn img {
+    width: 18px;
+    height: 18px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-name {
+    color: var(--pearl);
+    font-size: 13px;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.premium-badge {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #000;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    animation: kofiPulse 2s infinite;
+}
+
+.logout-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--gray);
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.logout-btn:hover {
+    background: rgba(255,255,255,0.2);
+    color: var(--pearl);
+}
+
+.premium-unlock-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+    background-size: 200% 200%;
+    animation: shimmer 3s ease infinite;
+    border: none;
+    border-radius: 25px;
+    color: #000;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(255,215,0,0.4);
+}
+
+.premium-unlock-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 6px 30px rgba(255,215,0,0.6);
+}
+
+.premium-lock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(26,35,50,0.6) 100%);
+    border: 1px dashed rgba(212,175,55,0.3);
+    border-radius: 12px;
+    text-align: center;
+    min-height: 150px;
+}
+
+.premium-lock p {
+    color: var(--gold);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.premium-lock .price {
+    color: var(--gold-light);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.premium-lock .duration {
+    color: var(--gray);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
+
+/* ========================================
    Lottery Balls
    ======================================== */
 .balls-container {
@@ -852,6 +1250,19 @@ footer a {
     <button class="game-btn" onclick="switchGame('mega')"><span class="tab-main">🔵 Mega Millions</span></button>
 </div>
 
+<!-- Auth Bar -->
+<div class="auth-bar" id="auth-bar">
+    <button class="login-btn" id="login-btn" onclick="googleSignIn()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Sign in with Google
+    </button>
+    <div class="user-info" id="user-info" style="display:none;">
+        <span class="user-name" id="user-name"></span>
+        <span class="premium-badge" id="premium-badge" style="display:none;">👑 Premium</span>
+        <button class="logout-btn" onclick="signOut()">Logout</button>
+    </div>
+</div>
+
 <div class="container">
 
     <!-- ========================================
@@ -1066,23 +1477,20 @@ footer a {
                 </div>
             </div>
 
-            <!-- ===== Karma Offering (복채) ===== -->
-            <div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,193,7,0.03));border:1px solid rgba(212,175,55,0.2);">
-                <p style="font-size:1.2rem;margin-bottom:8px;">🙏 Karma Offering (福債)</p>
-                <p style="font-size:0.9rem;color:var(--gray);line-height:1.6;margin-bottom:5px;">
-                    Having received wisdom, an offering honors tradition.
+            <!-- ===== Premium Unlock ===== -->
+            <div class="card" id="premium-section" style="text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,193,7,0.03));border:1px solid rgba(212,175,55,0.2);">
+                <p style="font-size:1.3rem;margin-bottom:8px;">👑 Unlock Premium Features</p>
+                <p style="font-size:0.9rem;color:var(--gray);line-height:1.6;margin-bottom:15px;">
+                    Get full access to AI interpretation copy, Life Cycles (大運),<br>
+                    10-Year Fortune & Lottery Numbers
                 </p>
-                <p style="font-size:0.85rem;color:var(--gold);margin-bottom:20px;">
-                    Shared blessings return doubled.
-                </p>
-                <a href="https://ko-fi.com/kmudang" target="_blank" class="kofi-btn" style="display:inline-block;">
-                    ☕ Offer Karma (Boost Luck)
-                </a>
+                <p class="price" style="font-size:1.8rem;color:var(--gold);font-weight:700;margin-bottom:5px;">$5</p>
+                <p class="duration" style="font-size:0.85rem;color:var(--gray);margin-bottom:20px;">24-hour full access</p>
+                <button class="premium-unlock-btn" onclick="openPremiumCheckout()">
+                    ⚡ Unlock Premium Now
+                </button>
                 <p style="font-size:0.75rem;color:var(--gray);margin-top:15px;opacity:0.7;">
-                    🔒 Ad-free zone. Only pure energy (Ki/氣) flows here
-                </p>
-                <p style="font-size:0.7rem;color:var(--gray);margin-top:8px;opacity:0.5;">
-                    Offerings are voluntary gestures of gratitude.
+                    🔒 Secure payment via Paddle · Instant activation
                 </p>
             </div>
 
@@ -1144,11 +1552,12 @@ footer a {
             <h3>🎰 Your Numbers</h3>
             <div class="balls-container" id="pb-balls"></div>
             
-            <!-- Ko-fi Button -->
-            <div class="kofi-container">
-                <a href="https://ko-fi.com/kmudang" target="_blank" class="kofi-btn">
-                    ☕ Offer Karma (Boost Luck)
-                </a>
+            <!-- Premium Upsell -->
+            <div style="text-align:center;margin-top:20px;padding:15px;background:rgba(255,215,0,0.05);border-radius:10px;">
+                <p style="color:var(--gold);margin-bottom:10px;">👑 Want AI-powered destiny analysis?</p>
+                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:10px 20px;font-size:12px;">
+                    Unlock Premium $5
+                </button>
             </div>
         </div>
 
@@ -1196,11 +1605,12 @@ footer a {
             <h3>🎰 Your Numbers</h3>
             <div class="balls-container" id="mega-balls"></div>
             
-            <!-- Ko-fi Button -->
-            <div class="kofi-container">
-                <a href="https://ko-fi.com/kmudang" target="_blank" class="kofi-btn">
-                    ☕ Offer Karma (Boost Luck)
-                </a>
+            <!-- Premium Upsell -->
+            <div style="text-align:center;margin-top:20px;padding:15px;background:rgba(255,215,0,0.05);border-radius:10px;">
+                <p style="color:var(--gold);margin-bottom:10px;">👑 Want AI-powered destiny analysis?</p>
+                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:10px 20px;font-size:12px;">
+                    Unlock Premium $5
+                </button>
             </div>
         </div>
 
@@ -2387,27 +2797,18 @@ function getTenGod(stem, dayStem) {
 }
 
 function getTwelveState(dayStem, branch) {
-    // ✅ v4.3: 검증된 룩업 테이블 방식 (계산 오류 원천 차단)
-    // 연해자평(淵海子平) 화토동법(火土同法) 기준
-    // 테스트: 43개 케이스 전부 통과
-    const TWELVE_STATES_TABLE = {
-        "甲": {"子":1,"丑":2,"寅":3,"卯":4,"辰":5,"巳":6,"午":7,"未":8,"申":9,"酉":10,"戌":11,"亥":0},
-        "乙": {"子":6,"丑":5,"寅":4,"卯":3,"辰":2,"巳":1,"午":0,"未":11,"申":10,"酉":9,"戌":8,"亥":7},
-        "丙": {"子":10,"丑":11,"寅":0,"卯":1,"辰":2,"巳":3,"午":4,"未":5,"申":6,"酉":7,"戌":8,"亥":9},
-        "丁": {"子":9,"丑":8,"寅":7,"卯":6,"辰":5,"巳":4,"午":3,"未":2,"申":1,"酉":0,"戌":11,"亥":10},
-        "戊": {"子":10,"丑":11,"寅":0,"卯":1,"辰":2,"巳":3,"午":4,"未":5,"申":6,"酉":7,"戌":8,"亥":9},
-        "己": {"子":9,"丑":8,"寅":7,"卯":6,"辰":5,"巳":4,"午":3,"未":2,"申":1,"酉":0,"戌":11,"亥":10},
-        "庚": {"子":7,"丑":8,"寅":9,"卯":10,"辰":11,"巳":0,"午":1,"未":2,"申":3,"酉":4,"戌":5,"亥":6},
-        "辛": {"子":0,"丑":11,"寅":10,"卯":9,"辰":8,"巳":7,"午":6,"未":5,"申":4,"酉":3,"戌":2,"亥":1},
-        "壬": {"子":4,"丑":5,"寅":6,"卯":7,"辰":8,"巳":9,"午":10,"未":11,"申":0,"酉":1,"戌":2,"亥":3},
-        "癸": {"子":3,"丑":2,"寅":1,"卯":0,"辰":11,"巳":10,"午":9,"未":8,"申":7,"酉":6,"戌":5,"亥":4}
-    };
+    // 🔥 12운성 계산 수정 - Gemini Round 10
+    // 각 일간의 장생 위치 (지지 인덱스)
+    // 甲:亥(11), 乙:午(6), 丙:寅(2), 丁:酉(9), 戊:寅(2), 己:酉(9), 庚:巳(5), 辛:子(0), 壬:申(8), 癸:卯(3)
+    const starts = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];
+    const dsi = STEM.indexOf(dayStem);
+    const bi = BRANCH.indexOf(branch);
+    const start = starts[dsi];
     
-    // 천간/지지 문자 추출 (객체인 경우 .c 속성 사용)
-    const stemChar = typeof dayStem === 'object' ? dayStem.c : dayStem;
-    const branchChar = typeof branch === 'object' ? branch.c : branch;
-    
-    const idx = TWELVE_STATES_TABLE[stemChar][branchChar];
+    // 양간(陽干): 순행, 음간(陰干): 역행
+    // 양간: (bi - start + 12) % 12
+    // 음간: (start - bi + 12) % 12
+    const idx = dayStem.y ? (bi - start + 12) % 12 : (start - bi + 12) % 12;
     return TWELVE_STATES[idx];
 }
 
@@ -3182,8 +3583,23 @@ function calcGods(saju, str) {
         johu = johuData.yong;
         johuDesc = johuData.desc;
         
-        // Apply climate Yongsin if not harmful
-        if (johu !== gi) {
+        // ★ 금수상관격 특수 처리 (金水傷官喜見官)
+        // 금일간(庚/辛) + 겨울(亥/子/丑월) + 水 과다 = 조후용신(火)이 억부용신보다 우선
+        const isMetalDM = dm.e === 'metal';
+        const isWinterMonth = [10, 11, 0, 1].includes(mbi); // 亥子丑월
+        const waterCount = [saju.year, saju.month, saju.day, saju.hour].filter(p => 
+            p && ((p.s && p.s.e === 'water') || (p.b && p.b.e === 'water'))
+        ).length;
+        const isGeumsooSanggwan = isMetalDM && isWinterMonth && waterCount >= 2;
+        
+        // Apply climate Yongsin
+        // 조건: (조후용신 ≠ 기신) OR (금수상관격이면 조후용신 우선)
+        if (johu !== gi || isGeumsooSanggwan) {
+            // 금수상관격이면 기신도 변경 (火는 기신이 아님)
+            if (isGeumsooSanggwan && johu === 'fire') {
+                gi = 'earth'; // 토가 기신 (금을 생해서 수를 더 강하게 만듦)
+                johuDesc = '金水傷官喜見官 - Winter Metal needs Fire to melt the frozen water. Fire is beneficial, not harmful.';
+            }
             hee = yong;
             yong = johu;
         }
@@ -7006,6 +7422,11 @@ function showTodayFortune() {
 function copySajuForAI() {
     if (!SAJU) { toast('Please analyze your Four Pillars first'); return; }
     
+    // Premium check
+    if (!requirePremium('AI Interpretation Copy')) {
+        return;
+    }
+    
     try {
         const str = calcStrength(SAJU);
         const dm = SAJU.day.s;
@@ -8350,16 +8771,386 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+/* ========================================
+   LEGAL PAGE NAVIGATION
+   ======================================== */
+function showLegalPage(page) {
+    document.querySelectorAll('.legal-page').forEach(p => p.style.display = 'none');
+    document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+    document.getElementById('legal-' + page).style.display = 'block';
+    window.scrollTo(0, 0);
+    // Update URL hash without triggering reload
+    history.pushState(null, null, '#' + page);
+}
+
+function closeLegalPage() {
+    document.querySelectorAll('.legal-page').forEach(p => p.style.display = 'none');
+    document.querySelector('.tab-content.active').style.display = 'block';
+    // Clear hash
+    history.pushState(null, null, window.location.pathname);
+}
+
+// Handle URL hash on page load and hash change (for Paddle verification)
+function handleUrlHash() {
+    const hash = window.location.hash.replace('#', '');
+    if (hash === 'terms' || hash === 'privacy' || hash === 'refund') {
+        showLegalPage(hash);
+    }
+}
+
+// Check hash on page load
+window.addEventListener('load', handleUrlHash);
+// Check hash on hash change
+window.addEventListener('hashchange', handleUrlHash);
+
 </script>
-<script>
-// Security: Disable F12, right-click, copy
-document.addEventListener('contextmenu',e=>e.preventDefault());
-document.addEventListener('keydown',e=>{
-    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key.toUpperCase()))||(e.ctrlKey&&['U','S'].includes(e.key.toUpperCase()))){e.preventDefault();return false;}
-});
-document.addEventListener('selectstart',e=>{if(!['INPUT','TEXTAREA'].includes(e.target.tagName))e.preventDefault();});
-document.addEventListener('dragstart',e=>e.preventDefault());
-document.addEventListener('copy',e=>e.preventDefault());
-</script>
+
+<!-- ========================================
+     LEGAL PAGES
+     ======================================== -->
+
+<!-- TERMS OF SERVICE -->
+<div id="legal-terms" class="legal-page" style="display:none;">
+    <div class="legal-container">
+        <button class="legal-close" onclick="closeLegalPage()">✕ Close</button>
+        <h1>📜 Terms of Service</h1>
+        <p class="legal-updated">Last Updated: January 2025</p>
+        
+        <h2>1. ACCEPTANCE OF TERMS</h2>
+        <p>By accessing K-MUDANG ("Service"), you agree to these Terms of Service.</p>
+        
+        <h2>2. SERVICE DESCRIPTION</h2>
+        <p>K-MUDANG provides:</p>
+        <ul>
+            <li>Four Pillars of Destiny (Saju) analysis</li>
+            <li>AI-powered fortune interpretation</li>
+            <li>Lottery number generation based on metaphysical algorithms</li>
+        </ul>
+        
+        <h2>3. ENTERTAINMENT PURPOSE</h2>
+        <p>This Service is for <strong>ENTERTAINMENT PURPOSES ONLY</strong>.</p>
+        <ul>
+            <li>We do NOT guarantee lottery winnings</li>
+            <li>We do NOT predict actual future events</li>
+            <li>Saju analysis is based on traditional Korean metaphysics, not science</li>
+        </ul>
+        
+        <h2>4. PAYMENT & REFUNDS</h2>
+        <ul>
+            <li>Premium access is granted for 24 hours after payment</li>
+            <li>All sales are final. No refunds (see Refund Policy for exceptions)</li>
+            <li>Payment processed securely via Paddle</li>
+        </ul>
+        
+        <h2>5. USER RESPONSIBILITIES</h2>
+        <ul>
+            <li>You must be 18+ to use this Service</li>
+            <li>You are responsible for your gambling decisions</li>
+            <li>Do not spend more than you can afford to lose</li>
+        </ul>
+        
+        <h2>6. INTELLECTUAL PROPERTY</h2>
+        <ul>
+            <li>All content, algorithms, and AI prompts are owned by K-MUDANG</li>
+            <li>Unauthorized copying or redistribution is prohibited</li>
+        </ul>
+        
+        <h2>7. LIMITATION OF LIABILITY</h2>
+        <p>K-MUDANG is not liable for:</p>
+        <ul>
+            <li>Financial losses from lottery play</li>
+            <li>Decisions made based on Saju readings</li>
+            <li>Any damages arising from use of this Service</li>
+        </ul>
+        
+        <h2>8. GOVERNING LAW</h2>
+        <p>These Terms are governed by the laws of the Republic of Korea.</p>
+        
+        <h2>9. CONTACT</h2>
+        <p>For questions: <a href="/cdn-cgi/l/email-protection#513a3c2435303f367f3e3737383238303d11363c30383d7f323e3c"><span class="__cf_email__" data-cfemail="452e283021242b226b2a23232c262c2429052228242c296b262a28">[email&#160;protected]</span></a></p>
+    </div>
+</div>
+
+<!-- PRIVACY POLICY -->
+<div id="legal-privacy" class="legal-page" style="display:none;">
+    <div class="legal-container">
+        <button class="legal-close" onclick="closeLegalPage()">✕ Close</button>
+        <h1>🔒 Privacy Policy</h1>
+        <p class="legal-updated">Last Updated: January 2025</p>
+        
+        <h2>1. INFORMATION WE COLLECT</h2>
+        
+        <h3>a) Account Information:</h3>
+        <ul>
+            <li>Email address (via Google Sign-In)</li>
+            <li>Name (from Google profile)</li>
+        </ul>
+        
+        <h3>b) Birth Information (User Provided):</h3>
+        <ul>
+            <li>Birth date, time, and gender</li>
+            <li>Used solely for Saju calculation</li>
+        </ul>
+        
+        <h3>c) Payment Information:</h3>
+        <ul>
+            <li>Processed by Paddle</li>
+            <li>We do NOT store credit card numbers</li>
+        </ul>
+        
+        <h2>2. HOW WE USE YOUR INFORMATION</h2>
+        <ul>
+            <li>To provide Saju analysis</li>
+            <li>To process payments</li>
+            <li>To improve our Service</li>
+            <li>To send service-related notifications</li>
+        </ul>
+        
+        <h2>3. DATA STORAGE</h2>
+        <ul>
+            <li>Stored securely in Google Firebase (Seoul, Korea)</li>
+            <li>Birth data is encrypted</li>
+            <li>Retained until account deletion</li>
+        </ul>
+        
+        <h2>4. DATA SHARING</h2>
+        <p>We do NOT sell your data. We share data only with:</p>
+        <ul>
+            <li>Google (Authentication)</li>
+            <li>Paddle (Payment processing)</li>
+            <li>Analytics providers</li>
+        </ul>
+        
+        <h2>5. YOUR RIGHTS</h2>
+        <p>You may:</p>
+        <ul>
+            <li>Access your data</li>
+            <li>Delete your account</li>
+            <li>Request data export</li>
+        </ul>
+        
+        <h2>6. COOKIES</h2>
+        <p>We use essential cookies for:</p>
+        <ul>
+            <li>Authentication</li>
+            <li>Session management</li>
+        </ul>
+        
+        <h2>7. CHILDREN'S PRIVACY</h2>
+        <p>This Service is not for users under 18.</p>
+        
+        <h2>8. CHANGES TO POLICY</h2>
+        <p>We may update this Policy. Continued use means acceptance.</p>
+        
+        <h2>9. CONTACT</h2>
+        <p>Privacy questions: <a href="/cdn-cgi/l/email-protection#0962647c6d68676e27666f6f606a606865496e64686065276a6664"><span class="__cf_email__" data-cfemail="4e25233b2a2f202960212828272d272f220e29232f2722602d2123">[email&#160;protected]</span></a></p>
+    </div>
+</div>
+
+<!-- REFUND POLICY -->
+<div id="legal-refund" class="legal-page" style="display:none;">
+    <div class="legal-container">
+        <button class="legal-close" onclick="closeLegalPage()">✕ Close</button>
+        <h1>💰 Refund Policy</h1>
+        <p class="legal-updated">Last Updated: January 2025</p>
+        
+        <h2>1. DIGITAL PRODUCTS - NO REFUNDS</h2>
+        <p>K-MUDANG provides digital fortune-telling services and AI-generated content.</p>
+        <p>Due to the nature of digital products, <strong>ALL SALES ARE FINAL</strong>.</p>
+        <p>Once you receive your Saju analysis or lottery numbers, the service has been fully delivered and cannot be "returned."</p>
+        
+        <h2>2. EXCEPTIONS</h2>
+        <p>We may offer refunds ONLY in these cases:</p>
+        <ul>
+            <li>Technical error prevented access to paid content</li>
+            <li>Duplicate charge (charged twice for same purchase)</li>
+            <li>Service was completely unavailable for 24+ hours</li>
+        </ul>
+        
+        <h2>3. HOW TO REQUEST</h2>
+        <p>If you believe you qualify for an exception:</p>
+        <ul>
+            <li>Email: <a href="/cdn-cgi/l/email-protection#c9a2a4bcada8a7aee7a6afafa0aaa0a8a589aea4a8a0a5e7aaa6a4"><span class="__cf_email__" data-cfemail="1f74726a7b7e717831707979767c767e735f78727e7673317c7072">[email&#160;protected]</span></a></li>
+            <li>Include: Your email, purchase date, reason</li>
+            <li>Response time: Within 48 hours</li>
+        </ul>
+        
+        <h2>4. PROCESSING</h2>
+        <p>Approved refunds will be processed within 5-7 business days to the original payment method.</p>
+        
+        <h2>5. CONTACT</h2>
+        <p>Questions about refunds: <a href="/cdn-cgi/l/email-protection#1873756d7c79767f36777e7e717b717974587f75797174367b7775"><span class="__cf_email__" data-cfemail="4e25233b2a2f202960212828272d272f220e29232f2722602d2123">[email&#160;protected]</span></a></p>
+    </div>
+</div>
+
+<!-- ========================================
+     FOOTER
+     ======================================== -->
+<footer class="legal-footer">
+    <div class="disclaimer">
+        <strong>⚠️ Disclaimer:</strong> K-MUDANG is an entertainment service based on traditional Korean Saju (Four Pillars of Destiny) logic and AI interpretation. 
+        This service does not guarantee lottery winnings or predict future events. 
+        Lottery numbers are generated using metaphysical algorithms for entertainment purposes only. 
+        Please gamble responsibly.
+    </div>
+    
+    <div class="copyright">
+        © 2025 K-MUDANG. All Rights Reserved.<br>
+        <span class="ip-notice">The AI-Saju Integration Protocol is a proprietary methodology of K-MUDANG.</span>
+    </div>
+    
+    <div class="legal-links">
+        <a href="#terms" onclick="showLegalPage('terms'); return false;">Terms of Service</a> | 
+        <a href="#privacy" onclick="showLegalPage('privacy'); return false;">Privacy Policy</a> | 
+        <a href="#refund" onclick="showLegalPage('refund'); return false;">Refund Policy</a> | 
+        <a href="/cdn-cgi/l/email-protection#6803051d0c09060f46070e0e010b010904280f05090104460b0705">Contact</a>
+    </div>
+</footer>
+
+<style>
+/* Legal Pages CSS */
+.legal-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--navy);
+    z-index: 9999;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.legal-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 15px;
+    padding: 40px;
+}
+
+.legal-close {
+    float: right;
+    background: rgba(212, 175, 55, 0.2);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.legal-close:hover {
+    background: var(--gold);
+    color: var(--navy);
+}
+
+.legal-page h1 {
+    color: var(--gold);
+    font-family: 'Cinzel Decorative', serif;
+    margin-bottom: 10px;
+}
+
+.legal-updated {
+    color: #888;
+    font-style: italic;
+    margin-bottom: 30px;
+}
+
+.legal-page h2 {
+    color: #F4D58D;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    padding-bottom: 10px;
+}
+
+.legal-page h3 {
+    color: #ccc;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.legal-page p {
+    color: #bbb;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.legal-page ul {
+    color: #bbb;
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.legal-page li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.legal-page a {
+    color: var(--gold);
+}
+
+.legal-page strong {
+    color: #fff;
+}
+
+/* Footer CSS */
+.legal-footer {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 30px 20px;
+    margin-top: 50px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #9CA3AF;
+}
+
+.legal-footer .disclaimer {
+    max-width: 800px;
+    margin: 0 auto 20px;
+    padding: 15px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    line-height: 1.6;
+}
+
+.legal-footer .copyright {
+    margin-bottom: 15px;
+}
+
+.legal-footer .ip-notice {
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.legal-footer .legal-links {
+    margin-top: 15px;
+}
+
+.legal-footer .legal-links a {
+    color: var(--gold);
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.legal-footer .legal-links a:hover {
+    opacity: 0.7;
+}
+
+/* Mobile Footer */
+@media (max-width: 768px) {
+    .legal-footer {
+        padding: 20px 15px;
+        font-size: 0.8rem;
+    }
+    .legal-footer .disclaimer {
+        padding: 12px;
+    }
+}
+</style>
+
 </body>
 </html>
