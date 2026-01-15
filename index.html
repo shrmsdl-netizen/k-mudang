@@ -3,17 +3,20 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.10 (GitHub Pages Edition)                                    ║
+║  K-MUDANG Pro v4.12 (Personal Edition - All Features Unlocked)                ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
-║  v4.10 Changes (Critical Bug Fix):                                            ║
-║    - [BUG-001] 격국 판단: 년간/월간 투출 우선 로직 추가                       ║
-║    - [BUG-002] 세운+원국 방합 완성 감지 (巳午未 화국 등)                       ║
-║    - [BUG-003] 육합 결과가 忌神일 때 경고 추가                                 ║
-║    - [BUG-004] 식상 천간 설기 가중치 증가 (신강 과대평가 수정)                 ║
+║  v4.12 Changes:                                                               ║
+║    - [MAJOR] calcStrength 전면 재작성                                         ║
+║    - [NEW] 천간합 무력화 체크 (乙庚合 등 인성/비겁 무력화)                     ║
+║    - [NEW] 토왕용사 적용 (辰戌丑未 = 土득령)                                   ║
+║    - [NEW] 실제 통근 체크 (12운성 아닌 지장간 기준)                            ║
+║    - [NEW] 종격(Follower) 판단 로직 (극신약+무근 시)                           ║
+║    - [FIX] 조후 예외처리 강화 (극한 기후 시 조후 최우선)                       ║
+║  v4.11: 방합/삼합 가중치, 대운+원국 삼합 감지                                  ║
+║  v4.10: BUG-001~004 수정 (격국/방합/육합/식상설기)                            ║
 ║                                                                                ║
-║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
-║  Contact: kmudang.official@gmail.com                                          ║
+║  ⚠️ LOCAL TEST VERSION - No Firebase/Paddle SDK                               ║
 ║  Last Updated: 2025-01-15                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 -->
@@ -32,327 +35,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
-<!-- Paddle.js -->
-<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
-
-<script>
-/* ========================================
-   Toast Function (Early Definition)
-   ======================================== */
-function toast(msg) {
-    const t = document.getElementById('toast');
-    if (t) {
-        t.textContent = msg;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 10000);
-    } else {
-        console.log('Toast:', msg);
-        alert(msg); // Fallback if toast element not ready
-    }
-}
-
-/* ========================================
-   Firebase & Paddle Configuration
-   ======================================== */
-const firebaseConfig = {
-    apiKey: "AIzaSyBG8P5KYAo3vTcJBm0rNsAmTgRm8Nt3Rgw",
-    authDomain: "k-mudang-pro.firebaseapp.com",
-    projectId: "k-mudang-pro",
-    storageBucket: "k-mudang-pro.firebasestorage.app",
-    messagingSenderId: "287683280564",
-    appId: "1:287683280564:web:6168a13d4f1302f0fe21e1",
-    measurementId: "G-044J002H6P"
-};
-
-// Paddle Price IDs - 복채(福債) 옵션
-const PADDLE_PRICES = {
-    basic: { id: 'pri_01kf06tck44xzkavtqz38gkmk2', amount: 10, label: '$10' },
-    blessed: { id: 'pri_01kf094v5gc1nj6t9xeptsc0ck', amount: 20, label: '$20' },
-    sacred: { id: 'pri_01kf095hgzg08a5nqy8v1g1vad', amount: 50, label: '$50' }
-};
-const PREMIUM_DURATION_HOURS = 24;
-
-/* ========================================
-   Premium State Management
-   ======================================== */
-let auth = null;
-let db = null;
-let currentUser = null;
-let isPremium = false;
-let premiumExpiry = null;
-let firebaseReady = false;
-let paddleReady = false;
-
-// Initialize Firebase when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if running locally (file://)
-    if (window.location.protocol === 'file:') {
-        console.warn('Running locally - Firebase requires http:// or https://');
-        setTimeout(() => {
-            toast('⚠️ Local file detected. Please use a web server or deploy to test login/payment.');
-        }, 1000);
-    }
-    
-    // Initialize Firebase
-    try {
-        if (typeof firebase !== 'undefined') {
-            firebase.initializeApp(firebaseConfig);
-            auth = firebase.auth();
-            db = firebase.firestore();
-            firebaseReady = true;
-            console.log('Firebase initialized successfully');
-            
-            // Auth state listener
-            auth.onAuthStateChanged(async (user) => {
-                currentUser = user;
-                if (user) {
-                    await checkPremiumStatus(user.uid);
-                    // Create/update user document
-                    db.collection('users').doc(user.uid).set({
-                        email: user.email,
-                        displayName: user.displayName,
-                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                    }, { merge: true });
-                } else {
-                    isPremium = false;
-                    premiumExpiry = null;
-                }
-                updateAuthUI();
-            });
-        } else {
-            console.warn('Firebase SDK not loaded');
-            setTimeout(() => toast('⚠️ Login service unavailable. Check internet connection.'), 1500);
-            updateAuthUI(); // Still update UI for non-logged-in state
-        }
-    } catch (e) {
-        console.error('Firebase init error:', e);
-        setTimeout(() => toast('⚠️ Login service error: ' + e.message), 1500);
-        updateAuthUI(); // Still update UI even on error
-    }
-    
-    // Initialize Paddle
-    try {
-        if (typeof Paddle !== 'undefined') {
-            Paddle.Initialize({ 
-                token: 'live_8cdfa23600d1d845a7ede32e1be'
-            });
-            paddleReady = true;
-            console.log('Paddle initialized successfully');
-            
-            // Listen for Paddle events
-            if (Paddle.Checkout) {
-                Paddle.Checkout.on('completed', (data) => {
-                    if (currentUser) {
-                        activatePremium(currentUser.uid);
-                    }
-                });
-            }
-        } else {
-            console.warn('Paddle SDK not loaded');
-        }
-    } catch (e) {
-        console.error('Paddle init error:', e);
-    }
-});
-
-// Check premium status from Firestore
-async function checkPremiumStatus(uid) {
-    if (!db) return false;
-    try {
-        const doc = await db.collection('users').doc(uid).get();
-        if (doc.exists) {
-            const data = doc.data();
-            if (data.premiumExpiry) {
-                const expiry = data.premiumExpiry.toDate();
-                if (expiry > new Date()) {
-                    isPremium = true;
-                    premiumExpiry = expiry;
-                    return true;
-                }
-            }
-        }
-        isPremium = false;
-        premiumExpiry = null;
-        return false;
-    } catch (e) {
-        console.error('Premium check error:', e);
-        return false;
-    }
-}
-
-// Update UI based on auth/premium state
-function updateAuthUI() {
-    const authBar = document.getElementById('auth-bar');
-    const loginBtn = document.getElementById('login-btn');
-    const userInfo = document.getElementById('user-info');
-    const userName = document.getElementById('user-name');
-    const premiumBadge = document.getElementById('premium-badge');
-    const premiumBtns = document.querySelectorAll('.premium-unlock-btn');
-    const premiumLocks = document.querySelectorAll('.premium-lock');
-    const premiumSections = document.querySelectorAll('.premium-section');
-    
-    if (currentUser) {
-        loginBtn.style.display = 'none';
-        userInfo.style.display = 'flex';
-        userName.textContent = currentUser.displayName || currentUser.email;
-        
-        if (isPremium) {
-            premiumBadge.style.display = 'inline-block';
-            premiumBadge.textContent = '👑 Premium';
-            premiumBtns.forEach(btn => btn.style.display = 'none');
-            premiumLocks.forEach(lock => lock.style.display = 'none');
-            // Unlock premium sections
-            premiumSections.forEach(section => section.classList.add('unlocked'));
-        } else {
-            premiumBadge.style.display = 'none';
-            premiumBtns.forEach(btn => btn.style.display = 'inline-block');
-            premiumLocks.forEach(lock => lock.style.display = 'flex');
-            // Lock premium sections
-            premiumSections.forEach(section => section.classList.remove('unlocked'));
-        }
-    } else {
-        loginBtn.style.display = 'inline-flex';
-        userInfo.style.display = 'none';
-        premiumBadge.style.display = 'none';
-        premiumBtns.forEach(btn => btn.style.display = 'inline-block');
-        premiumLocks.forEach(lock => {
-            lock.style.display = 'flex';
-            lock.innerHTML = '<span style="color:var(--gold);">🔒 Login required</span>';
-        });
-        // Lock premium sections (show overlay)
-        premiumSections.forEach(section => section.classList.remove('unlocked'));
-    }
-}
-
-// Google Sign In
-async function googleSignIn() {
-    // Check local file
-    if (window.location.protocol === 'file:') {
-        toast('⚠️ Login requires web server. Deploy to GitHub Pages or use localhost.');
-        return;
-    }
-    
-    if (!firebaseReady || !auth) {
-        toast('⏳ Login service loading... Please wait and try again.');
-        return;
-    }
-    try {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        const result = await auth.signInWithPopup(provider);
-        toast('Welcome, ' + result.user.displayName + '!');
-    } catch (e) {
-        console.error('Login error:', e);
-        if (e.code === 'auth/popup-blocked') {
-            toast('🚫 Popup blocked. Please allow popups for this site.');
-        } else if (e.code === 'auth/cancelled-popup-request') {
-            toast('Login cancelled.');
-        } else if (e.code === 'auth/unauthorized-domain') {
-            toast('❌ Domain not authorized! Add domain in Firebase Console.');
-        } else {
-            // 에러 코드와 메시지 둘 다 표시
-            toast('❌ Login failed [' + (e.code || 'NO_CODE') + ']: ' + (e.message || 'Unknown error'));
-        }
-    }
-}
-
-// Sign Out
-async function signOut() {
-    if (!auth) return;
-    try {
-        await auth.signOut();
-        toast('Signed out successfully');
-    } catch (e) {
-        console.error('Logout error:', e);
-    }
-}
-
-// Paddle Checkout - 복채(福債) 금액 선택
-function openPremiumCheckout(tier = 'basic') {
-    // Check local file
-    if (window.location.protocol === 'file:') {
-        toast('⚠️ Payment requires web server. Deploy to GitHub Pages to test.');
-        return;
-    }
-    
-    if (!currentUser) {
-        toast('🔐 Please login first to offer 福債');
-        googleSignIn();
-        return;
-    }
-    
-    if (!paddleReady) {
-        toast('⏳ Payment service loading... Please wait and try again.');
-        return;
-    }
-    
-    try {
-        const price = PADDLE_PRICES[tier] || PADDLE_PRICES.basic;
-        
-        Paddle.Checkout.open({
-            items: [{ priceId: price.id, quantity: 1 }],
-            customer: { email: currentUser.email },
-            customData: { 
-                uid: currentUser.uid,
-                tier: tier,
-                amount: price.amount,
-                purchaseTime: new Date().toISOString()
-            },
-            settings: {
-                displayMode: 'overlay',
-                theme: 'dark',
-                locale: 'en'
-            }
-        });
-    } catch (e) {
-        console.error('Checkout error:', e);
-        toast('❌ Payment error: ' + (e.message || 'Unknown error'));
-    }
-}
-
-// Handle successful payment (called by webhook or client-side)
-async function activatePremium(uid) {
-    if (!db) return;
-    const expiry = new Date();
-    expiry.setHours(expiry.getHours() + PREMIUM_DURATION_HOURS);
-    
-    try {
-        await db.collection('users').doc(uid).set({
-            premiumExpiry: firebase.firestore.Timestamp.fromDate(expiry),
-            lastPurchase: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-        
-        isPremium = true;
-        premiumExpiry = expiry;
-        updateAuthUI();
-        toast('🎉 Premium activated for 24 hours!');
-    } catch (e) {
-        console.error('Premium activation error:', e);
-    }
-}
-
-/* ========================================
-   Premium Feature Gating
-   ======================================== */
-function requirePremium(feature) {
-    if (!currentUser) {
-        toast('🔒 Please login to access ' + feature);
-        return false;
-    }
-    if (!isPremium) {
-        toast('👑 Premium required for ' + feature);
-        return false;
-    }
-    return true;
-}
-
-</script>
-
 <script>
 (function(){
     document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
@@ -811,198 +493,6 @@ header h1 {
 }
 
 /* ========================================
-   Auth Bar & Premium UI
-   ======================================== */
-.auth-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 15px;
-    background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(26,35,50,0.8) 100%);
-    border-bottom: 1px solid rgba(212,175,55,0.2);
-}
-
-.login-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background: #fff;
-    border: none;
-    border-radius: 20px;
-    color: #333;
-    font-family: 'Noto Serif KR', serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-
-.login-btn img {
-    width: 18px;
-    height: 18px;
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.user-name {
-    color: var(--pearl);
-    font-size: 13px;
-    max-width: 120px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.premium-badge {
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-    color: #000;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 700;
-    animation: kofiPulse 2s infinite;
-}
-
-.logout-btn {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: var(--gray);
-    padding: 6px 12px;
-    border-radius: 15px;
-    font-size: 11px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.logout-btn:hover {
-    background: rgba(255,255,255,0.2);
-    color: var(--pearl);
-}
-
-.premium-unlock-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 28px;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
-    background-size: 200% 200%;
-    animation: shimmer 3s ease infinite;
-    border: none;
-    border-radius: 25px;
-    color: #000;
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(255,215,0,0.4);
-}
-
-.premium-unlock-btn:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 6px 30px rgba(255,215,0,0.6);
-}
-
-.premium-lock {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 30px;
-    background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(26,35,50,0.6) 100%);
-    border: 1px dashed rgba(212,175,55,0.3);
-    border-radius: 12px;
-    text-align: center;
-    min-height: 150px;
-}
-
-.premium-lock p {
-    color: var(--gold);
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-}
-
-.premium-lock .price {
-    color: var(--gold-light);
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.premium-lock .duration {
-    color: var(--gray);
-    font-size: 0.85rem;
-    margin-bottom: 20px;
-}
-
-/* Premium Section Overlay */
-.premium-section {
-    position: relative;
-}
-
-.premium-tag {
-    font-size: 0.7rem;
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-    color: #000;
-    padding: 2px 8px;
-    border-radius: 10px;
-    margin-left: 8px;
-    font-weight: 700;
-}
-
-.premium-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(26, 35, 50, 0.95);
-    backdrop-filter: blur(5px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    border-radius: 15px;
-}
-
-.premium-overlay-content {
-    text-align: center;
-    padding: 20px;
-}
-
-.premium-overlay-content p {
-    color: var(--gold);
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-}
-
-.premium-overlay-content .premium-price {
-    color: var(--gold-light);
-    font-size: 0.9rem;
-    margin-bottom: 15px;
-}
-
-.premium-section.unlocked .premium-overlay {
-    display: none;
-}
-
-.premium-section.unlocked .premium-tag {
-    display: none;
-}
-
-/* ========================================
    Lottery Balls
    ======================================== */
 .balls-container {
@@ -1372,19 +862,6 @@ footer a {
     <button class="game-btn" onclick="switchGame('mega')"><span class="tab-main">🔵 Mega Millions</span></button>
 </div>
 
-<!-- Auth Bar -->
-<div class="auth-bar" id="auth-bar">
-    <button class="login-btn" id="login-btn" onclick="googleSignIn()">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Sign in with Google
-    </button>
-    <div class="user-info" id="user-info" style="display:none;">
-        <span class="user-name" id="user-name"></span>
-        <span class="premium-badge" id="premium-badge" style="display:none;">👑 Premium</span>
-        <button class="logout-btn" onclick="signOut()">Logout</button>
-    </div>
-</div>
-
 <div class="container">
 
     <!-- ========================================
@@ -1439,267 +916,126 @@ footer a {
         </div>
 
         <div id="saju-result" style="display:none;">
-            <!-- Four Pillars Chart - FREE -->
+            <!-- Four Pillars Chart -->
             <div class="card">
                 <h3>📜 Four Pillars (Four Pillars Chart)</h3>
                 <div class="pillars" id="pillars"></div>
-                <!-- 12운성/강약은 Premium으로 이동 -->
-            </div>
-
-            <!-- Premium Upsell for Full Analysis -->
-            <div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,193,7,0.03));border:1px solid rgba(212,175,55,0.2);">
-                <p style="font-size:1.2rem;margin-bottom:10px;">🔮 Unlock Full Destiny Analysis</p>
-                <p style="font-size:0.85rem;color:var(--gray);margin-bottom:15px;">
-                    70+ Advanced interpretations · Life Cycles · Divine Stars · Monthly Fortune
-                </p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()">🙏 Offer 福債 · Unlock Premium</button>
-            </div>
-
-            <!-- Strength & 12 States - PREMIUM -->
-            <div class="card premium-section" id="card-strength">
-                <h3>💪 Day Master Strength <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
                 <div id="twelve-states"></div>
                 <div class="strength-box" id="strength-box"></div>
             </div>
 
-            <!-- 納音(Sound Element)/命宮(Life Palace)/Conception - PREMIUM -->
-            <div class="card premium-section" id="card-napeum">
-                <h3>🎵 納音 & 命宮 <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- 納音(Sound Element)/命宮(Life Palace)/Conception -->
+            <div class="card">
+                <h3>🎵 納音(Sound Element) & 命宮(Life Palace)</h3>
                 <div id="napeum-myunggung"></div>
             </div>
 
-            <!-- Hidden Stems Analysis - PREMIUM -->
-            <div class="card premium-section" id="card-jijanggan">
-                <h3>🌿 支藏干 Hidden Stems <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- Hidden Stems Analysis -->
+            <div class="card">
+                <h3>🌿 支藏干 Hidden Stems</h3>
                 <div id="jijanggan-analysis"></div>
             </div>
 
-            <!-- Root & Stem Analysis - PREMIUM -->
-            <div class="card premium-section" id="card-tonggeun">
-                <h3>🌳 通根透干 Root & Stem <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- Root & Stem Analysis -->
+            <div class="card">
+                <h3>🌳 通根透干 Root & Stem</h3>
                 <div id="tonggeun-analysis"></div>
             </div>
 
-            <!-- Five Elements (五行) - PREMIUM -->
-            <div class="card premium-section" id="card-elements">
-                <h3>🌟 Five Elements (五行) <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- Five Elements (五行) -->
+            <div class="card">
+                <h3>🌟 Five Elements (五行)</h3>
                 <div class="element-bar" id="element-bar"></div>
                 <div class="element-legend" id="element-legend"></div>
                 <div id="element-analysis"></div>
             </div>
 
-            <!-- Beneficial Elements (用神) - PREMIUM -->
-            <div class="card gold premium-section" id="card-gods">
-                <h3>⚖️ Beneficial Elements (用神) <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- Beneficial Elements (用神) -->
+            <div class="card gold">
+                <h3>⚖️ Beneficial Elements (用神) </h3>
                 <div id="gods" class="gods-grid"></div>
                 <div id="gods-detail"></div>
                 <div id="gods-analysis"></div>
             </div>
 
-            <!-- Six Relations (六親) Analysis - PREMIUM -->
-            <div class="card premium-section" id="card-yukcheon">
-                <h3>👨‍👩‍👧‍👦 Six Relations (六親) <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- Six Relations (六親) Analysis -->
+            <div class="card">
+                <h3>👨‍👩‍👧‍👦 Six Relations (六親) </h3>
                 <div id="yukcheon-analysis"></div>
             </div>
 
-            <!-- Structure - PREMIUM -->
-            <div class="card premium-section" id="card-format">
-                <h3>🏛️ 格局 Structure <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- Structure -->
+            <div class="card">
+                <h3>🏛️ 格局 Structure</h3>
                 <div id="format"></div>
                 <div id="format-analysis"></div>
             </div>
 
-            <!-- Day Pillar Analysis - PREMIUM -->
-            <div class="card premium-section" id="card-ilju">
-                <h3>📅 日柱 Day Pillar Analysis <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- Day Pillar Analysis -->
+            <div class="card">
+                <h3>📅 日柱 Day Pillar Analysis</h3>
                 <div id="ilju"></div>
             </div>
 
-            <!-- Position & Life Stages - PREMIUM -->
-            <div class="card premium-section" id="card-gungwi">
-                <h3>🏠 Palace & Twelve States <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- Position & Life Stages -->
+            <div class="card">
+                <h3>🏠 Palace & Twelve States</h3>
                 <div id="gungwi-analysis"></div>
                 <div id="twelve-states-full"></div>
             </div>
 
-            <!-- 大運(Life Cycle) - PREMIUM -->
-            <div class="card premium-section" id="card-luck">
-                <h3>🔄 Life Cycles (大運) <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay" id="overlay-luck">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- 大運(Life Cycle) -->
+            <div class="card">
+                <h3>🔄 Life Cycles (大運)</h3>
                 <div class="luck-timeline" id="luck-timeline"></div>
                 <div id="luck-detail"></div>
                 <div id="gyoungi-analysis"></div>
             </div>
 
-            <!-- 향후 10년 운 - PREMIUM -->
-            <div class="card premium-section" id="card-tenyears">
-                <h3>📈 Next 10 Years Fortune <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay" id="overlay-tenyears">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- 향후 10년 운 -->
+            <div class="card">
+                <h3>📈 Next 10 Years Fortune</h3>
                 <div id="ten-years-luck"></div>
             </div>
 
-            <!-- Monthly Fortune - PREMIUM -->
-            <div class="card premium-section" id="card-monthly">
-                <h3>📆 Monthly Fortune <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay" id="overlay-monthly">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- Monthly Fortune -->
+            <div class="card">
+                <h3>📆 Monthly Fortune</h3>
                 <div id="monthly-luck"></div>
             </div>
 
-            <!-- Harmony/Clash Analysis - PREMIUM -->
-            <div class="card premium-section" id="card-interactions">
-                <h3>🔗 Harmony & Clash <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- Harmony/Clash Analysis -->
+            <div class="card">
+                <h3>🔗 Harmony & Clash </h3>
                 <div id="interactions"></div>
                 <div id="banghap-amhap"></div>
                 <div id="advanced-interactions"></div>
             </div>
 
-            <!-- 공망 - PREMIUM -->
-            <div class="card premium-section" id="card-gongmang">
-                <h3>⭕ Empty Void (空亡) <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- 공망 -->
+            <div class="card">
+                <h3>⭕ Empty Void (空亡) </h3>
                 <div id="gongmang"></div>
                 <div id="gongmang-haeso"></div>
             </div>
 
-            <!-- 신살 - PREMIUM -->
-            <div class="card premium-section" id="card-sinsal">
-                <h3>✨ Divine Stars (神殺) <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- 신살 -->
+            <div class="card">
+                <h3>✨ Divine Stars (神殺) </h3>
                 <div id="sinsal"></div>
                 <div id="sinsal-position"></div>
                 <div class="sinsal-grid" id="sinsal-grid"></div>
             </div>
 
-            <!-- Today's Fortune - PREMIUM -->
-            <div class="card gold premium-section" id="card-today">
-                <h3>🌅 Today's Fortune <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- Today's Fortune -->
+            <div class="card gold">
+                <h3>🌅 Today's Fortune</h3>
                 <div id="today-fortune"></div>
             </div>
 
-            <!-- AI Comprehensive Interpretation - PREMIUM -->
-            <div class="card gold premium-section" id="card-ai">
-                <h3>🤖 AI Interpretation <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- AI Comprehensive Interpretation -->
+            <div class="card gold">
+                <h3>🤖 AI Interpretation</h3>
                 <div id="ai-interpretation"></div>
                 <div style="margin-top:25px;text-align:center;padding:20px;background:linear-gradient(135deg,rgba(103,58,183,0.1),rgba(156,39,176,0.05));border-radius:12px;">
                     <p style="font-size:0.95rem;color:var(--gold);margin-bottom:8px;font-weight:bold;">
@@ -1718,16 +1054,9 @@ footer a {
                 </div>
             </div>
 
-            <!-- 종합 해석 - PREMIUM -->
-            <div class="card gold premium-section" id="card-summary">
-                <h3>📖 Summary Analysis <span class="premium-tag">👑 Premium</span></h3>
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <p>🙏 福債 (Karma Offering)</p>
-                        <p class="premium-price">$10 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
-                    </div>
-                </div>
+            <!-- 종합 해석 -->
+            <div class="card gold">
+                <h3>📖 Summary Analysis</h3>
                 <div id="summary-analysis"></div>
             </div>
 
@@ -1747,43 +1076,23 @@ footer a {
                 </div>
             </div>
 
-            <!-- ===== Premium Unlock (福債) ===== -->
-            <div class="card" id="premium-section" style="text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,193,7,0.03));border:1px solid rgba(212,175,55,0.2);">
-                <p style="font-size:1.4rem;margin-bottom:8px;">🙏 福債 (Karma Offering)</p>
-                <p style="font-size:0.95rem;color:var(--gold-light);line-height:1.7;margin-bottom:15px;font-style:italic;">
-                    "복을 받았으면 복채를 내어야 한다"<br>
-                    <span style="font-size:0.8rem;color:var(--gray);">"Having received wisdom, an offering honors tradition."</span>
+            <!-- ===== Karma Offering (복채) ===== -->
+            <div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,193,7,0.03));border:1px solid rgba(212,175,55,0.2);">
+                <p style="font-size:1.2rem;margin-bottom:8px;">🙏 Karma Offering (福債)</p>
+                <p style="font-size:0.9rem;color:var(--gray);line-height:1.6;margin-bottom:5px;">
+                    Having received wisdom, an offering honors tradition.
                 </p>
-                <p style="font-size:0.85rem;color:var(--gray);line-height:1.6;margin-bottom:15px;">
-                    In Korean fortune-telling tradition, <strong style="color:var(--gold);">福債 (Bokchae)</strong> is the sacred exchange —<br>
-                    a grateful offering for cosmic insight received.
+                <p style="font-size:0.85rem;color:var(--gold);margin-bottom:20px;">
+                    Shared blessings return doubled.
                 </p>
-                <p style="font-size:0.8rem;color:var(--gray);margin-bottom:20px;">
-                    Unlock: Life Cycles (大運) · 10-Year Fortune · Monthly Fortune · AI Copy
+                <a href="https://ko-fi.com/kmudang" target="_blank" class="kofi-btn" style="display:inline-block;">
+                    ☕ Offer Karma (Boost Luck)
+                </a>
+                <p style="font-size:0.75rem;color:var(--gray);margin-top:15px;opacity:0.7;">
+                    🔒 Ad-free zone. Only pure energy (Ki/氣) flows here
                 </p>
-                
-                <!-- 3-Tier Offering Buttons -->
-                <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:15px;">
-                    <button class="premium-unlock-btn" onclick="openPremiumCheckout('basic')" style="padding:15px 25px;min-width:100px;">
-                        <span style="display:block;font-size:1.3rem;font-weight:700;">$10</span>
-                        <span style="display:block;font-size:0.7rem;opacity:0.8;">Basic</span>
-                    </button>
-                    <button class="premium-unlock-btn" onclick="openPremiumCheckout('blessed')" style="padding:15px 25px;min-width:100px;background:linear-gradient(135deg,#FFD700,#FFA500);box-shadow:0 0 20px rgba(255,215,0,0.3);">
-                        <span style="display:block;font-size:1.3rem;font-weight:700;">$20</span>
-                        <span style="display:block;font-size:0.7rem;opacity:0.8;">✨ Blessed</span>
-                    </button>
-                    <button class="premium-unlock-btn" onclick="openPremiumCheckout('sacred')" style="padding:15px 25px;min-width:100px;background:linear-gradient(135deg,#9B59B6,#8E44AD);">
-                        <span style="display:block;font-size:1.3rem;font-weight:700;">$50</span>
-                        <span style="display:block;font-size:0.7rem;opacity:0.8;">🔮 Sacred</span>
-                    </button>
-                </div>
-                
-                <p class="duration" style="font-size:0.85rem;color:var(--gray);margin-bottom:15px;">24-hour full access · All tiers unlock same features</p>
-                <p style="font-size:0.75rem;color:var(--gold-light);opacity:0.9;">
-                    💫 Greater offerings attract greater blessings
-                </p>
-                <p style="font-size:0.7rem;color:var(--gray);margin-top:10px;opacity:0.6;">
-                    🔒 Secure payment via Paddle · Instant activation
+                <p style="font-size:0.7rem;color:var(--gray);margin-top:8px;opacity:0.5;">
+                    Offerings are voluntary gestures of gratitude.
                 </p>
             </div>
 
@@ -1837,25 +1146,19 @@ footer a {
                 <div class="form-group"><label>Day</label><select id="pb-day"></select></div>
                 <div class="form-group"><label>Year</label><select id="pb-year"></select></div>
             </div>
-            <button class="btn btn-secondary" onclick="generatePowerball('quick')">🎲 Quick Pick (Random)</button>
-            <div style="margin-top:15px;padding:12px;background:rgba(255,215,0,0.05);border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
-                <p style="font-size:0.8rem;color:var(--gold);margin-bottom:8px;">🔮 Want destiny-based numbers?</p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:8px 16px;font-size:12px;">
-                    👑 Unlock Destiny Numbers
-                </button>
-            </div>
+            <button class="btn" onclick="generatePowerball('destiny')">🔮 Destiny Numbers</button>
+            <button class="btn btn-secondary" style="margin-top:10px;" onclick="generatePowerball('quick')">🎲 Quick Pick</button>
         </div>
 
         <div class="card" id="pb-result" style="display:none;">
             <h3>🎰 Your Numbers</h3>
             <div class="balls-container" id="pb-balls"></div>
             
-            <!-- Premium Upsell -->
-            <div style="text-align:center;margin-top:20px;padding:15px;background:rgba(255,215,0,0.05);border-radius:10px;">
-                <p style="color:var(--gold);margin-bottom:10px;">👑 Want AI-powered destiny analysis?</p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:10px 20px;font-size:12px;">
-                    Unlock Premium $10
-                </button>
+            <!-- Ko-fi Button -->
+            <div class="kofi-container">
+                <a href="https://ko-fi.com/kmudang" target="_blank" class="kofi-btn">
+                    ☕ Offer Karma (Boost Luck)
+                </a>
             </div>
         </div>
 
@@ -1895,25 +1198,19 @@ footer a {
                 <div class="form-group"><label>Day</label><select id="mega-day"></select></div>
                 <div class="form-group"><label>Year</label><select id="mega-year"></select></div>
             </div>
-            <button class="btn btn-secondary" onclick="generateMega('quick')">🎲 Quick Pick (Random)</button>
-            <div style="margin-top:15px;padding:12px;background:rgba(255,215,0,0.05);border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
-                <p style="font-size:0.8rem;color:var(--gold);margin-bottom:8px;">🔮 Want destiny-based numbers?</p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:8px 16px;font-size:12px;">
-                    👑 Unlock Destiny Numbers
-                </button>
-            </div>
+            <button class="btn" onclick="generateMega('destiny')">🔮 Destiny Numbers</button>
+            <button class="btn btn-secondary" style="margin-top:10px;" onclick="generateMega('quick')">🎲 Quick Pick</button>
         </div>
 
         <div class="card" id="mega-result" style="display:none;">
             <h3>🎰 Your Numbers</h3>
             <div class="balls-container" id="mega-balls"></div>
             
-            <!-- Premium Upsell -->
-            <div style="text-align:center;margin-top:20px;padding:15px;background:rgba(255,215,0,0.05);border-radius:10px;">
-                <p style="color:var(--gold);margin-bottom:10px;">👑 Want AI-powered destiny analysis?</p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:10px 20px;font-size:12px;">
-                    Unlock Premium $10
-                </button>
+            <!-- Ko-fi Button -->
+            <div class="kofi-container">
+                <a href="https://ko-fi.com/kmudang" target="_blank" class="kofi-btn">
+                    ☕ Offer Karma (Boost Luck)
+                </a>
             </div>
         </div>
 
@@ -2526,14 +1823,11 @@ document.addEventListener('DOMContentLoaded', init);
 /* ========================================
    5. 유틸리티 함수
    ======================================== */
-// toast already defined at top - this is a backup
-if (typeof toast !== 'function') {
-    function toast(msg) {
-        const t = document.getElementById('toast');
-        t.textContent = msg;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 3000);
-    }
+function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 function getBallColor(n) {
@@ -2960,7 +2254,7 @@ function analyzeJijanggan(saju) {
     
     branches.forEach((branch, pIdx) => {
         if (!branch) return;
-        const bi = BRANCH.findIndex(br => br.c === branch.c);
+        const bi = BRANCH.indexOf(branch);
         const jj = HIDDEN_STEMS[bi];
         
         const pillarInfo = {
@@ -3028,70 +2322,52 @@ function analyzeTonggeunTougan(saju) {
     const branches = [saju.year?.b, saju.month?.b, saju.day?.b, saju.hour?.b];
     const stems = [saju.year?.s, saju.month?.s, saju.day?.s, saju.hour?.s];
     
-    // ====== 통근 분석 (같은 천간은 하나로 합침) ======
-    const stemRootsMap = {}; // {stemChar: {stem, god, roots[]}}
-    const processedStemChars = new Set(); // 이미 처리한 천간 문자
-    
+    // Check root for each stem
     stems.forEach((stem, sIdx) => {
         if (!stem) return;
         const si = STEM.indexOf(stem);
-        const stemKey = stem.c; // 같은 천간 문자로 그룹화
-        
-        // 이미 처리한 천간이면 스킵 (중복 방지)
-        if (processedStemChars.has(stemKey)) return;
-        processedStemChars.add(stemKey);
+        const roots = [];
         
         branches.forEach((branch, bIdx) => {
             if (!branch) return;
-            const bi = BRANCH.findIndex(br => br.c === branch.c);
+            const bi = BRANCH.indexOf(branch);
             const jj = HIDDEN_STEMS[bi];
             
             jj.forEach((h, hIdx) => {
                 if (h.stem === si) {
                     const isJunggi = hIdx === jj.length - 1;
-                    const rootInfo = {
+                    roots.push({
                         pillar: branchNames[bIdx],
                         branch: branch.c,
                         type: isJunggi ? 'Main' : (hIdx === 0 ? 'Side' : 'Middle'),
                         strength: isJunggi ? 'Strong' : (hIdx === 0 ? 'Weak' : 'Medium')
-                    };
-                    
-                    if (!stemRootsMap[stemKey]) {
-                        stemRootsMap[stemKey] = {
-                            stem: stem.c + stem.k,
-                            god: sIdx === 2 ? 'Day Master' : getTenGod(stem, dm).k,
-                            roots: []
-                        };
-                    }
-                    
-                    // 중복 root 체크 (같은 pillar+branch 조합)
-                    const exists = stemRootsMap[stemKey].roots.some(r => 
-                        r.pillar === rootInfo.pillar && r.branch === rootInfo.branch
-                    );
-                    if (!exists) {
-                        stemRootsMap[stemKey].roots.push(rootInfo);
-                    }
+                    });
                 }
             });
         });
+        
+        if (roots.length > 0) {
+            result.tonggeun.push({
+                pillar: pillarNames[sIdx],
+                stem: stem.c + stem.k,
+                god: sIdx === 2 ? 'Day Master' : getTenGod(stem, dm).k,
+                roots: roots
+            });
+        }
     });
     
-    result.tonggeun = Object.values(stemRootsMap).filter(t => t.roots.length > 0);
-    
-    // ====== 투간 분석 (중복 제거) ======
-    const touganSet = new Set();
+    // Check stem emergence
     branches.forEach((branch, bIdx) => {
         if (!branch) return;
-        const bi = BRANCH.findIndex(br => br.c === branch.c);
+        const bi = BRANCH.indexOf(branch);
         const jj = HIDDEN_STEMS[bi];
         
         jj.forEach(h => {
             stems.forEach((stem, sIdx) => {
                 if (!stem) return;
                 if (STEM.indexOf(stem) === h.stem) {
-                    const key = stem.c;
-                    if (!touganSet.has(key)) {
-                        touganSet.add(key);
+                    const existing = result.tougan.find(t => t.stem === stem.c + stem.k);
+                    if (!existing) {
                         result.tougan.push({
                             stem: stem.c + stem.k,
                             pillar: pillarNames[sIdx],
@@ -3126,7 +2402,7 @@ function getTwelveState(dayStem, branch) {
     // 甲:亥(11), 乙:午(6), 丙:寅(2), 丁:酉(9), 戊:寅(2), 己:酉(9), 庚:巳(5), 辛:子(0), 壬:申(8), 癸:卯(3)
     const starts = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];
     const dsi = STEM.indexOf(dayStem);
-    const bi = BRANCH.findIndex(br => br.c === branch.c);
+    const bi = BRANCH.indexOf(branch);
     const start = starts[dsi];
     
     // 양간(陽干): 순행, 음간(陰干): 역행
@@ -3141,9 +2417,11 @@ function getTwelveState(dayStem, branch) {
    ======================================== */
 function calcNapeum(stem, branch) {
     const si = STEM.indexOf(stem);
-    const bi = BRANCH.findIndex(br => br.c === branch.c);
-    // 60갑자 순서 계산
-    const idx = (si * 6 + Math.floor(bi / 2)) % 30;
+    const bi = BRANCH.indexOf(branch);
+    // 60갑자 순서 계산 (정확한 공식)
+    // jiaziIndex = (stem * 36 + branch * 25) % 60
+    const jiaziIndex = (si * 36 + bi * 25) % 60;
+    const idx = Math.floor(jiaziIndex / 2);
     const napeum = NAPEUM[idx];
     return {
         name: napeum.name,
@@ -3158,8 +2436,8 @@ function calcNapeum(stem, branch) {
    ======================================== */
 function calcMyunggung(monthBranch, hourBranch) {
     // 命宮(Life Palace) = (14 - Month Branch - Hour Branch) % 12
-    const mbi = BRANCH.findIndex(br => br.c === monthBranch.c);
-    const hbi = BRANCH.findIndex(br => br.c === hourBranch.c);
+    const mbi = BRANCH.indexOf(monthBranch);
+    const hbi = BRANCH.indexOf(hourBranch);
     const mgIdx = (14 - mbi - hbi + 24) % 12;
     const mgBranch = BRANCH[mgIdx];
     
@@ -3192,7 +2470,7 @@ function calcMyunggung(monthBranch, hourBranch) {
 function calcTaewon(yearStem, monthStem, monthBranch) {
     // Conception Origin = Month Stem +1, Month Branch +3
     const msi = STEM.indexOf(monthStem);
-    const mbi = BRANCH.findIndex(br => br.c === monthBranch.c);
+    const mbi = BRANCH.indexOf(monthBranch);
     
     const tStem = STEM[(msi + 1) % 10];
     const tBranch = BRANCH[(mbi + 3) % 12];
@@ -3214,13 +2492,13 @@ function calcTaewon(yearStem, monthStem, monthBranch) {
    ======================================== */
 function analyzeBanghap(saju) {
     const branches = [];
-    if (saju.year) branches.push(BRANCH.findIndex(br => br.c === saju.year.b.c));
-    if (saju.month) branches.push(BRANCH.findIndex(br => br.c === saju.month.b.c));
-    if (saju.day) branches.push(BRANCH.findIndex(br => br.c === saju.day.b.c));
-    if (saju.hour) branches.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));
+    if (saju.year) branches.push(BRANCH.indexOf(saju.year.b));
+    if (saju.month) branches.push(BRANCH.indexOf(saju.month.b));
+    if (saju.day) branches.push(BRANCH.indexOf(saju.day.b));
+    if (saju.hour) branches.push(BRANCH.indexOf(saju.hour.b));
     
     // 🔥 월지 인덱스 (준 방합 판단용) - Gemini Round 10
-    const monthBranchIdx = saju.month ? BRANCH.findIndex(br => br.c === saju.month.b.c) : -1;
+    const monthBranchIdx = saju.month ? BRANCH.indexOf(saju.month.b) : -1;
     
     const results = [];
     
@@ -3272,10 +2550,10 @@ function analyzeAmhap(saju) {
     const branches = [];
     const pillars = ['Year Branch', 'Month Branch', 'Day Branch', 'Hour Branch'];
     
-    if (saju.year) branches.push({idx: BRANCH.findIndex(br => br.c === saju.year.b.c), name: 'Year Branch', c: saju.year.b.c});
-    if (saju.month) branches.push({idx: BRANCH.findIndex(br => br.c === saju.month.b.c), name: 'Month Branch', c: saju.month.b.c});
-    if (saju.day) branches.push({idx: BRANCH.findIndex(br => br.c === saju.day.b.c), name: 'Day Branch', c: saju.day.b.c});
-    if (saju.hour) branches.push({idx: BRANCH.findIndex(br => br.c === saju.hour.b.c), name: 'Hour Branch', c: saju.hour.b.c});
+    if (saju.year) branches.push({idx: BRANCH.indexOf(saju.year.b), name: 'Year Branch', c: saju.year.b.c});
+    if (saju.month) branches.push({idx: BRANCH.indexOf(saju.month.b), name: 'Month Branch', c: saju.month.b.c});
+    if (saju.day) branches.push({idx: BRANCH.indexOf(saju.day.b), name: 'Day Branch', c: saju.day.b.c});
+    if (saju.hour) branches.push({idx: BRANCH.indexOf(saju.hour.b), name: 'Hour Branch', c: saju.hour.b.c});
     
     const results = [];
     
@@ -3307,10 +2585,10 @@ function analyzeGongmangHaeso(saju, gongmang) {
     }
     
     const branches = [];
-    if (saju.year) branches.push(BRANCH.findIndex(br => br.c === saju.year.b.c));
-    if (saju.month) branches.push(BRANCH.findIndex(br => br.c === saju.month.b.c));
-    if (saju.day) branches.push(BRANCH.findIndex(br => br.c === saju.day.b.c));
-    if (saju.hour) branches.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));
+    if (saju.year) branches.push(BRANCH.indexOf(saju.year.b));
+    if (saju.month) branches.push(BRANCH.indexOf(saju.month.b));
+    if (saju.day) branches.push(BRANCH.indexOf(saju.day.b));
+    if (saju.hour) branches.push(BRANCH.indexOf(saju.hour.b));
     
     const results = [];
     
@@ -3367,13 +2645,13 @@ function analyzeSinsalPosition(saju) {
         {name: 'Hour Branch', b: saju.hour?.b, meaning: 'Children, Later years', age: 'Later years (45+)'}
     ];
     
-    const ybi = BRANCH.findIndex(br => br.c === saju.year?.b?.c);
+    const ybi = BRANCH.indexOf(saju.year?.b);
     
     // Peach Blossom position analysis
     const taohua = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};
     for (const pos of positions) {
         if (!pos.b) continue;
-        const bi = BRANCH.findIndex(br => br.c === pos.b.c);
+        const bi = BRANCH.indexOf(pos.b);
         if (bi === taohua[ybi]) {
             results.push({
                 sinsal: 'Peach Blossom (桃花殺)',
@@ -3391,7 +2669,7 @@ function analyzeSinsalPosition(saju) {
     const yima = {0:2,1:11,2:8,3:5,4:2,5:11,6:8,7:5,8:2,9:11,10:8,11:5};
     for (const pos of positions) {
         if (!pos.b) continue;
-        const bi = BRANCH.findIndex(br => br.c === pos.b.c);
+        const bi = BRANCH.indexOf(pos.b);
         if (bi === yima[ybi]) {
             results.push({
                 sinsal: 'Traveling Horse (驛馬殺)',
@@ -3409,7 +2687,7 @@ function analyzeSinsalPosition(saju) {
     const huagai = {0:4,1:1,2:10,3:7,4:4,5:1,6:10,7:7,8:4,9:1,10:10,11:7};
     for (const pos of positions) {
         if (!pos.b) continue;
-        const bi = BRANCH.findIndex(br => br.c === pos.b.c);
+        const bi = BRANCH.indexOf(pos.b);
         if (bi === huagai[ybi]) {
             results.push({
                 sinsal: 'Canopy Star (華蓋殺)',
@@ -3496,182 +2774,261 @@ function analyzeGyoungi(luck, birthYear, currentYear) {
 function calcStrength(saju) {
     const dm = saju.day.s;
     const dme = dm.e;
-    const dmi = STEM.indexOf(dm);
-    const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);
+    const mbi = BRANCH.indexOf(saju.month.b);
     const season = SEASON[mbi];
     let score = 0;
     const factors = [];
     
-    // 비겁(Peer) = 같은 오행, 인성(Seal) = 나를 생하는 오행
-    const peerEl = dme;
-    const sealEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 4) % 5];
+    // ====== 오행 관계 정의 ======
+    const peerEl = dme;  // 비겁 (같은 오행)
+    const sealEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 4) % 5];  // 인성 (나를 생함)
+    const exprEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 1) % 5];  // 식상 (내가 생함)
+    const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 2) % 5]; // 재성 (내가 극함)
+    const officerEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 3) % 5]; // 관성 (나를 극함)
     const myEls = [peerEl, sealEl];
     
-    // 재성(Wealth) = 내가 극하는 오행, 관성(Officer) = 나를 극하는 오행
-    const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 2) % 5];
-    const officerEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 3) % 5];
-    const exprEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 1) % 5]; // 식상
-    
-    // ====== 표준 지장간 테이블 (정기/중기/여기) ======
-    // 순서: [정기(Main), 중기(Middle), 여기(Side)] - 각 천간 인덱스와 일수
+    // ====== 지장간 테이블 (정기, 중기, 여기) ======
     const JIJANGGAN = {
-        0: [{i:9, d:30}],                              // 子: 癸30
-        1: [{i:5, d:18}, {i:7, d:3}, {i:9, d:9}],      // 丑: 己18, 辛3, 癸9
-        2: [{i:0, d:16}, {i:2, d:7}, {i:4, d:7}],      // 寅: 甲16, 丙7, 戊7
-        3: [{i:1, d:30}],                              // 卯: 乙30
-        4: [{i:4, d:18}, {i:9, d:3}, {i:1, d:9}],      // 辰: 戊18, 癸3, 乙9
-        5: [{i:2, d:16}, {i:4, d:7}, {i:6, d:7}],      // 巳: 丙16, 戊7, 庚7
-        6: [{i:3, d:20}, {i:5, d:10}],                 // 午: 丁20, 己10
-        7: [{i:5, d:18}, {i:3, d:3}, {i:1, d:9}],      // 未: 己18, 丁3, 乙9
-        8: [{i:6, d:16}, {i:8, d:7}, {i:4, d:7}],      // 申: 庚16, 壬7, 戊7
-        9: [{i:7, d:30}],                              // 酉: 辛30
-        10:[{i:4, d:18}, {i:7, d:3}, {i:3, d:9}],      // 戌: 戊18, 辛3, 丁9
-        11:[{i:8, d:16}, {i:0, d:7}]                   // 亥: 壬16, 甲7
+        0: [{s:9, w:1.0}],                              // 子: 癸(정기)
+        1: [{s:5, w:0.6}, {s:7, w:0.2}, {s:9, w:0.2}], // 丑: 己, 辛, 癸
+        2: [{s:0, w:0.6}, {s:2, w:0.2}, {s:4, w:0.2}], // 寅: 甲, 丙, 戊
+        3: [{s:1, w:1.0}],                              // 卯: 乙(정기)
+        4: [{s:4, w:0.6}, {s:9, w:0.2}, {s:1, w:0.2}], // 辰: 戊, 癸, 乙
+        5: [{s:2, w:0.6}, {s:4, w:0.2}, {s:6, w:0.2}], // 巳: 丙, 戊, 庚
+        6: [{s:3, w:0.7}, {s:5, w:0.3}],               // 午: 丁, 己
+        7: [{s:5, w:0.6}, {s:3, w:0.2}, {s:1, w:0.2}], // 未: 己, 丁, 乙
+        8: [{s:6, w:0.6}, {s:8, w:0.2}, {s:4, w:0.2}], // 申: 庚, 壬, 戊
+        9: [{s:7, w:1.0}],                              // 酉: 辛(정기)
+        10:[{s:4, w:0.6}, {s:7, w:0.2}, {s:3, w:0.2}], // 戌: 戊, 辛, 丁
+        11:[{s:8, w:0.7}, {s:0, w:0.3}]                // 亥: 壬, 甲
     };
     
-    // ====== 1. 월령득령 (40점 만점) ======
-    const seasonScore = { 
-        spring: {wood:4, fire:2, earth:0, metal:-2, water:-1}, 
-        summer: {fire:4, earth:2, metal:0, water:-2, wood:-1}, 
-        autumn: {metal:4, water:2, wood:0, fire:-2, earth:-1}, 
-        winter: {water:4, wood:2, fire:0, earth:-2, metal:-1} 
+    // ====== 천간 수집 ======
+    const allStems = [saju.year.s, saju.month.s, saju.hour?.s].filter(s => s);
+    const allBranches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);
+    const branchIndices = allBranches.map(b => BRANCH.indexOf(b));
+    
+    // ====== ★★★ 1. 천간합 무력화 체크 (v4.12 NEW) ★★★ ======
+    // 천간합 쌍: 甲己, 乙庚, 丙辛, 丁壬, 戊癸
+    const STEM_COMBINE = [[0,5],[1,6],[2,7],[3,8],[4,9]];
+    const stemIndices = [STEM.indexOf(saju.year.s), STEM.indexOf(saju.month.s), STEM.indexOf(saju.hour?.s)].filter(i => i >= 0);
+    
+    let disabledSeals = [];  // 합으로 무력화된 인성
+    let disabledPeers = [];  // 합으로 무력화된 비겁
+    
+    STEM_COMBINE.forEach(([a, b]) => {
+        const hasA = stemIndices.includes(a);
+        const hasB = stemIndices.includes(b);
+        if (hasA && hasB) {
+            // 합이 성립 - 해당 천간들 무력화
+            const stemA = STEM[a];
+            const stemB = STEM[b];
+            if (stemA.e === sealEl) disabledSeals.push(a);
+            if (stemB.e === sealEl) disabledSeals.push(b);
+            if (stemA.e === peerEl) disabledPeers.push(a);
+            if (stemB.e === peerEl) disabledPeers.push(b);
+            factors.push({ l: '🔗 天干合', v: `${stemA.c}${stemB.c}合 → 힘 무력화`, p: false });
+        }
+    });
+    
+    // ====== ★★★ 2. 월령 득령/실령 (v4.12 강화 + 토왕용사) ★★★ ======
+    // 토왕용사: 辰(4), 未(7), 戌(10), 丑(1)은 土가 왕성한 달
+    const earthMonths = [1, 4, 7, 10]; // 丑, 辰, 未, 戌
+    const isEarthMonth = earthMonths.includes(mbi);
+    
+    // 월령별 오행 왕쇠 (더 정밀한 테이블)
+    // 寅卯=木왕, 巳午=火왕, 申酉=金왕, 亥子=水왕, 辰戌丑未=土왕
+    const monthScore = {
+        // 寅(2), 卯(3) = 木왕
+        2: {wood:3, fire:1, earth:-2, metal:-2, water:-1},
+        3: {wood:3, fire:2, earth:-2, metal:-2, water:-1},
+        // 辰(4) = 土왕 (봄→여름 전환, 습토)
+        4: {earth:2, wood:0, fire:-1, metal:-1, water:-1},
+        // 巳(5), 午(6) = 火왕
+        5: {fire:3, earth:1, metal:-2, water:-2, wood:0},
+        6: {fire:3, earth:2, metal:-2, water:-2, wood:0},
+        // 未(7) = 土왕 (여름→가을 전환, 조토)
+        7: {earth:2, fire:1, wood:-1, metal:-1, water:-2},
+        // 申(8), 酉(9) = 金왕
+        8: {metal:3, water:1, wood:-2, fire:-2, earth:0},
+        9: {metal:3, water:2, wood:-2, fire:-2, earth:0},
+        // 戌(10) = 土왕 (가을→겨울 전환, 조토)
+        10: {earth:2, metal:1, fire:-1, wood:-2, water:-1},
+        // 亥(11), 子(0) = 水왕
+        11: {water:3, wood:1, fire:-2, earth:-2, metal:0},
+        0: {water:3, wood:2, fire:-2, earth:-2, metal:0},
+        // 丑(1) = 土왕 (겨울→봄 전환, 습토)
+        1: {earth:2, water:0, metal:-1, wood:-1, fire:-2}
     };
-    const ms = seasonScore[season][dme];
+    
+    const ms = monthScore[mbi][dme];
     const deukRyung = ms >= 2;
-    score += ms * 2.5; // 최대 10점
-    factors.push({ l: 'Season Support', v: deukRyung ? `In Season (+${(ms*2.5).toFixed(1)})` : `Out of Season (${(ms*2.5).toFixed(1)})`, p: deukRyung });
+    score += ms * 6;  // 강화: *6
     
-    // ====== 2. 지지 통근 (30점 만점) - 핵심 수정! ======
-    let rootScore = 0;
-    let dayRoot = false;
-    let hourRoot = false;
-    const allBranches = [
-        {b: saju.year.b, pos: 'year', mult: 1.0},
-        {b: saju.month.b, pos: 'month', mult: 1.2},
-        {b: saju.day.b, pos: 'day', mult: 1.5},       // 일지 가중치 높음
-        {b: saju.hour?.b, pos: 'hour', mult: 1.3}    // 시지도 중요
-    ].filter(x => x.b);
+    const monthNames = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+    factors.push({ l: '月令 득령', v: `${monthNames[mbi]}월 ${deukRyung ? '✓ 당령' : '✗ 실령'} (${ms >= 0 ? '+' : ''}${ms*6})`, p: deukRyung });
     
-    allBranches.forEach(({b, pos, mult}) => {
-        const bi = BRANCH.findIndex(br => br.c === b.c); // 안전한 비교
-        if (bi === -1) return; // 유효하지 않은 지지 스킵
-        const hidden = JIJANGGAN[bi] || [];
+    // ====== ★★★ 3. 실제 통근 체크 (12운성 아닌 지장간 기준) ★★★ ======
+    let realRootScore = 0;
+    let hasRealRoot = { day: false, hour: false };
+    
+    allBranches.forEach((b, idx) => {
+        const bi = BRANCH.indexOf(b);
+        const position = ['year', 'month', 'day', 'hour'][idx];
+        const posWeight = position === 'day' ? 1.5 : position === 'hour' ? 1.3 : position === 'month' ? 1.2 : 1.0;
         
-        hidden.forEach((h, idx) => {
-            const hStem = STEM[h.i];
-            const hEl = hStem.e;
-            
-            // 비겁/인성 체크
-            if (myEls.includes(hEl)) {
-                // 정기(idx=0) > 중기(idx=1) > 여기(idx=2)
-                const qiWeight = idx === 0 ? 1.0 : idx === 1 ? 0.5 : 0.3;
-                const contribution = qiWeight * mult * 1.5;
-                rootScore += contribution;
-                
-                // ★ 통근 여부 플래그 설정 (핵심!)
-                if (pos === 'day') dayRoot = true;
-                if (pos === 'hour') hourRoot = true;
+        const hidden = JIJANGGAN[bi] || [];
+        hidden.forEach(h => {
+            const hStem = STEM[h.s];
+            // 지장간에 비겁(같은 오행) 또는 인성(나를 생하는 오행)이 있으면 진짜 뿌리
+            if (hStem.e === peerEl || hStem.e === sealEl) {
+                realRootScore += h.w * posWeight * 2;
+                if (position === 'day') hasRealRoot.day = true;
+                if (position === 'hour') hasRealRoot.hour = true;
             }
         });
-        
-        // 지지 본기(Main Element)가 비겁/인성이면 추가 점수
-        if (myEls.includes(b.e)) {
-            rootScore += 1.0 * mult;
-            if (pos === 'day') dayRoot = true;
-            if (pos === 'hour') hourRoot = true;
-        }
     });
     
-    score += Math.min(rootScore, 12); // 최대 12점
-    const rootStrong = rootScore >= 3;
-    factors.push({ l: 'Root Strength', v: rootStrong ? `Rooted (${rootScore.toFixed(1)})` : `Weak Roots (${rootScore.toFixed(1)})`, p: rootStrong });
+    score += Math.min(realRootScore, 10);
+    const rootStrong = realRootScore >= 2;
+    factors.push({ l: '通根 (실제뿌리)', v: rootStrong ? `✓ ${realRootScore.toFixed(1)}점` : `✗ 무근 (${realRootScore.toFixed(1)})`, p: rootStrong });
     
-    // ====== 3. 천간 비겁/인성 투출 (15점) ======
+    // ====== ★★★ 4. 천간 비겁/인성 투출 (합 무력화 반영) ★★★ ======
     let helpCount = 0;
-    const otherStems = [saju.year.s, saju.month.s, saju.hour?.s].filter(s => s);
-    otherStems.forEach(st => {
-        if (st.e === peerEl) { helpCount++; score += 2; }
-        if (st.e === sealEl) { helpCount++; score += 1.5; }
-    });
-    if (helpCount > 0) factors.push({ l: 'Stem Support', v: `${helpCount} (Peer/Seal)`, p: true });
+    let attackCount = 0;
+    let exprStemCount = 0;
     
-    // ====== 4. 설기/극기 공격 (감점) - BUG-004 FIX ======
-    let attackScore = 0;
-    let exprStemCount = 0; // ★ 식상 천간 카운트 추가
-    
-    // 천간 분석
-    otherStems.forEach(st => {
-        if (st.e === officerEl) attackScore += 1.5;  // 관살 공격
-        if (st.e === wealthEl) attackScore += 0.8;   // 재성 설기
-        if (st.e === exprEl) {
-            exprStemCount++;
-            attackScore += 1.2; // ★ 식상 천간: 0.5 → 1.2로 증가
+    allStems.forEach((st, idx) => {
+        const si = STEM.indexOf(st);
+        
+        // 합으로 무력화된 천간은 도움 안됨
+        if (disabledSeals.includes(si) || disabledPeers.includes(si)) {
+            factors.push({ l: '⚠️ 合去', v: `${st.c} 무력화됨`, p: false });
+            return;
+        }
+        
+        if (st.e === peerEl) { helpCount++; score += 2.5; }
+        if (st.e === sealEl) { helpCount++; score += 2; }
+        if (st.e === officerEl) { attackCount++; score -= 2; }
+        if (st.e === wealthEl) { attackCount++; score -= 1; }
+        if (st.e === exprEl) { 
+            exprStemCount++; 
+            score -= 2;  // 식상 설기
         }
     });
     
-    // 지지 분석
-    allBranches.map(x => x.b).forEach(b => {
-        if (b.e === officerEl) attackScore += 1.0;
-        if (b.e === wealthEl) attackScore += 0.5;
-        if (b.e === exprEl) attackScore += 0.5;
+    if (helpCount > 0) factors.push({ l: '天干 비겁/인성', v: `${helpCount}개 투출`, p: true });
+    if (attackCount > 0) factors.push({ l: '天干 관/재 압박', v: `${attackCount}개`, p: false });
+    
+    // ====== ★★★ 5. 식상태과 강력 감점 (v4.12 강화) ★★★ ======
+    let exprTotal = exprStemCount;
+    allBranches.forEach(b => { if (b.e === exprEl) exprTotal++; });
+    
+    if (exprTotal >= 3) {
+        score -= 4;  // 식상 3개 이상 = 강력 설기
+        factors.push({ l: '⚠️ 식상태과', v: `${exprTotal}개 → 설기과다 (−4)`, p: false });
+    } else if (exprStemCount >= 2) {
+        score -= 2;
+        factors.push({ l: '⚠️ 식상 투출', v: `${exprStemCount}天干 (−2)`, p: false });
+    }
+    
+    // ====== 6. 관살 압박 ======
+    let officerTotal = 0;
+    [...allStems, ...allBranches].forEach(p => { if (p.e === officerEl) officerTotal++; });
+    if (officerTotal >= 2) { 
+        score -= 2; 
+        factors.push({ l: '관살 압박', v: `${officerTotal}개 (−2)`, p: false }); 
+    }
+    
+    // ====== 7. 방합(方合) 체크 ======
+    const DIRECTIONAL = [
+        { branches: [2, 3, 4], element: 'wood', name: '寅卯辰 목국' },
+        { branches: [5, 6, 7], element: 'fire', name: '巳午未 화국' },
+        { branches: [8, 9, 10], element: 'metal', name: '申酉戌 금국' },
+        { branches: [11, 0, 1], element: 'water', name: '亥子丑 수국' }
+    ];
+    
+    let directionalFormed = null;
+    DIRECTIONAL.forEach(d => {
+        if (d.branches.every(b => branchIndices.includes(b))) {
+            directionalFormed = d;
+            if (d.element === peerEl) {
+                score += 8;
+                factors.push({ l: '🔥 方合', v: `${d.name} → 비겁 (+8)`, p: true });
+            } else if (d.element === sealEl) {
+                score += 6;
+                factors.push({ l: '🔥 方合', v: `${d.name} → 인성 (+6)`, p: true });
+            } else if (d.element === exprEl) {
+                score -= 5;
+                factors.push({ l: '⚠️ 方合', v: `${d.name} → 설기 (−5)`, p: false });
+            } else if (d.element === officerEl) {
+                score -= 6;
+                factors.push({ l: '⚠️ 方合', v: `${d.name} → 압박 (−6)`, p: false });
+            }
+        }
     });
     
-    // ★★★ 식상 천간 2개 이상이면 추가 감점 (강력한 설기) ★★★
-    if (exprStemCount >= 2) {
-        attackScore += 2.5;
-        factors.push({ l: '⚠️ Strong Expression', v: `${exprStemCount} stems draining (−2.5)`, p: false });
+    // ====== 8. 삼합(三合) 체크 ======
+    const THREE_HARMONY = [
+        { branches: [2, 6, 10], element: 'fire', name: '寅午戌 화국' },
+        { branches: [8, 0, 4], element: 'water', name: '申子辰 수국' },
+        { branches: [5, 9, 1], element: 'metal', name: '巳酉丑 금국' },
+        { branches: [11, 3, 7], element: 'wood', name: '亥卯未 목국' }
+    ];
+    
+    if (!directionalFormed) {
+        THREE_HARMONY.forEach(th => {
+            if (th.branches.every(b => branchIndices.includes(b))) {
+                if (th.element === peerEl) {
+                    score += 7;
+                    factors.push({ l: '🔥 三合', v: `${th.name} → 비겁 (+7)`, p: true });
+                } else if (th.element === sealEl) {
+                    score += 5;
+                    factors.push({ l: '🔥 三合', v: `${th.name} → 인성 (+5)`, p: true });
+                } else if (th.element === exprEl) {
+                    score -= 4;
+                    factors.push({ l: '⚠️ 三合', v: `${th.name} → 설기 (−4)`, p: false });
+                }
+            }
+        });
     }
     
-    if (attackScore > 0) {
-        score -= attackScore;
-        factors.push({ l: 'Attack Pressure', v: `${attackScore.toFixed(1)} (−)`, p: false });
-    }
-    
-    // ====== 5. 12운성 보정 ======
-    const ds = getTwelveState(dm, saju.day.b);
-    const dsBonus = ds.l >= 9 ? 2 : ds.l >= 6 ? 1 : ds.l >= 3 ? 0 : -1;
-    score += dsBonus;
-    factors.push({ l: 'Day Branch Stage', v: `${ds.k} (${dsBonus >= 0 ? '+' : ''}${dsBonus})`, p: ds.l >= 6 });
-    
-    // ====== 강약 판정 ======
+    // ====== 신강/신약 판정 ======
     let type = 'balanced';
     let extreme = null;
     
-    if (score >= 12) { type = 'strong'; if (score >= 18) extreme = 'Extreme Strong'; }
-    else if (score <= 0) { type = 'weak'; if (score <= -5) extreme = 'Extreme Weak'; }
-    else if (score >= 6) type = 'strong';
-    else if (score <= 3) type = 'weak';
+    if (score >= 15) { type = 'strong'; extreme = 'Extreme Strong'; }
+    else if (score >= 8) type = 'strong';
+    else if (score >= 3) type = 'balanced';
+    else if (score <= -5) { type = 'weak'; extreme = 'Extreme Weak'; }
+    else if (score <= 2) type = 'weak';
     
-    // ★ 뿌리가 있으면 극신약(종격) 불가! ★
-    if ((dayRoot || hourRoot) && extreme === 'Extreme Weak') {
+    // 실제 뿌리가 있으면 극신약 불가
+    if ((hasRealRoot.day || hasRealRoot.hour) && extreme === 'Extreme Weak') {
         extreme = null;
         type = 'weak';
-        factors.push({ l: '⚡ Root Override', v: 'Has root → Not Extreme Weak', p: true });
+        factors.push({ l: '⚡ 뿌리 보정', v: '극신약→신약', p: true });
     }
     
     // ====== 퍼센트 변환 ======
-    // score 범위: 대략 -10 ~ +20
-    let finalPct = Math.round(((score + 10) / 30) * 100);
-    finalPct = Math.max(0, Math.min(100, finalPct));
+    // score 범위: 약 -15 ~ +25
+    let pct = Math.round(((score + 15) / 40) * 100);
+    pct = Math.max(5, Math.min(95, pct));
     
-    // ★ 뿌리가 있으면 최소 퍼센트 보장! ★
-    if (dayRoot && finalPct < 15) {
-        finalPct = 15;
-        factors.push({ l: '⚡ Day Root Min', v: '15% guaranteed', p: true });
-    }
-    if (hourRoot && !dayRoot && finalPct < 10) {
-        finalPct = 10;
-        factors.push({ l: '⚡ Hour Root Min', v: '10% guaranteed', p: true });
-    }
+    // 뿌리 있으면 최소 15% 보장
+    if (hasRealRoot.hour && pct < 15) pct = 15;
+    if (hasRealRoot.day && pct < 20) pct = 20;
 
     return { 
         type, 
         score: Math.round(score * 10) / 10, 
-        pct: finalPct, 
+        pct, 
         factors, 
         extreme, 
-        hourRoot, 
-        dayRoot 
+        hourRoot: hasRealRoot.hour,
+        dayRoot: hasRealRoot.day,
+        disabledSeals,
+        disabledPeers
     };
 }
 
@@ -3835,7 +3192,7 @@ const JOHU_TABLE = {
 
 // Temperature-Humidity Balance 판단
 function analyzeClimate(saju) {
-    const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);
+    const mbi = BRANCH.indexOf(saju.month.b);
     const season = SEASON[mbi];
     
     let climate = {type: '', desc: '', needs: []};
@@ -3935,86 +3292,119 @@ function findByungYak(saju, strength) {
 function calcGods(saju, str) {
     const dm = saju.day.s;
     const dmi = STEM.indexOf(dm);
-    const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);
+    const mbi = BRANCH.indexOf(saju.month.b);
     const season = SEASON[mbi];
     let yong, hee, gi, johu = null, johuDesc = '';
+    let isFollower = false;  // 종격 여부
+    let followerType = null; // 종격 종류
     
-    // ★ 오행 카운트 (인성 과다 체크용)
-    const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
-    const sealEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5]; // 인성 오행
-    const exprEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5]; // 식상 오행
-    const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5]; // 재성 오행
+    // ====== 0. 기후 분석 (조후 체크를 위해 먼저 실행) ======
+    const climate = analyzeClimate(saju);
+    const isTooCold = climate && (climate.type === 'Cold' || climate.type === 'Very Cold');
+    const isTooHot = climate && (climate.type === 'Hot' || climate.type === 'Very Hot');
+    const isTooDamp = climate && (climate.type === 'Humid' || climate.type === 'Very Humid');
     
-    [saju.year, saju.month, saju.day, saju.hour].forEach(p => {
-        if (p && p.s) elCount[p.s.e]++;
-        if (p && p.b) elCount[p.b.e]++;
-    });
+    // ====== 1. 종격(Follower) 체크 - v4.12 NEW ======
+    // 조건: 10% 미만 + 일지/시지 모두 무근
+    const noRoot = !str.dayRoot && !str.hourRoot;
     
-    // 1. 기본 용신 (Strong/Weak 기준)
-    if (str.type === 'strong') { 
-        yong = wealthEl; // Wealth
-        hee = exprEl; // Food/Hurt
-        gi = sealEl;  // Seal
-    }
-    else if (str.type === 'weak') { 
-        yong = sealEl; // Seal
-        hee = dm.e; // Peer
-        gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];  // Officer
+    if (str.pct < 10 && noRoot) {
+        // 극신약 + 무근 = 종격 가능성
+        // 가장 강한 오행을 찾아 따름
+        const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
+        const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);
+        allPillars.forEach(p => {
+            elCount[p.s.e]++;
+            elCount[p.b.e]++;
+        });
         
-        // ★ 편인태왕(偏印太旺) 체크 - 인성 과다 시 용신 수정
-        // 조건: 신약(weak)인데 인성이 3개 이상 → 모자멸자(母慈滅子) 형국
-        // 해결: 인성을 설기하는 식상(Output)으로 용신 변경
-        if (elCount[sealEl] >= 3) {
-            yong = exprEl; // 식상(Output)으로 인성을 설기
-            hee = wealthEl; // 재성(Wealth)이 희신
-            gi = sealEl; // 과다한 인성이 기신
-            johuDesc = '偏印太旺 - Excess Seal (3+) suffocates Day Master. Output (Expression) needed to drain the overflow.';
-        }
-    }
-    else { 
-        yong = exprEl; // Food/Hurt
-        hee = wealthEl; // Wealth
-        gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];  // Officer
-    }
-    
-    // 2. 조후용신 고급 적용 (월별 테이블 사용)
-    const johuData = JOHU_TABLE[dmi] && JOHU_TABLE[dmi][mbi];
-    if (johuData) {
-        johu = johuData.yong;
-        // 인성 과다 상태에서는 조후용신보다 편인태왕 로직 우선
-        if (elCount[sealEl] >= 3 && str.type === 'weak') {
-            // 편인태왕 상태 유지, 조후용신은 참고만
-            johuDesc = johuDesc || johuData.desc;
-        } else {
-            johuDesc = johuData.desc;
+        // 일간 오행 제외하고 가장 강한 오행
+        const dmEl = dm.e;
+        let maxEl = null, maxCount = 0;
+        Object.entries(elCount).forEach(([el, cnt]) => {
+            if (el !== dmEl && cnt > maxCount) {
+                maxEl = el;
+                maxCount = cnt;
+            }
+        });
+        
+        if (maxCount >= 4) {
+            // 한 오행이 4개 이상이면 종격 확정
+            isFollower = true;
             
-            // ★ 금수상관격 특수 처리 (金水傷官喜見官)
-            // 금일간(庚/辛) + 겨울(亥/子/丑월) + 水 과다 = 조후용신(火)이 억부용신보다 우선
-            const isMetalDM = dm.e === 'metal';
-            const isWinterMonth = [10, 11, 0, 1].includes(mbi); // 亥子丑월
-            const waterCount = [saju.year, saju.month, saju.day, saju.hour].filter(p => 
-                p && ((p.s && p.s.e === 'water') || (p.b && p.b.e === 'water'))
-            ).length;
-            const isGeumsooSanggwan = isMetalDM && isWinterMonth && waterCount >= 2;
-            
-            // Apply climate Yongsin
-            // 조건: (조후용신 ≠ 기신) OR (금수상관격이면 조후용신 우선)
-            if (johu !== gi || isGeumsooSanggwan) {
-                // 금수상관격이면 기신도 변경 (火는 기신이 아님)
-                if (isGeumsooSanggwan && johu === 'fire') {
-                    gi = 'earth'; // 토가 기신 (금을 생해서 수를 더 강하게 만듦)
-                    johuDesc = '金水傷官喜見官 - Winter Metal needs Fire to melt the frozen water. Fire is beneficial, not harmful.';
-                }
-                hee = yong;
-                yong = johu;
+            // 종격 종류 판정
+            const relation = getElementRelation(dmEl, maxEl);
+            if (relation === 'wealth') {
+                followerType = '종재격';
+                yong = maxEl;  // 재성을 따름
+                hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 1) % 5]; // 재성을 생하는 식상
+                gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];   // 인성 (반란)
+            } else if (relation === 'officer') {
+                followerType = '종살격';
+                yong = maxEl;  // 관성을 따름
+                hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 4) % 5]; // 관성을 생하는 재성
+                gi = dm.e;  // 비겁 (반란)
+            } else if (relation === 'expression') {
+                followerType = '종아격';
+                yong = maxEl;  // 식상을 따름
+                hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 1) % 5]; // 식상을 생하는 비겁? → 재성
+                gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];   // 인성 (반란)
+            } else {
+                // 기타 종격
+                followerType = '종강격';
+                yong = maxEl;
+                hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 4) % 5];
+                gi = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 3) % 5];
             }
         }
     }
     
-    // 3. Cold-Warm-Damp balance analysis
-    const climate = analyzeClimate(saju);
+    // ====== 2. 일반 격국 - 신강/신약 용신 ======
+    if (!isFollower) {
+        if (str.type === 'strong') { 
+            yong = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5]; // 재성 (Wealth)
+            hee = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5]; // 식상 (Expression)
+            gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];  // 인성 (Seal)
+        }
+        else if (str.type === 'weak') { 
+            yong = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5]; // 인성 (Seal)
+            hee = dm.e; // 비겁 (Peer)
+            gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];  // 관성 (Officer)
+        }
+        else { 
+            yong = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5]; // 식상 (Expression)
+            hee = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5]; // 재성 (Wealth)
+            gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];  // 관성 (Officer)
+        }
+    }
     
-    // 4. Disease-Medicine analysis
+    // ====== 3. ★★★ 조후 예외 처리 (v4.12 강화) ★★★ ======
+    // 신약해도 극한 기후면 조후를 최우선!
+    const johuData = JOHU_TABLE[dmi] && JOHU_TABLE[dmi][mbi];
+    
+    if (johuData && !isFollower) {
+        johu = johuData.yong;
+        johuDesc = johuData.desc;
+        
+        // 🔥 핵심: 극한 기후(너무 춥거나/뜨겁거나/습하면) 조후 최우선
+        if (isTooCold || isTooHot || isTooDamp) {
+            // 조후가 기신이 아니면 무조건 조후 우선
+            if (johu !== gi) {
+                const prevYong = yong;
+                yong = johu;
+                hee = prevYong;
+                johuDesc += ' (Climate Priority Override)';
+            }
+        } else {
+            // 일반 조후 적용 (신강/신약 다음 우선순위)
+            if (johu !== gi && johu !== yong) {
+                // 조후가 용신과 같으면 그대로, 다르면 희신으로
+                if (hee !== johu) hee = johu;
+            }
+        }
+    }
+    
+    // ====== 4. 병약(病藥) 분석 ======
     const byungYak = findByungYak(saju, str);
     
     return { 
@@ -4024,8 +3414,22 @@ function calcGods(saju, str) {
         climate,
         byungYak,
         sub: johuData?.sub || null,
-        sealExcess: elCount[sealEl] >= 3 // 인성 과다 플래그
+        isFollower,
+        followerType
     };
+}
+
+// 오행 관계 판정 헬퍼 (종격용)
+function getElementRelation(dmEl, targetEl) {
+    const idx = EL_ORDER.indexOf(dmEl);
+    const tgtIdx = EL_ORDER.indexOf(targetEl);
+    const diff = (tgtIdx - idx + 5) % 5;
+    
+    if (diff === 1) return 'expression';  // 식상
+    if (diff === 2) return 'wealth';      // 재성
+    if (diff === 3) return 'officer';     // 관성
+    if (diff === 4) return 'seal';        // 인성
+    return 'peer';  // 비겁
 }
 
 /* ========================================
@@ -4098,7 +3502,7 @@ function analyzeYukcheon(saju, gender) {
         const stemGod = pos === 'day' ? {k: 'Day Master', c: '日干'} : getTenGod(pillar.s, dm);
         
         // Branch main stem Ten Gods
-        const mainJJ = HIDDEN_STEMS[BRANCH.findIndex(br => br.c === pillar.b.c)];
+        const mainJJ = HIDDEN_STEMS[BRANCH.indexOf(pillar.b)];
         const mainStem = mainJJ && mainJJ.length > 0 ? STEM[mainJJ[mainJJ.length - 1].stem] : null;
         const branchGod = mainStem ? getTenGod(mainStem, dm) : null;
         
@@ -4141,7 +3545,7 @@ function analyzeYukcheon(saju, gender) {
     
     pillars.forEach(({pos, pillar}) => {
         if (!pillar) return;
-        const jjList = HIDDEN_STEMS[BRANCH.findIndex(br => br.c === pillar.b.c)];
+        const jjList = HIDDEN_STEMS[BRANCH.indexOf(pillar.b)];
         if (jjList) {
             jjList.forEach(jj => {
                 const stem = STEM[jj.stem];
@@ -4375,7 +3779,7 @@ function checkSpecialFormat(saju, strength) {
     
     // 🔥 지장간 십신도 카운트 (본기 위주)
     allPillars.forEach(p => {
-        const bi = BRANCH.findIndex(br => br.c === p.b.c);
+        const bi = BRANCH.indexOf(p.b);
         const hidden = HIDDEN_STEMS[bi];
         if (hidden) {
             hidden.forEach(h => {
@@ -4413,7 +3817,7 @@ function checkSpecialFormat(saju, strength) {
 function checkYangInGeonRok(saju) {
     const dm = saju.day.s;
     const dsi = STEM.indexOf(dm);
-    const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);
+    const mbi = BRANCH.indexOf(saju.month.b);
     
     // Prime position (Day Master별 Prime지)
     const geonrokMap = {0:2, 1:3, 2:5, 3:6, 4:5, 5:6, 6:8, 7:9, 8:11, 9:0}; // 甲寅, 乙卯...
@@ -4426,7 +3830,7 @@ function checkYangInGeonRok(saju) {
     }
     
     // If Day Branch is Yang Blade 양인격
-    const dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);
+    const dbi = BRANCH.indexOf(saju.day.b);
     if (dbi === yanginMap[dsi]) {
         return {...FORMATS_SPECIAL.yangin, hasYangIn: true};
     }
@@ -4464,7 +3868,7 @@ function calcFormat(saju, strength) {
     // 지지 숨은 간도 체크
     const allBranches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);
     allBranches.forEach(b => {
-        const bi = BRANCH.findIndex(br => br.c === b.c);
+        const bi = BRANCH.indexOf(b);
         const hidden = HIDDEN_STEMS[bi] || [];
         hidden.forEach(h => {
             const hStem = STEM[h.stem];
@@ -4487,7 +3891,7 @@ function calcFormat(saju, strength) {
     }
     
     // 3. 내격 판정 (Month Branch Hidden Stems Main의 십신)
-    const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);
+    const mbi = BRANCH.indexOf(saju.month.b);
     const jj = HIDDEN_STEMS[mbi];
     
     // Find main stem
@@ -4547,7 +3951,7 @@ function calcFormat(saju, strength) {
     });
     // 지지의 지장간도 체크
     [saju.month.b, saju.hour?.b].filter(b => b).forEach(b => {
-        const bi = BRANCH.findIndex(br => br.c === b.c);
+        const bi = BRANCH.indexOf(b);
         const jjList = HIDDEN_STEMS[bi] || [];
         jjList.forEach(jjItem => {
             const hiddenStem = STEM[jjItem.stem];
@@ -4669,8 +4073,8 @@ function getIljuDesc(ds, db) {
     const branchTrait = ['active','diligent','progressive','delicate','flexible','clever','passionate','devoted','confident','stylish','loyal','wise'];
     return { 
         title: `${ds.c}${db.c} Day`, 
-        desc: `You have a ${stemDesc[ds.c]} personality. The ${ELEMENT[ds.e].n}(${ds.c}) Day Master sitting on ${db.c}(${db.m}) gives you an inherently ${branchTrait[BRANCH.findIndex(br => br.c === db.c)]} nature.`, 
-        spouse: `Your spouse may be ${branchTrait[BRANCH.findIndex(br => br.c === db.c)]} like the ${db.m}. Good connections possible in ${db.m} years.` 
+        desc: `You have a ${stemDesc[ds.c]} personality. The ${ELEMENT[ds.e].n}(${ds.c}) Day Master sitting on ${db.c}(${db.m}) gives you an inherently ${branchTrait[BRANCH.indexOf(db)]} nature.`, 
+        spouse: `Your spouse may be ${branchTrait[BRANCH.indexOf(db)]} like the ${db.m}. Good connections possible in ${db.m} years.` 
     };
 }
 
@@ -4683,7 +4087,7 @@ function calcLuck(saju, birthYear, gender, gods) {
     const forward = (isYang && isMale) || (!isYang && !isMale);
     const periods = [];
     const msi = STEM.indexOf(saju.month.s);
-    const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);
+    const mbi = BRANCH.indexOf(saju.month.b);
     const curYear = new Date().getFullYear();
     const curAge = curYear - birthYear;
     
@@ -4818,9 +4222,9 @@ function ylCheckClimateClash(yp, gods) {
 // 삼합 형성
 function ylCheckBureau(yp, saju) {
     const { samhapPatterns } = YEAR_LUCK_CONFIG;
-    const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);
-    const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];
-    if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));
+    const ypBi = BRANCH.indexOf(yp.b);
+    const allBr = [BRANCH.indexOf(saju.year.b), BRANCH.indexOf(saju.month.b), BRANCH.indexOf(saju.day.b)];
+    if (saju.hour) allBr.push(BRANCH.indexOf(saju.hour.b));
     
     for (const [a, b, c, el] of samhapPatterns) {
         if (ypBi === b && allBr.includes(a) && allBr.includes(c)) {
@@ -4836,7 +4240,7 @@ function ylCheckBureau(yp, saju) {
 // 월지충
 function ylCheckMonthClash(yp, saju, bureauFormed) {
     if (bureauFormed) return { active: false, score: 0, desc: '' };
-    const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);
+    const ypBi = BRANCH.indexOf(yp.b), mbi = BRANCH.indexOf(saju.month.b);
     if (Math.abs(ypBi - mbi) === 6) {
         const wang = [0, 3, 6, 9];
         const isWang = wang.includes(ypBi) && wang.includes(mbi);
@@ -4847,7 +4251,7 @@ function ylCheckMonthClash(yp, saju, bureauFormed) {
 
 // 일지충
 function ylCheckDayClash(yp, saju) {
-    const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);
+    const ypBi = BRANCH.indexOf(yp.b), dbi = BRANCH.indexOf(saju.day.b);
     if (Math.abs(ypBi - dbi) === 6) {
         return { active: true, desc: `${yp.b.c}↔${saju.day.b.c} CLASH attacks Day Branch (Spouse/Self)!` };
     }
@@ -4859,7 +4263,7 @@ function ylCheckYanginClash(yp, saju) {
     const { yanginBranches } = YEAR_LUCK_CONFIG;
     const dm = saju.day.s, dmKey = dm.e + (dm.p ? '+' : '-');
     const yanginIdx = yanginBranches[dmKey];
-    const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);
+    const ypBi = BRANCH.indexOf(yp.b), dbi = BRANCH.indexOf(saju.day.b);
     if (dbi === yanginIdx && Math.abs(ypBi - dbi) === 6) {
         return { active: true, desc: `⚔️ SHEEP BLADE CLASH (沖羊刃)! High Risk High Return - Surgery OR windfall.` };
     }
@@ -4868,9 +4272,9 @@ function ylCheckYanginClash(yp, saju) {
 
 // 삼중첩
 function ylCheckTripleBranch(yp, saju) {
-    const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);
-    const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];
-    if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));
+    const ypBi = BRANCH.indexOf(yp.b);
+    const allBr = [BRANCH.indexOf(saju.year.b), BRANCH.indexOf(saju.month.b), BRANCH.indexOf(saju.day.b)];
+    if (saju.hour) allBr.push(BRANCH.indexOf(saju.hour.b));
     const cnt = allBr.filter(b => b === ypBi).length;
     if (cnt >= 1) {
         const clash = (ypBi + 6) % 12;
@@ -4941,9 +4345,9 @@ function ylCheckStemCombine(yp, saju, gods) {
 // 육합
 function ylCheckBranchCombine(yp, saju, gods, strength) {
     const { branchCombineMap } = YEAR_LUCK_CONFIG;
-    const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);
-    const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];
-    if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));
+    const ypBi = BRANCH.indexOf(yp.b);
+    const allBr = [BRANCH.indexOf(saju.year.b), BRANCH.indexOf(saju.month.b), BRANCH.indexOf(saju.day.b)];
+    if (saju.hour) allBr.push(BRANCH.indexOf(saju.hour.b));
     
     for (const [a, b, resEl] of branchCombineMap) {
         if (ypBi === a || ypBi === b) {
@@ -4958,7 +4362,7 @@ function ylCheckBranchCombine(yp, saju, gods, strength) {
                 const combineIsGi = resEl === gods.gi;  // 합화 결과가 기신이면
                 const combineIsYong = resEl === gods.yong;  // 합화 결과가 용신이면
                 
-                if (saju.hour && BRANCH.findIndex(br => br.c === saju.hour.b.c) === tgt) {
+                if (saju.hour && BRANCH.indexOf(saju.hour.b) === tgt) {
                     if (isWeak && combineIsGi) {
                         // 신약인데 기신으로 합화 = 위험
                         desc = `⚠️ ${yp.b.c}+${tgtBr.c} COMBINE → ${ELEMENT[resEl].n}! WARNING: Weak chart but combine strengthens unfavorable element. Late-life/children axis under pressure. Health warning for kidneys/reproductive system.`;
@@ -4970,7 +4374,7 @@ function ylCheckBranchCombine(yp, saju, gods, strength) {
                         desc = `🤝 ${yp.b.c}+${tgtBr.c} COMBINE → ${ELEMENT[resEl].n}! Hour branch strengthened.`;
                         score = 1;
                     }
-                } else if (BRANCH.findIndex(br => br.c === saju.day.b.c) === tgt) {
+                } else if (BRANCH.indexOf(saju.day.b) === tgt) {
                     if (isWeak && combineIsGi) {
                         desc = `⚠️ ${yp.b.c}+${tgtBr.c} COMBINE → ${ELEMENT[resEl].n}! Spouse Palace transforms to unfavorable element. Relationship stress.`;
                         score = -1;
@@ -4989,11 +4393,11 @@ function ylCheckBranchCombine(yp, saju, gods, strength) {
 // 자형
 function ylCheckSelfPunishment(yp, saju) {
     const { selfPunishBranches } = YEAR_LUCK_CONFIG;
-    const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);
+    const ypBi = BRANCH.indexOf(yp.b);
     if (!selfPunishBranches.includes(ypBi)) return { active: false, desc: '' };
     
-    const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];
-    if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));
+    const allBr = [BRANCH.indexOf(saju.year.b), BRANCH.indexOf(saju.month.b), BRANCH.indexOf(saju.day.b)];
+    if (saju.hour) allBr.push(BRANCH.indexOf(saju.hour.b));
     if (allBr.filter(b => b === ypBi).length < 1) return { active: false, desc: '' };
     
     const bn = yp.b.c;
@@ -5014,7 +4418,7 @@ function ylCheckScandal(yp, saju) {
     if (hourGod.k !== '偏財(Indirect Wealth)' || ypGod.k !== '偏財(Indirect Wealth)') return { active: false, score: 0, desc: '' };
     
     const { selfPunishBranches } = YEAR_LUCK_CONFIG;
-    const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), hBi = BRANCH.findIndex(br => br.c === saju.hour.b.c);
+    const ypBi = BRANCH.indexOf(yp.b), hBi = BRANCH.indexOf(saju.hour.b);
     if (ypBi === hBi && selfPunishBranches.includes(ypBi)) {
         return { active: true, score: -2, desc: `🚨 SCANDAL ALERT (色難)! Hour Pillar + Indirect Wealth DOUBLED + Self-Punishment. High risk of scandal/gambling.` };
     }
@@ -5037,7 +4441,7 @@ function ylCheckMissingYong(saju, gods, yongAttacked) {
 // 육해 배신
 function ylCheckHarmBetrayal(saju) {
     const { harmPairs } = YEAR_LUCK_CONFIG;
-    const dBi = BRANCH.findIndex(br => br.c === saju.day.b.c), mBi = BRANCH.findIndex(br => br.c === saju.month.b.c);
+    const dBi = BRANCH.indexOf(saju.day.b), mBi = BRANCH.indexOf(saju.month.b);
     for (const [a, b] of harmPairs) {
         if ((mBi === a && dBi === b) || (mBi === b && dBi === a)) {
             if ((mBi === 3 && dBi === 4) || (mBi === 4 && dBi === 3)) {
@@ -5109,7 +4513,7 @@ function calcYearLuck(year, saju, gods) {
     let voidBreak = false, voidBreakDesc = '';
     try {
         const gm = calcGongmang(saju);
-        const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);
+        const ypBi = BRANCH.indexOf(yp.b);
         if (gm && gm.indices) {
             gm.indices.forEach(vi => {
                 if (Math.abs(ypBi - vi) === 6) {
@@ -5171,14 +4575,14 @@ function analyzeLuckCross(saju, birthYear, gender, gods, targetYear) {
     }
     
     // Life Cycles(Life Cycle)-歲運(Annual Fortune) Clash
-    const dbi = BRANCH.findIndex(br => br.c === curDaeun.b.c), sbi = BRANCH.findIndex(br => br.c === yearLuck.pillar.b.c);
+    const dbi = BRANCH.indexOf(curDaeun.b), sbi = BRANCH.indexOf(yearLuck.pillar.b);
     if (Math.abs(dbi - sbi) === 6 || Math.abs(dbi - sbi) === 6) {
         result.analysis.push({type:'bad', text:'Life Cycle-Annual Fortune branch clash! Changes and challenges may arise.'});
     }
     
     // Life Cycles(Life Cycle)-원국 관계
-    const allBi = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];
-    if (saju.hour) allBi.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));
+    const allBi = [BRANCH.indexOf(saju.year.b), BRANCH.indexOf(saju.month.b), BRANCH.indexOf(saju.day.b)];
+    if (saju.hour) allBi.push(BRANCH.indexOf(saju.hour.b));
     
     allBi.forEach((bi, idx) => {
         const positions = ['Year Branch','Month Branch','Day Branch','Hour Branch'];
@@ -5219,6 +4623,72 @@ function analyzeLuckCross(saju, birthYear, gender, gods, targetYear) {
         }
     });
     
+    // ★★★ 대운+원국 삼합(三合) 완성 체크 (v4.11 Patch) ★★★
+    const THREE_HARMONY_BUREAU = [
+        {branches: [2,6,10], element: 1, name: '寅午戌 Fire Bureau (화국)'},
+        {branches: [8,0,4], element: 4, name: '申子辰 Water Bureau (수국)'},
+        {branches: [5,9,1], element: 3, name: '巳酉丑 Metal Bureau (금국)'},
+        {branches: [11,3,7], element: 0, name: '亥卯未 Wood Bureau (목국)'}
+    ];
+    
+    THREE_HARMONY_BUREAU.forEach(bureau => {
+        const natalMatches = bureau.branches.filter(b => allBi.includes(b));
+        const yearCompletes = bureau.branches.includes(sbi) && !allBi.includes(sbi);
+        
+        if (natalMatches.length >= 2 && yearCompletes) {
+            const elNames = ['Wood','Fire','Earth','Metal','Water'];
+            result.analysis.push({
+                type: 'critical',
+                text: `🔥🔥🔥 THREE HARMONY ${bureau.name} COMPLETED! ${elNames[bureau.element]} energy intensifies!`
+            });
+            result.threeHarmonyFormed = { element: bureau.element, name: bureau.name };
+            
+            if (gods && bureau.element === gods.gi) {
+                result.analysis.push({
+                    type: 'danger',
+                    text: `⚠️ Three Harmony is UNFAVORABLE (忌神)! Health at risk!`
+                });
+                result.bureauDanger = true;
+            }
+            
+            if (gods && bureau.element === gods.yong) {
+                result.analysis.push({
+                    type: 'breakthrough',
+                    text: `✨ Three Harmony completes BENEFICIAL element! Major breakthrough!`
+                });
+                result.bureauBreakthrough = true;
+            }
+        }
+    });
+    
+    // ★★★ 대운지지+원국 삼합 체크 (v4.11) ★★★
+    THREE_HARMONY_BUREAU.forEach(bureau => {
+        const natalMatches = bureau.branches.filter(b => allBi.includes(b));
+        const daeunCompletes = bureau.branches.includes(dbi) && !allBi.includes(dbi);
+        
+        if (natalMatches.length >= 2 && daeunCompletes && !result.daeunBureau) {
+            const elNames = ['Wood','Fire','Earth','Metal','Water'];
+            result.daeunBureau = { element: bureau.element, name: bureau.name };
+            result.analysis.push({
+                type: 'info',
+                text: `📍 Life Cycle (${curDaeun.b.c}) completes ${bureau.name}. Decade theme: ${elNames[bureau.element]}.`
+            });
+            
+            if (gods && bureau.element === gods.yong) {
+                result.analysis.push({
+                    type: 'golden',
+                    text: `✨✨ GOLDEN DECADE: Three Harmony matches Beneficial Element!`
+                });
+            }
+            if (gods && bureau.element === gods.gi) {
+                result.analysis.push({
+                    type: 'caution',
+                    text: `⚠️ CAUTION DECADE: Three Harmony is Unfavorable Element.`
+                });
+            }
+        }
+    });
+    
     // ★★★ BUG-003 FIX: 육합 기신 변화 체크 (v4.5 Patch) ★★★
     const COMBINE_PAIRS = [[0,1,'earth'],[2,11,'wood'],[3,10,'fire'],[4,9,'metal'],[5,8,'water'],[6,7,'fire']];
     const elNameToIdx = {'wood':0,'fire':1,'earth':2,'metal':3,'water':4};
@@ -5231,7 +4701,7 @@ function analyzeLuckCross(saju, birthYear, gender, gods, targetYear) {
                     const positions = ['Year','Month','Day(Spouse)','Hour(Children)'];
                     result.analysis.push({
                         type: 'warning',
-                        text: `⚠️ ${BRANCH[sbi].c}+${BRANCH[bi].c} combine → ${resultEl.toUpperCase()}(忌神)! ${positions[idx]} area affected.`
+                        text: `⚠️ ${BRANCH[sbi]}+${BRANCH[bi]} combine → ${resultEl.toUpperCase()}(忌神)! ${positions[idx]} area affected.`
                     });
                 }
             }
@@ -5349,14 +4819,14 @@ function calcMonthLuck(year, month, saju, gods) {
 // 12개월 Monthly Fortune 분석
 function getYearlyMonthLuck(year, saju, gods) {
     const months = [];
-    const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);  // 원국 월지
+    const mbi = BRANCH.indexOf(saju.month.b);  // 원국 월지
     
     for (let m = 1; m <= 12; m++) {
         const monthData = calcMonthLuck(year, m, saju, gods);
         
         // 🔥 왕지충(旺支沖) 체크 - Gemini feedback
         // 화과다(Fire Excess) 사주에서 자오충(子午沖)은 폭발적
-        const monthBi = BRANCH.findIndex(br => br.c === monthData.pillar.b.c);
+        const monthBi = BRANCH.indexOf(monthData.pillar.b);
         const isWangClash = Math.abs(monthBi - mbi) === 6;  // 6 = 충
         
         if (isWangClash && gods.climate && 
@@ -5393,10 +4863,10 @@ function getYearlyMonthLuck(year, saju, gods) {
 function calcSinsal(saju) {
     const ss = [];
     const dmi = STEM.indexOf(saju.day.s);
-    const ybi = BRANCH.findIndex(br => br.c === saju.year.b.c);
-    const dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);
-    const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);
-    const hbi = saju.hour ? BRANCH.findIndex(br => br.c === saju.hour.b.c) : -1;
+    const ybi = BRANCH.indexOf(saju.year.b);
+    const dbi = BRANCH.indexOf(saju.day.b);
+    const mbi = BRANCH.indexOf(saju.month.b);
+    const hbi = saju.hour ? BRANCH.indexOf(saju.hour.b) : -1;
     const brs = [ybi, mbi, dbi];
     if (hbi >= 0) brs.push(hbi);
     
@@ -5409,23 +4879,23 @@ function calcSinsal(saju) {
     
     // 1. 天乙貴人(Heavenly Noble) (天乙貴人) - 최고 길신
     const guiren = {0:[1,7],1:[0,8],2:[11,9],3:[11,9],4:[1,7],5:[0,8],6:[7,1],7:[6,2],8:[5,3],9:[5,3]};
-    if (guiren[dmi] && brs.some(b => guiren[dmi].includes(b))) ss.push({n:'天乙貴人(Heavenly Noble)',t:'good',d:'Supreme blessing! A guardian angel appears in every crisis. Official fortune and protection surround you.',i:'👼',lv:'최상'});
+    if (guiren[dmi] && brs.some(b => guiren[dmi].includes(b))) ss.push({n:'天乙貴人(Heavenly Noble)(天乙貴人)',t:'good',d:'Supreme blessing! A guardian angel appears in every crisis. Official fortune and protection surround you.',i:'👼',lv:'최상'});
     
     // 2. 천덕귀인 (天德貴人)
     const tiande = [9,8,7,6,5,4,3,2,1,0,9,8]; // By month
-    if (mbi < 12 && (dmi === tiande[mbi] || brs.some(b => b === tiande[mbi]))) ss.push({n:'天德貴人(Heavens Virtue Noble)',t:'good',d:'Heavens virtue shines upon you! Living righteously multiplies your blessings tenfold.',i:'🌟',lv:'상'});
+    if (mbi < 12 && (dmi === tiande[mbi] || brs.some(b => b === tiande[mbi]))) ss.push({n:'天德貴人(天德貴人(Heavens Virtue Noble)) (天德貴人)',t:'good',d:'Heavens virtue shines upon you! Living righteously multiplies your blessings tenfold.',i:'🌟',lv:'상'});
     
     // 3. 월덕귀인 (月德貴人)
     const yuede = [2,6,2,6,4,8,4,8,0,6,0,6]; // By month 천간
-    if (mbi < 12 && dmi === yuede[mbi]) ss.push({n:'月德貴人(Moons Virtue Noble)',t:'good',d:'Moons blessing graces your path! Natural charisma draws trust and admiration. Official positions favor you.',i:'🌙',lv:'상'});
+    if (mbi < 12 && dmi === yuede[mbi]) ss.push({n:'月德貴人(月德貴人(Moons Virtue Noble)) (月德貴人)',t:'good',d:'Moons blessing graces your path! Natural charisma draws trust and admiration. Official positions favor you.',i:'🌙',lv:'상'});
     
     // 4. 문창귀인 (文昌貴人)
     const munchang = {0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};
-    if (brs.includes(munchang[dmi])) ss.push({n:'文昌貴人(Scholar Star)',t:'good',d:'Brilliant scholarly mind! Exams, certifications, and academic pursuits bend to your will. Writing flows naturally.',i:'📚',lv:'상'});
+    if (brs.includes(munchang[dmi])) ss.push({n:'文昌貴人(Scholar Star) (文昌貴人)',t:'good',d:'Brilliant scholarly mind! Exams, certifications, and academic pursuits bend to your will. Writing flows naturally.',i:'📚',lv:'상'});
     
     // 5. 학당귀인 (學堂貴人)
     const xuetang = {0:11,1:6,2:2,3:9,4:2,5:9,6:5,7:0,8:8,9:3};
-    if (brs.includes(xuetang[dmi])) ss.push({n:'學堂貴人(Academy Noble)',t:'good',d:'Scholars destiny! Research and education lead to greatness. Professorship and expertise await.',i:'🎓',lv:'상'});
+    if (brs.includes(xuetang[dmi])) ss.push({n:'學堂貴人(Academy Noble) (學堂貴人)',t:'good',d:'Scholars destiny! Research and education lead to greatness. Professorship and expertise await.',i:'🎓',lv:'상'});
     
     // 6. 장성귀인 (將星貴人)
     const jiangx = {0:0,1:9,2:6,3:3,4:0,5:9,6:6,7:3,8:0,9:9,10:6,11:3}; // By Year Branch
@@ -5433,7 +4903,7 @@ function calcSinsal(saju) {
     
     // 7. 金輿(Golden Carriage) (金輿) - 배우자 복
     const jinyu = {0:4,1:5,2:7,3:8,4:7,5:8,6:10,7:11,8:1,9:2};
-    if (brs.includes(jinyu[dmi])) ss.push({n:'金輿(Golden Carriage)',t:'good',d:'Supreme spouse fortune! Marriage unlocks your destiny. An ideal partner awaits.',i:'💍',lv:'상'});
+    if (brs.includes(jinyu[dmi])) ss.push({n:'金輿(Golden Carriage) (金輿)',t:'good',d:'Supreme spouse fortune! Marriage unlocks your destiny. An ideal partner awaits.',i:'💍',lv:'상'});
     
     // 8. 복성귀인 (福星貴人)
     const fuxing = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};
@@ -5441,7 +4911,7 @@ function calcSinsal(saju) {
     
     // 9. 암록 (暗祿) - 숨은 녹
     const anlu = {0:11,1:10,2:1,3:0,4:1,5:0,6:3,7:2,8:5,9:4};
-    if (brs.includes(anlu[dmi])) ss.push({n:'暗祿(Hidden Fortune)',t:'good',d:'Hidden blessings flow! Invisible support guides you when you least expect it.',i:'🎁',lv:'Medium'});
+    if (brs.includes(anlu[dmi])) ss.push({n:'暗祿(暗祿(Hidden Fortune)) (暗祿)',t:'good',d:'Hidden blessings flow! Invisible support guides you when you least expect it.',i:'🎁',lv:'Medium'});
     
     // 10. Prime (建祿)
     const jianlu = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};
@@ -5449,21 +4919,21 @@ function calcSinsal(saju) {
     
     // 11. 천의성 (天醫星)
     const tianyi = [11,0,1,2,3,4,5,6,7,8,9,10]; // By month
-    if (mbi < 12 && brs.includes(tianyi[mbi])) ss.push({n:'天醫星(Heavenly Doctor)',t:'good',d:'Medical calling! Doctors, nurses, pharmacists — healing professions bring great fortune.',i:'💊',lv:'Medium'});
+    if (mbi < 12 && brs.includes(tianyi[mbi])) ss.push({n:'天醫星(天醫星(Heavenly Doctor))',t:'good',d:'Medical calling! Doctors, nurses, pharmacists — healing professions bring great fortune.',i:'💊',lv:'Medium'});
     
     // ========== 중성(中性) ==========
     
     // 12. 驛馬(Traveling Horse) (驛馬殺)
     const yima = {0:2,1:11,2:8,3:5,4:2,5:11,6:8,7:5,8:2,9:11,10:8,11:5};
-    if (brs.includes(yima[ybi])) ss.push({n:'驛馬(Traveling Horse)',t:'neutral',d:'Movement awakens fortune! Travel, relocation, overseas ventures — motion is your medicine.',i:'🐎',lv:'Medium'});
+    if (brs.includes(yima[ybi])) ss.push({n:'驛馬(Traveling Horse)(驛馬殺)',t:'neutral',d:'Movement awakens fortune! Travel, relocation, overseas ventures — motion is your medicine.',i:'🐎',lv:'Medium'});
     
     // 13. 桃花(Peach Blossom) (桃花殺)
     const taohua = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};
-    if (brs.includes(taohua[ybi])) ss.push({n:'桃花(Peach Blossom)',t:'neutral',d:'Irresistible charm! Magnetic attraction to opposite sex. Star quality — guard against wandering heart.',i:'🌸',lv:'Medium'});
+    if (brs.includes(taohua[ybi])) ss.push({n:'桃花(Peach Blossom)(桃花殺)',t:'neutral',d:'Irresistible charm! Magnetic attraction to opposite sex. Star quality — guard against wandering heart.',i:'🌸',lv:'Medium'});
     
     // 14. Fire개살 (華蓋殺)
     const huagai = {0:4,1:1,2:10,3:7,4:4,5:1,6:10,7:7,8:4,9:1,10:10,11:7};
-    if (brs.includes(huagai[ybi])) ss.push({n:'華蓋(Canopy Star)',t:'neutral',d:'Artists soul! Music, art, and writing flow naturally. Spiritual and philosophical depths call to you.',i:'🎨',lv:'Medium'});
+    if (brs.includes(huagai[ybi])) ss.push({n:'華蓋(Canopy Star) (華蓋殺)',t:'neutral',d:'Artists soul! Music, art, and writing flow naturally. Spiritual and philosophical depths call to you.',i:'🎨',lv:'Medium'});
     
     // 15. 홍염살 (紅艶殺) - 이성 인기
     const hongyan = {0:6,1:5,2:8,3:7,4:8,5:7,6:9,7:8,8:11,9:10};
@@ -5473,7 +4943,7 @@ function calcSinsal(saju) {
     
     // 16. 괴강살 (魁罡殺)
     const kuigang = [[6,4],[],[6,4],[],[6,10],[],[6,10],[],[],[]]; // Day Branch by Day Master
-    if (kuigang[dmi] && kuigang[dmi].includes(dbi)) ss.push({n:'魁罡(Fierce Star)',t:'bad',d:'Fierce fire spirit! Charismatic leader potential — temper your autocratic tendencies.',i:'⚡',lv:'상'});
+    if (kuigang[dmi] && kuigang[dmi].includes(dbi)) ss.push({n:'魁罡(魁罡(Fierce Star)) (魁罡殺)',t:'bad',d:'Fierce fire spirit! Charismatic leader potential — temper your autocratic tendencies.',i:'⚡',lv:'상'});
     
     // 17. 양인살 (羊刃殺)
     const yangren = {0:3,1:2,2:6,3:5,4:6,5:5,6:9,7:8,8:0,9:11};
@@ -5481,7 +4951,7 @@ function calcSinsal(saju) {
     
     // 18. 백호살 (白虎殺)
     const baihu = [6,7,8,9,10,11,0,1,2,3,4,5]; // By month
-    if (mbi < 12 && brs.includes(baihu[mbi])) ss.push({n:'白虎(White Tiger)',t:'bad',d:'Accident alert! However, professions involving blood (medicine, culinary) transform this into blessing.',i:'🐯',lv:'Medium'});
+    if (mbi < 12 && brs.includes(baihu[mbi])) ss.push({n:'白虎(白虎(White Tiger)) (白虎殺)',t:'bad',d:'Accident alert! However, professions involving blood (medicine, culinary) transform this into blessing.',i:'🐯',lv:'Medium'});
     
     // 🔥 18-2. 일주 백호대살 (日柱白虎) - Gemini Round 10
     // 甲辰, 乙巳, 丙戌, 丁丑, 戊辰, 己巳, 庚戌, 辛丑, 壬辰, 癸巳
@@ -5493,42 +4963,42 @@ function calcSinsal(saju) {
     
     // 19. 겁살 (劫殺)
     const jiesha = {0:5,1:2,2:11,3:8,4:5,5:2,6:11,7:8,8:5,9:2,10:11,11:8};
-    if (brs.includes(jiesha[ybi])) ss.push({n:'劫殺(Robbery Star)',t:'bad',d:'Financial vulnerability! Guard against theft, fraud, bad investments. Never co-sign loans!',i:'💸',lv:'Medium'});
+    if (brs.includes(jiesha[ybi])) ss.push({n:'劫殺(劫殺(Robbery Star)) (劫殺)',t:'bad',d:'Financial vulnerability! Guard against theft, fraud, bad investments. Never co-sign loans!',i:'💸',lv:'Medium'});
     
     // 20. 망신살 (亡神殺)
     const wangshen = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};
-    if (brs.includes(wangshen[ybi]) && wangshen[ybi] !== taohua[ybi]) ss.push({n:'亡神(Disgrace Star)',t:'bad',d:'Reputation vulnerability! Guard social media, drinking occasions carefully.',i:'😰',lv:'Medium'});
+    if (brs.includes(wangshen[ybi]) && wangshen[ybi] !== taohua[ybi]) ss.push({n:'亡神(亡神(Disgrace Star)) (亡神殺)',t:'bad',d:'Reputation vulnerability! Guard social media, drinking occasions carefully.',i:'😰',lv:'Medium'});
     
     // 21. 원진살 (怨嗔殺)
     const yuanchen = [[7],[6],[5],[4],[3],[2],[1],[0],[11],[10],[9],[8]];
-    if (yuanchen[ybi] && brs.some(b => yuanchen[ybi].includes(b))) ss.push({n:'怨嗔(Resentment Star)',t:'bad',d:'Love-hate bonds entangle you. Navigate close relationships with care.',i:'💔',lv:'Medium'});
+    if (yuanchen[ybi] && brs.some(b => yuanchen[ybi].includes(b))) ss.push({n:'怨嗔(怨嗔(Resentment Star)) (怨嗔殺)',t:'bad',d:'Love-hate bonds entangle you. Navigate close relationships with care.',i:'💔',lv:'Medium'});
     
     // 22. 귀문관살 (鬼門關殺)
     const guimen = [[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,0],[0,1],[1,2],[2,3],[3,4],[4,5]];
     if (guimen[ybi] && brs.some(b => guimen[ybi].includes(b))) ss.push({n:'鬼門關(Spirit Gate)',t:'neutral',d:'Highly intuitive and spiritually sensitive. You have a sixth sense for art and people. Meditation is your power source.',i:'🔮',lv:'Medium'});
     
     // 23. 현침살 (懸針殺) - 甲, 申, 辛에 세로획
-    if ([0,7].includes(dmi)) ss.push({n:'懸針(Needle Star)',t:'bad',d:'Needle-sharp energy! Critical perfectionist. Talent for acupuncture, precision crafts.',i:'📍',lv:'하'});
+    if ([0,7].includes(dmi)) ss.push({n:'懸針(懸針(Needle Star)) (懸針殺)',t:'bad',d:'Needle-sharp energy! Critical perfectionist. Talent for acupuncture, precision crafts.',i:'📍',lv:'하'});
     
     // 24. 육해살 (六害殺)
     const liuhai = [[7],[6],[5],[4],[3],[2],[1],[0],[11],[10],[9],[8]];
-    if (liuhai[dbi] && brs.some(b => liuhai[dbi].includes(b) && b !== dbi)) ss.push({n:'六害(Six Harms)',t:'bad',d:'Vulnerability through close ones. Navigate spouse and sibling relationships carefully.',i:'⚠️',lv:'Medium'});
+    if (liuhai[dbi] && brs.some(b => liuhai[dbi].includes(b) && b !== dbi)) ss.push({n:'六害(Six Harms) (六害殺)',t:'bad',d:'Vulnerability through close ones. Navigate spouse and sibling relationships carefully.',i:'⚠️',lv:'Medium'});
     
     // 25. 천라지망 (天羅地網)
     const tianluodiwang = (dbi === 10 && [5,6].includes(mbi)) || (dbi === 11 && [9,10].includes(mbi));
-    if (tianluodiwang) ss.push({n:'天羅地網(Heavens Net)',t:'bad',d:'Caught in heavens net. Guard against gossip, lawsuits. Feelings of entrapment may arise.',i:'🕸️',lv:'Medium'});
+    if (tianluodiwang) ss.push({n:'天羅地網(天羅地網(Heavens Net)) (天羅地網)',t:'bad',d:'Caught in heavens net. Guard against gossip, lawsuits. Feelings of entrapment may arise.',i:'🕸️',lv:'Medium'});
     
     // 26. 고란살 (孤鸞殺) - 혼자 있는 기러기
     const guluanM = [[0,2],[1,3],[2,5],[3,6],[4,5],[5,6],[6,8],[7,9],[8,11],[9,0]]; // Day Master+Branch combo (male)
     const guluanF = [[1,3],[0,2],[3,6],[2,5],[3,6],[2,5],[7,9],[6,8],[9,0],[8,11]]; // female
     const guluanCheck = GENDER === 'm' ? guluanM : guluanF;
-    if (guluanCheck[dmi] && guluanCheck[dmi][1] === dbi) ss.push({n:'孤鸞(Lonely Swan)',t:'bad',d:'Solitary spirit dwells within. Late marriage or single tendencies. Solitude becomes your companion.',i:'🦢',lv:'하'});
+    if (guluanCheck[dmi] && guluanCheck[dmi][1] === dbi) ss.push({n:'孤鸞(孤鸞(Lonely Swan)) (孤鸞殺)',t:'bad',d:'Solitary spirit dwells within. Late marriage or single tendencies. Solitude becomes your companion.',i:'🦢',lv:'하'});
     
     // 27. 삼재 (三災) - Year Branch 기준
     const sanzai = {0:[2,3,4],1:[2,3,4],2:[2,3,4],3:[5,6,7],4:[5,6,7],5:[5,6,7],6:[8,9,10],7:[8,9,10],8:[8,9,10],9:[11,0,1],10:[11,0,1],11:[11,0,1]};
     const curYear = new Date().getFullYear();
     const curYearBranch = (curYear - 4) % 12;
-    if (sanzai[ybi] && sanzai[ybi].includes(curYearBranch)) ss.push({n:'三災(Three Calamities)',t:'bad',d:'Three Calamities period active! Exercise caution for 3 years. Avoid reckless expansion and major moves.',i:'🔥',lv:'Medium'});
+    if (sanzai[ybi] && sanzai[ybi].includes(curYearBranch)) ss.push({n:'三災(三災(Three Calamities))',t:'bad',d:'三災(三災(Three Calamities)) period active! Exercise caution for 3 years. Avoid reckless expansion and major moves.',i:'🔥',lv:'Medium'});
     
     // 28. 반안살 (攀鞍殺)
     const panan = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};
@@ -5536,13 +5006,13 @@ function calcSinsal(saju) {
     
     // 29. 천주귀인 (天廚貴人) - 식복
     const tianchu = {0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};
-    if (brs.includes(tianchu[dmi])) ss.push({n:'天廚貴人(Heavenly Kitchen)',t:'good',d:'Blessed with food fortune! Never worry about hunger. Culinary talent awaits discovery.',i:'🍽️',lv:'Medium'});
+    if (brs.includes(tianchu[dmi])) ss.push({n:'天廚貴人(Heavenly Kitchen) (天廚貴人)',t:'good',d:'Blessed with food fortune! Never worry about hunger. Culinary talent awaits discovery.',i:'🍽️',lv:'Medium'});
     
     // 30. 천사(天赦) - 하늘이 용서하는 날
     const tiansha = [[2,0],[3,1],[5,2],[6,3],[8,4],[9,5],[11,6],[0,7],[2,8],[3,9]]; // [Branch,Stem] combination
     if (tiansha.some(ts => dbi === ts[0] && dmi === ts[1])) ss.push({n:'天赦日(Heavens Pardon)',t:'good',d:'天赦日(Heavens Pardon) Day! Misfortunes transform into blessings. Divine forgiveness surrounds you.',i:'🕊️',lv:'상'});
     
-    return ss.length ? ss : [{n:'No Special Stars',t:'neutral',d:'No exceptional divine stars. A peacefully balanced chart brings steady fortune.',i:'☯️',lv:'Medium'}];
+    return ss.length ? ss : [{n:'無特殊神殺(無特殊神殺(No Special Stars))',t:'neutral',d:'No exceptional divine stars. A peacefully balanced chart brings steady fortune.',i:'☯️',lv:'Medium'}];
 }
 
 /* ========================================
@@ -5551,11 +5021,8 @@ function calcSinsal(saju) {
 function calcInteractions(saju) {
     const res = [];
     const stems = [STEM.indexOf(saju.year.s), STEM.indexOf(saju.month.s), STEM.indexOf(saju.day.s)];
-    const brs = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];
-    if (saju.hour) { stems.push(STEM.indexOf(saju.hour.s)); brs.push(BRANCH.findIndex(br => br.c === saju.hour.b.c)); }
-    
-    // ★ 중복 제거용 Set
-    const addedCombines = new Set();
+    const brs = [BRANCH.indexOf(saju.year.b), BRANCH.indexOf(saju.month.b), BRANCH.indexOf(saju.day.b)];
+    if (saju.hour) { stems.push(STEM.indexOf(saju.hour.s)); brs.push(BRANCH.indexOf(saju.hour.b)); }
     
     // StemsHarmony
     const stComb = [[0,5,'甲己 (Wood+Earth) combine to Earth'],[1,6,'乙庚 (Wood+Metal) combine to Metal'],[2,7,'丙辛 (Fire+Metal) combine to Water'],[3,8,'丁壬 (Fire+Water) combine to Wood'],[4,9,'戊癸 (Earth+Water) combine to Fire']];
@@ -5563,11 +5030,7 @@ function calcInteractions(saju) {
         for (let i = 0; i < stems.length; i++) {
             for (let j = i+1; j < stems.length; j++) {
                 if ((stems[i]===a && stems[j]===b) || (stems[i]===b && stems[j]===a)) {
-                    const key = `天合:${Math.min(a,b)}-${Math.max(a,b)}`;
-                    if (!addedCombines.has(key)) {
-                        addedCombines.add(key);
-                        res.push({t:'天合',c:`${STEM[a].c}+${STEM[b].c}`,m:n,d:'💫 Heavenly stems unite to create new energy! This harmony brings smooth relationships, good timing, and opportunities. A blessing in your chart.'});
-                    }
+                    res.push({t:'天合',c:`${STEM[a].c}+${STEM[b].c}`,m:n,d:'💫 Heavenly stems unite to create new energy! This harmony brings smooth relationships, good timing, and opportunities. A blessing in your chart.'});
                 }
             }
         }
@@ -6145,12 +5608,12 @@ function analyzeAdvancedInteractions(saju) {
         warnings: []
     };
     
-    const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);
+    const mbi = BRANCH.indexOf(saju.month.b);
     const season = SEASON[mbi];
     const stems = [saju.year?.s, saju.month?.s, saju.day?.s, saju.hour?.s].filter(s => s);
     const stemIdxs = stems.map(s => STEM.indexOf(s));
-    const brs = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];
-    if (saju.hour) brs.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));
+    const brs = [BRANCH.indexOf(saju.year.b), BRANCH.indexOf(saju.month.b), BRANCH.indexOf(saju.day.b)];
+    if (saju.hour) brs.push(BRANCH.indexOf(saju.hour.b));
     
     // ========== Stem Transformation Conditions ==========
     const ganHap = [
@@ -6276,7 +5739,7 @@ function analyzeAdvancedInteractions(saju) {
    ======================================== */
 // Return Hidden Stems info for specific branch
 function getJijanggan(branch) {
-    const bi = BRANCH.findIndex(br => br.c === branch.c);
+    const bi = BRANCH.indexOf(branch);
     return HIDDEN_STEMS[bi] || [];
 }
 
@@ -6422,7 +5885,7 @@ function countElementsAdvanced(saju) {
     
     // Hidden Stems (비율 반영)
     branches.forEach(br => {
-        const bi = BRANCH.findIndex(x => x.c === br.b.c);
+        const bi = BRANCH.indexOf(br.b);
         const jj = HIDDEN_STEMS[bi] || [];
         jj.forEach(j => {
             const hiddenStem = STEM[j.stem];
@@ -6627,7 +6090,7 @@ function genCareerFortune(saju, str, gods) {
    ======================================== */
 function genLoveFortune(saju, str, gods) {
     const dm = saju.day.s;
-    const dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);
+    const dbi = BRANCH.indexOf(saju.day.b);
     const ec = countElements(saju);
     
     // Spouse element (M:Wealth, F:Officer)
@@ -6812,7 +6275,7 @@ function runMatch() {
     if (ganMatch) { score += 20; details.push({t:'good', txt:'💕 Stem Harmony! Your Day Masters are soulmates!'}); }
     
     // 2. Day Branch compatibility (Branch harmony/clash)
-    const myDb = BRANCH.findIndex(br => br.c === SAJU.day.b.c), pDb = BRANCH.findIndex(br => br.c === pSaju.day.b.c);
+    const myDb = BRANCH.indexOf(SAJU.day.b), pDb = BRANCH.indexOf(pSaju.day.b);
     const jiHap = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
     const jiChung = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
     for (let [a,b] of jiHap) if ((myDb===a && pDb===b) || (myDb===b && pDb===a)) { score += 15; details.push({t:'good', txt:'🤝 Day Branch Six Harmony! 함께 있으면 편안하고 안정감을 느껴요.'}); break; }
@@ -6827,7 +6290,7 @@ function runMatch() {
     if (SAJU.day.s.e === pSaju.day.s.e) { score += 5; details.push({t:'neutral', txt:`🔄 같은 ${ELEMENT[SAJU.day.s.e].k} element! Similar tendencies connect you.`}); }
     
     // 4. Zodiac Harmony
-    const myTti = BRANCH.findIndex(br => br.c === SAJU.year.b.c), pTti = BRANCH.findIndex(br => br.c === pSaju.year.b.c);
+    const myTti = BRANCH.indexOf(SAJU.year.b), pTti = BRANCH.indexOf(pSaju.year.b);
     for (let [a,b] of jiHap) if ((myTti===a && pTti===b) || (myTti===b && pTti===a)) { score += 5; details.push({t:'good', txt:`🐾 Zodiac Six Harmony! ${BRANCH[myTti].a}and ${BRANCH[pTti].a}are a great match.`}); break; }
     for (let [a,b] of jiChung) if ((myTti===a && pTti===b) || (myTti===b && pTti===a)) { score -= 5; details.push({t:'bad', txt:`🐾 Zodiac Clash! ${BRANCH[myTti].a}and ${BRANCH[pTti].a}may have conflicts.`}); break; }
     
@@ -7908,11 +7371,6 @@ function showTodayFortune() {
 function copySajuForAI() {
     if (!SAJU) { toast('Please analyze your Four Pillars first'); return; }
     
-    // Premium check
-    if (!requirePremium('AI Interpretation Copy')) {
-        return;
-    }
-    
     try {
         const str = calcStrength(SAJU);
         const dm = SAJU.day.s;
@@ -7935,42 +7393,10 @@ function copySajuForAI() {
             if(p && p.b) elCount[p.b.e]++;
         });
         
-        // ====== 지장간(Hidden Stems) 포함 오행 체크 (v4.8 fix) ======
-        const hiddenElCount = {wood:0, fire:0, earth:0, metal:0, water:0};
-        const JIJANGGAN_MAP = {
-            0: [9],           // 子: 癸
-            1: [5,7,9],       // 丑: 己,辛,癸
-            2: [0,2,4],       // 寅: 甲,丙,戊
-            3: [1],           // 卯: 乙
-            4: [4,9,1],       // 辰: 戊,癸,乙
-            5: [2,4,6],       // 巳: 丙,戊,庚
-            6: [3,5],         // 午: 丁,己
-            7: [5,3,1],       // 未: 己,丁,乙
-            8: [6,8,4],       // 申: 庚,壬,戊
-            9: [7],           // 酉: 辛
-            10:[4,7,3],       // 戌: 戊,辛,丁
-            11:[8,0]          // 亥: 壬,甲
-        };
-        [SAJU.year.b, SAJU.month.b, SAJU.day.b, SAJU.hour?.b].filter(b => b).forEach(b => {
-            const bi = BRANCH.findIndex(br => br.c === b.c);
-            const hidden = JIJANGGAN_MAP[bi] || [];
-            hidden.forEach(hi => { hiddenElCount[STEM[hi].e]++; });
-        });
-        
         // Ten Gods calculation
         const yearGod = getTenGod(SAJU.year.s, dm);
         const monthGod = getTenGod(SAJU.month.s, dm);
         const hourGod = SAJU.hour ? getTenGod(SAJU.hour.s, dm) : null;
-        
-        // 십신 중복 체크 - 같은 십신이면 간략화
-        const monthGodDesc = (monthGod.k === yearGod.k) 
-            ? `Same as Year Stem (${yearGod.k}), amplifying its influence`
-            : `${monthGod.k} - ${monthGod.d}`;
-        const hourGodDesc = hourGod 
-            ? (hourGod.k === yearGod.k || hourGod.k === monthGod.k)
-                ? `Same as above (${hourGod.k})`
-                : `${hourGod.k} - ${hourGod.d}`
-            : null;
         
         // Twelve States 계산
         const yearState = getTwelveState(dm, SAJU.year.b);
@@ -8137,9 +7563,9 @@ function copySajuForAI() {
 
 【TEN GODS (Based on Stems)】
 • Year Stem ${SAJU.year.s.c}: ${yearGod.k} - ${yearGod.d}
-• Month Stem ${SAJU.month.s.c}: ${monthGodDesc}
+• Month Stem ${SAJU.month.s.c}: ${monthGod.k} - ${monthGod.d}
 • Day Stem ${SAJU.day.s.c}: Self (Day Master)
-${hourGod ? '• Hour Stem ' + SAJU.hour.s.c + ': ' + hourGodDesc : '• Hour Stem: Unknown'}
+${hourGod ? '• Hour Stem ' + SAJU.hour.s.c + ': ' + hourGod.k + ' - ' + hourGod.d : '• Hour Stem: Unknown'}
 
 【TWELVE LIFE STAGES (Based on Day Master)】
 • Year Branch ${SAJU.year.b.c}: ${yearState.k} (Energy ${yearState.l}/12)
@@ -8153,20 +7579,38 @@ ${hourState ? '• Hour Branch ' + SAJU.hour.b.c + ': ' + hourState.k + ' (Energ
 • Earth (土): ${elCount.earth}
 • Metal (金): ${elCount.metal}
 • Water (水): ${elCount.water}
-• Missing Elements: ${(() => {
-    const missing = Object.entries(elCount).filter(e => e[1] === 0);
-    if (missing.length === 0) return 'None';
-    return missing.map(([el, cnt]) => {
-        if (hiddenElCount[el] > 0) {
-            return ELEMENT[el].c + '(' + ELEMENT[el].n + ') - Weak (Hidden in branches)';
-        }
-        return ELEMENT[el].c + '(' + ELEMENT[el].n + ')';
-    }).join(', ');
-})()}
+• Missing Elements: ${Object.entries(elCount).filter(e => e[1] === 0).map(e => ELEMENT[e[0]].n).join(', ') || 'None'}
 
 【DAY MASTER STRENGTH】
 • Strength: ${str.pct}% (${str.type === 'strong' ? 'STRONG Body' : str.type === 'weak' ? 'WEAK Body' : 'BALANCED'})
 ${str.extreme ? '• Special Note: ' + (str.extreme === 'Extreme Strong' ? 'Extremely Strong' : 'Extremely Weak') + ' chart (Possible Special Format)' : ''}
+${(() => {
+    // v4.12: 실제 통근 정보 (지장간 기준)
+    let rootInfo = '';
+    if (str.dayRoot || str.hourRoot) {
+        rootInfo = '• ⚡ REAL ROOTS (지장간 기준): ';
+        if (str.dayRoot) rootInfo += 'Day Branch has Peer/Seal in hidden stems. ';
+        if (str.hourRoot) rootInfo += 'Hour Branch has Peer/Seal in hidden stems. ';
+        rootInfo += 'Hidden resilience - not helpless despite low percentage.';
+    } else if (str.type === 'weak') {
+        rootInfo = '• ⚠️ NO REAL ROOTS: Day Master lacks Peer/Seal in branch hidden stems. Flexible but needs external support.';
+    }
+    return rootInfo;
+})()}
+${(() => {
+    // v4.12: 천간합 무력화 정보
+    if (str.disabledSeals?.length || str.disabledPeers?.length) {
+        const disabled = [];
+        if (str.disabledSeals?.length) {
+            str.disabledSeals.forEach(si => disabled.push(STEM[si].c + '(Seal)'));
+        }
+        if (str.disabledPeers?.length) {
+            str.disabledPeers.forEach(si => disabled.push(STEM[si].c + '(Peer)'));
+        }
+        return '• 🔗 STEM COMBINE NEUTRALIZATION: ' + disabled.join(', ') + ' disabled by 天干合. These helpers cannot support Day Master.';
+    }
+    return '';
+})()}
 ${(() => {
     // 🔥 재다신약(財多身弱) 체크 - Gemini Round 3
     const dm = SAJU.day.s;
@@ -8176,43 +7620,6 @@ ${(() => {
         return '• 💰 WEALTH OVERLOAD (財多身弱): ' + wealthCount + ' Wealth elements overwhelming weak Day Master! ' +
                'Metaphor: "Small boat carrying elephant." ' +
                'Strategy: Do NOT chase money directly. Lock assets in Real Estate/Documents. Let spouse manage finances. Health first, money second.';
-    }
-    return '';
-})()}
-${(() => {
-    // Rooted check - 일지/시지에 록왕지가 있는지 확인
-    const dmEl = SAJU.day.s.e;
-    const dayState = getTwelveState(SAJU.day.s, SAJU.day.b);
-    const hourState = SAJU.hour ? getTwelveState(SAJU.day.s, SAJU.hour.b) : null;
-    const strongStates = [11, 12]; // 건록(11), 제왕(12)
-    const hasRoot = strongStates.includes(dayState.l) || (hourState && strongStates.includes(hourState.l));
-    
-    // 🔥 뿌리 공격 체크 (일지-시지 충) - Gemini Round 3
-    let rootUnderAttack = false;
-    let attackDesc = '';
-    if (SAJU.hour) {
-        const dbi = BRANCH.findIndex(br => br.c === SAJU.day.b.c);
-        const hbi = BRANCH.findIndex(br => br.c === SAJU.hour.b.c);
-        // 육충 체크 (6 차이)
-        if (Math.abs(dbi - hbi) === 6) {
-            rootUnderAttack = true;
-            attackDesc = `Day-Hour Clash (${SAJU.day.b.c}↔${SAJU.hour.b.c})! Root is under attack from spouse palace.`;
-        }
-    }
-    
-    if (str.type === 'weak' && hasRoot) {
-        if (rootUnderAttack) {
-            return '• ⚠️ ROOT UNDER ATTACK: Day Master has root in ' + 
-                   (hourState && strongStates.includes(hourState.l) ? 'Hour Branch (' + hourState.k + ')' : 'Day Branch') +
-                   ' BUT ' + attackDesc + 
-                   ' Late-life instability. Spouse conflicts may drain vitality. Guard cardiovascular health especially in later years.';
-        } else {
-            return '• ⚡ ROOT ANALYSIS: Despite low percentage, Day Master has STRONG ROOTS in ' + 
-                   (strongStates.includes(dayState.l) ? 'Day Branch (' + dayState.k + ')' : '') +
-                   (strongStates.includes(dayState.l) && hourState && strongStates.includes(hourState.l) ? ' and ' : '') +
-                   (hourState && strongStates.includes(hourState.l) ? 'Hour Branch (' + hourState.k + ')' : '') +
-                   '. Hidden resilience and late-blooming potential. Not helpless - just selective about when to fight.';
-        }
     }
     return '';
 })()}
@@ -8251,12 +7658,12 @@ ${(() => {
     });
     
     // 일지가 충을 받는지 체크
-    const dayBranchIdx = BRANCH.findIndex(br => br.c === SAJU.day.b.c);
+    const dayBranchIdx = BRANCH.indexOf(SAJU.day.b);
     let dayClashed = false;
     const branches = [SAJU.year.b, SAJU.month.b];
     if (SAJU.hour) branches.push(SAJU.hour.b);
     branches.forEach(b => {
-        if (Math.abs(BRANCH.findIndex(br => br.c === b.c) - dayBranchIdx) === 6) dayClashed = true;
+        if (Math.abs(BRANCH.indexOf(b) - dayBranchIdx) === 6) dayClashed = true;
     });
     
     if (peerCount >= 3 && dayClashed) {
@@ -8274,6 +7681,7 @@ ${(() => {
 • Beneficial God (用神): ${ELEMENT[GODS.yong].n} (${ELEMENT[GODS.yong].c}) - Most needed element
 • Favorable God (喜神): ${ELEMENT[GODS.hee].n} (${ELEMENT[GODS.hee].c}) - Supports beneficial element
 • Unfavorable God (忌神): ${ELEMENT[GODS.gi].n} (${ELEMENT[GODS.gi].c}) - Element to avoid
+${GODS.isFollower ? '• 🌀 FOLLOWER CHART (' + GODS.followerType + '): Extremely weak Day Master follows the dominant element. DO NOT fight the trend - ride it. Years bringing ' + ELEMENT[GODS.yong].n + ' are FAVORABLE, not threatening.' : ''}
 ${GODS.johu ? '• Seasonal Adjustment: ' + (GODS.johuDesc || '') : ''}
 ${GODS.climate ? '• Climate Balance: ' + GODS.climate.type + ' - ' + GODS.climate.desc : ''}
 
@@ -8426,9 +7834,9 @@ ${(() => {
     }
     
     const clashMap = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
-    const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);
-    const mbBi = BRANCH.findIndex(br => br.c === SAJU.month.b.c);
-    const dbBi = BRANCH.findIndex(br => br.c === SAJU.day.b.c);
+    const ypBi = BRANCH.indexOf(yp.b);
+    const mbBi = BRANCH.indexOf(SAJU.month.b);
+    const dbBi = BRANCH.indexOf(SAJU.day.b);
     const warnings = [];
     clashMap.forEach(([a,b]) => {
         if ((ypBi === a && mbBi === b) || (ypBi === b && mbBi === a)) {
@@ -8444,24 +7852,24 @@ ${(() => {
     // 🔥 Pillar Echo 체크 - Gemini feedback
     const yp = calcYearPillar(currentYear, 6, 1);
     const ypSi = STEM.indexOf(yp.s);
-    const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);
+    const ypBi = BRANCH.indexOf(yp.b);
     const fuyin = [];
     
     // 🔥 대운 복음 (Life Cycle Echo) - Gemini Round 5
-    if (curLuck && STEM.indexOf(curLuck.s) === ypSi && BRANCH.findIndex(br => br.c === curLuck.b.c) === ypBi) {
+    if (curLuck && STEM.indexOf(curLuck.s) === ypSi && BRANCH.indexOf(curLuck.b) === ypBi) {
         fuyin.push('🔥🔥 LIFE CYCLE ECHO (大運伏吟): Annual Fortune MATCHES your current decade! Your decade\'s theme is CONCENTRATED into this year. Whatever challenges or opportunities this decade brings - they crystallize NOW. High stakes year. Success or setback will be magnified.');
     }
     
     // 년주 복음
-    if (STEM.indexOf(SAJU.year.s) === ypSi && BRANCH.findIndex(br => br.c === SAJU.year.b.c) === ypBi) {
+    if (STEM.indexOf(SAJU.year.s) === ypSi && BRANCH.indexOf(SAJU.year.b) === ypBi) {
         fuyin.push('🔄 YEAR PILLAR ECHO (伏吟): Grand reset of foundations. Family/ancestry matters highlighted.');
     }
     // 월주 복음 (가장 중요!)
-    if (STEM.indexOf(SAJU.month.s) === ypSi && BRANCH.findIndex(br => br.c === SAJU.month.b.c) === ypBi) {
+    if (STEM.indexOf(SAJU.month.s) === ypSi && BRANCH.indexOf(SAJU.month.b) === ypBi) {
         fuyin.push('🔄 MONTH PILLAR ECHO (伏吟): Social/Career axis reset! Major job change, relocation, or life direction shift incoming. Do not resist - flow with the reset.');
     }
     // 일주 복음 - 신강/신약에 따라 해석 다름
-    if (STEM.indexOf(SAJU.day.s) === ypSi && BRANCH.findIndex(br => br.c === SAJU.day.b.c) === ypBi) {
+    if (STEM.indexOf(SAJU.day.s) === ypSi && BRANCH.indexOf(SAJU.day.b) === ypBi) {
         const str = calcStrength(SAJU);
         if (str.type === 'strong') {
             fuyin.push('⚠️ DAY PILLAR ECHO (伏吟): Your strong energy DOUBLES! Risk of overconfidence, ego conflicts, or health strain from excess. Channel power carefully - too much fire burns the house.');
@@ -8470,7 +7878,7 @@ ${(() => {
         }
     }
     // 시주 복음 - 🔥 편재면 색난 경고 (Gemini Round 8)
-    if (SAJU.hour && STEM.indexOf(SAJU.hour.s) === ypSi && BRANCH.findIndex(br => br.c === SAJU.hour.b.c) === ypBi) {
+    if (SAJU.hour && STEM.indexOf(SAJU.hour.s) === ypSi && BRANCH.indexOf(SAJU.hour.b) === ypBi) {
         const hourGod = getTenGod(SAJU.hour.s, SAJU.day.s);
         if (hourGod.k === '偏財(Indirect Wealth)') {
             fuyin.push('🚨 HOUR PILLAR ECHO (伏吟) + INDIRECT WEALTH: Secret life axis DOUBLED! High risk of romantic scandal, gambling, or hidden expenses. This is NOT a creative opportunity - it is a TRAP. Stay home at night. Reject temptation.');
@@ -8487,8 +7895,8 @@ ${(() => {
     
     // 🔥 삼중 복음 체크 (대운+세운+원국 동일)
     if (curLuck && SAJU.hour) {
-        const daeunMatch = STEM.indexOf(curLuck.s) === ypSi && BRANCH.findIndex(br => br.c === curLuck.b.c) === ypBi;
-        const hourMatch = STEM.indexOf(SAJU.hour.s) === ypSi && BRANCH.findIndex(br => br.c === SAJU.hour.b.c) === ypBi;
+        const daeunMatch = STEM.indexOf(curLuck.s) === ypSi && BRANCH.indexOf(curLuck.b) === ypBi;
+        const hourMatch = STEM.indexOf(SAJU.hour.s) === ypSi && BRANCH.indexOf(SAJU.hour.b) === ypBi;
         if (daeunMatch && hourMatch) {
             fuyin.push('🔥🔥🔥 TRIPLE ECHO! Life Cycle + Annual + Hour Pillar ALL MATCH (' + yp.s.c + yp.b.c + '). EXTREMELY RARE. Life-altering transformation. Health demands extra attention as energy triples.');
         }
@@ -8968,7 +8376,7 @@ function getElementNumbers(element, max) {
 // Extract Yongsin element from Saju
 function getYongsinElement(saju) {
     const dmi = STEM.indexOf(saju.day.s);  // Day Master index
-    const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);  // Month branch index
+    const mbi = BRANCH.indexOf(saju.month.b);  // Month branch index
     
     // JOHU_TABLE에서 용신 찾기
     if(JOHU_TABLE[dmi] && JOHU_TABLE[dmi][mbi]) {
@@ -8982,13 +8390,6 @@ function getYongsinElement(saju) {
 }
 
 function generatePowerball(type) {
-    // Premium check for destiny-based numbers
-    if (type === 'destiny' && !isPremium) {
-        toast('👑 Destiny Numbers require Premium. Please offer 福債.');
-        openPremiumCheckout();
-        return;
-    }
-    
     const y = +document.getElementById('pb-year').value;
     const m = +document.getElementById('pb-month').value;
     const d = +document.getElementById('pb-day').value;
@@ -9111,13 +8512,6 @@ function renderPbHistory() {
 }
 
 function generateMega(type) {
-    // Premium check for destiny-based numbers
-    if (type === 'destiny' && !isPremium) {
-        toast('👑 Destiny Numbers require Premium. Please offer 福債.');
-        openPremiumCheckout();
-        return;
-    }
-    
     const y = +document.getElementById('mega-year').value;
     const m = +document.getElementById('mega-month').value;
     const d = +document.getElementById('mega-day').value;
@@ -9320,29 +8714,12 @@ function showLegalPage(page) {
     document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
     document.getElementById('legal-' + page).style.display = 'block';
     window.scrollTo(0, 0);
-    // Update URL hash without triggering reload
-    history.pushState(null, null, '#' + page);
 }
 
 function closeLegalPage() {
     document.querySelectorAll('.legal-page').forEach(p => p.style.display = 'none');
     document.querySelector('.tab-content.active').style.display = 'block';
-    // Clear hash
-    history.pushState(null, null, window.location.pathname);
 }
-
-// Handle URL hash on page load and hash change (for Paddle verification)
-function handleUrlHash() {
-    const hash = window.location.hash.replace('#', '');
-    if (hash === 'terms' || hash === 'privacy' || hash === 'refund') {
-        showLegalPage(hash);
-    }
-}
-
-// Check hash on page load
-window.addEventListener('load', handleUrlHash);
-// Check hash on hash change
-window.addEventListener('hashchange', handleUrlHash);
 
 </script>
 
@@ -9408,7 +8785,7 @@ window.addEventListener('hashchange', handleUrlHash);
         <p>These Terms are governed by the laws of the Republic of Korea.</p>
         
         <h2>9. CONTACT</h2>
-        <p>For questions: <a href="/cdn-cgi/l/email-protection#513a3c2435303f367f3e3737383238303d11363c30383d7f323e3c"><span class="__cf_email__" data-cfemail="452e283021242b226b2a23232c262c2429052228242c296b262a28">[email&#160;protected]</span></a></p>
+        <p>For questions: <a href="/cdn-cgi/l/email-protection#8ce7e1f9e8ede2eba2e3eaeae5efe5ede0ccebe1ede5e0a2efe3e1"><span class="__cf_email__" data-cfemail="204b4d5544414e470e4f4646494349414c60474d41494c0e434f4d">[email&#160;protected]</span></a></p>
     </div>
 </div>
 
@@ -9484,7 +8861,7 @@ window.addEventListener('hashchange', handleUrlHash);
         <p>We may update this Policy. Continued use means acceptance.</p>
         
         <h2>9. CONTACT</h2>
-        <p>Privacy questions: <a href="/cdn-cgi/l/email-protection#0962647c6d68676e27666f6f606a606865496e64686065276a6664"><span class="__cf_email__" data-cfemail="4e25233b2a2f202960212828272d272f220e29232f2722602d2123">[email&#160;protected]</span></a></p>
+        <p>Privacy questions: <a href="/cdn-cgi/l/email-protection#d4bfb9a1b0b5bab3fabbb2b2bdb7bdb5b894b3b9b5bdb8fab7bbb9"><span class="__cf_email__" data-cfemail="563d3b2332373831783930303f353f373a16313b373f3a7835393b">[email&#160;protected]</span></a></p>
     </div>
 </div>
 
@@ -9511,7 +8888,7 @@ window.addEventListener('hashchange', handleUrlHash);
         <h2>3. HOW TO REQUEST</h2>
         <p>If you believe you qualify for an exception:</p>
         <ul>
-            <li>Email: <a href="/cdn-cgi/l/email-protection#c9a2a4bcada8a7aee7a6afafa0aaa0a8a589aea4a8a0a5e7aaa6a4"><span class="__cf_email__" data-cfemail="1f74726a7b7e717831707979767c767e735f78727e7673317c7072">[email&#160;protected]</span></a></li>
+            <li>Email: <a href="/cdn-cgi/l/email-protection#3a51574f5e5b545d14555c5c5359535b567a5d575b535614595557"><span class="__cf_email__" data-cfemail="ed868098898c838ac3828b8b848e848c81ad8a808c8481c38e8280">[email&#160;protected]</span></a></li>
             <li>Include: Your email, purchase date, reason</li>
             <li>Response time: Within 48 hours</li>
         </ul>
@@ -9520,7 +8897,7 @@ window.addEventListener('hashchange', handleUrlHash);
         <p>Approved refunds will be processed within 5-7 business days to the original payment method.</p>
         
         <h2>5. CONTACT</h2>
-        <p>Questions about refunds: <a href="/cdn-cgi/l/email-protection#1873756d7c79767f36777e7e717b717974587f75797174367b7775"><span class="__cf_email__" data-cfemail="4e25233b2a2f202960212828272d272f220e29232f2722602d2123">[email&#160;protected]</span></a></p>
+        <p>Questions about refunds: <a href="/cdn-cgi/l/email-protection#b3d8dec6d7d2ddd49ddcd5d5dad0dad2dff3d4ded2dadf9dd0dcde"><span class="__cf_email__" data-cfemail="53383e2637323d347d3c35353a303a323f13343e323a3f7d303c3e">[email&#160;protected]</span></a></p>
     </div>
 </div>
 
@@ -9544,7 +8921,7 @@ window.addEventListener('hashchange', handleUrlHash);
         <a href="#terms" onclick="showLegalPage('terms'); return false;">Terms of Service</a> | 
         <a href="#privacy" onclick="showLegalPage('privacy'); return false;">Privacy Policy</a> | 
         <a href="#refund" onclick="showLegalPage('refund'); return false;">Refund Policy</a> | 
-        <a href="/cdn-cgi/l/email-protection#6803051d0c09060f46070e0e010b010904280f05090104460b0705">Contact</a>
+        <a href="/cdn-cgi/l/email-protection#701b1d0514111e175e1f1616191319111c30171d11191c5e131f1d">Contact</a>
     </div>
 </footer>
 
@@ -9650,48 +9027,4 @@ window.addEventListener('hashchange', handleUrlHash);
 }
 
 .legal-footer .disclaimer {
-    max-width: 800px;
-    margin: 0 auto 20px;
-    padding: 15px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 8px;
-    line-height: 1.6;
-}
-
-.legal-footer .copyright {
-    margin-bottom: 15px;
-}
-
-.legal-footer .ip-notice {
-    font-size: 0.75rem;
-    opacity: 0.7;
-}
-
-.legal-footer .legal-links {
-    margin-top: 15px;
-}
-
-.legal-footer .legal-links a {
-    color: var(--gold);
-    text-decoration: none;
-    transition: opacity 0.3s;
-}
-
-.legal-footer .legal-links a:hover {
-    opacity: 0.7;
-}
-
-/* Mobile Footer */
-@media (max-width: 768px) {
-    .legal-footer {
-        padding: 20px 15px;
-        font-size: 0.8rem;
-    }
-    .legal-footer .disclaimer {
-        padding: 12px;
-    }
-}
-</style>
-
-</body>
-</html>
+    max-width: 800px
