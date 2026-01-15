@@ -3867,20 +3867,41 @@ function calcGods(saju, str) {
     const season = SEASON[mbi];
     let yong, hee, gi, johu = null, johuDesc = '';
     
+    // ★ 오행 카운트 (인성 과다 체크용)
+    const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
+    const sealEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5]; // 인성 오행
+    const exprEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5]; // 식상 오행
+    const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5]; // 재성 오행
+    
+    [saju.year, saju.month, saju.day, saju.hour].forEach(p => {
+        if (p && p.s) elCount[p.s.e]++;
+        if (p && p.b) elCount[p.b.e]++;
+    });
+    
     // 1. 기본 용신 (Strong/Weak 기준)
     if (str.type === 'strong') { 
-        yong = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5]; // Wealth
-        hee = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5]; // Food/Hurt
-        gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];  // Seal
+        yong = wealthEl; // Wealth
+        hee = exprEl; // Food/Hurt
+        gi = sealEl;  // Seal
     }
     else if (str.type === 'weak') { 
-        yong = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5]; // Seal
+        yong = sealEl; // Seal
         hee = dm.e; // Peer
         gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];  // Officer
+        
+        // ★ 편인태왕(偏印太旺) 체크 - 인성 과다 시 용신 수정
+        // 조건: 신약(weak)인데 인성이 3개 이상 → 모자멸자(母慈滅子) 형국
+        // 해결: 인성을 설기하는 식상(Output)으로 용신 변경
+        if (elCount[sealEl] >= 3) {
+            yong = exprEl; // 식상(Output)으로 인성을 설기
+            hee = wealthEl; // 재성(Wealth)이 희신
+            gi = sealEl; // 과다한 인성이 기신
+            johuDesc = '偏印太旺 - Excess Seal (3+) suffocates Day Master. Output (Expression) needed to drain the overflow.';
+        }
     }
     else { 
-        yong = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5]; // Food/Hurt
-        hee = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5]; // Wealth
+        yong = exprEl; // Food/Hurt
+        hee = wealthEl; // Wealth
         gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];  // Officer
     }
     
@@ -3888,27 +3909,33 @@ function calcGods(saju, str) {
     const johuData = JOHU_TABLE[dmi] && JOHU_TABLE[dmi][mbi];
     if (johuData) {
         johu = johuData.yong;
-        johuDesc = johuData.desc;
-        
-        // ★ 금수상관격 특수 처리 (金水傷官喜見官)
-        // 금일간(庚/辛) + 겨울(亥/子/丑월) + 水 과다 = 조후용신(火)이 억부용신보다 우선
-        const isMetalDM = dm.e === 'metal';
-        const isWinterMonth = [10, 11, 0, 1].includes(mbi); // 亥子丑월
-        const waterCount = [saju.year, saju.month, saju.day, saju.hour].filter(p => 
-            p && ((p.s && p.s.e === 'water') || (p.b && p.b.e === 'water'))
-        ).length;
-        const isGeumsooSanggwan = isMetalDM && isWinterMonth && waterCount >= 2;
-        
-        // Apply climate Yongsin
-        // 조건: (조후용신 ≠ 기신) OR (금수상관격이면 조후용신 우선)
-        if (johu !== gi || isGeumsooSanggwan) {
-            // 금수상관격이면 기신도 변경 (火는 기신이 아님)
-            if (isGeumsooSanggwan && johu === 'fire') {
-                gi = 'earth'; // 토가 기신 (금을 생해서 수를 더 강하게 만듦)
-                johuDesc = '金水傷官喜見官 - Winter Metal needs Fire to melt the frozen water. Fire is beneficial, not harmful.';
+        // 인성 과다 상태에서는 조후용신보다 편인태왕 로직 우선
+        if (elCount[sealEl] >= 3 && str.type === 'weak') {
+            // 편인태왕 상태 유지, 조후용신은 참고만
+            johuDesc = johuDesc || johuData.desc;
+        } else {
+            johuDesc = johuData.desc;
+            
+            // ★ 금수상관격 특수 처리 (金水傷官喜見官)
+            // 금일간(庚/辛) + 겨울(亥/子/丑월) + 水 과다 = 조후용신(火)이 억부용신보다 우선
+            const isMetalDM = dm.e === 'metal';
+            const isWinterMonth = [10, 11, 0, 1].includes(mbi); // 亥子丑월
+            const waterCount = [saju.year, saju.month, saju.day, saju.hour].filter(p => 
+                p && ((p.s && p.s.e === 'water') || (p.b && p.b.e === 'water'))
+            ).length;
+            const isGeumsooSanggwan = isMetalDM && isWinterMonth && waterCount >= 2;
+            
+            // Apply climate Yongsin
+            // 조건: (조후용신 ≠ 기신) OR (금수상관격이면 조후용신 우선)
+            if (johu !== gi || isGeumsooSanggwan) {
+                // 금수상관격이면 기신도 변경 (火는 기신이 아님)
+                if (isGeumsooSanggwan && johu === 'fire') {
+                    gi = 'earth'; // 토가 기신 (금을 생해서 수를 더 강하게 만듦)
+                    johuDesc = '金水傷官喜見官 - Winter Metal needs Fire to melt the frozen water. Fire is beneficial, not harmful.';
+                }
+                hee = yong;
+                yong = johu;
             }
-            hee = yong;
-            yong = johu;
         }
     }
     
@@ -3924,7 +3951,8 @@ function calcGods(saju, str) {
         johu, johuDesc,
         climate,
         byungYak,
-        sub: johuData?.sub || null
+        sub: johuData?.sub || null,
+        sealExcess: elCount[sealEl] >= 3 // 인성 과다 플래그
     };
 }
 
@@ -5237,23 +5265,23 @@ function calcSinsal(saju) {
     
     // 1. 天乙貴人(Heavenly Noble) (天乙貴人) - 최고 길신
     const guiren = {0:[1,7],1:[0,8],2:[11,9],3:[11,9],4:[1,7],5:[0,8],6:[7,1],7:[6,2],8:[5,3],9:[5,3]};
-    if (guiren[dmi] && brs.some(b => guiren[dmi].includes(b))) ss.push({n:'天乙貴人(Heavenly Noble)(天乙貴人)',t:'good',d:'Supreme blessing! A guardian angel appears in every crisis. Official fortune and protection surround you.',i:'👼',lv:'최상'});
+    if (guiren[dmi] && brs.some(b => guiren[dmi].includes(b))) ss.push({n:'天乙貴人(Heavenly Noble)',t:'good',d:'Supreme blessing! A guardian angel appears in every crisis. Official fortune and protection surround you.',i:'👼',lv:'최상'});
     
     // 2. 천덕귀인 (天德貴人)
     const tiande = [9,8,7,6,5,4,3,2,1,0,9,8]; // By month
-    if (mbi < 12 && (dmi === tiande[mbi] || brs.some(b => b === tiande[mbi]))) ss.push({n:'天德貴人(天德貴人(Heavens Virtue Noble)) (天德貴人)',t:'good',d:'Heavens virtue shines upon you! Living righteously multiplies your blessings tenfold.',i:'🌟',lv:'상'});
+    if (mbi < 12 && (dmi === tiande[mbi] || brs.some(b => b === tiande[mbi]))) ss.push({n:'天德貴人(Heavens Virtue Noble)',t:'good',d:'Heavens virtue shines upon you! Living righteously multiplies your blessings tenfold.',i:'🌟',lv:'상'});
     
     // 3. 월덕귀인 (月德貴人)
     const yuede = [2,6,2,6,4,8,4,8,0,6,0,6]; // By month 천간
-    if (mbi < 12 && dmi === yuede[mbi]) ss.push({n:'月德貴人(月德貴人(Moons Virtue Noble)) (月德貴人)',t:'good',d:'Moons blessing graces your path! Natural charisma draws trust and admiration. Official positions favor you.',i:'🌙',lv:'상'});
+    if (mbi < 12 && dmi === yuede[mbi]) ss.push({n:'月德貴人(Moons Virtue Noble)',t:'good',d:'Moons blessing graces your path! Natural charisma draws trust and admiration. Official positions favor you.',i:'🌙',lv:'상'});
     
     // 4. 문창귀인 (文昌貴人)
     const munchang = {0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};
-    if (brs.includes(munchang[dmi])) ss.push({n:'文昌貴人(Scholar Star) (文昌貴人)',t:'good',d:'Brilliant scholarly mind! Exams, certifications, and academic pursuits bend to your will. Writing flows naturally.',i:'📚',lv:'상'});
+    if (brs.includes(munchang[dmi])) ss.push({n:'文昌貴人(Scholar Star)',t:'good',d:'Brilliant scholarly mind! Exams, certifications, and academic pursuits bend to your will. Writing flows naturally.',i:'📚',lv:'상'});
     
     // 5. 학당귀인 (學堂貴人)
     const xuetang = {0:11,1:6,2:2,3:9,4:2,5:9,6:5,7:0,8:8,9:3};
-    if (brs.includes(xuetang[dmi])) ss.push({n:'學堂貴人(Academy Noble) (學堂貴人)',t:'good',d:'Scholars destiny! Research and education lead to greatness. Professorship and expertise await.',i:'🎓',lv:'상'});
+    if (brs.includes(xuetang[dmi])) ss.push({n:'學堂貴人(Academy Noble)',t:'good',d:'Scholars destiny! Research and education lead to greatness. Professorship and expertise await.',i:'🎓',lv:'상'});
     
     // 6. 장성귀인 (將星貴人)
     const jiangx = {0:0,1:9,2:6,3:3,4:0,5:9,6:6,7:3,8:0,9:9,10:6,11:3}; // By Year Branch
@@ -5261,7 +5289,7 @@ function calcSinsal(saju) {
     
     // 7. 金輿(Golden Carriage) (金輿) - 배우자 복
     const jinyu = {0:4,1:5,2:7,3:8,4:7,5:8,6:10,7:11,8:1,9:2};
-    if (brs.includes(jinyu[dmi])) ss.push({n:'金輿(Golden Carriage) (金輿)',t:'good',d:'Supreme spouse fortune! Marriage unlocks your destiny. An ideal partner awaits.',i:'💍',lv:'상'});
+    if (brs.includes(jinyu[dmi])) ss.push({n:'金輿(Golden Carriage)',t:'good',d:'Supreme spouse fortune! Marriage unlocks your destiny. An ideal partner awaits.',i:'💍',lv:'상'});
     
     // 8. 복성귀인 (福星貴人)
     const fuxing = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};
@@ -5269,7 +5297,7 @@ function calcSinsal(saju) {
     
     // 9. 암록 (暗祿) - 숨은 녹
     const anlu = {0:11,1:10,2:1,3:0,4:1,5:0,6:3,7:2,8:5,9:4};
-    if (brs.includes(anlu[dmi])) ss.push({n:'暗祿(暗祿(Hidden Fortune)) (暗祿)',t:'good',d:'Hidden blessings flow! Invisible support guides you when you least expect it.',i:'🎁',lv:'Medium'});
+    if (brs.includes(anlu[dmi])) ss.push({n:'暗祿(Hidden Fortune)',t:'good',d:'Hidden blessings flow! Invisible support guides you when you least expect it.',i:'🎁',lv:'Medium'});
     
     // 10. Prime (建祿)
     const jianlu = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};
@@ -5277,21 +5305,21 @@ function calcSinsal(saju) {
     
     // 11. 천의성 (天醫星)
     const tianyi = [11,0,1,2,3,4,5,6,7,8,9,10]; // By month
-    if (mbi < 12 && brs.includes(tianyi[mbi])) ss.push({n:'天醫星(天醫星(Heavenly Doctor))',t:'good',d:'Medical calling! Doctors, nurses, pharmacists — healing professions bring great fortune.',i:'💊',lv:'Medium'});
+    if (mbi < 12 && brs.includes(tianyi[mbi])) ss.push({n:'天醫星(Heavenly Doctor)',t:'good',d:'Medical calling! Doctors, nurses, pharmacists — healing professions bring great fortune.',i:'💊',lv:'Medium'});
     
     // ========== 중성(中性) ==========
     
     // 12. 驛馬(Traveling Horse) (驛馬殺)
     const yima = {0:2,1:11,2:8,3:5,4:2,5:11,6:8,7:5,8:2,9:11,10:8,11:5};
-    if (brs.includes(yima[ybi])) ss.push({n:'驛馬(Traveling Horse)(驛馬殺)',t:'neutral',d:'Movement awakens fortune! Travel, relocation, overseas ventures — motion is your medicine.',i:'🐎',lv:'Medium'});
+    if (brs.includes(yima[ybi])) ss.push({n:'驛馬(Traveling Horse)',t:'neutral',d:'Movement awakens fortune! Travel, relocation, overseas ventures — motion is your medicine.',i:'🐎',lv:'Medium'});
     
     // 13. 桃花(Peach Blossom) (桃花殺)
     const taohua = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};
-    if (brs.includes(taohua[ybi])) ss.push({n:'桃花(Peach Blossom)(桃花殺)',t:'neutral',d:'Irresistible charm! Magnetic attraction to opposite sex. Star quality — guard against wandering heart.',i:'🌸',lv:'Medium'});
+    if (brs.includes(taohua[ybi])) ss.push({n:'桃花(Peach Blossom)',t:'neutral',d:'Irresistible charm! Magnetic attraction to opposite sex. Star quality — guard against wandering heart.',i:'🌸',lv:'Medium'});
     
     // 14. Fire개살 (華蓋殺)
     const huagai = {0:4,1:1,2:10,3:7,4:4,5:1,6:10,7:7,8:4,9:1,10:10,11:7};
-    if (brs.includes(huagai[ybi])) ss.push({n:'華蓋(Canopy Star) (華蓋殺)',t:'neutral',d:'Artists soul! Music, art, and writing flow naturally. Spiritual and philosophical depths call to you.',i:'🎨',lv:'Medium'});
+    if (brs.includes(huagai[ybi])) ss.push({n:'華蓋(Canopy Star)',t:'neutral',d:'Artists soul! Music, art, and writing flow naturally. Spiritual and philosophical depths call to you.',i:'🎨',lv:'Medium'});
     
     // 15. 홍염살 (紅艶殺) - 이성 인기
     const hongyan = {0:6,1:5,2:8,3:7,4:8,5:7,6:9,7:8,8:11,9:10};
@@ -5301,7 +5329,7 @@ function calcSinsal(saju) {
     
     // 16. 괴강살 (魁罡殺)
     const kuigang = [[6,4],[],[6,4],[],[6,10],[],[6,10],[],[],[]]; // Day Branch by Day Master
-    if (kuigang[dmi] && kuigang[dmi].includes(dbi)) ss.push({n:'魁罡(魁罡(Fierce Star)) (魁罡殺)',t:'bad',d:'Fierce fire spirit! Charismatic leader potential — temper your autocratic tendencies.',i:'⚡',lv:'상'});
+    if (kuigang[dmi] && kuigang[dmi].includes(dbi)) ss.push({n:'魁罡(Fierce Star)',t:'bad',d:'Fierce fire spirit! Charismatic leader potential — temper your autocratic tendencies.',i:'⚡',lv:'상'});
     
     // 17. 양인살 (羊刃殺)
     const yangren = {0:3,1:2,2:6,3:5,4:6,5:5,6:9,7:8,8:0,9:11};
@@ -5309,7 +5337,7 @@ function calcSinsal(saju) {
     
     // 18. 백호살 (白虎殺)
     const baihu = [6,7,8,9,10,11,0,1,2,3,4,5]; // By month
-    if (mbi < 12 && brs.includes(baihu[mbi])) ss.push({n:'白虎(白虎(White Tiger)) (白虎殺)',t:'bad',d:'Accident alert! However, professions involving blood (medicine, culinary) transform this into blessing.',i:'🐯',lv:'Medium'});
+    if (mbi < 12 && brs.includes(baihu[mbi])) ss.push({n:'白虎(White Tiger)',t:'bad',d:'Accident alert! However, professions involving blood (medicine, culinary) transform this into blessing.',i:'🐯',lv:'Medium'});
     
     // 🔥 18-2. 일주 백호대살 (日柱白虎) - Gemini Round 10
     // 甲辰, 乙巳, 丙戌, 丁丑, 戊辰, 己巳, 庚戌, 辛丑, 壬辰, 癸巳
@@ -5321,42 +5349,42 @@ function calcSinsal(saju) {
     
     // 19. 겁살 (劫殺)
     const jiesha = {0:5,1:2,2:11,3:8,4:5,5:2,6:11,7:8,8:5,9:2,10:11,11:8};
-    if (brs.includes(jiesha[ybi])) ss.push({n:'劫殺(劫殺(Robbery Star)) (劫殺)',t:'bad',d:'Financial vulnerability! Guard against theft, fraud, bad investments. Never co-sign loans!',i:'💸',lv:'Medium'});
+    if (brs.includes(jiesha[ybi])) ss.push({n:'劫殺(Robbery Star)',t:'bad',d:'Financial vulnerability! Guard against theft, fraud, bad investments. Never co-sign loans!',i:'💸',lv:'Medium'});
     
     // 20. 망신살 (亡神殺)
     const wangshen = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};
-    if (brs.includes(wangshen[ybi]) && wangshen[ybi] !== taohua[ybi]) ss.push({n:'亡神(亡神(Disgrace Star)) (亡神殺)',t:'bad',d:'Reputation vulnerability! Guard social media, drinking occasions carefully.',i:'😰',lv:'Medium'});
+    if (brs.includes(wangshen[ybi]) && wangshen[ybi] !== taohua[ybi]) ss.push({n:'亡神(Disgrace Star)',t:'bad',d:'Reputation vulnerability! Guard social media, drinking occasions carefully.',i:'😰',lv:'Medium'});
     
     // 21. 원진살 (怨嗔殺)
     const yuanchen = [[7],[6],[5],[4],[3],[2],[1],[0],[11],[10],[9],[8]];
-    if (yuanchen[ybi] && brs.some(b => yuanchen[ybi].includes(b))) ss.push({n:'怨嗔(怨嗔(Resentment Star)) (怨嗔殺)',t:'bad',d:'Love-hate bonds entangle you. Navigate close relationships with care.',i:'💔',lv:'Medium'});
+    if (yuanchen[ybi] && brs.some(b => yuanchen[ybi].includes(b))) ss.push({n:'怨嗔(Resentment Star)',t:'bad',d:'Love-hate bonds entangle you. Navigate close relationships with care.',i:'💔',lv:'Medium'});
     
     // 22. 귀문관살 (鬼門關殺)
     const guimen = [[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,0],[0,1],[1,2],[2,3],[3,4],[4,5]];
     if (guimen[ybi] && brs.some(b => guimen[ybi].includes(b))) ss.push({n:'鬼門關(Spirit Gate)',t:'neutral',d:'Highly intuitive and spiritually sensitive. You have a sixth sense for art and people. Meditation is your power source.',i:'🔮',lv:'Medium'});
     
     // 23. 현침살 (懸針殺) - 甲, 申, 辛에 세로획
-    if ([0,7].includes(dmi)) ss.push({n:'懸針(懸針(Needle Star)) (懸針殺)',t:'bad',d:'Needle-sharp energy! Critical perfectionist. Talent for acupuncture, precision crafts.',i:'📍',lv:'하'});
+    if ([0,7].includes(dmi)) ss.push({n:'懸針(Needle Star)',t:'bad',d:'Needle-sharp energy! Critical perfectionist. Talent for acupuncture, precision crafts.',i:'📍',lv:'하'});
     
     // 24. 육해살 (六害殺)
     const liuhai = [[7],[6],[5],[4],[3],[2],[1],[0],[11],[10],[9],[8]];
-    if (liuhai[dbi] && brs.some(b => liuhai[dbi].includes(b) && b !== dbi)) ss.push({n:'六害(Six Harms) (六害殺)',t:'bad',d:'Vulnerability through close ones. Navigate spouse and sibling relationships carefully.',i:'⚠️',lv:'Medium'});
+    if (liuhai[dbi] && brs.some(b => liuhai[dbi].includes(b) && b !== dbi)) ss.push({n:'六害(Six Harms)',t:'bad',d:'Vulnerability through close ones. Navigate spouse and sibling relationships carefully.',i:'⚠️',lv:'Medium'});
     
     // 25. 천라지망 (天羅地網)
     const tianluodiwang = (dbi === 10 && [5,6].includes(mbi)) || (dbi === 11 && [9,10].includes(mbi));
-    if (tianluodiwang) ss.push({n:'天羅地網(天羅地網(Heavens Net)) (天羅地網)',t:'bad',d:'Caught in heavens net. Guard against gossip, lawsuits. Feelings of entrapment may arise.',i:'🕸️',lv:'Medium'});
+    if (tianluodiwang) ss.push({n:'天羅地網(Heavens Net)',t:'bad',d:'Caught in heavens net. Guard against gossip, lawsuits. Feelings of entrapment may arise.',i:'🕸️',lv:'Medium'});
     
     // 26. 고란살 (孤鸞殺) - 혼자 있는 기러기
     const guluanM = [[0,2],[1,3],[2,5],[3,6],[4,5],[5,6],[6,8],[7,9],[8,11],[9,0]]; // Day Master+Branch combo (male)
     const guluanF = [[1,3],[0,2],[3,6],[2,5],[3,6],[2,5],[7,9],[6,8],[9,0],[8,11]]; // female
     const guluanCheck = GENDER === 'm' ? guluanM : guluanF;
-    if (guluanCheck[dmi] && guluanCheck[dmi][1] === dbi) ss.push({n:'孤鸞(孤鸞(Lonely Swan)) (孤鸞殺)',t:'bad',d:'Solitary spirit dwells within. Late marriage or single tendencies. Solitude becomes your companion.',i:'🦢',lv:'하'});
+    if (guluanCheck[dmi] && guluanCheck[dmi][1] === dbi) ss.push({n:'孤鸞(Lonely Swan)',t:'bad',d:'Solitary spirit dwells within. Late marriage or single tendencies. Solitude becomes your companion.',i:'🦢',lv:'하'});
     
     // 27. 삼재 (三災) - Year Branch 기준
     const sanzai = {0:[2,3,4],1:[2,3,4],2:[2,3,4],3:[5,6,7],4:[5,6,7],5:[5,6,7],6:[8,9,10],7:[8,9,10],8:[8,9,10],9:[11,0,1],10:[11,0,1],11:[11,0,1]};
     const curYear = new Date().getFullYear();
     const curYearBranch = (curYear - 4) % 12;
-    if (sanzai[ybi] && sanzai[ybi].includes(curYearBranch)) ss.push({n:'三災(三災(Three Calamities))',t:'bad',d:'三災(三災(Three Calamities)) period active! Exercise caution for 3 years. Avoid reckless expansion and major moves.',i:'🔥',lv:'Medium'});
+    if (sanzai[ybi] && sanzai[ybi].includes(curYearBranch)) ss.push({n:'三災(Three Calamities)',t:'bad',d:'Three Calamities period active! Exercise caution for 3 years. Avoid reckless expansion and major moves.',i:'🔥',lv:'Medium'});
     
     // 28. 반안살 (攀鞍殺)
     const panan = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};
@@ -5364,13 +5392,13 @@ function calcSinsal(saju) {
     
     // 29. 천주귀인 (天廚貴人) - 식복
     const tianchu = {0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};
-    if (brs.includes(tianchu[dmi])) ss.push({n:'天廚貴人(Heavenly Kitchen) (天廚貴人)',t:'good',d:'Blessed with food fortune! Never worry about hunger. Culinary talent awaits discovery.',i:'🍽️',lv:'Medium'});
+    if (brs.includes(tianchu[dmi])) ss.push({n:'天廚貴人(Heavenly Kitchen)',t:'good',d:'Blessed with food fortune! Never worry about hunger. Culinary talent awaits discovery.',i:'🍽️',lv:'Medium'});
     
     // 30. 천사(天赦) - 하늘이 용서하는 날
     const tiansha = [[2,0],[3,1],[5,2],[6,3],[8,4],[9,5],[11,6],[0,7],[2,8],[3,9]]; // [Branch,Stem] combination
     if (tiansha.some(ts => dbi === ts[0] && dmi === ts[1])) ss.push({n:'天赦日(Heavens Pardon)',t:'good',d:'天赦日(Heavens Pardon) Day! Misfortunes transform into blessings. Divine forgiveness surrounds you.',i:'🕊️',lv:'상'});
     
-    return ss.length ? ss : [{n:'無特殊神殺(無特殊神殺(No Special Stars))',t:'neutral',d:'No exceptional divine stars. A peacefully balanced chart brings steady fortune.',i:'☯️',lv:'Medium'}];
+    return ss.length ? ss : [{n:'No Special Stars',t:'neutral',d:'No exceptional divine stars. A peacefully balanced chart brings steady fortune.',i:'☯️',lv:'Medium'}];
 }
 
 /* ========================================
@@ -5382,13 +5410,20 @@ function calcInteractions(saju) {
     const brs = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];
     if (saju.hour) { stems.push(STEM.indexOf(saju.hour.s)); brs.push(BRANCH.findIndex(br => br.c === saju.hour.b.c)); }
     
+    // ★ 중복 제거용 Set
+    const addedCombines = new Set();
+    
     // StemsHarmony
     const stComb = [[0,5,'甲己 (Wood+Earth) combine to Earth'],[1,6,'乙庚 (Wood+Metal) combine to Metal'],[2,7,'丙辛 (Fire+Metal) combine to Water'],[3,8,'丁壬 (Fire+Water) combine to Wood'],[4,9,'戊癸 (Earth+Water) combine to Fire']];
     for (let [a,b,n] of stComb) {
         for (let i = 0; i < stems.length; i++) {
             for (let j = i+1; j < stems.length; j++) {
                 if ((stems[i]===a && stems[j]===b) || (stems[i]===b && stems[j]===a)) {
-                    res.push({t:'天合',c:`${STEM[a].c}+${STEM[b].c}`,m:n,d:'💫 Heavenly stems unite to create new energy! This harmony brings smooth relationships, good timing, and opportunities. A blessing in your chart.'});
+                    const key = `天合:${Math.min(a,b)}-${Math.max(a,b)}`;
+                    if (!addedCombines.has(key)) {
+                        addedCombines.add(key);
+                        res.push({t:'天合',c:`${STEM[a].c}+${STEM[b].c}`,m:n,d:'💫 Heavenly stems unite to create new energy! This harmony brings smooth relationships, good timing, and opportunities. A blessing in your chart.'});
+                    }
                 }
             }
         }
@@ -7783,6 +7818,16 @@ function copySajuForAI() {
         const monthGod = getTenGod(SAJU.month.s, dm);
         const hourGod = SAJU.hour ? getTenGod(SAJU.hour.s, dm) : null;
         
+        // 십신 중복 체크 - 같은 십신이면 간략화
+        const monthGodDesc = (monthGod.k === yearGod.k) 
+            ? `Same as Year Stem (${yearGod.k}), amplifying its influence`
+            : `${monthGod.k} - ${monthGod.d}`;
+        const hourGodDesc = hourGod 
+            ? (hourGod.k === yearGod.k || hourGod.k === monthGod.k)
+                ? `Same as above (${hourGod.k})`
+                : `${hourGod.k} - ${hourGod.d}`
+            : null;
+        
         // Twelve States 계산
         const yearState = getTwelveState(dm, SAJU.year.b);
         const monthState = getTwelveState(dm, SAJU.month.b);
@@ -7948,9 +7993,9 @@ function copySajuForAI() {
 
 【TEN GODS (Based on Stems)】
 • Year Stem ${SAJU.year.s.c}: ${yearGod.k} - ${yearGod.d}
-• Month Stem ${SAJU.month.s.c}: ${monthGod.k} - ${monthGod.d}
+• Month Stem ${SAJU.month.s.c}: ${monthGodDesc}
 • Day Stem ${SAJU.day.s.c}: Self (Day Master)
-${hourGod ? '• Hour Stem ' + SAJU.hour.s.c + ': ' + hourGod.k + ' - ' + hourGod.d : '• Hour Stem: Unknown'}
+${hourGod ? '• Hour Stem ' + SAJU.hour.s.c + ': ' + hourGodDesc : '• Hour Stem: Unknown'}
 
 【TWELVE LIFE STAGES (Based on Day Master)】
 • Year Branch ${SAJU.year.b.c}: ${yearState.k} (Energy ${yearState.l}/12)
