@@ -3,20 +3,18 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.9                                                            ║
+║  K-MUDANG Pro v4.10 (GitHub Pages Edition)                                    ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
-║  v4.9 Changes:                                                                ║
-║    - 인성과다(偏印太旺) 체크: Seal 3+ → Output 용신                            ║
-║    - 십신 중복 설명 간략화                                                     ║
-║    - 천간합 Unique 처리 (중복 출력 방지)                                       ║
-║    - 신살 괄호 포맷 정리 (20+ 신살)                                            ║
-║    - 24 Premium 섹션 잠금                                                      ║
-║    - Total: 70 AI Rules                                                       ║
+║  v4.10 Changes (Critical Bug Fix):                                            ║
+║    - [BUG-001] 격국 판단: 년간/월간 투출 우선 로직 추가                       ║
+║    - [BUG-002] 세운+원국 방합 완성 감지 (巳午未 화국 등)                       ║
+║    - [BUG-003] 육합 결과가 忌神일 때 경고 추가                                 ║
+║    - [BUG-004] 식상 천간 설기 가중치 증가 (신강 과대평가 수정)                 ║
 ║                                                                                ║
 ║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
 ║  Contact: kmudang.official@gmail.com                                          ║
-║  Last Updated: 2025-01                                                        ║
+║  Last Updated: 2025-01-15                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 -->
 <meta charset="UTF-8">
@@ -3594,13 +3592,33 @@ function calcStrength(saju) {
     });
     if (helpCount > 0) factors.push({ l: 'Stem Support', v: `${helpCount} (Peer/Seal)`, p: true });
     
-    // ====== 4. 설기/극기 공격 (감점) ======
+    // ====== 4. 설기/극기 공격 (감점) - BUG-004 FIX ======
     let attackScore = 0;
-    [...otherStems, ...allBranches.map(x => x.b)].forEach(p => {
-        if (p.e === officerEl) attackScore += 1.5;  // 관살 공격
-        if (p.e === wealthEl) attackScore += 0.8;   // 재성 설기
-        if (p.e === exprEl) attackScore += 0.5;     // 식상 설기
+    let exprStemCount = 0; // ★ 식상 천간 카운트 추가
+    
+    // 천간 분석
+    otherStems.forEach(st => {
+        if (st.e === officerEl) attackScore += 1.5;  // 관살 공격
+        if (st.e === wealthEl) attackScore += 0.8;   // 재성 설기
+        if (st.e === exprEl) {
+            exprStemCount++;
+            attackScore += 1.2; // ★ 식상 천간: 0.5 → 1.2로 증가
+        }
     });
+    
+    // 지지 분석
+    allBranches.map(x => x.b).forEach(b => {
+        if (b.e === officerEl) attackScore += 1.0;
+        if (b.e === wealthEl) attackScore += 0.5;
+        if (b.e === exprEl) attackScore += 0.5;
+    });
+    
+    // ★★★ 식상 천간 2개 이상이면 추가 감점 (강력한 설기) ★★★
+    if (exprStemCount >= 2) {
+        attackScore += 2.5;
+        factors.push({ l: '⚠️ Strong Expression', v: `${exprStemCount} stems draining (−2.5)`, p: false });
+    }
+    
     if (attackScore > 0) {
         score -= attackScore;
         factors.push({ l: 'Attack Pressure', v: `${attackScore.toFixed(1)} (−)`, p: false });
@@ -4474,17 +4492,39 @@ function calcFormat(saju, strength) {
     const mainStem = STEM[mainJj.stem];
     const god = getTenGod(mainStem, saju.day.s);
     
-    // Check month stem Ten God (투출 여부)
-    const monthGod = getTenGod(saju.month.s, saju.day.s);
+    // ★★★ BUG-001 FIX: 년간+월간 투출 우선 체크 (v4.5 Patch) ★★★
+    const validStructureGods = ['食神(Eating God)','傷官(Expressor)','偏財(Indirect Wealth)','正財(Direct Wealth)','偏官(Challenger)','正官(Direct Officer)','偏印(Indirect Seal)','正印(Direct Seal)'];
     
-    // If stem emerged 그걸 격국으로
+    // 년간 십신 체크
+    const yearGod = getTenGod(saju.year.s, saju.day.s);
+    const yearStemIdx = STEM.indexOf(saju.year.s);
+    const yearHasRoot = jj.some(j => j.stem === yearStemIdx) || 
+                        [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b=>b).some(branch => {
+                            const bi = BRANCH.indexOf(branch);
+                            return (HIDDEN_STEMS[bi] || []).some(h => h.stem === yearStemIdx);
+                        });
+    
+    // 월간 십신 체크
+    const monthGod = getTenGod(saju.month.s, saju.day.s);
+    const monthStemIdx = STEM.indexOf(saju.month.s);
+    const monthHasRoot = jj.some(j => j.stem === monthStemIdx);
+    
+    // 투출 십신 집계
+    let emergentGods = {};
+    if (validStructureGods.includes(yearGod.k) && yearHasRoot) {
+        emergentGods[yearGod.k] = (emergentGods[yearGod.k] || 0) + 1;
+    }
+    if (validStructureGods.includes(monthGod.k) && monthHasRoot) {
+        emergentGods[monthGod.k] = (emergentGods[monthGod.k] || 0) + 1;
+    }
+    
+    // 가장 많이 투출된 십신을 격국으로 (투출이 없으면 월지 본기 사용)
     let finalGod = god.k;
-    if (['食神(Eating God)','傷官(Expressor)','偏財(Indirect Wealth)','正財(Direct Wealth)','偏官(Challenger)','正官(Direct Officer)','偏印(Indirect Seal)','正印(Direct Seal)'].includes(monthGod.k)) {
-        // Check if month stem has root in month branch
-        const monthStemIdx = STEM.indexOf(saju.month.s);
-        if (jj.some(j => j.stem === monthStemIdx)) {
-            finalGod = monthGod.k; // Emerged Ten God is structure
-        }
+    const emergentEntries = Object.entries(emergentGods);
+    if (emergentEntries.length > 0) {
+        // 가장 많이 투출된 것 선택
+        emergentEntries.sort((a,b) => b[1] - a[1]);
+        finalGod = emergentEntries[0][0];
     }
     
     // Check Prime structure
@@ -5143,6 +5183,56 @@ function analyzeLuckCross(saju, birthYear, gender, gods, targetYear) {
         if (Math.abs(bi - sbi) === 6) {
             result.analysis.push({type:'warning', text:`Annual Fortune clashes with ${positions[idx]}! ${idx===2 ? 'Watch spouse or health!' : idx===0 ? 'Family elder matters possible.' : idx===1 ? 'Career or business changes possible.' : 'Children or junior matters possible.'}`});
         }
+    });
+    
+    // ★★★ BUG-002 FIX: 세운+원국 방합 완성 체크 (v4.5 Patch) ★★★
+    const DIRECTIONAL_BUREAU = [
+        {branches: [2,3,4], element: 0, name: '寅卯辰(Tiger-Rabbit-Dragon) 木局 Eastern Wood'},
+        {branches: [5,6,7], element: 1, name: '巳午未(Snake-Horse-Goat) 火局 Southern Fire'},
+        {branches: [8,9,10], element: 3, name: '申酉戌(Monkey-Rooster-Dog) 金局 Western Metal'},
+        {branches: [11,0,1], element: 4, name: '亥子丑(Pig-Rat-Ox) 水局 Northern Water'}
+    ];
+    
+    DIRECTIONAL_BUREAU.forEach(bureau => {
+        // 원국에 2개 있고 세운이 나머지 1개를 채우는지 체크
+        const natalMatches = bureau.branches.filter(b => allBi.includes(b));
+        const yearCompletes = bureau.branches.includes(sbi) && !allBi.includes(sbi);
+        
+        if (natalMatches.length >= 2 && yearCompletes) {
+            const elNames = ['Wood','Fire','Earth','Metal','Water'];
+            result.analysis.push({
+                type: 'critical',
+                text: `🔥🔥🔥 ${bureau.name} Bureau COMPLETED! ${elNames[bureau.element]} energy explosion!`
+            });
+            
+            // 방합 오행이 기신이면 추가 경고
+            if (gods && bureau.element === gods.gi) {
+                result.analysis.push({
+                    type: 'danger',
+                    text: `⚠️ Bureau result is UNFAVORABLE (忌神)! Health and wealth at extreme risk!`
+                });
+                result.bureauDanger = true;
+            }
+        }
+    });
+    
+    // ★★★ BUG-003 FIX: 육합 기신 변화 체크 (v4.5 Patch) ★★★
+    const COMBINE_PAIRS = [[0,1,'earth'],[2,11,'wood'],[3,10,'fire'],[4,9,'metal'],[5,8,'water'],[6,7,'fire']];
+    const elNameToIdx = {'wood':0,'fire':1,'earth':2,'metal':3,'water':4};
+    
+    allBi.forEach((bi, idx) => {
+        COMBINE_PAIRS.forEach(([a, b, resultEl]) => {
+            if ((bi === a && sbi === b) || (bi === b && sbi === a)) {
+                const resultElIdx = elNameToIdx[resultEl];
+                if (gods && resultElIdx === gods.gi) {
+                    const positions = ['Year','Month','Day(Spouse)','Hour(Children)'];
+                    result.analysis.push({
+                        type: 'warning',
+                        text: `⚠️ ${BRANCH[sbi].c}+${BRANCH[bi].c} combine → ${resultEl.toUpperCase()}(忌神)! ${positions[idx]} area affected.`
+                    });
+                }
+            }
+        });
     });
     
     // Total score
