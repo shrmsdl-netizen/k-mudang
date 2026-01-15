@@ -45,6 +45,21 @@
 
 <script>
 /* ========================================
+   Toast Function (Early Definition)
+   ======================================== */
+function toast(msg) {
+    const t = document.getElementById('toast');
+    if (t) {
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    } else {
+        console.log('Toast:', msg);
+        alert(msg); // Fallback if toast element not ready
+    }
+}
+
+/* ========================================
    Firebase & Paddle Configuration
    ======================================== */
 const firebaseConfig = {
@@ -78,6 +93,14 @@ let paddleReady = false;
 
 // Initialize Firebase when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if running locally (file://)
+    if (window.location.protocol === 'file:') {
+        console.warn('Running locally - Firebase requires http:// or https://');
+        setTimeout(() => {
+            toast('⚠️ Local file detected. Please use a web server or deploy to test login/payment.');
+        }, 1000);
+    }
+    
     // Initialize Firebase
     try {
         if (typeof firebase !== 'undefined') {
@@ -106,10 +129,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } else {
             console.warn('Firebase SDK not loaded');
+            setTimeout(() => toast('⚠️ Login service unavailable. Check internet connection.'), 1500);
             updateAuthUI(); // Still update UI for non-logged-in state
         }
     } catch (e) {
         console.error('Firebase init error:', e);
+        setTimeout(() => toast('⚠️ Login service error: ' + e.message), 1500);
         updateAuthUI(); // Still update UI even on error
     }
     
@@ -209,8 +234,14 @@ function updateAuthUI() {
 
 // Google Sign In
 async function googleSignIn() {
+    // Check local file
+    if (window.location.protocol === 'file:') {
+        toast('⚠️ Login requires web server. Deploy to GitHub Pages or use localhost.');
+        return;
+    }
+    
     if (!firebaseReady || !auth) {
-        toast('Login service is loading. Please try again.');
+        toast('⏳ Login service loading... Please wait and try again.');
         return;
     }
     try {
@@ -219,7 +250,13 @@ async function googleSignIn() {
         toast('Welcome, ' + result.user.displayName + '!');
     } catch (e) {
         console.error('Login error:', e);
-        toast('Login failed. Please try again.');
+        if (e.code === 'auth/popup-blocked') {
+            toast('🚫 Popup blocked. Please allow popups for this site.');
+        } else if (e.code === 'auth/cancelled-popup-request') {
+            toast('Login cancelled.');
+        } else {
+            toast('❌ Login failed: ' + (e.message || 'Unknown error'));
+        }
     }
 }
 
@@ -236,34 +273,45 @@ async function signOut() {
 
 // Paddle Checkout - 복채(福債) 금액 선택
 function openPremiumCheckout(tier = 'basic') {
+    // Check local file
+    if (window.location.protocol === 'file:') {
+        toast('⚠️ Payment requires web server. Deploy to GitHub Pages to test.');
+        return;
+    }
+    
     if (!currentUser) {
-        toast('Please login first to offer 福債');
+        toast('🔐 Please login first to offer 福債');
         googleSignIn();
         return;
     }
     
     if (!paddleReady) {
-        toast('Payment service is loading. Please try again.');
+        toast('⏳ Payment service loading... Please wait and try again.');
         return;
     }
     
-    const price = PADDLE_PRICES[tier] || PADDLE_PRICES.basic;
-    
-    Paddle.Checkout.open({
-        items: [{ priceId: price.id, quantity: 1 }],
-        customer: { email: currentUser.email },
-        customData: { 
-            uid: currentUser.uid,
-            tier: tier,
-            amount: price.amount,
-            purchaseTime: new Date().toISOString()
-        },
-        settings: {
-            displayMode: 'overlay',
-            theme: 'dark',
-            locale: 'en'
-        }
-    });
+    try {
+        const price = PADDLE_PRICES[tier] || PADDLE_PRICES.basic;
+        
+        Paddle.Checkout.open({
+            items: [{ priceId: price.id, quantity: 1 }],
+            customer: { email: currentUser.email },
+            customData: { 
+                uid: currentUser.uid,
+                tier: tier,
+                amount: price.amount,
+                purchaseTime: new Date().toISOString()
+            },
+            settings: {
+                displayMode: 'overlay',
+                theme: 'dark',
+                locale: 'en'
+            }
+        });
+    } catch (e) {
+        console.error('Checkout error:', e);
+        toast('❌ Payment error: ' + (e.message || 'Unknown error'));
+    }
 }
 
 // Handle successful payment (called by webhook or client-side)
@@ -2477,11 +2525,14 @@ document.addEventListener('DOMContentLoaded', init);
 /* ========================================
    5. 유틸리티 함수
    ======================================== */
-function toast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+// toast already defined at top - this is a backup
+if (typeof toast !== 'function') {
+    function toast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
 }
 
 function getBallColor(n) {
