@@ -3,8 +3,16 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.12.1                                                         ║
+║  K-MUDANG Pro v4.12.2                                                         ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
+║                                                                                ║
+║  v4.12.2 Changes:                                                             ║
+║    - [NEW] Mobile Touch Enhancement CSS (터치 피드백 강화)                     ║
+║    - [NEW] Test Suite 추가 (runAllTests() - 8개 테스트 그룹)                   ║
+║    - [CSS] :active scale/transition, ripple effect, touch-action              ║
+║    - [CSS] -webkit-tap-highlight-color, will-change 최적화                    ║
+║    - [TEST] 신강/신약, 천간합인접성, 토왕용사, 용신, 종격 테스트               ║
+║    - [TEST] 금수상관격, 편인태왕, 방합/삼합 테스트                             ║
 ║                                                                                ║
 ║  v4.12.1 Changes (Major Logic Overhaul):                                      ║
 ║    - [MAJOR] calcStrength 전면 재작성: 천간합 인접성, 토왕용사, 실제통근       ║
@@ -16,7 +24,7 @@
 ║                                                                                ║
 ║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
 ║  Contact: kmudang.official@gmail.com                                          ║
-║  Last Updated: 2025-01-15                                                     ║
+║  Last Updated: 2025-01-16                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 -->
 <meta charset="UTF-8">
@@ -1351,6 +1359,207 @@ footer a {
     .pillar-stem { font-size: 22px; }
     .pillar-branch { font-size: 18px; }
     .bagua { font-size: 1.8rem; }
+}
+
+/* ========================================
+   Mobile Touch Enhancement (v4.12.2)
+   ======================================== */
+
+/* Global touch settings */
+* {
+    -webkit-tap-highlight-color: rgba(212, 175, 55, 0.15);
+    touch-action: manipulation;
+}
+
+/* Prevent text selection on interactive elements */
+.btn, .game-btn, .toggle-btn, .kofi-btn, .card, .pillar,
+.ball, .premium-unlock-btn, .legal-close, .tab-toggle {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Enhanced button touch feedback */
+.btn {
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform, box-shadow;
+}
+
+.btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 2px 10px var(--theme-glow);
+    transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
+}
+
+/* Game tab buttons */
+.game-btn {
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform, border-color, color;
+}
+
+.game-btn:active {
+    transform: scale(0.94);
+    transition: transform 0.08s ease-out;
+}
+
+/* Toggle buttons */
+.toggle-btn {
+    transition: all 0.2s ease;
+    will-change: transform, background, color;
+}
+
+.toggle-btn:active {
+    transform: scale(0.92);
+    transition: transform 0.06s ease-out;
+}
+
+/* Ko-fi / Premium buttons */
+.kofi-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, box-shadow, background;
+}
+
+.kofi-btn:active {
+    transform: scale(0.97) translateY(0);
+    box-shadow: 0 0 15px rgba(212,175,55,0.3);
+    transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
+}
+
+/* Premium unlock buttons */
+.premium-unlock-btn {
+    transition: all 0.2s ease;
+    will-change: transform;
+}
+
+.premium-unlock-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.08s ease-out;
+}
+
+/* Card touch feedback */
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    will-change: transform;
+}
+
+.card:active {
+    transform: scale(0.99);
+    transition: transform 0.1s ease-out;
+}
+
+/* Pillar touch (for future interactions) */
+.pillar {
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    cursor: pointer;
+}
+
+.pillar:active {
+    transform: scale(0.97);
+    border-color: var(--gold);
+    transition: transform 0.06s ease-out;
+}
+
+/* Ball touch feedback */
+.ball {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    will-change: transform;
+}
+
+.ball:active {
+    transform: scale(0.92);
+    transition: transform 0.08s ease-out;
+}
+
+/* Legal close button */
+.legal-close {
+    transition: all 0.2s ease;
+}
+
+.legal-close:active {
+    transform: scale(0.92);
+    transition: transform 0.08s ease-out;
+}
+
+/* Form select touch enhancement */
+.form-group select,
+.form-group input {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group select:active,
+.form-group input:active {
+    border-color: var(--theme-accent);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.25);
+}
+
+/* Auth bar buttons */
+#login-btn, #logout-btn {
+    transition: all 0.2s ease;
+}
+
+#login-btn:active, #logout-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.08s ease-out;
+}
+
+/* Mobile-specific enhancements */
+@media (hover: none) and (pointer: coarse) {
+    /* Increase touch targets */
+    .btn {
+        min-height: 48px;
+        padding: 14px 20px;
+    }
+    
+    .game-btn {
+        min-height: 44px;
+        padding: 12px 18px;
+    }
+    
+    .toggle-btn {
+        min-height: 40px;
+        padding: 10px 12px;
+    }
+    
+    /* Stronger active state on mobile */
+    .btn:active {
+        transform: scale(0.94);
+    }
+    
+    .game-btn:active {
+        transform: scale(0.92);
+    }
+    
+    /* Ripple effect simulation */
+    .btn::after,
+    .game-btn::after,
+    .kofi-btn::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+        pointer-events: none;
+        opacity: 0;
+    }
+    
+    .btn:active::after,
+    .game-btn:active::after,
+    .kofi-btn:active::after {
+        width: 200%;
+        height: 200%;
+        opacity: 1;
+        transition: width 0.1s ease, height 0.1s ease, opacity 0s;
+    }
+    
+    /* Ensure buttons have position for ripple */
+    .btn, .game-btn, .kofi-btn {
+        position: relative;
+        overflow: hidden;
+    }
 }
 </style>
 </head>
@@ -9891,6 +10100,366 @@ window.addEventListener('hashchange', handleUrlHash);
     }
 }
 </style>
+
+<!-- ========================================
+     TEST SUITE (v4.12.2)
+     콘솔에서 runAllTests() 실행
+     ======================================== -->
+<script>
+/* ========================================
+   K-MUDANG Test Suite
+   Run: runAllTests() in console
+   ======================================== */
+
+// Test helper functions
+function createTestSaju(yStem, yBranch, mStem, mBranch, dStem, dBranch, hStem, hBranch) {
+    return {
+        year: { s: STEM[yStem], b: BRANCH[yBranch] },
+        month: { s: STEM[mStem], b: BRANCH[mBranch] },
+        day: { s: STEM[dStem], b: BRANCH[dBranch] },
+        hour: hStem !== null ? { s: STEM[hStem], b: BRANCH[hBranch] } : null
+    };
+}
+
+function testResult(name, expected, actual, details = '') {
+    const pass = expected === actual;
+    const icon = pass ? '✅' : '❌';
+    console.log(`${icon} ${name}: Expected "${expected}", Got "${actual}" ${details}`);
+    return pass;
+}
+
+// ====== 1. 신강/신약 테스트 ======
+function testStrength() {
+    console.log('\n📊 ===== 신강/신약 (calcStrength) 테스트 =====');
+    let passed = 0, total = 0;
+    
+    // Test 1: 갑목(甲木) 인월(寅月) - 당령 + 통근 = 신강
+    // 甲寅 丙寅 甲寅 甲寅 (극신강 케이스)
+    const test1 = createTestSaju(0, 2, 2, 2, 0, 2, 0, 2);
+    const str1 = calcStrength(test1);
+    total++;
+    if (testResult('갑목 인월 당령+통근', 'strong', str1.type, `(score: ${str1.score})`)) passed++;
+    
+    // Test 2: 갑목(甲木) 유월(酉月) - 실령 + 무근 = 신약
+    // 庚申 乙酉 甲戌 丙寅
+    const test2 = createTestSaju(6, 8, 1, 9, 0, 10, 2, 2);
+    const str2 = calcStrength(test2);
+    total++;
+    if (testResult('갑목 유월 실령', 'weak', str2.type, `(score: ${str2.score})`)) passed++;
+    
+    // Test 3: 정화(丁火) 오월(午月) - 당령 = 신강
+    // 丙午 甲午 丁巳 壬寅
+    const test3 = createTestSaju(2, 6, 0, 6, 3, 5, 8, 2);
+    const str3 = calcStrength(test3);
+    total++;
+    if (testResult('정화 오월 당령', 'strong', str3.type, `(score: ${str3.score})`)) passed++;
+    
+    // Test 4: 경금(庚金) 자월(子月) - 설기 = 신약
+    // 壬子 壬子 庚子 壬午
+    const test4 = createTestSaju(8, 0, 8, 0, 6, 0, 8, 6);
+    const str4 = calcStrength(test4);
+    total++;
+    if (testResult('경금 자월 설기과다', 'weak', str4.type, `(score: ${str4.score})`)) passed++;
+    
+    // Test 5: 무토(戊土) 미월(未月) - 토왕용사 = 신강
+    // 戊午 己未 戊戌 戊辰
+    const test5 = createTestSaju(4, 6, 5, 7, 4, 10, 4, 4);
+    const str5 = calcStrength(test5);
+    total++;
+    if (testResult('무토 미월 토왕용사', 'strong', str5.type, `(score: ${str5.score})`)) passed++;
+    
+    console.log(`\n신강/신약 테스트: ${passed}/${total} 통과`);
+    return { passed, total };
+}
+
+// ====== 2. 천간합 인접성 테스트 ======
+function testStemCombine() {
+    console.log('\n🔗 ===== 천간합 인접성 테스트 =====');
+    let passed = 0, total = 0;
+    
+    // Test 1: 갑기합 (년-월) - 인접 → 합 성립
+    // 甲子 己丑 壬寅 庚辰  (년간 甲 + 월간 己 = 합)
+    const test1 = createTestSaju(0, 0, 5, 1, 8, 2, 6, 4);
+    const str1 = calcStrength(test1);
+    const hasAdjacentCombine1 = str1.factors.some(f => f.l === '🔗 天干合');
+    total++;
+    if (testResult('갑기합 년-월 인접', true, hasAdjacentCombine1)) passed++;
+    
+    // Test 2: 을경합 (월-일) - 인접 → 합 성립
+    // 壬子 乙丑 庚寅 丙辰  (월간 乙 + 일간 庚 = 합)
+    const test2 = createTestSaju(8, 0, 1, 1, 6, 2, 2, 4);
+    const str2 = calcStrength(test2);
+    const hasAdjacentCombine2 = str2.factors.some(f => f.l === '🔗 天干合');
+    total++;
+    if (testResult('을경합 월-일 인접', true, hasAdjacentCombine2)) passed++;
+    
+    // Test 3: 병신합 (일-시) - 인접 → 합 성립
+    // 壬子 壬丑 丙寅 辛辰  (일간 丙 + 시간 辛 = 합)
+    const test3 = createTestSaju(8, 0, 8, 1, 2, 2, 7, 4);
+    const str3 = calcStrength(test3);
+    const hasAdjacentCombine3 = str3.factors.some(f => f.l === '🔗 天干合');
+    total++;
+    if (testResult('병신합 일-시 인접', true, hasAdjacentCombine3)) passed++;
+    
+    // Test 4: 갑기 (년-시) - 비인접 → 합 불성립
+    // 甲子 壬丑 壬寅 己辰  (년간 甲 + 시간 己 = 비인접, 합 불성립)
+    const test4 = createTestSaju(0, 0, 8, 1, 8, 2, 5, 4);
+    const str4 = calcStrength(test4);
+    // 합 factor가 있더라도 년-시 조합은 없어야 함
+    const hasYearHourCombine = str4.factors.some(f => 
+        f.l === '🔗 天干合' && f.v.includes('year-hour')
+    );
+    total++;
+    if (testResult('갑기 년-시 비인접 불성립', false, hasYearHourCombine)) passed++;
+    
+    console.log(`\n천간합 인접성 테스트: ${passed}/${total} 통과`);
+    return { passed, total };
+}
+
+// ====== 3. 토왕용사 테스트 ======
+function testEarthMonth() {
+    console.log('\n🌍 ===== 토왕용사 테스트 =====');
+    let passed = 0, total = 0;
+    
+    // 辰戌丑未 월에 土 일간은 당령
+    const earthMonths = [
+        { branch: 1, name: '丑월' },  // 丑
+        { branch: 4, name: '辰월' },  // 辰
+        { branch: 7, name: '未월' },  // 未
+        { branch: 10, name: '戌월' }  // 戌
+    ];
+    
+    earthMonths.forEach(em => {
+        // 戊土 일간 in 土월
+        const saju = createTestSaju(4, 0, 4, em.branch, 4, 2, 4, 6);
+        const str = calcStrength(saju);
+        const isDeukRyung = str.factors.some(f => f.l === '月令 득령' && f.v.includes('당령'));
+        total++;
+        if (testResult(`무토 ${em.name} 토왕용사 당령`, true, isDeukRyung)) passed++;
+    });
+    
+    console.log(`\n토왕용사 테스트: ${passed}/${total} 통과`);
+    return { passed, total };
+}
+
+// ====== 4. 용신 판정 테스트 ======
+function testGods() {
+    console.log('\n⭐ ===== 용신 (calcGods) 테스트 =====');
+    let passed = 0, total = 0;
+    
+    // Test 1: 신강 → 설기(식상/재성) 용신
+    // 甲寅 丙寅 甲寅 甲寅 (극신강)
+    const test1 = createTestSaju(0, 2, 2, 2, 0, 2, 0, 2);
+    const str1 = calcStrength(test1);
+    const gods1 = calcGods(test1, str1);
+    // 신강은 火(식상) 또는 土(재성) 용신
+    const validYong1 = ['fire', 'earth'].includes(gods1.yong);
+    total++;
+    if (testResult('신강 설기용신', true, validYong1, `(용신: ${gods1.yong})`)) passed++;
+    
+    // Test 2: 신약 → 부조(인성/비겁) 용신
+    // 庚申 辛酉 甲戌 丙寅
+    const test2 = createTestSaju(6, 8, 7, 9, 0, 10, 2, 2);
+    const str2 = calcStrength(test2);
+    const gods2 = calcGods(test2, str2);
+    // 신약 갑목은 水(인성) 또는 木(비겁) 용신
+    const validYong2 = ['water', 'wood'].includes(gods2.yong);
+    total++;
+    if (testResult('신약 부조용신', true, validYong2, `(용신: ${gods2.yong})`)) passed++;
+    
+    // Test 3: 조후 테스트 - 동절기 화용신
+    // 壬子 壬子 甲子 甲子 (겨울 + 水 많음 → 火 조후)
+    const test3 = createTestSaju(8, 0, 8, 0, 0, 0, 0, 0);
+    const str3 = calcStrength(test3);
+    const gods3 = calcGods(test3, str3);
+    // 겨울 갑목은 조후로 火가 필요
+    total++;
+    if (testResult('동절기 조후용신', 'fire', gods3.johu, `(조후: ${gods3.johu})`)) passed++;
+    
+    // Test 4: 하절기 수용신
+    // 丙午 甲午 丁巳 丙午 (여름 + 火 많음 → 水 조후)
+    const test4 = createTestSaju(2, 6, 0, 6, 3, 5, 2, 6);
+    const str4 = calcStrength(test4);
+    const gods4 = calcGods(test4, str4);
+    // 여름 정화는 조후로 水가 필요
+    total++;
+    if (testResult('하절기 조후용신', 'water', gods4.johu, `(조후: ${gods4.johu})`)) passed++;
+    
+    console.log(`\n용신 테스트: ${passed}/${total} 통과`);
+    return { passed, total };
+}
+
+// ====== 5. 종격 테스트 ======
+function testFollower() {
+    console.log('\n🌊 ===== 종격 테스트 =====');
+    let passed = 0, total = 0;
+    
+    // Test 1: 종재격 (재성 4개 이상, 극신약, 무근)
+    // 戊辰 戊午 乙未 戊戌 (土4개, 乙木 극신약)
+    const test1 = createTestSaju(4, 4, 4, 6, 1, 7, 4, 10);
+    const str1 = calcStrength(test1);
+    const gods1 = calcGods(test1, str1);
+    total++;
+    if (str1.pct < 15 && gods1.isFollower) {
+        if (testResult('종재격 판정', '종재격', gods1.followerType)) passed++;
+    } else {
+        // 종격 조건 미충족 시에도 체크
+        console.log(`⚠️ 종재격 판정: pct=${str1.pct}, isFollower=${gods1.isFollower}`);
+        testResult('종재격 판정', '종재격', gods1.followerType || '일반격');
+    }
+    
+    // Test 2: 종살격 테스트
+    // 甲子 丙寅 辛酉 庚申 - 신금이 목화에 둘러싸임
+    const test2 = createTestSaju(0, 0, 2, 2, 7, 9, 6, 8);
+    const str2 = calcStrength(test2);
+    total++;
+    testResult('종살격 후보 신약 체크', true, str2.pct < 50, `(pct: ${str2.pct})`);
+    
+    console.log(`\n종격 테스트: ${passed}/${total} 통과 (일부 케이스는 조건 체크)`);
+    return { passed, total };
+}
+
+// ====== 6. 금수상관격 테스트 ======
+function testGoldWaterFormat() {
+    console.log('\n💧 ===== 금수상관격 테스트 =====');
+    let passed = 0, total = 0;
+    
+    // 금수상관격 조건: 金 일간 + 冬月 + 水 식상 왕성
+    // 庚子 壬子 庚子 壬午 (경금 자월, 수 많음)
+    const test1 = createTestSaju(6, 0, 8, 0, 6, 0, 8, 6);
+    const str1 = calcStrength(test1);
+    const format1 = calcFormat(test1, str1);
+    
+    // 금수상관격 판정 체크
+    const isGoldWater = format1.name && format1.name.includes('金水');
+    total++;
+    if (testResult('금수상관격 판정', true, isGoldWater, `(격국: ${format1.name})`)) passed++;
+    
+    // 금수상관격이면 관성(火) 기피
+    if (isGoldWater) {
+        const gods1 = calcGods(test1, str1);
+        const avoidsFire = gods1.gi === 'fire';
+        total++;
+        if (testResult('금수상관격 화 기피', true, avoidsFire, `(기신: ${gods1.gi})`)) passed++;
+    }
+    
+    console.log(`\n금수상관격 테스트: ${passed}/${total} 통과`);
+    return { passed, total };
+}
+
+// ====== 7. 편인태왕 테스트 ======
+function testSealExcess() {
+    console.log('\n📚 ===== 편인태왕 테스트 =====');
+    let passed = 0, total = 0;
+    
+    // 인성과다 조건: 인성 3개 이상 → 식상으로 설기
+    // 甲子 壬寅 丙午 壬辰 (병화 일간, 목+수 인성 많음)
+    const test1 = createTestSaju(0, 0, 8, 2, 2, 6, 8, 4);
+    const str1 = calcStrength(test1);
+    const gods1 = calcGods(test1, str1);
+    
+    // 인성 오행 카운트
+    const sealEl = 'wood'; // 병화의 인성은 목
+    let sealCount = 0;
+    [test1.year, test1.month, test1.day, test1.hour].forEach(p => {
+        if (p && p.s && p.s.e === sealEl) sealCount++;
+        if (p && p.b && p.b.e === sealEl) sealCount++;
+    });
+    
+    total++;
+    testResult('인성 카운트', true, sealCount >= 2, `(인성: ${sealCount}개)`);
+    
+    // 인성과다 시 식상 용신 체크
+    if (sealCount >= 3) {
+        const exprEl = 'earth'; // 병화의 식상은 토
+        total++;
+        if (testResult('인성과다 식상용신', exprEl, gods1.yong, `(용신: ${gods1.yong})`)) passed++;
+    }
+    
+    console.log(`\n편인태왕 테스트: ${passed}/${total} 통과`);
+    return { passed, total };
+}
+
+// ====== 8. 방합/삼합 테스트 ======
+function testCombinations() {
+    console.log('\n🔥 ===== 방합/삼합 테스트 =====');
+    let passed = 0, total = 0;
+    
+    // 방합 테스트: 寅卯辰 목국
+    // 甲寅 乙卯 丙辰 丁巳
+    const test1 = createTestSaju(0, 2, 1, 3, 2, 4, 3, 5);
+    const str1 = calcStrength(test1);
+    const hasDirectional = str1.factors.some(f => f.l === '🔥 方合');
+    total++;
+    if (testResult('寅卯辰 방합', true, hasDirectional)) passed++;
+    
+    // 삼합 테스트: 寅午戌 화국
+    // 甲寅 丙午 戊戌 庚子
+    const test2 = createTestSaju(0, 2, 2, 6, 4, 10, 6, 0);
+    const str2 = calcStrength(test2);
+    const hasThreeHarmony = str2.factors.some(f => f.l === '🔥 三合');
+    total++;
+    if (testResult('寅午戌 삼합', true, hasThreeHarmony)) passed++;
+    
+    console.log(`\n방합/삼합 테스트: ${passed}/${total} 통과`);
+    return { passed, total };
+}
+
+// ====== 메인 테스트 실행 함수 ======
+function runAllTests() {
+    console.clear();
+    console.log('╔════════════════════════════════════════════════════════╗');
+    console.log('║        K-MUDANG Pro v4.12.2 Test Suite                 ║');
+    console.log('║        사주 계산 로직 검증                              ║');
+    console.log('╚════════════════════════════════════════════════════════╝');
+    
+    const results = [];
+    
+    results.push(testStrength());
+    results.push(testStemCombine());
+    results.push(testEarthMonth());
+    results.push(testGods());
+    results.push(testFollower());
+    results.push(testGoldWaterFormat());
+    results.push(testSealExcess());
+    results.push(testCombinations());
+    
+    // 총합 계산
+    const totalPassed = results.reduce((sum, r) => sum + r.passed, 0);
+    const totalTests = results.reduce((sum, r) => sum + r.total, 0);
+    
+    console.log('\n╔════════════════════════════════════════════════════════╗');
+    console.log(`║  📊 최종 결과: ${totalPassed}/${totalTests} 테스트 통과`);
+    console.log(`║  ${totalPassed === totalTests ? '✅ ALL PASS!' : '⚠️ 일부 실패 - 로직 확인 필요'}`);
+    console.log('╚════════════════════════════════════════════════════════╝');
+    
+    return { passed: totalPassed, total: totalTests };
+}
+
+// 개별 테스트 실행 헬퍼
+function runTest(name) {
+    const tests = {
+        strength: testStrength,
+        stem: testStemCombine,
+        earth: testEarthMonth,
+        gods: testGods,
+        follower: testFollower,
+        goldwater: testGoldWaterFormat,
+        seal: testSealExcess,
+        combine: testCombinations
+    };
+    
+    if (tests[name]) {
+        console.clear();
+        tests[name]();
+    } else {
+        console.log('사용 가능한 테스트:', Object.keys(tests).join(', '));
+    }
+}
+
+// 콘솔에 도움말 표시
+console.log('🧪 K-MUDANG Test Suite loaded. Run: runAllTests() or runTest("strength")');
+</script>
 
 </body>
 </html>
