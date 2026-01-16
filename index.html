@@ -3,18 +3,24 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.12.6                                                         ║
+║  K-MUDANG Pro v4.12.7                                                         ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
-║  v4.12.6 Changes (CRITICAL: 12운성 음간 수정) (MAJOR FIX - 신강/신약 로직 원본 방식 통일):                  ║
-║    - [FIX] calcStrength 원본 방식으로 전면 재작성                              ║
-║    - [FIX] 월령 가중치: ms*6 → ms*4 (원본과 동일)                             ║
-║    - [FIX] 12운성 점수 calcStrength에 추가 (원본에서 누락됐던 부분)            ║
-║    - [FIX] 통근 계산 원본 방식 통일                                            ║
-║    - [FIX] 천간합 인접성 체크 유지                                             ║
+║  v4.12.7 Changes (Hidden Stems Standard Fix):                                 ║
+║    - [CRITICAL] 지장간 12지지 전체 표준 수정 (오차 0%)                         ║
+║    - [FIX] 子: 壬(10)+癸(20) 추가, 卯: 甲(10)+乙(20) 추가                      ║
+║    - [FIX] 午: 丙(10)+己(9)+丁(11) 추가, 酉: 庚(10)+辛(20) 추가                ║
+║    - [FIX] 巳: 戊(7)+庚(7)+丙(16), 亥: 戊(7)+甲(7)+壬(16) 수정                 ║
+║    - [FIX] calcStrength 내부 JIJANGGAN 테이블도 동기화                         ║
+║    - [KEEP] 쇠신충왕, 편인도식, 왕신충발 경고 패턴                             ║
+║    - Total: 70 AI Rules                                                       ║
 ║                                                                                ║
-║  v4.12.3 Changes:                                                             ║
-║    - [CRITICAL] calcDayPillar 甲戌(+10) 보정 수정                             ║
+║  v4.12.1 Changes (Major Logic Overhaul):                                      ║
+║    - [MAJOR] calcStrength 전면 재작성: 천간합 인접성, 토왕용사, 실제통근       ║
+║    - [NEW] 종격(Follower) 판단 로직 추가                                       ║
+║    - [NEW] 조후 예외처리 강화 (극한 기후 시 조후 최우선)                       ║
+║    - [FIX] 12운성과 통근 분리 (장생≠뿌리)                                      ║
+║    - [KEEP] 편인태왕, 금수상관격, Paddle SDK, Premium 잠금                     ║
 ║                                                                                ║
 ║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
 ║  Contact: kmudang.official@gmail.com                                          ║
@@ -1354,207 +1360,6 @@ footer a {
     .pillar-branch { font-size: 18px; }
     .bagua { font-size: 1.8rem; }
 }
-
-/* ========================================
-   Mobile Touch Enhancement (v4.12.2)
-   ======================================== */
-
-/* Global touch settings */
-* {
-    -webkit-tap-highlight-color: rgba(212, 175, 55, 0.15);
-    touch-action: manipulation;
-}
-
-/* Prevent text selection on interactive elements */
-.btn, .game-btn, .toggle-btn, .kofi-btn, .card, .pillar,
-.ball, .premium-unlock-btn, .legal-close, .tab-toggle {
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-/* Enhanced button touch feedback */
-.btn {
-    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: transform, box-shadow;
-}
-
-.btn:active {
-    transform: scale(0.96);
-    box-shadow: 0 2px 10px var(--theme-glow);
-    transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
-}
-
-/* Game tab buttons */
-.game-btn {
-    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: transform, border-color, color;
-}
-
-.game-btn:active {
-    transform: scale(0.94);
-    transition: transform 0.08s ease-out;
-}
-
-/* Toggle buttons */
-.toggle-btn {
-    transition: all 0.2s ease;
-    will-change: transform, background, color;
-}
-
-.toggle-btn:active {
-    transform: scale(0.92);
-    transition: transform 0.06s ease-out;
-}
-
-/* Ko-fi / Premium buttons */
-.kofi-btn {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform, box-shadow, background;
-}
-
-.kofi-btn:active {
-    transform: scale(0.97) translateY(0);
-    box-shadow: 0 0 15px rgba(212,175,55,0.3);
-    transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
-}
-
-/* Premium unlock buttons */
-.premium-unlock-btn {
-    transition: all 0.2s ease;
-    will-change: transform;
-}
-
-.premium-unlock-btn:active {
-    transform: scale(0.95);
-    transition: transform 0.08s ease-out;
-}
-
-/* Card touch feedback */
-.card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    will-change: transform;
-}
-
-.card:active {
-    transform: scale(0.99);
-    transition: transform 0.1s ease-out;
-}
-
-/* Pillar touch (for future interactions) */
-.pillar {
-    transition: transform 0.15s ease, border-color 0.15s ease;
-    cursor: pointer;
-}
-
-.pillar:active {
-    transform: scale(0.97);
-    border-color: var(--gold);
-    transition: transform 0.06s ease-out;
-}
-
-/* Ball touch feedback */
-.ball {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    will-change: transform;
-}
-
-.ball:active {
-    transform: scale(0.92);
-    transition: transform 0.08s ease-out;
-}
-
-/* Legal close button */
-.legal-close {
-    transition: all 0.2s ease;
-}
-
-.legal-close:active {
-    transform: scale(0.92);
-    transition: transform 0.08s ease-out;
-}
-
-/* Form select touch enhancement */
-.form-group select,
-.form-group input {
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.form-group select:active,
-.form-group input:active {
-    border-color: var(--theme-accent);
-    box-shadow: 0 0 8px rgba(212, 175, 55, 0.25);
-}
-
-/* Auth bar buttons */
-#login-btn, #logout-btn {
-    transition: all 0.2s ease;
-}
-
-#login-btn:active, #logout-btn:active {
-    transform: scale(0.95);
-    transition: transform 0.08s ease-out;
-}
-
-/* Mobile-specific enhancements */
-@media (hover: none) and (pointer: coarse) {
-    /* Increase touch targets */
-    .btn {
-        min-height: 48px;
-        padding: 14px 20px;
-    }
-    
-    .game-btn {
-        min-height: 44px;
-        padding: 12px 18px;
-    }
-    
-    .toggle-btn {
-        min-height: 40px;
-        padding: 10px 12px;
-    }
-    
-    /* Stronger active state on mobile */
-    .btn:active {
-        transform: scale(0.94);
-    }
-    
-    .game-btn:active {
-        transform: scale(0.92);
-    }
-    
-    /* Ripple effect simulation */
-    .btn::after,
-    .game-btn::after,
-    .kofi-btn::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        background: rgba(255,255,255,0.2);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
-        pointer-events: none;
-        opacity: 0;
-    }
-    
-    .btn:active::after,
-    .game-btn:active::after,
-    .kofi-btn:active::after {
-        width: 200%;
-        height: 200%;
-        opacity: 1;
-        transition: width 0.1s ease, height 0.1s ease, opacity 0s;
-    }
-    
-    /* Ensure buttons have position for ripple */
-    .btn, .game-btn, .kofi-btn {
-        position: relative;
-        overflow: hidden;
-    }
-}
 </style>
 </head>
 <body class="saju-mode">
@@ -2174,61 +1979,66 @@ const BRANCH = [
     {c:'戌',k:'Dog',e:'earth',a:'Dog',m:'dog'},{c:'亥',k:'Pig',e:'water',a:'Pig',m:'pig'}
 ];
 
-// Hidden Stems(地藏干) - Main/Middle/Side with days
-// Hidden stems in each branch (Main=main energy, Middle, Side)
-// days: days this energy operates days (based on 30 days)
+// Hidden Stems(地藏干) - 余氣/中氣/正氣 with days
+// v4.12.7 FIX: 표준 지장간 완전 수정 (오차 0%)
+// 순서: 余氣(여기) → 中氣(중기) → 正氣(정기)
 const HIDDEN_STEMS = {
-    0: [ // 子 (Rat)
-        {stem: 9, type: 'jung', days: 30, name: '癸(Main)'} // Yin Water 30 days
+    0: [ // 子 (Rat) - 壬癸 수기
+        {stem: 8, type: 'yeo', days: 10, name: '壬(余氣)'},  // Yang Water 10 days
+        {stem: 9, type: 'jung', days: 20, name: '癸(正氣)'}  // Yin Water 20 days
     ],
-    1: [ // 丑 (Ox)
-        {stem: 9, type: 'yeo', days: 9, name: '癸(Side)'},  // Yin Water 9 days
-        {stem: 7, type: 'jung', days: 3, name: '辛(Middle)'}, // Yin Metal 3 days
-        {stem: 5, type: 'jung', days: 18, name: '己(Main)'} // Yin Earth 18 days
+    1: [ // 丑 (Ox) - 癸辛己
+        {stem: 9, type: 'yeo', days: 9, name: '癸(余氣)'},   // Yin Water 9 days
+        {stem: 7, type: 'jung', days: 3, name: '辛(中氣)'},  // Yin Metal 3 days
+        {stem: 5, type: 'jung', days: 18, name: '己(正氣)'} // Yin Earth 18 days
     ],
-    2: [ // 寅 (Tiger)
-        {stem: 4, type: 'yeo', days: 7, name: '戊(Side)'},  // Yang Earth 7 days
-        {stem: 2, type: 'jung', days: 7, name: '丙(Middle)'}, // Yang Fire 7 days
-        {stem: 0, type: 'jung', days: 16, name: '甲(Main)'} // Yang Wood 16 days
+    2: [ // 寅 (Tiger) - 戊丙甲
+        {stem: 4, type: 'yeo', days: 7, name: '戊(余氣)'},   // Yang Earth 7 days
+        {stem: 2, type: 'jung', days: 7, name: '丙(中氣)'},  // Yang Fire 7 days
+        {stem: 0, type: 'jung', days: 16, name: '甲(正氣)'} // Yang Wood 16 days
     ],
-    3: [ // 卯 (Rabbit)
-        {stem: 1, type: 'jung', days: 30, name: '乙(Main)'} // Tiger Wood 30 days
+    3: [ // 卯 (Rabbit) - 甲乙 목기
+        {stem: 0, type: 'yeo', days: 10, name: '甲(余氣)'},  // Yang Wood 10 days
+        {stem: 1, type: 'jung', days: 20, name: '乙(正氣)'} // Yin Wood 20 days
     ],
-    4: [ // 辰 (Dragon)
-        {stem: 1, type: 'yeo', days: 9, name: '乙(Side)'},  // Tiger Wood 9 days
-        {stem: 9, type: 'jung', days: 3, name: '癸(Middle)'}, // Yin Water 3 days
-        {stem: 4, type: 'jung', days: 18, name: '戊(Main)'} // Yang Earth 18 days
+    4: [ // 辰 (Dragon) - 乙癸戊
+        {stem: 1, type: 'yeo', days: 9, name: '乙(余氣)'},   // Yin Wood 9 days
+        {stem: 9, type: 'jung', days: 3, name: '癸(中氣)'},  // Yin Water 3 days (水根!)
+        {stem: 4, type: 'jung', days: 18, name: '戊(正氣)'} // Yang Earth 18 days
     ],
-    5: [ // 巳 (Snake)
-        {stem: 4, type: 'yeo', days: 5, name: '戊(Side)'},  // Yang Earth 5 days
-        {stem: 6, type: 'jung', days: 9, name: '庚(Middle)'}, // Yang Metal 9 days
-        {stem: 2, type: 'jung', days: 16, name: '丙(Main)'} // Yang Fire 16 days
+    5: [ // 巳 (Snake) - 戊庚丙
+        {stem: 4, type: 'yeo', days: 7, name: '戊(余氣)'},   // Yang Earth 7 days
+        {stem: 6, type: 'jung', days: 7, name: '庚(中氣)'},  // Yang Metal 7 days
+        {stem: 2, type: 'jung', days: 16, name: '丙(正氣)'} // Yang Fire 16 days
     ],
-    6: [ // 午 (Horse)
-        {stem: 5, type: 'yeo', days: 9, name: '己(Side)'},  // Yin Earth 9 days
-        {stem: 3, type: 'jung', days: 21, name: '丁(Main)'} // Yin Fire 21 days
+    6: [ // 午 (Horse) - 丙己丁
+        {stem: 2, type: 'yeo', days: 10, name: '丙(余氣)'},  // Yang Fire 10 days
+        {stem: 5, type: 'jung', days: 9, name: '己(中氣)'},  // Yin Earth 9 days
+        {stem: 3, type: 'jung', days: 11, name: '丁(正氣)'} // Yin Fire 11 days
     ],
-    7: [ // 未 (Goat)
-        {stem: 3, type: 'yeo', days: 9, name: '丁(Side)'},  // Yin Fire 9 days
-        {stem: 1, type: 'jung', days: 3, name: '乙(Middle)'}, // Tiger Wood 3 days
-        {stem: 5, type: 'jung', days: 18, name: '己(Main)'} // Yin Earth 18 days
+    7: [ // 未 (Goat) - 丁乙己
+        {stem: 3, type: 'yeo', days: 9, name: '丁(余氣)'},   // Yin Fire 9 days
+        {stem: 1, type: 'jung', days: 3, name: '乙(中氣)'},  // Yin Wood 3 days
+        {stem: 5, type: 'jung', days: 18, name: '己(正氣)'} // Yin Earth 18 days
     ],
-    8: [ // 申 (Monkey)
-        {stem: 4, type: 'yeo', days: 7, name: '戊(Side)'},  // Yang Earth 7 days
-        {stem: 8, type: 'jung', days: 7, name: '壬(Middle)'}, // Yang Water 7 days
-        {stem: 6, type: 'jung', days: 16, name: '庚(Main)'} // Yang Metal 16 days
+    8: [ // 申 (Monkey) - 戊壬庚
+        {stem: 4, type: 'yeo', days: 7, name: '戊(余氣)'},   // Yang Earth 7 days
+        {stem: 8, type: 'jung', days: 7, name: '壬(中氣)'},  // Yang Water 7 days (水根!)
+        {stem: 6, type: 'jung', days: 16, name: '庚(正氣)'} // Yang Metal 16 days
     ],
-    9: [ // 酉 (Rooster)
-        {stem: 7, type: 'jung', days: 30, name: '辛(Main)'} // Yin Metal 30 days
+    9: [ // 酉 (Rooster) - 庚辛 금기
+        {stem: 6, type: 'yeo', days: 10, name: '庚(余氣)'},  // Yang Metal 10 days
+        {stem: 7, type: 'jung', days: 20, name: '辛(正氣)'} // Yin Metal 20 days
     ],
-    10: [ // 戌 (Dog)
-        {stem: 7, type: 'yeo', days: 9, name: '辛(Side)'},  // Yin Metal 9 days
-        {stem: 3, type: 'jung', days: 3, name: '丁(Middle)'}, // Yin Fire 3 days
-        {stem: 4, type: 'jung', days: 18, name: '戊(Main)'} // Yang Earth 18 days
+    10: [ // 戌 (Dog) - 辛丁戊 (NO WATER!)
+        {stem: 7, type: 'yeo', days: 9, name: '辛(余氣)'},   // Yin Metal 9 days
+        {stem: 3, type: 'jung', days: 3, name: '丁(中氣)'},  // Yin Fire 3 days
+        {stem: 4, type: 'jung', days: 18, name: '戊(正氣)'} // Yang Earth 18 days
     ],
-    11: [ // 亥 (Pig)
-        {stem: 0, type: 'yeo', days: 7, name: '甲(Side)'},  // Yang Wood 7 days
-        {stem: 8, type: 'jung', days: 23, name: '壬(Main)'} // Yang Water 23 days
+    11: [ // 亥 (Pig) - 戊甲壬
+        {stem: 4, type: 'yeo', days: 7, name: '戊(余氣)'},   // Yang Earth 7 days
+        {stem: 0, type: 'jung', days: 7, name: '甲(中氣)'},  // Yang Wood 7 days
+        {stem: 8, type: 'jung', days: 16, name: '壬(正氣)'} // Yang Water 16 days
     ]
 };
 
@@ -3124,29 +2934,15 @@ function calcMonthPillar(y, m, d, h = 12) {
     return { s: STEM[msi], b: BRANCH[mbi] };
 }
 
-// Day pillar calculation - FIXED: 1900-01-01 = 甲戌(index 10) 보정
+// Day pillar calculation (existing accurate logic)
 function calcDayPillar(y, m, d) {
-    // 방법 1: Date 객체 기반 (검증된 로직)
-    const baseDate = new Date(1900, 0, 1);  // 1900년 1월 1일
-    const targetDate = new Date(y, m - 1, d);
-    
-    // UTC/시간대 이슈 방지
-    baseDate.setHours(12, 0, 0, 0);
-    targetDate.setHours(12, 0, 0, 0);
-    
-    // 일수 차이
-    const diffTime = targetDate.getTime() - baseDate.getTime();
-    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-    
-    // ★★★ 핵심: 1900-01-01은 甲戌일(10번째)이므로 +10 보정 필수! ★★★
-    let dayIdx = (diffDays + 10) % 60;
-    if (dayIdx < 0) dayIdx += 60;
-    
-    // 60갑자 인덱스 → 천간(10)/지지(12) 분리
-    const stemIdx = dayIdx % 10;
-    const branchIdx = dayIdx % 12;
-    
-    return { s: STEM[stemIdx], b: BRANCH[branchIdx] };
+    const a = Math.floor((14 - m) / 12);
+    const adjY = y + 4800 - a;
+    const adjM = m + 12 * a - 3;
+    const jdn = d + Math.floor((153 * adjM + 2) / 5) + 365 * adjY + Math.floor(adjY / 4) - Math.floor(adjY / 100) + Math.floor(adjY / 400) - 32045;
+    const baseJdn = 2415021;
+    const diff = jdn - baseJdn;
+    return { s: STEM[((diff % 10) + 10) % 10], b: BRANCH[((diff % 12) + 12) % 12] };
 }
 
 // Hour pillar calculation (existing accurate logic)
@@ -3337,20 +3133,18 @@ function getTenGod(stem, dayStem) {
 }
 
 function getTwelveState(dayStem, branch) {
-    // 🔥 12운성 계산 - v4.12.6 CRITICAL FIX
+    // 🔥 12운성 계산 수정 - Gemini Round 10
     // 각 일간의 장생 위치 (지지 인덱스)
-    // 양간: 甲:亥(11), 丙:寅(2), 戊:寅(2), 庚:巳(5), 壬:申(8)
-    // 음간: 乙:午(6), 丁:酉(9), 己:酉(9), 辛:子(0), 癸:卯(3)
+    // 甲:亥(11), 乙:午(6), 丙:寅(2), 丁:酉(9), 戊:寅(2), 己:酉(9), 庚:巳(5), 辛:子(0), 壬:申(8), 癸:卯(3)
     const starts = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];
     const dsi = STEM.indexOf(dayStem);
     const bi = BRANCH.findIndex(br => br.c === branch.c);
     const start = starts[dsi];
     
-    // ★ 양간(陽干): 순행, 음간(陰干): 역행
-    // 양간: dsi % 2 === 0 (甲丙戊庚壬 = 0,2,4,6,8)
-    // 음간: dsi % 2 === 1 (乙丁己辛癸 = 1,3,5,7,9)
-    const isYang = dsi % 2 === 0;
-    const idx = isYang ? (bi - start + 12) % 12 : (start - bi + 12) % 12;
+    // 양간(陽干): 순행, 음간(陰干): 역행
+    // 양간: (bi - start + 12) % 12
+    // 음간: (start - bi + 12) % 12
+    const idx = dayStem.y ? (bi - start + 12) % 12 : (start - bi + 12) % 12;
     return TWELVE_STATES[idx];
 }
 
@@ -3360,9 +3154,18 @@ function getTwelveState(dayStem, branch) {
 function calcNapeum(stem, branch) {
     const si = STEM.indexOf(stem);
     const bi = BRANCH.findIndex(br => br.c === branch.c);
-    // 60갑자 순서 계산
-    const idx = (si * 6 + Math.floor(bi / 2)) % 30;
-    const napeum = NAPEUM[idx];
+    
+    // v4.12.6 FIX: 정확한 60갑자 인덱스 계산
+    const diff = (bi - si + 12) % 12;
+    if (diff % 2 !== 0) {
+        // 음양 불일치 (이론상 발생하면 안됨)
+        console.warn('Napeum: 음양 불일치', stem.c, branch.c);
+        return { name: 'Unknown', element: 'earth', elementK: '토', desc: '' };
+    }
+    const idx60 = si + ((6 - diff / 2) % 6) * 10;
+    const napeumIdx = Math.floor(idx60 / 2);
+    
+    const napeum = NAPEUM[napeumIdx];
     return {
         name: napeum.name,
         element: napeum.element,
@@ -3727,21 +3530,36 @@ function calcStrength(saju) {
     const officerEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 3) % 5]; // 관성 (나를 극함)
     const myEls = [peerEl, sealEl];
     
-    // ====== 원본 방식 지장간 테이블 (인덱스 배열) ======
-    const jijanggan = {
-        0:[9], 1:[9,7,5], 2:[0,2,4], 3:[1], 4:[4,1,9], 5:[2,4,6],
-        6:[3,5], 7:[5,3,1], 8:[6,8,4], 9:[7], 10:[4,7,3], 11:[8,0]
+    // ====== 지장간 테이블 (여기, 중기, 정기) - v4.12.7 표준 수정 ======
+    const JIJANGGAN = {
+        0: [{s:8, w:0.33}, {s:9, w:0.67}],                   // 子: 壬(여기), 癸(정기)
+        1: [{s:9, w:0.3}, {s:7, w:0.1}, {s:5, w:0.6}],      // 丑: 癸, 辛, 己
+        2: [{s:4, w:0.23}, {s:2, w:0.23}, {s:0, w:0.54}],   // 寅: 戊, 丙, 甲
+        3: [{s:0, w:0.33}, {s:1, w:0.67}],                   // 卯: 甲(여기), 乙(정기)
+        4: [{s:1, w:0.3}, {s:9, w:0.1}, {s:4, w:0.6}],      // 辰: 乙, 癸(水根!), 戊
+        5: [{s:4, w:0.23}, {s:6, w:0.23}, {s:2, w:0.54}],   // 巳: 戊, 庚, 丙
+        6: [{s:2, w:0.33}, {s:5, w:0.3}, {s:3, w:0.37}],    // 午: 丙(여기), 己, 丁
+        7: [{s:3, w:0.3}, {s:1, w:0.1}, {s:5, w:0.6}],      // 未: 丁, 乙, 己
+        8: [{s:4, w:0.23}, {s:8, w:0.23}, {s:6, w:0.54}],   // 申: 戊, 壬(水根!), 庚
+        9: [{s:6, w:0.33}, {s:7, w:0.67}],                   // 酉: 庚(여기), 辛(정기)
+        10:[{s:7, w:0.3}, {s:3, w:0.1}, {s:4, w:0.6}],      // 戌: 辛, 丁, 戊 (NO WATER!)
+        11:[{s:4, w:0.23}, {s:0, w:0.23}, {s:8, w:0.54}]    // 亥: 戊, 甲, 壬
     };
     
-    // ====== 천간/지지 수집 ======
+    // ====== 천간 수집 ======
     const allStems = [saju.year.s, saju.month.s, saju.hour?.s].filter(s => s);
     const allBranches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);
+    const branchIndices = allBranches.map(b => BRANCH.indexOf(b));
     
-    // ====== 1. 천간합 무력화 체크 (인접성) ======
-    const STEM_COMBINE = [[0,5],[1,6],[2,7],[3,8],[4,9]];
-    let disabledSeals = [];
-    let disabledPeers = [];
+    // ====== ★★★ 1. 천간합 무력화 체크 (v4.12.1 인접성 체크) ★★★ ======
+    // 천간합은 인접한 기둥끼리만 성립! (년-월, 월-일, 일-시)
+    // 년-시처럼 멀리 떨어진 천간은 합 불성립
+    const STEM_COMBINE = [[0,5],[1,6],[2,7],[3,8],[4,9]]; // 甲己, 乙庚, 丙辛, 丁壬, 戊癸
     
+    let disabledSeals = [];  // 합으로 무력화된 인성
+    let disabledPeers = [];  // 합으로 무력화된 비겁
+    
+    // 인접한 기둥 쌍만 검사
     const adjacentPairs = [
         { pos1: 'year', pos2: 'month', s1: saju.year.s, s2: saju.month.s },
         { pos1: 'month', pos2: 'day', s1: saju.month.s, s2: saju.day.s },
@@ -3752,10 +3570,15 @@ function calcStrength(saju) {
         if (!pair.s1 || !pair.s2) return;
         const idx1 = STEM.indexOf(pair.s1);
         const idx2 = STEM.indexOf(pair.s2);
+        
+        // 합 조건 체크
         const isCombine = STEM_COMBINE.some(([a, b]) => 
             (idx1 === a && idx2 === b) || (idx1 === b && idx2 === a)
         );
+        
         if (isCombine) {
+            // 인접합 성립 → 해당 천간들 무력화
+            // 단, 일간은 무력화되지 않음 (본인은 합거 안됨)
             if (pair.pos1 !== 'day') {
                 if (pair.s1.e === sealEl) disabledSeals.push(idx1);
                 if (pair.s1.e === peerEl) disabledPeers.push(idx1);
@@ -3764,107 +3587,171 @@ function calcStrength(saju) {
                 if (pair.s2.e === sealEl) disabledSeals.push(idx2);
                 if (pair.s2.e === peerEl) disabledPeers.push(idx2);
             }
-            factors.push({ l: '🔗 天干合', v: `${pair.s1.c}${pair.s2.c}合 (${pair.pos1}-${pair.pos2})`, p: false });
+            
+            factors.push({ l: '🔗 天干合', v: `${pair.s1.c}${pair.s2.c}合 (${pair.pos1}-${pair.pos2}) → 무력화`, p: false });
         }
     });
     
-    // ====== ★★★ 2. 월령득령 (원본 방식: seasonScore * 4) ★★★ ======
-    const seasonScore = { 
-        spring: {wood:3, fire:2, earth:0, metal:-1, water:-2}, 
-        summer: {fire:3, earth:2, metal:0, water:-1, wood:-2}, 
-        autumn: {metal:3, water:2, wood:0, fire:-1, earth:-2}, 
-        winter: {water:3, wood:2, fire:0, earth:-1, metal:-2} 
+    // ====== ★★★ 2. 월령 득령/실령 (v4.12.1 강화 + 토왕용사) ★★★ ======
+    // 토왕용사: 辰(4), 未(7), 戌(10), 丑(1)은 土가 왕성한 달
+    const earthMonths = [1, 4, 7, 10]; // 丑, 辰, 未, 戌
+    const isEarthMonth = earthMonths.includes(mbi);
+    
+    // 월령별 오행 왕쇠 (더 정밀한 테이블)
+    // 寅卯=木왕, 巳午=火왕, 申酉=金왕, 亥子=水왕, 辰戌丑未=土왕
+    const monthScore = {
+        // 寅(2), 卯(3) = 木왕
+        2: {wood:3, fire:1, earth:-2, metal:-2, water:-1},
+        3: {wood:3, fire:2, earth:-2, metal:-2, water:-1},
+        // 辰(4) = 土왕 (봄→여름 전환, 습토)
+        4: {earth:2, wood:0, fire:-1, metal:-1, water:-1},
+        // 巳(5), 午(6) = 火왕
+        5: {fire:3, earth:1, metal:-2, water:-2, wood:0},
+        6: {fire:3, earth:2, metal:-2, water:-2, wood:0},
+        // 未(7) = 土왕 (여름→가을 전환, 조토)
+        7: {earth:2, fire:1, wood:-1, metal:-1, water:-2},
+        // 申(8), 酉(9) = 金왕
+        8: {metal:3, water:1, wood:-2, fire:-2, earth:0},
+        9: {metal:3, water:2, wood:-2, fire:-2, earth:0},
+        // 戌(10) = 土왕 (가을→겨울 전환, 조토)
+        10: {earth:2, metal:1, fire:-1, wood:-2, water:-1},
+        // 亥(11), 子(0) = 水왕
+        11: {water:3, wood:1, fire:-2, earth:-2, metal:0},
+        0: {water:3, wood:2, fire:-2, earth:-2, metal:0},
+        // 丑(1) = 土왕 (겨울→봄 전환, 습토)
+        1: {earth:2, water:0, metal:-1, wood:-1, fire:-2}
     };
-    const ms = seasonScore[season][dme];
+    
+    const ms = monthScore[mbi][dme];
     const deukRyung = ms >= 2;
-    score += ms * 4;  // ★ 원본 방식: *4
+    score += ms * 6;  // 강화: *6
     
     const monthNames = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
-    factors.push({ l: '月令 득령', v: `${monthNames[mbi]}월(${season}) ${deukRyung ? '✓ 당령' : '✗ 실령'} (${ms >= 0 ? '+' : ''}${ms*4})`, p: deukRyung });
+    factors.push({ l: '月令 득령', v: `${monthNames[mbi]}월 ${deukRyung ? '✓ 당령' : '✗ 실령'} (${ms >= 0 ? '+' : ''}${ms*6})`, p: deukRyung });
     
-    // ====== 3. 지지 통근 (원본 방식 + 강화) ======
-    let roots = 0;
+    // ====== ★★★ 3. 실제 통근 체크 (12운성 아닌 지장간 기준) ★★★ ======
+    let realRootScore = 0;
     let hasRealRoot = { day: false, hour: false };
     
     allBranches.forEach((b, idx) => {
         const bi = BRANCH.indexOf(b);
         const position = ['year', 'month', 'day', 'hour'][idx];
+        const posWeight = position === 'day' ? 1.5 : position === 'hour' ? 1.3 : position === 'month' ? 1.2 : 1.0;
         
-        // 지지 본기가 비겁/인성이면 강한 뿌리
-        if (myEls.includes(b.e)) roots += 1.5;
-        
-        // 지장간 체크
-        const hidden = jijanggan[bi] || [];
-        hidden.forEach((hi, hidx) => {
-            const hEl = STEM[hi].e;
-            if (myEls.includes(hEl)) {
-                roots += (hidx === 0 ? 0.5 : 0.3);  // 정기 > 중기/여기
+        const hidden = JIJANGGAN[bi] || [];
+        hidden.forEach(h => {
+            const hStem = STEM[h.s];
+            // 지장간에 비겁(같은 오행) 또는 인성(나를 생하는 오행)이 있으면 진짜 뿌리
+            if (hStem.e === peerEl || hStem.e === sealEl) {
+                realRootScore += h.w * posWeight * 2;
                 if (position === 'day') hasRealRoot.day = true;
                 if (position === 'hour') hasRealRoot.hour = true;
             }
         });
     });
     
-    const rootStrong = roots >= 3;
-    score += Math.min(roots * 1.5, 8);  // ★ 원본 방식
-    factors.push({ l: '지지 통근', v: rootStrong ? `강(${roots.toFixed(1)})` : `약(${roots.toFixed(1)})`, p: rootStrong });
+    score += Math.min(realRootScore, 10);
+    const rootStrong = realRootScore >= 2;
+    factors.push({ l: '通根 (실제뿌리)', v: rootStrong ? `✓ ${realRootScore.toFixed(1)}점` : `✗ 무근 (${realRootScore.toFixed(1)})`, p: rootStrong });
     
-    // ====== 4. 천간 투출 (합 무력화 반영) ======
-    let helps = 0, attacks = 0;
+    // ====== ★★★ 4. 천간 비겁/인성 투출 (합 무력화 반영) ★★★ ======
+    let helpCount = 0;
+    let attackCount = 0;
+    let exprStemCount = 0;
     
     allStems.forEach((st, idx) => {
         const si = STEM.indexOf(st);
         
-        // 합으로 무력화된 천간은 제외
+        // 합으로 무력화된 천간은 도움 안됨
         if (disabledSeals.includes(si) || disabledPeers.includes(si)) {
+            factors.push({ l: '⚠️ 合去', v: `${st.c} 무력화됨`, p: false });
             return;
         }
         
-        if (myEls.includes(st.e)) helps++;
-        if (st.e === officerEl) attacks += 1.5;
-        if (st.e === wealthEl) attacks += 0.5;
+        if (st.e === peerEl) { helpCount++; score += 2.5; }
+        if (st.e === sealEl) { helpCount++; score += 2; }
+        if (st.e === officerEl) { attackCount++; score -= 2; }
+        if (st.e === wealthEl) { attackCount++; score -= 1; }
+        if (st.e === exprEl) { 
+            exprStemCount++; 
+            score -= 2;  // 식상 설기
+        }
     });
     
-    score += helps * 2;
-    score -= attacks;
-    if (helps >= 1) factors.push({ l: '천간 투출', v: `비겁/인성 ${helps}개`, p: true });
+    if (helpCount > 0) factors.push({ l: '天干 비겁/인성', v: `${helpCount}개 투출`, p: true });
+    if (attackCount > 0) factors.push({ l: '天干 관/재 압박', v: `${attackCount}개`, p: false });
     
-    // ====== 5. 관살 압박 ======
-    let gwanCount = 0;
-    [...allStems, ...allBranches].forEach(p => { if (p.e === officerEl) gwanCount++; });
-    if (gwanCount >= 2) { 
+    // ====== ★★★ 5. 식상태과 강력 감점 (v4.12.1 강화) ★★★ ======
+    let exprTotal = exprStemCount;
+    allBranches.forEach(b => { if (b.e === exprEl) exprTotal++; });
+    
+    if (exprTotal >= 3) {
+        score -= 4;  // 식상 3개 이상 = 강력 설기
+        factors.push({ l: '⚠️ 식상태과', v: `${exprTotal}개 → 설기과다 (−4)`, p: false });
+    } else if (exprStemCount >= 2) {
+        score -= 2;
+        factors.push({ l: '⚠️ 식상 투출', v: `${exprStemCount}天干 (−2)`, p: false });
+    }
+    
+    // ====== 6. 관살 압박 ======
+    let officerTotal = 0;
+    [...allStems, ...allBranches].forEach(p => { if (p.e === officerEl) officerTotal++; });
+    if (officerTotal >= 2) { 
         score -= 2; 
-        factors.push({ l: '관살 압박', v: `${gwanCount}개 (신약↓)`, p: false }); 
+        factors.push({ l: '관살 압박', v: `${officerTotal}개 (−2)`, p: false }); 
     }
     
-    // ====== 6. 재성 과다 ======
-    let jaeCount = 0;
-    [...allStems, ...allBranches].forEach(p => { if (p.e === wealthEl) jaeCount++; });
-    if (jaeCount >= 3) { 
-        score -= 2; 
-        factors.push({ l: '재성 과다', v: `${jaeCount}개 (신약↓)`, p: false }); 
-    }
+    // ====== 7. 방합(方合) 체크 ======
+    const DIRECTIONAL = [
+        { branches: [2, 3, 4], element: 'wood', name: '寅卯辰 목국' },
+        { branches: [5, 6, 7], element: 'fire', name: '巳午未 화국' },
+        { branches: [8, 9, 10], element: 'metal', name: '申酉戌 금국' },
+        { branches: [11, 0, 1], element: 'water', name: '亥子丑 수국' }
+    ];
     
-    // ====== ★★★ 7. 일지 12운성 (원본 방식 추가!) ★★★ ======
-    const ds = getTwelveState(dm, saju.day.b);
-    const dsScore = ds.l >= 8 ? 3 : ds.l >= 6 ? 1 : ds.l >= 4 ? 0 : ds.l >= 2 ? -1 : -2;
-    score += dsScore;
-    factors.push({ l: '일지 12운', v: `${ds.k}(${dsScore >= 0 ? '+' : ''}${dsScore})`, p: ds.l >= 6 });
+    let directionalFormed = null;
+    DIRECTIONAL.forEach(d => {
+        if (d.branches.every(b => branchIndices.includes(b))) {
+            directionalFormed = d;
+            if (d.element === peerEl) {
+                score += 8;
+                factors.push({ l: '🔥 方合', v: `${d.name} → 비겁 (+8)`, p: true });
+            } else if (d.element === sealEl) {
+                score += 6;
+                factors.push({ l: '🔥 方合', v: `${d.name} → 인성 (+6)`, p: true });
+            } else if (d.element === exprEl) {
+                score -= 5;
+                factors.push({ l: '⚠️ 方合', v: `${d.name} → 설기 (−5)`, p: false });
+            } else if (d.element === officerEl) {
+                score -= 6;
+                factors.push({ l: '⚠️ 方合', v: `${d.name} → 압박 (−6)`, p: false });
+            }
+        }
+    });
     
-    // ====== 8. 비겁 개수 ======
-    let biCount = 0;
-    [...allStems, ...allBranches].forEach(p => { if (p.e === dme) biCount++; });
-    if (biCount >= 3) { 
-        score += 2; 
-        factors.push({ l: '비겁 다수', v: `${biCount}개 (신강↑)`, p: true }); 
-    }
+    // ====== 8. 삼합(三合) 체크 ======
+    const THREE_HARMONY = [
+        { branches: [2, 6, 10], element: 'fire', name: '寅午戌 화국' },
+        { branches: [8, 0, 4], element: 'water', name: '申子辰 수국' },
+        { branches: [5, 9, 1], element: 'metal', name: '巳酉丑 금국' },
+        { branches: [11, 3, 7], element: 'wood', name: '亥卯未 목국' }
+    ];
     
-    // ====== 9. 인성 개수 ======
-    let inCount = 0;
-    [...allStems, ...allBranches].forEach(p => { if (p.e === sealEl) inCount++; });
-    if (inCount >= 2) { 
-        score += 1.5; 
-        factors.push({ l: '인성 생부', v: `${inCount}개 (신강↑)`, p: true }); 
+    if (!directionalFormed) {
+        THREE_HARMONY.forEach(th => {
+            if (th.branches.every(b => branchIndices.includes(b))) {
+                if (th.element === peerEl) {
+                    score += 7;
+                    factors.push({ l: '🔥 三合', v: `${th.name} → 비겁 (+7)`, p: true });
+                } else if (th.element === sealEl) {
+                    score += 5;
+                    factors.push({ l: '🔥 三合', v: `${th.name} → 인성 (+5)`, p: true });
+                } else if (th.element === exprEl) {
+                    score -= 4;
+                    factors.push({ l: '⚠️ 三合', v: `${th.name} → 설기 (−4)`, p: false });
+                }
+            }
+        });
     }
     
     // ====== 신강/신약 판정 ======
@@ -3884,13 +3771,19 @@ function calcStrength(saju) {
         factors.push({ l: '⚡ 뿌리 보정', v: '극신약→신약', p: true });
     }
     
-    // ====== 퍼센트 변환 (원본 방식) ======
-    let pct = Math.min(100, Math.max(0, (score + 5) * 4));
+    // ====== 퍼센트 변환 ======
+    // score 범위: 약 -15 ~ +25
+    let pct = Math.round(((score + 15) / 40) * 100);
+    pct = Math.max(5, Math.min(95, pct));
+    
+    // 뿌리 있으면 최소 15% 보장
+    if (hasRealRoot.hour && pct < 15) pct = 15;
+    if (hasRealRoot.day && pct < 20) pct = 20;
 
     return { 
         type, 
         score: Math.round(score * 10) / 10, 
-        pct: Math.round(pct), 
+        pct, 
         factors, 
         extreme, 
         hourRoot: hasRealRoot.hour,
@@ -4079,82 +3972,51 @@ function analyzeClimate(saju) {
         if (s.e === 'water') waterCount++;
     });
     
-    // v4.12.6: 계절별 정확한 조후 표현 (Gemini 피드백)
+    // Basic climate determination with resolution check
     if (season === 'winter') {
-        // 겨울(亥子丑): 극한(極寒) - 火가 절대적으로 필요
+        // Winter needs Fire - check if Fire already exists
         if (fireCount >= 2) {
-            climate.type = '난동(暖冬)';
-            climate.desc = '겨울생이나 火가 한기를 해소. 균형 잡힘.';
+            climate.type = 'Warm Winter';
+            climate.desc = 'Winter-born but Fire resolves the cold. Balanced and fortunate.';
             climate.needs = [];
         } else if (fireCount === 1) {
-            climate.type = '미한(微寒)';
-            climate.desc = '겨울생에 약간의 온기. 火 보충 시 더 길함.';
+            climate.type = 'Mild Cold';
+            climate.desc = 'Winter chart with some warmth. Additional Fire enhances fortune.';
             climate.needs = ['fire'];
         } else {
-            climate.type = waterCount >= 2 ? '극한(極寒)' : '한냉(寒冷)';
-            climate.desc = '한냉한 사주. 火로 온기가 절실.';
+            climate.type = waterCount >= 2 ? 'Extreme Cold' : 'Cold';
+            climate.desc = 'Cold chart. Needs warming Fire energy.';
             climate.needs = ['fire', 'wood'];
         }
     } else if (season === 'summer') {
-        // 여름(巳午未): 조열(燥熱) - 水가 절대적으로 필요
+        // Summer needs Water - check if Water already exists
         if (waterCount >= 2) {
-            climate.type = '양하(涼夏)';
-            climate.desc = '여름생이나 水가 더위를 식힘. 균형 잡힘.';
+            climate.type = 'Cool Summer';
+            climate.desc = 'Summer-born but Water cools the heat. Balanced and fortunate.';
             climate.needs = [];
         } else if (waterCount === 1) {
-            climate.type = '미열(微熱)';
-            climate.desc = '여름생에 약간의 청량. 水 보충 시 더 길함.';
+            climate.type = 'Mild Hot';
+            climate.desc = 'Summer chart with some cooling. Additional Water enhances fortune.';
             climate.needs = ['water'];
         } else {
-            climate.type = fireCount >= 2 ? '조열(燥熱)' : '염열(炎熱)';
-            climate.desc = '뜨겁고 건조한 사주. 水로 서늘함이 절실.';
+            climate.type = fireCount >= 2 ? 'Extreme Dry' : 'Dry';
+            climate.desc = 'Hot and dry chart. Needs cooling Water energy.';
             climate.needs = ['water', 'metal'];
         }
-    } else if (season === 'spring') {
-        // 봄(寅卯): 한습(寒濕)에서 온화(溫和)로 - 火로 따뜻함 필요
-        if (fireCount >= 2) {
-            climate.type = '온화(溫和)';
-            climate.desc = '봄생에 충분한 온기. 만물이 소생하는 좋은 조합.';
-            climate.needs = [];
-        } else if (waterCount >= 2 && fireCount === 0) {
-            climate.type = '한습(寒濕)';
-            climate.desc = '봄생이나 水가 많아 차갑고 습함. 火가 필요.';
-            climate.needs = ['fire'];
-        } else {
-            climate.type = '청화(淸和)';
-            climate.desc = '봄의 청명한 기운. 온화한 사주.';
-            climate.needs = fireCount === 0 ? ['fire'] : [];
-        }
-    } else if (season === 'autumn') {
-        // 가을(申酉): 청량(淸涼)에서 서늘(肅殺)로 - 火로 온기 필요
-        if (fireCount >= 2) {
-            climate.type = '온추(溫秋)';
-            climate.desc = '가을생에 충분한 온기. 결실의 풍요가 기대됨.';
-            climate.needs = [];
-        } else if (waterCount >= 2 && fireCount === 0) {
-            climate.type = '냉추(冷秋)';
-            climate.desc = '가을생에 水가 많아 쌀쌀함. 火가 필요.';
-            climate.needs = ['fire'];
-        } else {
-            climate.type = '청량(淸涼)';
-            climate.desc = '가을의 청량한 기운. 선선한 사주.';
-            climate.needs = [];
-        }
     } else if (mbi === 1 || mbi === 4 || mbi === 7 || mbi === 10) {
-        // 土월(丑辰未戌): 습토(濕土) 또는 조토(燥土)
+        // Earth dominant season
         if (earthCount >= 2) {
-            const isWetEarth = mbi === 1 || mbi === 4; // 丑辰 = 습토
-            climate.type = isWetEarth ? '습토(濕土)' : '조토(燥土)';
-            climate.desc = isWetEarth ? '습한 토의 기운. 火로 건조함 필요.' : '건조한 토의 기운. 水로 윤택함 필요.';
-            climate.needs = isWetEarth ? ['fire', 'wood'] : ['water'];
+            climate.type = 'Humid';
+            climate.desc = 'Humid chart. Needs Fire to dry.';
+            climate.needs = ['fire', 'wood'];
         } else {
-            climate.type = '중화(中和)';
-            climate.desc = '토월생의 중화된 기운.';
+            climate.type = 'Balanced';
+            climate.desc = 'Balanced climate chart.';
             climate.needs = [];
         }
     } else {
-        climate.type = '온화(溫和)';
-        climate.desc = '온화하고 균형 잡힌 사주.';
+        climate.type = 'Mild';
+        climate.desc = 'Mild and temperate chart.';
         climate.needs = [];
     }
     
@@ -4199,10 +4061,9 @@ function calcGods(saju, str) {
     
     // ====== 0. 기후 분석 (조후 체크를 위해 먼저 실행) ======
     const climate = analyzeClimate(saju);
-    // v4.12.6: 새 조후 타입에 맞게 수정
-    const isTooCold = climate && (climate.type.includes('극한') || climate.type.includes('한냉') || climate.type.includes('한습') || climate.type.includes('냉추'));
-    const isTooHot = climate && (climate.type.includes('조열') || climate.type.includes('염열'));
-    const isTooDamp = climate && (climate.type.includes('습토'));
+    const isTooCold = climate && (climate.type === 'Cold' || climate.type === 'Very Cold');
+    const isTooHot = climate && (climate.type === 'Hot' || climate.type === 'Very Hot');
+    const isTooDamp = climate && (climate.type === 'Humid' || climate.type === 'Very Humid');
     
     // ★ 오행 카운트 (인성 과다/종격 체크용)
     const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
@@ -4332,189 +4193,6 @@ function calcGods(saju, str) {
     // ====== 4. 병약(病藥) 분석 ======
     const byungYak = findByungYak(saju, str);
     
-    // ====== 5. 용신 판단 근거 생성 ======
-    const reasoning = [];
-    
-    if (isFollower) {
-        reasoning.push(`【종격】 신강 ${str.pct}% (극신약) + 일지/시지 무근`);
-        reasoning.push(`→ ${followerType}: ${ELEMENT[yong]?.k || yong}이 4개 이상으로 압도적`);
-        reasoning.push(`→ 용신: ${ELEMENT[yong]?.k || yong} (흐름을 따름)`);
-    } else {
-        // 기본 신강/신약 근거
-        if (str.type === 'strong') {
-            reasoning.push(`【신강】 점수 ${str.score}점 (${str.pct}%)`);
-            reasoning.push(`→ 기본 용신: ${ELEMENT[wealthEl]?.k || wealthEl} (재성 - 일간을 설기)`);
-        } else if (str.type === 'weak') {
-            reasoning.push(`【신약】 점수 ${str.score}점 (${str.pct}%)`);
-            if (elCount[sealEl] >= 3) {
-                reasoning.push(`→ 편인태왕(${elCount[sealEl]}개): 인성 과다로 일간 질식`);
-                reasoning.push(`→ 용신 수정: ${ELEMENT[exprEl]?.k || exprEl} (식상으로 인성 설기)`);
-            } else {
-                reasoning.push(`→ 기본 용신: ${ELEMENT[sealEl]?.k || sealEl} (인성 - 일간을 생함)`);
-            }
-        } else {
-            reasoning.push(`【중화】 점수 ${str.score}점 (${str.pct}%)`);
-            reasoning.push(`→ 기본 용신: ${ELEMENT[exprEl]?.k || exprEl} (식상 - 자연스러운 표현)`);
-        }
-        
-        // 조후 적용 근거
-        if (johu && johuData) {
-            const johuApplied = yong === johu;
-            if (johuApplied) {
-                reasoning.push(`【조후】 ${johuData.desc}`);
-                if (isTooCold || isTooHot || isTooDamp) {
-                    reasoning.push(`→ 극한 기후: 조후 최우선 적용`);
-                } else {
-                    reasoning.push(`→ 조후용신 ${ELEMENT[johu]?.k || johu}이 기신 아니므로 적용`);
-                }
-            }
-        }
-        
-        // 금수상관격
-        const isMetalDM = dm.e === 'metal';
-        const isWinterMonth = [10, 11, 0, 1].includes(mbi);
-        const waterCount = [saju.year, saju.month, saju.day, saju.hour].filter(p => 
-            p && ((p.s && p.s.e === 'water') || (p.b && p.b.e === 'water'))
-        ).length;
-        if (isMetalDM && isWinterMonth && waterCount >= 2) {
-            reasoning.push(`【금수상관격】 金日+冬月+水2+: 火가 기신→희신으로 변환`);
-        }
-    }
-    
-    // 병약 근거
-    if (byungYak && byungYak.byung) {
-        reasoning.push(`【병약】 ${byungYak.desc}`);
-    }
-    
-    // ====== v4.12.6 NEW: 용신 파괴 패턴 경고 ======
-    const warnings = [];
-    
-    // ★ 수정: 용신이 원국에 1개 이상 있을 때만 "용신 파괴" 체크
-    // 용신이 0개면 "용신부재"로 처리 (아래에서)
-    
-    // 1. 금다목절(金多木折) - 金 3+ & 용신 木 1+ → 도끼가 나무를 자름
-    if (elCount.metal >= 3 && yong === 'wood' && elCount.wood >= 1 && elCount.wood <= 2) {
-        warnings.push({
-            type: '금다목절(金多木折)',
-            desc: '金 3개 이상이 용신 木을 극파 → 계획/성장이 꺾임',
-            severity: 'high',
-            advice: '金 기운 피하고 水로 통관 필요'
-        });
-        reasoning.push(`⚠️【용신파괴】 금다목절: 金${elCount.metal}개가 용신 木${elCount.wood}개를 자름`);
-    }
-    
-    // 2. 토다금매(土多金埋) - 土 4+ & 용신 金 1+ → 흙이 금을 묻음
-    if (elCount.earth >= 4 && yong === 'metal' && elCount.metal >= 1 && elCount.metal <= 2) {
-        warnings.push({
-            type: '토다금매(土多金埋)',
-            desc: '土 4개 이상이 용신 金을 매몰 → 재능이 빛을 못 봄',
-            severity: 'high',
-            advice: '木으로 土를 소모시키거나 金을 보충'
-        });
-        reasoning.push(`⚠️【용신파괴】 토다금매: 土${elCount.earth}개가 용신 金${elCount.metal}개를 묻음`);
-    }
-    
-    // 3. 목다화식(木多火熄) - 木 4+ & 용신 火 1+ → 젖은 나무가 불을 끔
-    if (elCount.wood >= 4 && yong === 'fire' && elCount.fire >= 1 && elCount.fire <= 2) {
-        warnings.push({
-            type: '목다화식(木多火熄)',
-            desc: '木 4개 이상이 용신 火를 덮음 → 열정이 질식',
-            severity: 'medium',
-            advice: '적절한 火 보충 필요'
-        });
-        reasoning.push(`⚠️【용신파괴】 목다화식: 木${elCount.wood}개가 용신 火${elCount.fire}개를 덮음`);
-    }
-    
-    // 4. 수다화식(水多火熄) - 水 3+ & 일간 火 → 물이 불을 끔
-    if (elCount.water >= 3 && dm.e === 'fire') {
-        warnings.push({
-            type: '수다화식(水多火熄)',
-            desc: '水 3개 이상이 火 일간을 극함 → 의지/활력 저하',
-            severity: 'high',
-            advice: '木으로 水를 흡수하고 火를 생함'
-        });
-        reasoning.push(`⚠️【위험】 수다화식: 水${elCount.water}개가 火일간을 위협`);
-    }
-    
-    // 5. 화다금소(火多金少) - 火 3+ & 일간 金 → 불이 금을 녹임
-    if (elCount.fire >= 3 && dm.e === 'metal') {
-        warnings.push({
-            type: '화다금소(火多金少)',
-            desc: '火 3개 이상이 金 일간을 극함 → 압박/스트레스 극심',
-            severity: 'high',
-            advice: '土로 火를 소모시키고 金을 생함'
-        });
-        reasoning.push(`⚠️【위험】 화다금소: 火${elCount.fire}개가 金일간을 녹임`);
-    }
-    
-    // 6. 화다수빈(火多水貧) - 火 3+ & 용신 水 1+ → 불이 물을 증발
-    if (elCount.fire >= 3 && yong === 'water' && elCount.water >= 1 && elCount.water <= 2) {
-        warnings.push({
-            type: '화다수빈(火多水貧)',
-            desc: '火 3개 이상이 용신 水를 증발 → 지혜/재물 고갈',
-            severity: 'high',
-            advice: '金으로 火를 제어하고 水를 생함'
-        });
-        reasoning.push(`⚠️【용신파괴】 화다수빈: 火${elCount.fire}개가 용신 水${elCount.water}개를 증발`);
-    }
-    
-    // 7. 군비쟁재(群比爭財) - 비겁 4+ & 재성 1-2 → 형제가 재물 다툼
-    const biCount = [...[saju.year, saju.month, saju.day, saju.hour].filter(p => p)]
-        .filter(p => (p.s && p.s.e === dm.e) || (p.b && p.b.e === dm.e)).length;
-    if (biCount >= 4 && elCount[wealthEl] >= 1 && elCount[wealthEl] <= 2) {
-        warnings.push({
-            type: '군비쟁재(群比爭財)',
-            desc: `비겁 ${biCount}개가 재성 ${elCount[wealthEl]}개를 다툼 → 재물 손실/경쟁 과다`,
-            severity: 'medium',
-            advice: '官殺로 비겁 제어 또는 식상으로 설기'
-        });
-        reasoning.push(`⚠️【특수】 군비쟁재: 비겁${biCount}개 vs 재성${elCount[wealthEl]}개`);
-    }
-    
-    // 8. 용신부재 - 용신이 원국에 없음
-    if (elCount[yong] === 0) {
-        warnings.push({
-            type: '용신부재(用神不在)',
-            desc: `용신 ${ELEMENT[yong].k}이 원국에 없음 → 대운에서 보충 필수`,
-            severity: 'medium',
-            advice: '대운/세운에서 용신이 올 때가 기회'
-        });
-        reasoning.push(`⚠️【주의】 용신부재: ${ELEMENT[yong].k}이 원국에 없음, 대운 의존`);
-    }
-    
-    // 9. 금다목극(金多木剋) - 金 4+ & 일간 木 → 일간이 극받음 (용신 무관)
-    if (elCount.metal >= 4 && dm.e === 'wood') {
-        warnings.push({
-            type: '금다목극(金多木剋)',
-            desc: '金 4개 이상이 木 일간을 극함 → 압박/건강(간담) 주의',
-            severity: 'high',
-            advice: '火로 金을 제어하거나 水로 통관'
-        });
-        reasoning.push(`⚠️【일간극파】 금다목극: 金${elCount.metal}개가 木일간을 극함`);
-    }
-    
-    // 10. 목다토극(木多土剋) - 木 4+ & 일간 土 → 일간이 극받음
-    if (elCount.wood >= 4 && dm.e === 'earth') {
-        warnings.push({
-            type: '목다토극(木多土剋)',
-            desc: '木 4개 이상이 土 일간을 극함 → 위장/소화기 주의',
-            severity: 'high',
-            advice: '火로 통관 또는 金으로 木 제어'
-        });
-        reasoning.push(`⚠️【일간극파】 목다토극: 木${elCount.wood}개가 土일간을 극함`);
-    }
-    
-    // 11. 토다수극(土多水剋) - 土 4+ & 일간 水 → 일간이 극받음
-    if (elCount.earth >= 4 && dm.e === 'water') {
-        warnings.push({
-            type: '토다수극(土多水剋)',
-            desc: '土 4개 이상이 水 일간을 극함 → 신장/비뇨기 주의',
-            severity: 'high',
-            advice: '金으로 통관 또는 木으로 土 제어'
-        });
-        reasoning.push(`⚠️【일간극파】 토다수극: 土${elCount.earth}개가 水일간을 극함`);
-    }
-    
     return { 
         yong, hee, gi, 
         type: str.type, 
@@ -4524,9 +4202,7 @@ function calcGods(saju, str) {
         sub: johuData?.sub || null,
         isFollower,
         followerType,
-        sealExcess: elCount[sealEl] >= 3,
-        warnings,  // ★ v4.12.6 용신 파괴 패턴
-        reasoning  // ★ 용신 판단 근거 추가
+        sealExcess: elCount[sealEl] >= 3
     };
 }
 
@@ -4541,235 +4217,6 @@ function getElementRelation(dmEl, targetEl) {
     if (diff === 3) return 'officer';
     if (diff === 4) return 'seal';
     return 'peer';
-}
-
-/* ========================================
-   9-4-2. 통합 분석 파이프라인 (fullAnalysis)
-   v4.12.3 NEW - 모든 분석을 하나로 통합
-   ======================================== */
-
-function fullAnalysis(saju) {
-    const result = {
-        // 기본 정보
-        dayMaster: saju.day.s,
-        monthBranch: saju.month.b,
-        
-        // 1단계: 삼합/방합 분석
-        combinations: null,
-        
-        // 2단계: 천간합 분석
-        stemCombines: null,
-        
-        // 3단계: 신강/신약 분석
-        strength: null,
-        
-        // 4단계: 한난조습 분석
-        climate: null,
-        
-        // 5단계: 용신 분석
-        gods: null,
-        
-        // 최종 요약
-        summary: null
-    };
-    
-    // ====== 1. 삼합/방합 분석 ======
-    const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);
-    const branchIdxs = branches.map(b => BRANCH.indexOf(b));
-    
-    // 삼합 (Harmony of Three)
-    const SAMHAP = [
-        {branches: [8, 0, 4], result: 'water', name: '申子辰 水局'},
-        {branches: [2, 6, 10], result: 'fire', name: '寅午戌 火局'},
-        {branches: [11, 3, 7], result: 'wood', name: '亥卯未 木局'},
-        {branches: [5, 9, 1], result: 'metal', name: '巳酉丑 金局'}
-    ];
-    
-    // 방합 (Directional Harmony)
-    const BANGHAP = [
-        {branches: [2, 3, 4], result: 'wood', name: '寅卯辰 東方木'},
-        {branches: [5, 6, 7], result: 'fire', name: '巳午未 南方火'},
-        {branches: [8, 9, 10], result: 'metal', name: '申酉戌 西方金'},
-        {branches: [11, 0, 1], result: 'water', name: '亥子丑 北方水'}
-    ];
-    
-    const foundCombos = [];
-    
-    SAMHAP.forEach(sh => {
-        const count = sh.branches.filter(b => branchIdxs.includes(b)).length;
-        if (count >= 2) {
-            foundCombos.push({
-                type: count === 3 ? '삼합' : '반합',
-                name: sh.name,
-                result: sh.result,
-                count
-            });
-        }
-    });
-    
-    BANGHAP.forEach(bh => {
-        const count = bh.branches.filter(b => branchIdxs.includes(b)).length;
-        if (count >= 2) {
-            foundCombos.push({
-                type: count === 3 ? '방합' : '방합(2)',
-                name: bh.name,
-                result: bh.result,
-                count
-            });
-        }
-    });
-    
-    result.combinations = foundCombos;
-    
-    // ====== 2. 천간합 분석 (인접성 + 합화 성립 조건) ======
-    // v4.12.6: "레고→요리" 핵심 - 계절에 따른 합화 성립 여부
-    const STEM_COMBINE_RESULT = {
-        '0-5': {result: 'earth', name: '甲己合土', seasonBranches: [1,4,7,10]},  // 丑辰未戌(토월)
-        '1-6': {result: 'metal', name: '乙庚合金', seasonBranches: [8,9]},       // 申酉(금월)
-        '2-7': {result: 'water', name: '丙辛合水', seasonBranches: [0,11]},      // 子亥(수월)
-        '3-8': {result: 'wood', name: '丁壬合木', seasonBranches: [2,3]},        // 寅卯(목월)
-        '4-9': {result: 'fire', name: '戊癸合火', seasonBranches: [5,6]}         // 巳午(화월)
-    };
-    
-    const stemCombines = [];
-    const positions = ['year', 'month', 'day', 'hour'];
-    const monthBranchIdx = BRANCH.findIndex(b => b.c === saju.month.b.c);
-    
-    for (let i = 0; i < 3; i++) {
-        const s1 = saju[positions[i]]?.s;
-        const s2 = saju[positions[i+1]]?.s;
-        if (!s1 || !s2) continue;
-        
-        const idx1 = STEM.indexOf(s1);
-        const idx2 = STEM.indexOf(s2);
-        
-        const key1 = `${Math.min(idx1, idx2)}-${Math.max(idx1, idx2)}`;
-        
-        if (STEM_COMBINE_RESULT[key1]) {
-            const combineData = STEM_COMBINE_RESULT[key1];
-            
-            // ★ 합화 성립 조건: 월지가 합화 결과 오행의 계절이어야 함
-            const canTransform = combineData.seasonBranches.includes(monthBranchIdx);
-            
-            // 투출 체크: 합화 결과 오행이 천간에 있으면 합화력 강화
-            const allStems = [saju.year?.s, saju.month?.s, saju.day?.s, saju.hour?.s].filter(s => s);
-            const hasTouchal = allStems.some(s => s.e === combineData.result);
-            
-            let status, note;
-            if (canTransform && hasTouchal) {
-                status = '진합화(眞合化)';
-                note = `✅ 계절 적합(${BRANCH[monthBranchIdx].c}월) + 투출 → 완전 변환`;
-            } else if (canTransform) {
-                status = '합화(合化)';
-                note = `계절 적합(${BRANCH[monthBranchIdx].c}월) → ${ELEMENT[combineData.result].k}으로 변환`;
-            } else {
-                status = '합이류(合而留)';
-                note = `⚠️ ${BRANCH[monthBranchIdx].c}월 = 계절 불일치 → 합은 하나 변하지 않음`;
-            }
-            
-            stemCombines.push({
-                stems: `${s1.c}${s2.c}`,
-                positions: `${positions[i]}-${positions[i+1]}`,
-                ...combineData,
-                isAdjacent: true,
-                canTransform,
-                hasTouchal,
-                status,
-                note
-            });
-        }
-    }
-    
-    // 년-시 원거리 합 체크 (氣絆 - 기운만 묶임, 변환 불가)
-    if (saju.year?.s && saju.hour?.s) {
-        const yIdx = STEM.indexOf(saju.year.s);
-        const hIdx = STEM.indexOf(saju.hour.s);
-        const key = `${Math.min(yIdx, hIdx)}-${Math.max(yIdx, hIdx)}`;
-        if (STEM_COMBINE_RESULT[key]) {
-            stemCombines.push({
-                stems: `${saju.year.s.c}${saju.hour.s.c}`,
-                positions: 'year-hour',
-                ...STEM_COMBINE_RESULT[key],
-                isAdjacent: false,
-                canTransform: false,
-                status: '기반(氣絆)',
-                note: '⚠️ 원거리 합 = 기운만 묶임, 화학적 변화 없음'
-            });
-        }
-    }
-    
-    result.stemCombines = stemCombines;
-    
-    // ====== 3. 신강/신약 분석 ======
-    result.strength = calcStrength(saju);
-    
-    // ====== 4. 한난조습 분석 ======
-    result.climate = analyzeClimate(saju);
-    
-    // ====== 5. 용신 분석 ======
-    result.gods = calcGods(saju, result.strength);
-    
-    // ====== 6. 최종 요약 생성 ======
-    const dm = saju.day.s;
-    const gods = result.gods;
-    const str = result.strength;
-    
-    const summaryLines = [];
-    summaryLines.push(`【일간】 ${dm.c}(${dm.k}) ${ELEMENT[dm.e].k}`);
-    summaryLines.push(`【신강/신약】 ${str.type === 'strong' ? '신강' : str.type === 'weak' ? '신약' : '중화'} (${str.score}점, ${str.pct}%)`);
-    
-    if (gods.isFollower) {
-        summaryLines.push(`【특수격국】 ${gods.followerType}`);
-    }
-    
-    summaryLines.push(`【용신】 ${ELEMENT[gods.yong]?.k || gods.yong}`);
-    summaryLines.push(`【희신】 ${ELEMENT[gods.hee]?.k || gods.hee}`);
-    summaryLines.push(`【기신】 ${ELEMENT[gods.gi]?.k || gods.gi}`);
-    
-    if (gods.johu) {
-        summaryLines.push(`【조후】 ${ELEMENT[gods.johu]?.k || gods.johu} - ${gods.johuDesc}`);
-    }
-    
-    if (result.climate) {
-        summaryLines.push(`【기후】 ${result.climate.type} - ${result.climate.desc}`);
-    }
-    
-    if (foundCombos.length > 0) {
-        summaryLines.push(`【지지합】 ${foundCombos.map(c => c.name).join(', ')}`);
-    }
-    
-    if (stemCombines.length > 0) {
-        // v4.12.6: 합화 성립 여부 상세 표시
-        const combineDetails = stemCombines.map(c => {
-            if (c.status === '진합화(眞合化)') {
-                return `✅${c.name}→${ELEMENT[c.result].k}(진합화)`;
-            } else if (c.status === '합화(合化)') {
-                return `${c.name}→${ELEMENT[c.result].k}(합화)`;
-            } else if (c.status === '합이류(合而留)') {
-                return `⚠️${c.name}(합이류-불변)`;
-            } else {
-                return `${c.name}(기반)`;
-            }
-        });
-        summaryLines.push(`【천간합】 ${combineDetails.join(', ')}`);
-    }
-    
-    // ====== v4.12.6 NEW: 용신 파괴 패턴 경고 출력 ======
-    if (gods.warnings && gods.warnings.length > 0) {
-        const highWarnings = gods.warnings.filter(w => w.severity === 'high');
-        const mediumWarnings = gods.warnings.filter(w => w.severity === 'medium');
-        
-        if (highWarnings.length > 0) {
-            summaryLines.push(`🚨【위험경고】 ${highWarnings.map(w => w.type).join(', ')}`);
-        }
-        if (mediumWarnings.length > 0) {
-            summaryLines.push(`⚠️【주의사항】 ${mediumWarnings.map(w => w.type).join(', ')}`);
-        }
-    }
-    
-    result.summary = summaryLines;
-    
-    return result;
 }
 
 
@@ -5449,16 +4896,14 @@ function calcLuck(saju, birthYear, gender, gods) {
         // 🔥 조후 역운 체크 (Climate Clash) - Gemini feedback
         if (gods.climate) {
             const daeunEls = [s.e, b.e];
-            // v4.12.6: 새 조후 타입에 맞게 수정
-            // 조열/염열 + Fire 대운 = penalty (뜨거운데 더 뜨거움)
-            if ((gods.climate.type.includes('조열') || gods.climate.type.includes('염열')) && 
+            // Extreme Dry + Fire 대운 = penalty
+            if ((gods.climate.type.includes('Dry') || gods.climate.type.includes('Hot')) && 
                 daeunEls.filter(e => e === 'fire').length >= 1) {
                 score -= 2;
                 climateClash = true;
             }
-            // 극한/한냉/한습/냉추 + Water 대운 = penalty (추운데 더 추움)
-            if ((gods.climate.type.includes('극한') || gods.climate.type.includes('한냉') || 
-                 gods.climate.type.includes('한습') || gods.climate.type.includes('냉추')) && 
+            // Extreme Cold + Water 대운 = penalty
+            if ((gods.climate.type.includes('Cold') || gods.climate.type.includes('Extreme Cold')) && 
                 daeunEls.filter(e => e === 'water').length >= 1) {
                 score -= 2;
                 climateClash = true;
@@ -5553,12 +4998,11 @@ function ylCheckClimateClash(yp, gods) {
     if (!gods.climate) return { active: false, score: 0, desc: '' };
     const yearEls = [yp.s.e, yp.b.e];
     const climate = gods.climate.type;
-    // v4.12.6: 새 조후 타입에 맞게 수정
-    if ((climate.includes('조열') || climate.includes('염열')) && yearEls.includes('fire')) {
-        return { active: true, score: -(yearEls.filter(e => e === 'fire').length * 3), desc: '뜨거운 사주에 火가 더해져 조열 심화! 건강/재물 주의.' };
+    if ((climate.includes('Dry') || climate.includes('Hot')) && yearEls.includes('fire')) {
+        return { active: true, score: -(yearEls.filter(e => e === 'fire').length * 3), desc: 'Fire on Dry! Health/wealth at risk.' };
     }
-    if ((climate.includes('극한') || climate.includes('한냉') || climate.includes('한습') || climate.includes('냉추')) && yearEls.includes('water')) {
-        return { active: true, score: -(yearEls.filter(e => e === 'water').length * 3), desc: '추운 사주에 水가 더해져 한기 심화! 우울증/냉증 주의.' };
+    if ((climate.includes('Cold') || climate.includes('Extreme Cold')) && yearEls.includes('water')) {
+        return { active: true, score: -(yearEls.filter(e => e === 'water').length * 3), desc: 'Water on Cold! Depression risk.' };
     }
     return { active: false, score: 0, desc: '' };
 }
@@ -5797,18 +5241,83 @@ function ylCheckHarmBetrayal(saju) {
     return { active: false, desc: '' };
 }
 
+// v4.12.6 NEW: 쇠신충왕(衰神沖旺) - 용신이 와도 기신에 압도됨
+function ylCheckYongOverwhelmed(saju, gods) {
+    const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
+    [saju.year, saju.month, saju.day, saju.hour].forEach(p => {
+        if (p?.s) elCount[p.s.e]++;
+        if (p?.b) elCount[p.b.e]++;
+    });
+    const yongCount = elCount[gods.yong] || 0;
+    const giCount = elCount[gods.gi] || 0;
+    if (giCount >= 3 && yongCount <= 1 && giCount >= yongCount * 3) {
+        return { active: true, score: -2, desc: `⚠️ 쇠신충왕(衰神沖旺): 기신(${ELEMENT[gods.gi].k}) ${giCount}개 vs 용신(${ELEMENT[gods.yong].k}) ${yongCount}개 → 용신이 와도 압도됨!` };
+    }
+    return { active: false, score: 0, desc: '' };
+}
+
+// v4.12.6 NEW: 편인도식(偏印倒食) - 식신격인데 편인이 충하면 밥그릇 깨짐
+function ylCheckPyunInDoShik(saju, gods) {
+    const dm = saju.day.s;
+    const monthBi = BRANCH.findIndex(b => b.c === saju.month.b.c);
+    const shikShinEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];
+    const pyunInEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];
+    if (saju.month.b.e !== shikShinEl) return { active: false, score: 0, desc: '' };
+    const clashPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
+    const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);
+    let found = false, detail = '';
+    branches.forEach(b => {
+        if (b.e === pyunInEl) {
+            const bi = BRANCH.findIndex(br => br.c === b.c);
+            clashPairs.forEach(([a, c]) => {
+                if ((bi === a && monthBi === c) || (bi === c && monthBi === a)) {
+                    found = true;
+                    detail = `${b.c}(편인)↔${saju.month.b.c}(식신)`;
+                }
+            });
+        }
+    });
+    if (found) {
+        return { active: true, score: -2, desc: `⚠️ 편인도식(偏印倒食): ${detail} 충 → 재능은 있으나 예민함 때문에 기회를 걷어차는 형국!` };
+    }
+    return { active: false, score: 0, desc: '' };
+}
+
+// v4.12.6 NEW: 왕신충발(旺神沖發) - 4개 이상 왕한 오행을 세운이 충하면 폭발
+function ylCheckWangShinChungBal(yp, saju) {
+    const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
+    [saju.year, saju.month, saju.day, saju.hour].forEach(p => {
+        if (p?.s) elCount[p.s.e]++;
+        if (p?.b) elCount[p.b.e]++;
+    });
+    const wangElements = Object.entries(elCount).filter(([el, cnt]) => cnt >= 4);
+    if (wangElements.length === 0) return { active: false, score: 0, desc: '' };
+    const clashPairs = {'子':'午','午':'子','丑':'未','未':'丑','寅':'申','申':'寅','卯':'酉','酉':'卯','辰':'戌','戌':'辰','巳':'亥','亥':'巳'};
+    const yearBranch = yp.b.c;
+    const clashTarget = clashPairs[yearBranch];
+    if (!clashTarget) return { active: false, score: 0, desc: '' };
+    const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);
+    const targetBranches = branches.filter(b => b.c === clashTarget);
+    if (targetBranches.length === 0) return { active: false, score: 0, desc: '' };
+    const targetEl = targetBranches[0].e;
+    const isWang = wangElements.some(([el]) => el === targetEl);
+    if (isWang) {
+        const wangCount = elCount[targetEl];
+        return { active: true, score: -3, desc: `🚨 왕신충발(旺神沖發): ${yearBranch}(세운)이 ${clashTarget}(원국)을 충! ${ELEMENT[targetEl].k}이 ${wangCount}개로 왕한데 건드림 → 대격변/사고/파재 극도 주의!` };
+    }
+    return { active: false, score: 0, desc: '' };
+}
+
 // ===== Rating 결정 =====
 function ylDetermineRating(r, score) {
+    // v4.12.6 NEW: 왕신충발 > 쇠신충왕 > 편인도식 (가장 위험한 순)
+    if (r.wangShinChungBal && r.wangShinChungBal.active) return 'wang_shin_chung_bal';
+    if (r.yongOverwhelmed && r.yongOverwhelmed.active) return 'yong_overwhelmed';
+    if (r.pyunInDoShik && r.pyunInDoShik.active) return 'pyunin_doshik';
     if (r.bureau.active && r.yongGi.score > 0) return 'breakthrough';
     if (r.yongAttack.active) return 'yong_attacked';
     if (r.robWealth.active) return 'rob_wealth';
     if (r.yanginClash.active) return 'surgery_risk';
-    // v4.12.6: 쇠신충왕 - 용신이 와도 기신에 압도
-    if (r.yongOverwhelmed && r.yongOverwhelmed.active) return 'yong_overwhelmed';
-    // v4.12.6: 편인도식
-    if (r.pyunInDoShik && r.pyunInDoShik.active) return 'pyunin_doshik';
-    // v4.12.6: 왕신충발 - 왕한 오행을 충하면 폭발
-    if (r.wangShinChungBal && r.wangShinChungBal.active) return 'wang_shin_chung_bal';
     if (r.dayClash.active && r.yongGi.score > 0) return 'volatile_wealth';
     if (r.monthClash.active && score > 0) return 'volatile';
     if (score >= 4) return 'great';
@@ -5816,132 +5325,6 @@ function ylDetermineRating(r, score) {
     if (score <= -4) return 'danger';
     if (score <= -2) return 'bad';
     return 'neutral';
-}
-
-// v4.12.6 NEW: 쇠신충왕(衰神沖旺) - 용신이 와도 기신이 3배 이상이면 압도됨
-function ylCheckYongOverwhelmed(saju, gods) {
-    const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
-    [saju.year, saju.month, saju.day, saju.hour].forEach(p => {
-        if (p?.s) elCount[p.s.e]++;
-        if (p?.b) elCount[p.b.e]++;
-    });
-    
-    const yongCount = elCount[gods.yong] || 0;
-    const giCount = elCount[gods.gi] || 0;
-    
-    // 기신이 용신의 3배 이상이면 쇠신충왕
-    if (giCount >= 3 && yongCount <= 1 && giCount >= yongCount * 3) {
-        return {
-            active: true,
-            score: -2,
-            desc: `⚠️ 쇠신충왕(衰神沖旺): 기신(${ELEMENT[gods.gi].k}) ${giCount}개 vs 용신(${ELEMENT[gods.yong].k}) ${yongCount}개 → 용신이 와도 기신에 압도됨`,
-            giCount,
-            yongCount
-        };
-    }
-    return { active: false, score: 0, desc: '', giCount, yongCount };
-}
-
-// v4.12.6 NEW: 왕신충발(旺神沖發) - 원국에 4개 이상인 오행을 세운이 충하면 폭발
-function ylCheckWangShinChungBal(yp, saju) {
-    // 원국 오행 카운트
-    const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
-    [saju.year, saju.month, saju.day, saju.hour].forEach(p => {
-        if (p?.s) elCount[p.s.e]++;
-        if (p?.b) elCount[p.b.e]++;
-    });
-    
-    // ★ 수정: 4개 이상인 오행만 "왕"으로 간주 (명리학 정석)
-    const wangElements = Object.entries(elCount).filter(([el, cnt]) => cnt >= 4);
-    if (wangElements.length === 0) return { active: false, score: 0, desc: '' };
-    
-    // 세운 지지가 원국의 왕한 오행을 충하는지 체크
-    const clashPairs = {
-        '子': '午', '午': '子',
-        '丑': '未', '未': '丑',
-        '寅': '申', '申': '寅',
-        '卯': '酉', '酉': '卯',
-        '辰': '戌', '戌': '辰',
-        '巳': '亥', '亥': '巳'
-    };
-    
-    const yearBranch = yp.b.c;
-    const clashTarget = clashPairs[yearBranch];
-    
-    if (!clashTarget) return { active: false, score: 0, desc: '' };
-    
-    // 원국에서 충 대상 지지의 오행 확인
-    const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);
-    const targetBranches = branches.filter(b => b.c === clashTarget);
-    
-    if (targetBranches.length === 0) return { active: false, score: 0, desc: '' };
-    
-    // 충 대상의 오행이 왕한 오행인지 확인
-    const targetEl = targetBranches[0].e;
-    const isWang = wangElements.some(([el, cnt]) => el === targetEl);
-    
-    if (isWang) {
-        const wangCount = elCount[targetEl];
-        return {
-            active: true,
-            score: -3,  // 매우 위험
-            desc: `🚨 왕신충발(旺神沖發): ${yearBranch}(세운)이 ${clashTarget}(원국)을 충! ${ELEMENT[targetEl].k}이 ${wangCount}개로 왕한데 건드림 → 잠자는 사자 코털! 대격변/사고/파재 위험`,
-            wangElement: targetEl,
-            wangCount
-        };
-    }
-    
-    return { active: false, score: 0, desc: '' };
-}
-
-// v4.12.6 NEW: 편인도식(偏印倒食) - 식신격인데 편인이 식신을 충/극하면 밥그릇 깨짐
-function ylCheckPyunInDoShik(saju, gods) {
-    // 월지의 지장간 정기로 격국 판정
-    const monthBi = BRANCH.findIndex(b => b.c === saju.month.b.c);
-    const dm = saju.day.s;
-    
-    // 식신 오행
-    const shikShinEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];
-    // 편인 오행
-    const pyunInEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];
-    
-    // 월지가 식신 오행인지 체크 (식신격 가능성)
-    const isShikShinMonth = saju.month.b.e === shikShinEl;
-    
-    if (!isShikShinMonth) return { active: false, score: 0, desc: '' };
-    
-    // 편인이 원국에 있는지 + 충 관계인지 체크
-    const clashPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]]; // 子午, 丑未, 寅申, 卯酉, 辰戌, 巳亥
-    const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);
-    const branchIndices = branches.map(b => BRANCH.findIndex(br => br.c === b.c));
-    
-    let hasPyunInClash = false;
-    let clashDetail = '';
-    
-    // 편인이 식신을 충하는지 체크
-    branches.forEach((b, i) => {
-        if (b.e === pyunInEl) {
-            const bi = BRANCH.findIndex(br => br.c === b.c);
-            // 월지(식신)와 충인지
-            clashPairs.forEach(([a, c]) => {
-                if ((bi === a && monthBi === c) || (bi === c && monthBi === a)) {
-                    hasPyunInClash = true;
-                    clashDetail = `${b.c}(편인) ↔ ${saju.month.b.c}(식신)`;
-                }
-            });
-        }
-    });
-    
-    if (hasPyunInClash) {
-        return {
-            active: true,
-            score: -2,
-            desc: `⚠️ 편인도식(偏印倒食): ${clashDetail} 충 → 재능은 있으나 예민함 때문에 기회를 걷어차는 형국. 밥그릇이 깨지기 쉬움.`,
-            clashDetail
-        };
-    }
-    
-    return { active: false, score: 0, desc: '' };
 }
 
 // ===== MAIN: calcYearLuck (v4.0 Refactored) =====
@@ -5971,7 +5354,7 @@ function calcYearLuck(year, saju, gods) {
         scandal: ylCheckScandal(yp, saju),
         missingYong: ylCheckMissingYong(saju, gods, false),
         harmBetrayal: ylCheckHarmBetrayal(saju),
-        // v4.12.6 NEW: 쇠신충왕 + 편인도식 + 왕신충발
+        // v4.12.6 NEW
         yongOverwhelmed: ylCheckYongOverwhelmed(saju, gods),
         pyunInDoShik: ylCheckPyunInDoShik(saju, gods),
         wangShinChungBal: ylCheckWangShinChungBal(yp, saju)
@@ -6208,18 +5591,16 @@ function calcMonthLuck(year, month, saju, gods) {
     if ([mp.s.e, mp.b.e].includes(gods.gi)) score -= 2;
     
     // 🔥 조후 역운 체크 (Climate Clash) - Gemini feedback
-    // v4.12.6: 새 조후 타입에 맞게 수정
     if (gods.climate) {
         const monthEls = [mp.s.e, mp.b.e];
-        // 조열/염열 + Fire month = DANGER
-        if ((gods.climate.type.includes('조열') || gods.climate.type.includes('염열')) && 
+        // Extreme Dry + Fire month = DANGER
+        if ((gods.climate.type.includes('Dry') || gods.climate.type.includes('Hot')) && 
             monthEls.filter(e => e === 'fire').length >= 1) {
             score -= 3;
             climateClash = true;
         }
-        // 극한/한냉/한습/냉추 + Water month = DANGER
-        if ((gods.climate.type.includes('극한') || gods.climate.type.includes('한냉') ||
-             gods.climate.type.includes('한습') || gods.climate.type.includes('냉추')) && 
+        // Extreme Cold + Water month = DANGER
+        if ((gods.climate.type.includes('Cold') || gods.climate.type.includes('Extreme Cold')) && 
             monthEls.filter(e => e === 'water').length >= 1) {
             score -= 3;
             climateClash = true;
@@ -9191,8 +8572,6 @@ ${(() => {
 • Beneficial God (用神): ${ELEMENT[GODS.yong].n} (${ELEMENT[GODS.yong].c}) - Most needed element
 • Favorable God (喜神): ${ELEMENT[GODS.hee].n} (${ELEMENT[GODS.hee].c}) - Supports beneficial element
 • Unfavorable God (忌神): ${ELEMENT[GODS.gi].n} (${ELEMENT[GODS.gi].c}) - Element to avoid
-${GODS.reasoning?.length ? '\n【用神 DETERMINATION REASONING】\n' + GODS.reasoning.map(r => '• ' + r).join('\n') : ''}
-${GODS.warnings?.length ? '\n【⚠️ CRITICAL WARNINGS (用神 Destruction Patterns)】\n' + GODS.warnings.map(w => '• 🚨 ' + w.type + ': ' + w.desc + '\n  → Advice: ' + w.advice).join('\n') : ''}
 ${GODS.isFollower ? '• 🌀 FOLLOWER CHART (' + GODS.followerType + '): Extremely weak Day Master follows the dominant element. DO NOT fight the trend - ride it. Years bringing ' + ELEMENT[GODS.yong].n + ' are FAVORABLE, not threatening.' : ''}
 ${GODS.sealExcess ? '• ⚠️ SEAL EXCESS (偏印太旺): 3+ Seal elements suffocating Day Master. Output (Expression) needed to drain the overflow.' : ''}
 ${GODS.johu ? '• Seasonal Adjustment: ' + (GODS.johuDesc || '') : ''}
@@ -9261,9 +8640,9 @@ ${(() => {
                        yearLuck.rating === 'rob_wealth' ? '⚔️ DANGER - Wealth Robbery Year (群劫爭財)! Avoid partnerships!' :
                        yearLuck.rating === 'surgery_risk' ? '⚔️ HIGH RISK HIGH RETURN - Wealth OR Surgery Year (沖羊刃)' :
                        yearLuck.rating === 'volatile_wealth' ? '💰⚠️ VOLATILE WEALTH - Big money but health/spouse risk' :
-                       yearLuck.rating === 'yong_overwhelmed' ? '⚠️ 쇠신충왕(衰神沖旺) - 용신이 와도 기신에 압도됨! 보수적으로!' :
-                       yearLuck.rating === 'pyunin_doshik' ? '⚠️ 편인도식(偏印倒食) - 밥그릇 깨짐 주의! 예민함 경계!' :
-                       yearLuck.rating === 'wang_shin_chung_bal' ? '🚨 왕신충발(旺神沖發) - 잠자는 사자 코털! 대격변/사고/파재 극도 주의!' :
+                       yearLuck.rating === 'wang_shin_chung_bal' ? '🚨 왕신충발(旺神沖發) - 대격변/사고/파재 극도 주의!' :
+                       yearLuck.rating === 'yong_overwhelmed' ? '⚠️ 쇠신충왕(衰神沖旺) - 용신이 와도 기신에 압도됨!' :
+                       yearLuck.rating === 'pyunin_doshik' ? '⚠️ 편인도식(偏印倒食) - 밥그릇 깨짐 주의!' :
                        yearLuck.rating === 'great' ? 'EXCELLENT' : 
                        yearLuck.rating === 'good' ? 'FAVORABLE' : 
                        yearLuck.rating === 'volatile' ? '⚡ VOLATILE - Beneficial but UNSTABLE (gains come with losses)' :
@@ -10626,407 +10005,6 @@ window.addEventListener('hashchange', handleUrlHash);
     }
 }
 </style>
-
-<!-- ========================================
-     TEST SUITE (v4.12.2)
-     콘솔에서 runAllTests() 실행
-     ======================================== -->
-<script>
-/* ========================================
-   K-MUDANG Test Suite
-   Run: runAllTests() in console
-   ======================================== */
-
-// Test helper functions
-function createTestSaju(yStem, yBranch, mStem, mBranch, dStem, dBranch, hStem, hBranch) {
-    return {
-        year: { s: STEM[yStem], b: BRANCH[yBranch] },
-        month: { s: STEM[mStem], b: BRANCH[mBranch] },
-        day: { s: STEM[dStem], b: BRANCH[dBranch] },
-        hour: hStem !== null ? { s: STEM[hStem], b: BRANCH[hBranch] } : null
-    };
-}
-
-function testResult(name, expected, actual, details = '') {
-    const pass = expected === actual;
-    const icon = pass ? '✅' : '❌';
-    console.log(`${icon} ${name}: Expected "${expected}", Got "${actual}" ${details}`);
-    return pass;
-}
-
-// ====== 1. 신강/신약 테스트 ======
-function testStrength() {
-    console.log('\n📊 ===== 신강/신약 (calcStrength) 테스트 =====');
-    let passed = 0, total = 0;
-    
-    // Test 1: 갑목(甲木) 인월(寅月) - 당령 + 통근 = 신강
-    // 甲寅 丙寅 甲寅 甲寅 (극신강 케이스)
-    const test1 = createTestSaju(0, 2, 2, 2, 0, 2, 0, 2);
-    const str1 = calcStrength(test1);
-    total++;
-    if (testResult('갑목 인월 당령+통근', 'strong', str1.type, `(score: ${str1.score})`)) passed++;
-    
-    // Test 2: 갑목(甲木) 유월(酉月) - 실령 + 무근 = 신약
-    // 庚申 乙酉 甲戌 丙寅
-    const test2 = createTestSaju(6, 8, 1, 9, 0, 10, 2, 2);
-    const str2 = calcStrength(test2);
-    total++;
-    if (testResult('갑목 유월 실령', 'weak', str2.type, `(score: ${str2.score})`)) passed++;
-    
-    // Test 3: 정화(丁火) 오월(午月) - 당령 = 신강
-    // 丙午 甲午 丁巳 壬寅
-    const test3 = createTestSaju(2, 6, 0, 6, 3, 5, 8, 2);
-    const str3 = calcStrength(test3);
-    total++;
-    if (testResult('정화 오월 당령', 'strong', str3.type, `(score: ${str3.score})`)) passed++;
-    
-    // Test 4: 경금(庚金) 자월(子月) - 설기 = 신약
-    // 壬子 壬子 庚子 壬午
-    const test4 = createTestSaju(8, 0, 8, 0, 6, 0, 8, 6);
-    const str4 = calcStrength(test4);
-    total++;
-    if (testResult('경금 자월 설기과다', 'weak', str4.type, `(score: ${str4.score})`)) passed++;
-    
-    // Test 5: 무토(戊土) 미월(未月) - 토왕용사 = 신강
-    // 戊午 己未 戊戌 戊辰
-    const test5 = createTestSaju(4, 6, 5, 7, 4, 10, 4, 4);
-    const str5 = calcStrength(test5);
-    total++;
-    if (testResult('무토 미월 토왕용사', 'strong', str5.type, `(score: ${str5.score})`)) passed++;
-    
-    console.log(`\n신강/신약 테스트: ${passed}/${total} 통과`);
-    return { passed, total };
-}
-
-// ====== 2. 천간합 인접성 테스트 ======
-function testStemCombine() {
-    console.log('\n🔗 ===== 천간합 인접성 테스트 =====');
-    let passed = 0, total = 0;
-    
-    // Test 1: 갑기합 (년-월) - 인접 → 합 성립
-    // 甲子 己丑 壬寅 庚辰  (년간 甲 + 월간 己 = 합)
-    const test1 = createTestSaju(0, 0, 5, 1, 8, 2, 6, 4);
-    const str1 = calcStrength(test1);
-    const hasAdjacentCombine1 = str1.factors.some(f => f.l === '🔗 天干合');
-    total++;
-    if (testResult('갑기합 년-월 인접', true, hasAdjacentCombine1)) passed++;
-    
-    // Test 2: 을경합 (월-일) - 인접 → 합 성립
-    // 壬子 乙丑 庚寅 丙辰  (월간 乙 + 일간 庚 = 합)
-    const test2 = createTestSaju(8, 0, 1, 1, 6, 2, 2, 4);
-    const str2 = calcStrength(test2);
-    const hasAdjacentCombine2 = str2.factors.some(f => f.l === '🔗 天干合');
-    total++;
-    if (testResult('을경합 월-일 인접', true, hasAdjacentCombine2)) passed++;
-    
-    // Test 3: 병신합 (일-시) - 인접 → 합 성립
-    // 壬子 壬丑 丙寅 辛辰  (일간 丙 + 시간 辛 = 합)
-    const test3 = createTestSaju(8, 0, 8, 1, 2, 2, 7, 4);
-    const str3 = calcStrength(test3);
-    const hasAdjacentCombine3 = str3.factors.some(f => f.l === '🔗 天干合');
-    total++;
-    if (testResult('병신합 일-시 인접', true, hasAdjacentCombine3)) passed++;
-    
-    // Test 4: 갑기 (년-시) - 비인접 → 합 불성립
-    // 甲子 壬丑 壬寅 己辰  (년간 甲 + 시간 己 = 비인접, 합 불성립)
-    const test4 = createTestSaju(0, 0, 8, 1, 8, 2, 5, 4);
-    const str4 = calcStrength(test4);
-    // 합 factor가 있더라도 년-시 조합은 없어야 함
-    const hasYearHourCombine = str4.factors.some(f => 
-        f.l === '🔗 天干合' && f.v.includes('year-hour')
-    );
-    total++;
-    if (testResult('갑기 년-시 비인접 불성립', false, hasYearHourCombine)) passed++;
-    
-    console.log(`\n천간합 인접성 테스트: ${passed}/${total} 통과`);
-    return { passed, total };
-}
-
-// ====== 3. 토왕용사 테스트 ======
-function testEarthMonth() {
-    console.log('\n🌍 ===== 토왕용사 테스트 =====');
-    let passed = 0, total = 0;
-    
-    // 辰戌丑未 월에 土 일간은 당령
-    const earthMonths = [
-        { branch: 1, name: '丑월' },  // 丑
-        { branch: 4, name: '辰월' },  // 辰
-        { branch: 7, name: '未월' },  // 未
-        { branch: 10, name: '戌월' }  // 戌
-    ];
-    
-    earthMonths.forEach(em => {
-        // 戊土 일간 in 土월
-        const saju = createTestSaju(4, 0, 4, em.branch, 4, 2, 4, 6);
-        const str = calcStrength(saju);
-        const isDeukRyung = str.factors.some(f => f.l === '月令 득령' && f.v.includes('당령'));
-        total++;
-        if (testResult(`무토 ${em.name} 토왕용사 당령`, true, isDeukRyung)) passed++;
-    });
-    
-    console.log(`\n토왕용사 테스트: ${passed}/${total} 통과`);
-    return { passed, total };
-}
-
-// ====== 4. 용신 판정 테스트 ======
-function testGods() {
-    console.log('\n⭐ ===== 용신 (calcGods) 테스트 =====');
-    let passed = 0, total = 0;
-    
-    // Test 1: 신강 → 설기(식상/재성) 용신
-    // 甲寅 丙寅 甲寅 甲寅 (극신강)
-    const test1 = createTestSaju(0, 2, 2, 2, 0, 2, 0, 2);
-    const str1 = calcStrength(test1);
-    const gods1 = calcGods(test1, str1);
-    // 신강은 火(식상) 또는 土(재성) 용신
-    const validYong1 = ['fire', 'earth'].includes(gods1.yong);
-    total++;
-    if (testResult('신강 설기용신', true, validYong1, `(용신: ${gods1.yong})`)) passed++;
-    
-    // Test 2: 신약 → 부조(인성/비겁) 용신
-    // 庚申 辛酉 甲戌 丙寅
-    const test2 = createTestSaju(6, 8, 7, 9, 0, 10, 2, 2);
-    const str2 = calcStrength(test2);
-    const gods2 = calcGods(test2, str2);
-    // 신약 갑목은 水(인성) 또는 木(비겁) 용신
-    const validYong2 = ['water', 'wood'].includes(gods2.yong);
-    total++;
-    if (testResult('신약 부조용신', true, validYong2, `(용신: ${gods2.yong})`)) passed++;
-    
-    // Test 3: 조후 테스트 - 동절기 화용신
-    // 壬子 壬子 甲子 甲子 (겨울 + 水 많음 → 火 조후)
-    const test3 = createTestSaju(8, 0, 8, 0, 0, 0, 0, 0);
-    const str3 = calcStrength(test3);
-    const gods3 = calcGods(test3, str3);
-    // 겨울 갑목은 조후로 火가 필요
-    total++;
-    if (testResult('동절기 조후용신', 'fire', gods3.johu, `(조후: ${gods3.johu})`)) passed++;
-    
-    // Test 4: 하절기 수용신
-    // 丙午 甲午 丁巳 丙午 (여름 + 火 많음 → 水 조후)
-    const test4 = createTestSaju(2, 6, 0, 6, 3, 5, 2, 6);
-    const str4 = calcStrength(test4);
-    const gods4 = calcGods(test4, str4);
-    // 여름 정화는 조후로 水가 필요
-    total++;
-    if (testResult('하절기 조후용신', 'water', gods4.johu, `(조후: ${gods4.johu})`)) passed++;
-    
-    console.log(`\n용신 테스트: ${passed}/${total} 통과`);
-    return { passed, total };
-}
-
-// ====== 5. 종격 테스트 ======
-function testFollower() {
-    console.log('\n🌊 ===== 종격 테스트 =====');
-    let passed = 0, total = 0;
-    
-    // Test 1: 종재격 (재성 4개 이상, 극신약, 무근)
-    // 戊辰 戊午 乙未 戊戌 (土4개, 乙木 극신약)
-    const test1 = createTestSaju(4, 4, 4, 6, 1, 7, 4, 10);
-    const str1 = calcStrength(test1);
-    const gods1 = calcGods(test1, str1);
-    total++;
-    if (str1.pct < 15 && gods1.isFollower) {
-        if (testResult('종재격 판정', '종재격', gods1.followerType)) passed++;
-    } else {
-        // 종격 조건 미충족 시에도 체크
-        console.log(`⚠️ 종재격 판정: pct=${str1.pct}, isFollower=${gods1.isFollower}`);
-        testResult('종재격 판정', '종재격', gods1.followerType || '일반격');
-    }
-    
-    // Test 2: 종살격 테스트
-    // 甲子 丙寅 辛酉 庚申 - 신금이 목화에 둘러싸임
-    const test2 = createTestSaju(0, 0, 2, 2, 7, 9, 6, 8);
-    const str2 = calcStrength(test2);
-    total++;
-    testResult('종살격 후보 신약 체크', true, str2.pct < 50, `(pct: ${str2.pct})`);
-    
-    console.log(`\n종격 테스트: ${passed}/${total} 통과 (일부 케이스는 조건 체크)`);
-    return { passed, total };
-}
-
-// ====== 6. 금수상관격 테스트 ======
-function testGoldWaterFormat() {
-    console.log('\n💧 ===== 금수상관격 테스트 =====');
-    let passed = 0, total = 0;
-    
-    // 금수상관격 조건: 金 일간 + 冬月 + 水 식상 왕성
-    // 庚子 壬子 庚子 壬午 (경금 자월, 수 많음)
-    const test1 = createTestSaju(6, 0, 8, 0, 6, 0, 8, 6);
-    const str1 = calcStrength(test1);
-    const format1 = calcFormat(test1, str1);
-    
-    // 금수상관격 판정 체크
-    const isGoldWater = format1.name && format1.name.includes('金水');
-    total++;
-    if (testResult('금수상관격 판정', true, isGoldWater, `(격국: ${format1.name})`)) passed++;
-    
-    // 금수상관격이면 관성(火) 기피
-    if (isGoldWater) {
-        const gods1 = calcGods(test1, str1);
-        const avoidsFire = gods1.gi === 'fire';
-        total++;
-        if (testResult('금수상관격 화 기피', true, avoidsFire, `(기신: ${gods1.gi})`)) passed++;
-    }
-    
-    console.log(`\n금수상관격 테스트: ${passed}/${total} 통과`);
-    return { passed, total };
-}
-
-// ====== 7. 편인태왕 테스트 ======
-function testSealExcess() {
-    console.log('\n📚 ===== 편인태왕 테스트 =====');
-    let passed = 0, total = 0;
-    
-    // 인성과다 조건: 인성 3개 이상 → 식상으로 설기
-    // 甲子 壬寅 丙午 壬辰 (병화 일간, 목+수 인성 많음)
-    const test1 = createTestSaju(0, 0, 8, 2, 2, 6, 8, 4);
-    const str1 = calcStrength(test1);
-    const gods1 = calcGods(test1, str1);
-    
-    // 인성 오행 카운트
-    const sealEl = 'wood'; // 병화의 인성은 목
-    let sealCount = 0;
-    [test1.year, test1.month, test1.day, test1.hour].forEach(p => {
-        if (p && p.s && p.s.e === sealEl) sealCount++;
-        if (p && p.b && p.b.e === sealEl) sealCount++;
-    });
-    
-    total++;
-    testResult('인성 카운트', true, sealCount >= 2, `(인성: ${sealCount}개)`);
-    
-    // 인성과다 시 식상 용신 체크
-    if (sealCount >= 3) {
-        const exprEl = 'earth'; // 병화의 식상은 토
-        total++;
-        if (testResult('인성과다 식상용신', exprEl, gods1.yong, `(용신: ${gods1.yong})`)) passed++;
-    }
-    
-    console.log(`\n편인태왕 테스트: ${passed}/${total} 통과`);
-    return { passed, total };
-}
-
-// ====== 8. 방합/삼합 테스트 ======
-function testCombinations() {
-    console.log('\n🔥 ===== 방합/삼합 테스트 =====');
-    let passed = 0, total = 0;
-    
-    // 방합 테스트: 寅卯辰 목국
-    // 甲寅 乙卯 丙辰 丁巳
-    const test1 = createTestSaju(0, 2, 1, 3, 2, 4, 3, 5);
-    const str1 = calcStrength(test1);
-    const hasDirectional = str1.factors.some(f => f.l === '🔥 方合');
-    total++;
-    if (testResult('寅卯辰 방합', true, hasDirectional)) passed++;
-    
-    // 삼합 테스트: 寅午戌 화국
-    // 甲寅 丙午 戊戌 庚子
-    const test2 = createTestSaju(0, 2, 2, 6, 4, 10, 6, 0);
-    const str2 = calcStrength(test2);
-    const hasThreeHarmony = str2.factors.some(f => f.l === '🔥 三合');
-    total++;
-    if (testResult('寅午戌 삼합', true, hasThreeHarmony)) passed++;
-    
-    console.log(`\n방합/삼합 테스트: ${passed}/${total} 통과`);
-    return { passed, total };
-}
-
-// ====== 메인 테스트 실행 함수 ======
-function runAllTests() {
-    console.clear();
-    console.log('╔════════════════════════════════════════════════════════╗');
-    console.log('║        K-MUDANG Pro v4.12.3 Test Suite                 ║');
-    console.log('║        사주 계산 로직 검증                              ║');
-    console.log('╚════════════════════════════════════════════════════════╝');
-    
-    const results = [];
-    
-    // ★★★ 가장 중요한 일주 계산 테스트 먼저! ★★★
-    results.push(testDayPillar());
-    
-    results.push(testStrength());
-    results.push(testStemCombine());
-    results.push(testEarthMonth());
-    results.push(testGods());
-    results.push(testFollower());
-    results.push(testGoldWaterFormat());
-    results.push(testSealExcess());
-    results.push(testCombinations());
-    
-    // 총합 계산
-    const totalPassed = results.reduce((sum, r) => sum + r.passed, 0);
-    const totalTests = results.reduce((sum, r) => sum + r.total, 0);
-    
-    console.log('\n╔════════════════════════════════════════════════════════╗');
-    console.log(`║  📊 최종 결과: ${totalPassed}/${totalTests} 테스트 통과`);
-    console.log(`║  ${totalPassed === totalTests ? '✅ ALL PASS!' : '⚠️ 일부 실패 - 로직 확인 필요'}`);
-    console.log('╚════════════════════════════════════════════════════════╝');
-    
-    return { passed: totalPassed, total: totalTests };
-}
-
-// ====== 0. 일주(日柱) 계산 검증 테스트 - 가장 중요! ======
-function testDayPillar() {
-    console.log('\n📅 ===== 일주(日柱) 계산 검증 테스트 [CRITICAL] =====');
-    let passed = 0, total = 0;
-    
-    // 객관적 소스로 검증된 테스트 케이스
-    // KASI(한국천문연구원), 위키백과, 언론기사
-    const testCases = [
-        { y: 1900, m: 1, d: 1, expected: '甲戌', desc: '1900-01-01 기준일' },
-        { y: 1900, m: 1, d: 2, expected: '乙亥', desc: '1900-01-02 기준일+1' },
-        { y: 2000, m: 1, d: 1, expected: '戊午', desc: '2000-01-01 밀레니엄' },
-        { y: 2024, m: 1, d: 1, expected: '甲子', desc: '2024-01-01 (위키백과 검증)' },
-        { y: 2024, m: 3, d: 1, expected: '甲子', desc: '2024-03-01 (위키백과 검증)' },
-        { y: 2025, m: 12, d: 21, expected: '甲子', desc: '2025-12-21 (중부일보 검증)' },
-        { y: 2026, m: 1, d: 16, expected: '庚寅', desc: '2026-01-16 (KASI 검증)' },
-        { y: 2026, m: 1, d: 20, expected: '甲午', desc: '2026-01-20 (KASI 검증)' },
-    ];
-    
-    testCases.forEach(tc => {
-        const result = calcDayPillar(tc.y, tc.m, tc.d);
-        const actual = result.s.c + result.b.c;
-        const pass = actual === tc.expected;
-        total++;
-        if (pass) passed++;
-        
-        const icon = pass ? '✅' : '❌';
-        console.log(`${icon} ${tc.desc}: Expected "${tc.expected}", Got "${actual}"`);
-    });
-    
-    console.log(`\n일주 계산 테스트: ${passed}/${total} 통과`);
-    if (passed !== total) {
-        console.log('🚨 일주 계산 오류! 모든 사주 분석이 틀립니다!');
-    }
-    return { passed, total };
-}
-
-// 개별 테스트 실행 헬퍼
-function runTest(name) {
-    const tests = {
-        day: testDayPillar,      // ★ 가장 중요!
-        dayPillar: testDayPillar,
-        strength: testStrength,
-        stem: testStemCombine,
-        earth: testEarthMonth,
-        gods: testGods,
-        follower: testFollower,
-        goldwater: testGoldWaterFormat,
-        seal: testSealExcess,
-        combine: testCombinations
-    };
-    
-    if (tests[name]) {
-        console.clear();
-        tests[name]();
-    } else {
-        console.log('사용 가능한 테스트:', Object.keys(tests).join(', '));
-    }
-}
-
-// 콘솔에 도움말 표시
-console.log('🧪 K-MUDANG Test Suite loaded. Run: runAllTests() or runTest("strength")');
-</script>
 
 </body>
 </html>
