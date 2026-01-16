@@ -3,22 +3,22 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.12.2                                                         ║
+║  K-MUDANG Pro v4.12.3                                                         ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
+║                                                                                ║
+║  v4.12.3 Changes (CRITICAL FIX):                                              ║
+║    - [CRITICAL] calcDayPillar 일주 계산 버그 수정!!!                           ║
+║    - [FIX] 1900-01-01 = 甲戌(index 10) 보정 누락 → +10 보정 추가              ║
+║    - [FIX] 기존: 모든 일주가 +50일 밀림 (甲子→甲寅 오류)                       ║
+║    - [FIX] JDN 방식 → Date 객체 기반 검증된 로직으로 교체                      ║
 ║                                                                                ║
 ║  v4.12.2 Changes:                                                             ║
 ║    - [NEW] Mobile Touch Enhancement CSS (터치 피드백 강화)                     ║
 ║    - [NEW] Test Suite 추가 (runAllTests() - 8개 테스트 그룹)                   ║
-║    - [CSS] :active scale/transition, ripple effect, touch-action              ║
-║    - [CSS] -webkit-tap-highlight-color, will-change 최적화                    ║
-║    - [TEST] 신강/신약, 천간합인접성, 토왕용사, 용신, 종격 테스트               ║
-║    - [TEST] 금수상관격, 편인태왕, 방합/삼합 테스트                             ║
 ║                                                                                ║
 ║  v4.12.1 Changes (Major Logic Overhaul):                                      ║
 ║    - [MAJOR] calcStrength 전면 재작성: 천간합 인접성, 토왕용사, 실제통근       ║
 ║    - [NEW] 종격(Follower) 판단 로직 추가                                       ║
-║    - [NEW] 조후 예외처리 강화 (극한 기후 시 조후 최우선)                       ║
-║    - [FIX] 12운성과 통근 분리 (장생≠뿌리)                                      ║
 ║    - [KEEP] 편인태왕, 금수상관격, Paddle SDK, Premium 잠금                     ║
 ║    - Total: 70 AI Rules                                                       ║
 ║                                                                                ║
@@ -3130,15 +3130,29 @@ function calcMonthPillar(y, m, d, h = 12) {
     return { s: STEM[msi], b: BRANCH[mbi] };
 }
 
-// Day pillar calculation (existing accurate logic)
+// Day pillar calculation - FIXED: 1900-01-01 = 甲戌(index 10) 보정
 function calcDayPillar(y, m, d) {
-    const a = Math.floor((14 - m) / 12);
-    const adjY = y + 4800 - a;
-    const adjM = m + 12 * a - 3;
-    const jdn = d + Math.floor((153 * adjM + 2) / 5) + 365 * adjY + Math.floor(adjY / 4) - Math.floor(adjY / 100) + Math.floor(adjY / 400) - 32045;
-    const baseJdn = 2415021;
-    const diff = jdn - baseJdn;
-    return { s: STEM[((diff % 10) + 10) % 10], b: BRANCH[((diff % 12) + 12) % 12] };
+    // 방법 1: Date 객체 기반 (검증된 로직)
+    const baseDate = new Date(1900, 0, 1);  // 1900년 1월 1일
+    const targetDate = new Date(y, m - 1, d);
+    
+    // UTC/시간대 이슈 방지
+    baseDate.setHours(12, 0, 0, 0);
+    targetDate.setHours(12, 0, 0, 0);
+    
+    // 일수 차이
+    const diffTime = targetDate.getTime() - baseDate.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    
+    // ★★★ 핵심: 1900-01-01은 甲戌일(10번째)이므로 +10 보정 필수! ★★★
+    let dayIdx = (diffDays + 10) % 60;
+    if (dayIdx < 0) dayIdx += 60;
+    
+    // 60갑자 인덱스 → 천간(10)/지지(12) 분리
+    const stemIdx = dayIdx % 10;
+    const branchIdx = dayIdx % 12;
+    
+    return { s: STEM[stemIdx], b: BRANCH[branchIdx] };
 }
 
 // Hour pillar calculation (existing accurate logic)
@@ -10409,11 +10423,14 @@ function testCombinations() {
 function runAllTests() {
     console.clear();
     console.log('╔════════════════════════════════════════════════════════╗');
-    console.log('║        K-MUDANG Pro v4.12.2 Test Suite                 ║');
+    console.log('║        K-MUDANG Pro v4.12.3 Test Suite                 ║');
     console.log('║        사주 계산 로직 검증                              ║');
     console.log('╚════════════════════════════════════════════════════════╝');
     
     const results = [];
+    
+    // ★★★ 가장 중요한 일주 계산 테스트 먼저! ★★★
+    results.push(testDayPillar());
     
     results.push(testStrength());
     results.push(testStemCombine());
@@ -10436,9 +10453,46 @@ function runAllTests() {
     return { passed: totalPassed, total: totalTests };
 }
 
+// ====== 0. 일주(日柱) 계산 검증 테스트 - 가장 중요! ======
+function testDayPillar() {
+    console.log('\n📅 ===== 일주(日柱) 계산 검증 테스트 [CRITICAL] =====');
+    let passed = 0, total = 0;
+    
+    // 수학적으로 검증된 날짜들
+    // 기준: 1900-01-01 = 甲戌(인덱스 10)
+    const testCases = [
+        { y: 1900, m: 1, d: 1, expected: '甲戌', desc: '1900-01-01 기준일' },
+        { y: 1900, m: 1, d: 2, expected: '乙亥', desc: '1900-01-02 기준일+1' },
+        { y: 1900, m: 3, d: 2, expected: '甲戌', desc: '1900-03-02 기준일+60 (갑자 사이클)' },
+        { y: 2000, m: 1, d: 1, expected: '戊午', desc: '2000-01-01 밀레니엄' },
+        { y: 2024, m: 1, d: 1, expected: '甲子', desc: '2024-01-01 (45290일, 50+10=60%60=0)' },
+        { y: 2024, m: 1, d: 2, expected: '乙丑', desc: '2024-01-02' },
+        { y: 2025, m: 1, d: 16, expected: '乙酉', desc: '2025-01-16' },
+    ];
+    
+    testCases.forEach(tc => {
+        const result = calcDayPillar(tc.y, tc.m, tc.d);
+        const actual = result.s.c + result.b.c;
+        const pass = actual === tc.expected;
+        total++;
+        if (pass) passed++;
+        
+        const icon = pass ? '✅' : '❌';
+        console.log(`${icon} ${tc.desc}: Expected "${tc.expected}", Got "${actual}"`);
+    });
+    
+    console.log(`\n일주 계산 테스트: ${passed}/${total} 통과`);
+    if (passed !== total) {
+        console.log('🚨 일주 계산 오류! 모든 사주 분석이 틀립니다!');
+    }
+    return { passed, total };
+}
+
 // 개별 테스트 실행 헬퍼
 function runTest(name) {
     const tests = {
+        day: testDayPillar,      // ★ 가장 중요!
+        dayPillar: testDayPillar,
         strength: testStrength,
         stem: testStemCombine,
         earth: testEarthMonth,
