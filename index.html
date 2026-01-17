@@ -3,10 +3,28 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.14.0 [PUBLIC]                                                         ║
+║  K-MUDANG Pro v4.14.5 [PUBLIC]                                                         ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
-║  v4.14.0 Changes (Fortune Talisman Card):                                 ║
+║  v4.14.5 Changes (AI Constitution - Core Logic Override Rules):           ║
+║    - [ADD] CORE LOGIC OVERRIDE RULES (헌법) - AI 해석 최상위 규칙 5개 추가           ║
+║    - [RULE1] Climate First: 여름 火일간=水필수, 겨울 水일간=火필수 (억부 무시)       ║
+║    - [RULE2] Bureau Power: 방합/삼합 완성 = x10 파워 (단순 합산 아님)              ║
+║    - [RULE3] Root vs Stage: 통근(지장간)과 12운성(장생 등) 명확 구분               ║
+║    - [RULE4] Data Override: 조후-억부 충돌 시 조후 우선                            ║
+║    - [RULE5] Wealth Hierarchy: 신약+재격=불안한 추격자, 신강+비겁운=겁재쟁재       ║
+║  v4.14.4 Changes (Climate Priority & Directional Bureau):                 ║
+║    - [FIX] 조후 우선시 기신(忌神)도 함께 변경 (여름 火일간: 水→용신, 관성→기신)     ║
+║    - [ADD] 세운 방합(方合) 완성 별도 출력 (巳午未 화국 등)                          ║
+║    - [MSG] "DIRECTIONAL BUREAU COMPLETED" 명시적 경고 추가                        ║
+║  v4.14.3 Changes (Rootless + Birth Stage):                                ║
+║    - [ADD] 무근+장생(無根有庇) 특별 메시지: 일지 통근 없지만 장생인 경우 구분        ║
+║    - [MSG] "Floating flower" 메타포 - 후원자는 있으나 기반이 약함을 명확히 표현      ║
+║  v4.14.2 Changes (Bug Fix & Serial Number):                               ║
+║    - [FIX] ROOT ANALYSIS: 12운성 장생(長生)을 통근으로 잘못 판정하던 버그 수정         ║
+║    - [FIX] 록왕지(祿旺之)는 건록(臨官)/제왕(帝旺)만 인정 (장생은 귀인의 도움)        ║
+║    - [UPD] 부적 일련번호: 랜덤 → 사주 기반 고정 해시 (같은 사주=같은 번호)          ║
+║  v4.14.1 Changes (Fortune Talisman Card):                                 ║
 ║    - [CRITICAL] 지장간 12지지 전체 표준 수정 (오차 0%)                         ║
 ║    - [FIX] 子: 壬(10)+癸(20) 추가, 卯: 甲(10)+乙(20) 추가                      ║
 ║    - [FIX] 午: 丙(10)+己(9)+丁(11) 추가, 酉: 庚(10)+辛(20) 추가                ║
@@ -1389,6 +1407,49 @@ footer a {
     text-align: center;
     padding: 20px;
 }
+/* [v4.14.1] Talisman Generation Animation */
+#talisman-ritual-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+}
+#talisman-ritual-overlay.active {
+    display: flex;
+}
+.ritual-text {
+    color: #D4AF37;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    font-family: "Noto Serif KR", serif;
+    animation: ritualPulse 1.5s ease-in-out infinite;
+}
+@keyframes ritualPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+.ritual-brush {
+    width: 300px;
+    height: 400px;
+    position: relative;
+}
+.brush-stroke {
+    position: absolute;
+    background: linear-gradient(180deg, #D4AF37, #8B7355);
+    opacity: 0;
+    border-radius: 2px;
+}
+@keyframes brushReveal {
+    0% { opacity: 0; transform: scaleY(0); }
+    100% { opacity: 1; transform: scaleY(1); }
+}
 </style>
 </head>
 <body class="saju-mode">
@@ -1721,16 +1782,25 @@ footer a {
                 
                 <!-- Talisman Content (visible when unlocked) -->
                 <div id="talisman-preview" style="display:none;margin-bottom:20px;">
-                    <canvas id="talisman-canvas" width="400" height="640"></canvas>
+                    <canvas id="talisman-canvas" width="540" height="960"></canvas>
+                    <p style="font-size:0.75rem;color:var(--gray);margin-top:10px;">📱 Optimized for phone wallpaper (9:16)</p>
                     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:15px;">
                         <button onclick="downloadTalisman()" style="padding:10px 20px;background:linear-gradient(135deg,#D4AF37,#B8860B);color:#1a1a1a;border:none;border-radius:20px;font-weight:600;cursor:pointer;">
-                            📥 Save Image
+                            📥 Save as Wallpaper
                         </button>
                         <button onclick="shareTalisman()" style="padding:10px 20px;background:linear-gradient(135deg,#25D366,#128C7E);color:white;border:none;border-radius:20px;font-weight:600;cursor:pointer;">
                             📤 Share
                         </button>
                     </div>
                 </div>
+                
+                <!-- [v4.14.1] Ritual Animation Overlay -->
+                <div id="talisman-ritual-overlay">
+                    <p class="ritual-text">🖌️ 부적을 그리는 중...</p>
+                    <p class="ritual-text" style="font-size:1rem;">Drawing your talisman...</p>
+                    <canvas id="ritual-canvas" width="300" height="400" style="border:2px solid #8B7355;border-radius:8px;margin-top:20px;"></canvas>
+                </div>
+                
                 <div id="talisman-btn-wrapper">
                     <button class="btn" onclick="generateTalisman()" style="background:linear-gradient(135deg,#8B0000,#DC143C);width:100%;padding:15px;">
                         🏮 Generate My Talisman
@@ -1952,7 +2022,7 @@ const BRANCH = [
 ];
 
 // Hidden Stems(地藏干) - 余氣/中氣/正氣 with days
-// v4.14.0 FIX: 표준 지장간 완전 수정 (오차 0%)
+// v4.14.1 FIX: 표준 지장간 완전 수정 (오차 0%)
 // 순서: 余氣(여기) → 中氣(중기) → 正氣(정기)
 const HIDDEN_STEMS = {
     0: [ // 子 (Rat) - 壬癸 수기
@@ -2479,136 +2549,239 @@ function generateTalisman() {
         return;
     }
     
+    // [v4.14.1] 의식 애니메이션 시작
+    const overlay = document.getElementById('talisman-ritual-overlay');
+    overlay.classList.add('active');
+    
+    // 붓으로 그리는 애니메이션
+    playRitualAnimation(() => {
+        // 애니메이션 완료 후 실제 부적 생성
+        createHighResTalisman();
+        overlay.classList.remove('active');
+        
+        document.getElementById('talisman-preview').style.display = 'block';
+        document.getElementById('talisman-btn-wrapper').style.display = 'none';
+        toast('🏮 Your fortune talisman has been created!');
+    });
+}
+
+// [v4.14.1] 의식 애니메이션
+function playRitualAnimation(callback) {
+    const canvas = document.getElementById('ritual-canvas');
+    const ctx = canvas.getContext('2d');
+    const W = 300, H = 400;
+    
+    ctx.fillStyle = '#0a0505';
+    ctx.fillRect(0, 0, W, H);
+    
+    const yongEl = GODS && GODS.yong ? GODS.yong : 'fire';
+    const colors = {
+        fire: { main: '#C41E3A', accent: '#FFD700' },
+        water: { main: '#1E3A5F', accent: '#87CEEB' },
+        wood: { main: '#228B22', accent: '#90EE90' },
+        metal: { main: '#B8860B', accent: '#FFD700' },
+        earth: { main: '#8B4513', accent: '#DEB887' }
+    };
+    const color = colors[yongEl] || colors.fire;
+    
+    // 붓으로 글자 그리는 애니메이션
+    const strokes = [
+        // 福 자 스트로크 (간략화)
+        { x: 80, y: 100, w: 4, h: 60 },
+        { x: 80, y: 100, w: 50, h: 4 },
+        { x: 80, y: 130, w: 40, h: 4 },
+        { x: 80, y: 160, w: 50, h: 4 },
+        { x: 150, y: 100, w: 4, h: 80 },
+        { x: 150, y: 140, w: 40, h: 4 },
+        // 運 자 스트로크
+        { x: 80, y: 220, w: 4, h: 60 },
+        { x: 80, y: 220, w: 60, h: 4 },
+        { x: 80, y: 250, w: 50, h: 4 },
+        { x: 80, y: 280, w: 60, h: 4 },
+        { x: 160, y: 220, w: 4, h: 70 },
+        { x: 140, y: 260, w: 30, h: 4 }
+    ];
+    
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i >= strokes.length) {
+            clearInterval(interval);
+            setTimeout(callback, 500);
+            return;
+        }
+        const s = strokes[i];
+        ctx.fillStyle = color.accent;
+        ctx.fillRect(s.x, s.y, s.w, s.h);
+        i++;
+    }, 200);
+}
+
+// [v4.14.1] 고해상도 부적 생성 (1080x1920, 9:16)
+function createHighResTalisman() {
     const canvas = document.getElementById('talisman-canvas');
     const ctx = canvas.getContext('2d');
-    const W = 400, H = 640;
+    
+    // 고해상도: 1080x1920 (9:16 배경화면)
+    const W = 1080, H = 1920;
     canvas.width = W;
     canvas.height = H;
     
-    // Background gradient (black → dark red)
+    // 용신별 색상 테마
+    const yongEl = GODS && GODS.yong ? GODS.yong : 'fire';
+    const themes = {
+        fire: {
+            bg1: '#1a0505', bg2: '#2d0a0a', bg3: '#1a0303',
+            main: '#C41E3A', accent: '#FFD700', border: '#8B7355',
+            symbol: '鳳', symbolName: 'Phoenix', emoji: '🔥'
+        },
+        water: {
+            bg1: '#050a1a', bg2: '#0a1a2d', bg3: '#03081a',
+            main: '#1E4D8C', accent: '#87CEEB', border: '#4682B4',
+            symbol: '龍', symbolName: 'Dragon', emoji: '💧'
+        },
+        wood: {
+            bg1: '#051a05', bg2: '#0a2d0a', bg3: '#031a03',
+            main: '#228B22', accent: '#90EE90', border: '#6B8E23',
+            symbol: '龍', symbolName: 'Azure Dragon', emoji: '🌳'
+        },
+        metal: {
+            bg1: '#1a1a1a', bg2: '#2d2d2d', bg3: '#0a0a0a',
+            main: '#C0C0C0', accent: '#FFD700', border: '#B8860B',
+            symbol: '虎', symbolName: 'White Tiger', emoji: '⚙️'
+        },
+        earth: {
+            bg1: '#1a1408', bg2: '#2d220a', bg3: '#1a1005',
+            main: '#8B4513', accent: '#DEB887', border: '#D2691E',
+            symbol: '麟', symbolName: 'Qilin', emoji: '🌍'
+        }
+    };
+    const theme = themes[yongEl] || themes.fire;
+    
+    // 배경 그라데이션
     const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
-    bgGrad.addColorStop(0, '#1a0a0a');
-    bgGrad.addColorStop(0.5, '#2d0a0a');
-    bgGrad.addColorStop(1, '#1a0505');
+    bgGrad.addColorStop(0, theme.bg1);
+    bgGrad.addColorStop(0.5, theme.bg2);
+    bgGrad.addColorStop(1, theme.bg3);
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, W, H);
     
-    // Double gold border
-    ctx.strokeStyle = '#8B7355';
+    // 이중 테두리
+    ctx.strokeStyle = theme.border;
+    ctx.lineWidth = 6;
+    ctx.strokeRect(40, 40, W-80, H-80);
+    ctx.strokeStyle = theme.accent;
     ctx.lineWidth = 2;
-    ctx.strokeRect(15, 15, W-30, H-30);
-    ctx.strokeStyle = '#D4AF37';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(20, 20, W-40, H-40);
+    ctx.strokeRect(55, 55, W-110, H-110);
     
-    // Corner ornaments
-    drawCornerOrnaments(ctx, W, H);
+    // 코너 장식
+    drawCornerOrnamentsHD(ctx, W, H, theme);
     
-    // Taegeuk symbol at top
-    drawTaegeuk(ctx, W/2, 60, 22);
+    // 태극 문양
+    drawTaegeukHD(ctx, W/2, 150, 60, theme);
     
-    // Title (Chinese + English)
-    ctx.fillStyle = '#D4AF37';
-    ctx.font = 'bold 22px "Noto Serif KR", serif';
+    // 제목
+    ctx.fillStyle = theme.accent;
+    ctx.font = 'bold 64px "Noto Serif KR", serif';
     ctx.textAlign = 'center';
-    ctx.fillText('二〇二六 開運符', W/2, 110);
+    ctx.fillText('二〇二六 開運符', W/2, 280);
     
-    ctx.fillStyle = '#B8860B';
-    ctx.font = '13px "Noto Sans KR", sans-serif';
-    ctx.fillText('2026 Fortune Talisman', W/2, 132);
+    ctx.fillStyle = theme.border;
+    ctx.font = '32px "Noto Sans KR", sans-serif';
+    ctx.fillText('2026 Fortune Talisman', W/2, 330);
     
-    // Divider line
-    ctx.strokeStyle = '#8B7355';
-    ctx.lineWidth = 1;
+    // 구분선
+    ctx.strokeStyle = theme.border;
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(50, 148);
-    ctx.lineTo(W-50, 148);
+    ctx.moveTo(150, 370);
+    ctx.lineTo(W-150, 370);
     ctx.stroke();
     
-    // ★ Yongshin-based mantra (Chinese characters kept, meaning in English)
-    const yongEl = GODS && GODS.yong ? GODS.yong : 'fire';
-    const yongsinMantras = {
-        'wood': { hanja: '木德生發 萬事亨通', meaning: 'Wood virtue blooms, all things prosper' },
-        'fire': { hanja: '火德昌盛 光明大吉', meaning: 'Fire virtue blazes, great fortune shines' },
-        'earth': { hanja: '土德厚載 財祿豊盈', meaning: 'Earth virtue endures, wealth overflows' },
-        'metal': { hanja: '金德堅固 百事成就', meaning: 'Metal virtue strengthens, all goals achieved' },
-        'water': { hanja: '水德潤澤 智慧通達', meaning: 'Water virtue nourishes, wisdom flows freely' }
+    // 용신별 만트라
+    const mantras = {
+        wood: { hanja: '木德生發 萬事亨通', meaning: 'Wood virtue blooms, all things prosper' },
+        fire: { hanja: '火德昌盛 光明大吉', meaning: 'Fire virtue blazes, great fortune shines' },
+        earth: { hanja: '土德厚載 財祿豊盈', meaning: 'Earth virtue endures, wealth overflows' },
+        metal: { hanja: '金德堅固 百事成就', meaning: 'Metal virtue strengthens, all goals achieved' },
+        water: { hanja: '水德潤澤 智慧通達', meaning: 'Water virtue nourishes, wisdom flows freely' }
     };
-    const mantra = yongsinMantras[yongEl] || yongsinMantras['fire'];
+    const mantra = mantras[yongEl] || mantras.fire;
     
-    ctx.fillStyle = '#FFD700';
-    ctx.font = 'bold 20px "Noto Serif KR", serif';
-    ctx.fillText(mantra.hanja, W/2, 180);
+    ctx.fillStyle = theme.accent;
+    ctx.font = 'bold 52px "Noto Serif KR", serif';
+    ctx.fillText(mantra.hanja, W/2, 450);
     
-    ctx.fillStyle = '#B8860B';
-    ctx.font = '11px "Noto Sans KR", sans-serif';
-    ctx.fillText(mantra.meaning, W/2, 200);
+    ctx.fillStyle = theme.border;
+    ctx.font = '28px "Noto Sans KR", sans-serif';
+    ctx.fillText(mantra.meaning, W/2, 500);
     
-    // Day Master (large display)
+    // 용신 심볼 (대형)
+    ctx.fillStyle = theme.main;
+    ctx.font = 'bold 180px "Noto Serif KR", serif';
+    ctx.fillText(theme.symbol, W/2, 720);
+    
+    ctx.fillStyle = theme.accent;
+    ctx.font = '36px "Noto Sans KR", sans-serif';
+    ctx.fillText(`${theme.symbolName} · ${ELEMENT[yongEl].n}`, W/2, 780);
+    
+    // 일간 표시
     const dayStem = SAJU.day.s.c;
     const dayBranch = SAJU.day.b.c;
-    ctx.fillStyle = '#FFD700';
-    ctx.font = 'bold 44px "Noto Serif KR", serif';
-    ctx.fillText(dayStem + dayBranch, W/2, 260);
+    ctx.fillStyle = theme.accent;
+    ctx.font = 'bold 100px "Noto Serif KR", serif';
+    ctx.fillText(dayStem + dayBranch, W/2, 920);
     
-    // Day pillar description
-    ctx.fillStyle = '#C0C0C0';
-    ctx.font = '13px "Noto Sans KR", sans-serif';
     const iljuKey = dayStem + dayBranch;
     const dayDesc = (typeof ILJU_60 !== 'undefined' && ILJU_60[iljuKey]) ? ILJU_60[iljuKey].name : '';
-    ctx.fillText(dayDesc + ' Day Pillar', W/2, 285);
+    ctx.fillStyle = '#C0C0C0';
+    ctx.font = '32px "Noto Sans KR", sans-serif';
+    ctx.fillText(dayDesc + ' Day Master', W/2, 970);
     
-    // Central info box
+    // 정보 박스
     ctx.fillStyle = 'rgba(139, 115, 85, 0.15)';
-    roundRect(ctx, 40, 305, W-80, 130, 10);
+    roundRectHD(ctx, 100, 1020, W-200, 280, 20);
     ctx.fill();
-    ctx.strokeStyle = '#8B7355';
-    ctx.lineWidth = 1;
-    roundRect(ctx, 40, 305, W-80, 130, 10);
+    ctx.strokeStyle = theme.border;
+    ctx.lineWidth = 2;
+    roundRectHD(ctx, 100, 1020, W-200, 280, 20);
     ctx.stroke();
     
-    // Yongshin/Huishin/Gishin info
+    // 용신/희신/기신
     ctx.textAlign = 'left';
-    ctx.font = '14px "Noto Sans KR", sans-serif';
+    ctx.font = '36px "Noto Sans KR", sans-serif';
     
-    const yongsinEl = GODS && GODS.yong ? ELEMENT[GODS.yong] : {k:'?', emoji:''};
-    const huisinEl = GODS && GODS.hee ? ELEMENT[GODS.hee] : {k:'?', emoji:''};
-    const gisinEl = GODS && GODS.gi ? ELEMENT[GODS.gi] : {k:'?', emoji:''};
+    const yongsinEl = ELEMENT[GODS.yong];
+    const huisinEl = ELEMENT[GODS.hee];
+    const gisinEl = ELEMENT[GODS.gi];
     
     ctx.fillStyle = '#FF6B6B';
-    ctx.fillText('用神', 60, 338);
-    ctx.fillStyle = '#FFD700';
-    ctx.fillText(`${yongsinEl.k} ${yongsinEl.emoji || ''}`, 105, 338);
+    ctx.fillText('用神 (Beneficial)', 150, 1090);
+    ctx.fillStyle = theme.accent;
+    ctx.fillText(`${yongsinEl.n} ${theme.emoji}`, 450, 1090);
     
     ctx.fillStyle = '#4ECDC4';
-    ctx.fillText('喜神', 170, 338);
-    ctx.fillStyle = '#FFD700';
-    ctx.fillText(`${huisinEl.k} ${huisinEl.emoji || ''}`, 215, 338);
+    ctx.fillText('喜神 (Favorable)', 150, 1150);
+    ctx.fillStyle = theme.accent;
+    ctx.fillText(`${huisinEl.n}`, 450, 1150);
     
     ctx.fillStyle = '#95A5A6';
-    ctx.fillText('忌神', 280, 338);
+    ctx.fillText('忌神 (Avoid)', 150, 1210);
     ctx.fillStyle = '#888';
-    ctx.fillText(`${gisinEl.k}`, 325, 338);
+    ctx.fillText(`${gisinEl.n}`, 450, 1210);
     
-    // Strength + Day Master
-    ctx.fillStyle = '#B8860B';
-    ctx.fillText('Body', 60, 370);
-    ctx.fillStyle = '#FFD700';
+    // 신강/신약
+    ctx.fillStyle = theme.border;
+    ctx.fillText('Body Strength', 150, 1270);
+    ctx.fillStyle = theme.accent;
     const strType = STRENGTH ? (STRENGTH.type === 'strong' ? 'Strong' : STRENGTH.type === 'weak' ? 'Weak' : 'Balanced') : '?';
     const strPct = STRENGTH ? STRENGTH.pct + '%' : '';
-    ctx.fillText(`${strType} ${strPct}`, 100, 370);
+    ctx.fillText(`${strType} ${strPct}`, 450, 1270);
     
-    ctx.fillStyle = '#B8860B';
-    ctx.fillText('Day', 200, 370);
-    ctx.fillStyle = '#FFD700';
-    const dayElK = ELEMENT[SAJU.day.s.e].k;
-    ctx.fillText(`${SAJU.day.s.k}(${dayElK})`, 235, 370);
-    
-    // 2026 Monthly fortune
+    // 2026 연운
     ctx.textAlign = 'center';
-    ctx.fillStyle = '#B8860B';
-    ctx.font = '12px "Noto Sans KR", sans-serif';
-    ctx.fillText('─── 2026 丙午年 ───', W/2, 410);
+    ctx.fillStyle = theme.border;
+    ctx.font = '32px "Noto Sans KR", sans-serif';
+    ctx.fillText('─── 2026 丙午年 Fire Horse Year ───', W/2, 1370);
     
     let bestMonth = '?', worstMonth = '?';
     try {
@@ -2617,58 +2790,146 @@ function generateTalisman() {
         if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;
     } catch(e) {}
     
-    ctx.font = '13px "Noto Sans KR", sans-serif';
+    ctx.font = '36px "Noto Sans KR", sans-serif';
     ctx.fillStyle = '#4ECDC4';
-    ctx.fillText(`✨ Best: Month ${bestMonth}`, W/2 - 60, 432);
+    ctx.fillText(`✨ Best Month: ${bestMonth}`, W/2 - 180, 1430);
     ctx.fillStyle = '#FF6B6B';
-    ctx.fillText(`⚠️ Caution: Month ${worstMonth}`, W/2 + 60, 432);
+    ctx.fillText(`⚠️ Caution: ${worstMonth}`, W/2 + 180, 1430);
     
-    // ★ Bottom protection mantra
-    ctx.strokeStyle = '#8B7355';
+    // 하단 보호 주문
+    ctx.strokeStyle = theme.border;
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(50, 455);
-    ctx.lineTo(W-50, 455);
+    ctx.moveTo(150, 1500);
+    ctx.lineTo(W-150, 1500);
     ctx.stroke();
     
-    ctx.fillStyle = '#D4AF37';
-    ctx.font = 'bold 18px "Noto Serif KR", serif';
-    ctx.fillText('厄退福來 百事大吉', W/2, 485);
+    ctx.fillStyle = theme.accent;
+    ctx.font = 'bold 48px "Noto Serif KR", serif';
+    ctx.fillText('厄退福來 百事大吉', W/2, 1570);
     
-    ctx.fillStyle = '#B8860B';
-    ctx.font = '11px "Noto Sans KR", sans-serif';
-    ctx.fillText('Misfortune retreats, blessings arrive, all is auspicious', W/2, 505);
+    ctx.fillStyle = theme.border;
+    ctx.font = '28px "Noto Sans KR", sans-serif';
+    ctx.fillText('Misfortune retreats, blessings arrive', W/2, 1620);
     
-    // Divider
-    ctx.strokeStyle = '#8B7355';
-    ctx.beginPath();
-    ctx.moveTo(80, 520);
-    ctx.lineTo(W-80, 520);
-    ctx.stroke();
+    // 브랜딩 + 일련번호
+    ctx.fillStyle = theme.border;
+    ctx.font = '24px "Noto Sans KR", sans-serif';
+    ctx.fillText('K-MUDANG Pro ☯ kmudang.com', W/2, 1720);
     
-    // 2026 specific mantra
-    ctx.fillStyle = '#C0C0C0';
-    ctx.font = '11px "Noto Sans KR", sans-serif';
-    ctx.fillText('丙午年 貴人相助 心想事成', W/2, 545);
+    // [v4.14.1] 일련번호 생성
+    const serialNo = generateSerialNumber();
+    ctx.fillStyle = 'rgba(139, 115, 85, 0.6)';
+    ctx.font = '18px monospace';
+    ctx.fillText(`No. ${serialNo}`, W/2, 1760);
     
-    // Branding
-    ctx.fillStyle = '#8B7355';
-    ctx.font = '10px "Noto Sans KR", sans-serif';
-    ctx.fillText('K-MUDANG Pro ☯', W/2, 575);
+    // 배경화면 안내
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '22px "Noto Sans KR", sans-serif';
+    ctx.fillText('📱 Set as your phone wallpaper for daily fortune', W/2, 1820);
     
-    // Bottom decorative line
-    ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
-    ctx.beginPath();
-    ctx.moveTo(120, 590);
-    ctx.lineTo(W-120, 590);
-    ctx.stroke();
-    
-    // Show preview
-    document.getElementById('talisman-preview').style.display = 'block';
-    document.getElementById('talisman-btn-wrapper').style.display = 'none';
+    // 저장
     talismanGenerated = true;
-    talismanDataUrl = canvas.toDataURL('image/png');
+    talismanDataUrl = canvas.toDataURL('image/png', 1.0);
+}
+
+// [v4.14.1] 일련번호 생성
+function generateSerialNumber() {
+    // v4.14.2: 생년월일시 기반 고정 해시 (같은 사주면 항상 같은 번호)
+    const birthData = `${SAJU.year.s.c}${SAJU.year.b.c}${SAJU.month.s.c}${SAJU.month.b.c}${SAJU.day.s.c}${SAJU.day.b.c}${SAJU.hour ? SAJU.hour.s.c + SAJU.hour.b.c : 'XX'}`;
     
-    toast('🏮 Your fortune talisman has been generated!');
+    // Simple hash function for consistent 4-char hex
+    let hash = 0;
+    for (let i = 0; i < birthData.length; i++) {
+        const char = birthData.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    const hexCode = Math.abs(hash).toString(16).toUpperCase().slice(-4).padStart(4, '0');
+    
+    const year = new Date().getFullYear();
+    const dayPillar = SAJU.day.s.c + SAJU.day.b.c;
+    return `${year}-KMUDANG-${dayPillar}-${hexCode}`;
+}
+
+// 고해상도 태극
+function drawTaegeukHD(ctx, x, y, r, theme) {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.strokeStyle = theme.accent;
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.85, 0, Math.PI, false);
+    ctx.fillStyle = theme.main;
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.85, Math.PI, Math.PI * 2, false);
+    ctx.fillStyle = '#1E3A5F';
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.arc(x - r * 0.35, y, r * 0.28, 0, Math.PI * 2);
+    ctx.fillStyle = '#1E3A5F';
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.arc(x + r * 0.35, y, r * 0.28, 0, Math.PI * 2);
+    ctx.fillStyle = theme.main;
+    ctx.fill();
+}
+
+// 고해상도 코너 장식
+function drawCornerOrnamentsHD(ctx, W, H, theme) {
+    const size = 50;
+    const offset = 70;
+    ctx.strokeStyle = theme.accent;
+    ctx.lineWidth = 3;
+    
+    // 좌상
+    ctx.beginPath();
+    ctx.moveTo(offset, offset + size);
+    ctx.lineTo(offset, offset);
+    ctx.lineTo(offset + size, offset);
+    ctx.stroke();
+    
+    // 우상
+    ctx.beginPath();
+    ctx.moveTo(W - offset - size, offset);
+    ctx.lineTo(W - offset, offset);
+    ctx.lineTo(W - offset, offset + size);
+    ctx.stroke();
+    
+    // 좌하
+    ctx.beginPath();
+    ctx.moveTo(offset, H - offset - size);
+    ctx.lineTo(offset, H - offset);
+    ctx.lineTo(offset + size, H - offset);
+    ctx.stroke();
+    
+    // 우하
+    ctx.beginPath();
+    ctx.moveTo(W - offset - size, H - offset);
+    ctx.lineTo(W - offset, H - offset);
+    ctx.lineTo(W - offset, H - offset - size);
+    ctx.stroke();
+}
+
+// 고해상도 둥근 사각형
+function roundRectHD(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
 }
 
 // Taegeuk symbol drawing
@@ -3818,7 +4079,7 @@ function calcStrength(saju) {
     const officerEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 3) % 5]; // 관성 (나를 극함)
     const myEls = [peerEl, sealEl];
     
-    // ====== 지장간 테이블 (여기, 중기, 정기) - v4.14.0 표준 수정 ======
+    // ====== 지장간 테이블 (여기, 중기, 정기) - v4.14.1 표준 수정 ======
     const JIJANGGAN = {
         0: [{s:8, w:0.33}, {s:9, w:0.67}],                   // 子: 壬(여기), 癸(정기)
         1: [{s:9, w:0.3}, {s:7, w:0.1}, {s:5, w:0.6}],      // 丑: 癸, 辛, 己
@@ -4464,7 +4725,23 @@ function calcGods(saju, str) {
                     const prevYong = yong;
                     yong = johu;
                     hee = prevYong;
-                    johuDesc += ' (Climate Priority Override)';
+                    // v4.14.4 FIX: 조후용신이 기존 기신이면, 기신을 다른 것으로 변경
+                    // 예: 여름 火일간 → 水 필요, 기존 gi=water였다면 gi를 다른 것으로
+                    if (johu === gi) {
+                        // 조후용신이 기존 기신이면, 기신을 극신(나를 극하는 오행)으로 변경
+                        gi = officerEl;
+                        johuDesc += ' ★ Climate Override: ' + ELEMENT[johu].n + ' is now BENEFICIAL (was listed as unfavorable). True enemy is ' + ELEMENT[officerEl].n + '.';
+                    } else {
+                        johuDesc += ' (Climate Priority Override)';
+                    }
+                } else {
+                    // v4.14.4 NEW: johu === gi인 경우 (조후용신이 기존 기신과 같음)
+                    // 이 경우 기신을 다른 것으로 바꾸고, 조후용신을 용신으로
+                    const prevYong = yong;
+                    yong = johu;
+                    hee = prevYong;
+                    gi = officerEl; // 관성(나를 극하는 오행)을 기신으로
+                    johuDesc += ' ★ Climate Override: ' + ELEMENT[johu].n + ' is ESSENTIAL for survival. Reclassified as Beneficial.';
                 }
             } else if (johu !== gi || isGeumsooSanggwan) {
                 // 금수상관격이면 기신도 변경
@@ -5295,13 +5572,15 @@ function ylCheckClimateClash(yp, gods) {
     return { active: false, score: 0, desc: '' };
 }
 
-// 삼합 형성
+// 삼합 형성 + 세운+일지 반합 체크
 function ylCheckBureau(yp, saju) {
     const { samhapPatterns } = YEAR_LUCK_CONFIG;
     const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);
-    const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];
+    const dayBi = BRANCH.findIndex(br => br.c === saju.day.b.c);
+    const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), dayBi];
     if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));
     
+    // 1. 삼합 완성 체크 (세운 + 원국 2개 = 3개)
     for (const [a, b, c, el] of samhapPatterns) {
         if (ypBi === b && allBr.includes(a) && allBr.includes(c)) {
             return { active: true, score: 3, element: el, desc: `🔥 ${BRANCH[a].c}${BRANCH[b].c}${BRANCH[c].c} ${ELEMENT[el].n} Bureau formed! Clash NEUTRALIZED.` };
@@ -5310,6 +5589,38 @@ function ylCheckBureau(yp, saju) {
             return { active: true, score: 3, element: el, desc: `🔥 ${BRANCH[a].c}${BRANCH[b].c}${BRANCH[c].c} ${ELEMENT[el].n} Bureau formed!` };
         }
     }
+    
+    // 2. [v4.14.1 NEW] 세운+일지 반합 체크 (왕지 포함 2개만으로 반합 인정)
+    // 삼합 반합: 왕지(중심)가 포함되어야 반합 성립
+    // 寅午戌(火): 왕지=午(6), 인오(2,6), 오술(6,10)
+    // 申子辰(水): 왕지=子(0), 신자(8,0), 자진(0,4)
+    // 巳酉丑(金): 왕지=酉(9), 사유(5,9), 유축(9,1)
+    // 亥卯未(木): 왕지=卯(3), 해묘(11,3), 묘미(3,7)
+    const halfBureauPatterns = [
+        { pair: [2, 6], wangji: 6, element: 'fire', name: '寅午 Fire Half-Bureau' },
+        { pair: [6, 10], wangji: 6, element: 'fire', name: '午戌 Fire Half-Bureau' },
+        { pair: [8, 0], wangji: 0, element: 'water', name: '申子 Water Half-Bureau' },
+        { pair: [0, 4], wangji: 0, element: 'water', name: '子辰 Water Half-Bureau' },
+        { pair: [5, 9], wangji: 9, element: 'metal', name: '巳酉 Metal Half-Bureau' },
+        { pair: [9, 1], wangji: 9, element: 'metal', name: '酉丑 Metal Half-Bureau' },
+        { pair: [11, 3], wangji: 3, element: 'wood', name: '亥卯 Wood Half-Bureau' },
+        { pair: [3, 7], wangji: 3, element: 'wood', name: '卯未 Wood Half-Bureau' }
+    ];
+    
+    for (const hb of halfBureauPatterns) {
+        // 세운과 일지가 반합 쌍을 이루는지 체크
+        if ((ypBi === hb.pair[0] && dayBi === hb.pair[1]) || 
+            (ypBi === hb.pair[1] && dayBi === hb.pair[0])) {
+            return { 
+                active: true, 
+                score: 2, 
+                element: hb.element, 
+                isHalfBureau: true,
+                desc: `🔥 ${hb.name} formed (Year+Day)! ${ELEMENT[hb.element].n} energy AMPLIFIED!` 
+            };
+        }
+    }
+    
     return { active: false, score: 0, element: null, desc: '' };
 }
 
@@ -5651,6 +5962,17 @@ function calcYearLuck(year, saju, gods) {
     // 삼합이면 월지충 무효
     if (r.bureau.active) r.monthClash = { active: false, score: 0, desc: '' };
     
+    // [v4.14.1 NEW] 반합이 용신 오행이면 쇠신충왕 무효화
+    if (r.bureau.active && r.bureau.element === gods.yong && r.yongOverwhelmed.active) {
+        r.yongOverwhelmed = { 
+            active: false, 
+            score: 0, 
+            desc: '',
+            overridden: true,
+            overrideReason: `🔥 ${r.bureau.desc} Beneficial Element (${ELEMENT[gods.yong].n}) AMPLIFIED! 쇠신충왕 무효화 → BREAKTHROUGH!`
+        };
+    }
+    
     // 용신 부재 + 피공격 재계산
     r.missingYong = ylCheckMissingYong(saju, gods, r.yongAttack.active);
     
@@ -5697,6 +6019,9 @@ function calcYearLuck(year, saju, gods) {
         harmBetrayalWarning: r.harmBetrayal.active, harmBetrayalDesc: r.harmBetrayal.desc,
         // v4.12.6 NEW
         yongOverwhelmed: r.yongOverwhelmed.active, yongOverwhelmedDesc: r.yongOverwhelmed.desc,
+        yongOverwhelmedOverridden: r.yongOverwhelmed.overridden || false,
+        yongOverwhelmedOverrideReason: r.yongOverwhelmed.overrideReason || '',
+        bureauElement: r.bureau.element || null,
         pyunInDoShik: r.pyunInDoShik.active, pyunInDoShikDesc: r.pyunInDoShik.desc,
         wangShinChungBal: r.wangShinChungBal.active, wangShinChungBalDesc: r.wangShinChungBal.desc
     };
@@ -5766,6 +6091,11 @@ function analyzeLuckCross(saju, birthYear, gender, gods, targetYear) {
                 type: 'critical',
                 text: `🔥🔥🔥 ${bureau.name} Bureau COMPLETED! ${elNames[bureau.element]} energy explosion!`
             });
+            
+            // v4.14.4: 방합 완성 별도 필드 추가 (출력용)
+            result.directionalBureauCompleted = true;
+            result.directionalBureauName = bureau.name;
+            result.directionalBureauElement = elNames[bureau.element];
             
             // 방합 오행이 기신이면 추가 경고
             if (gods && bureau.element === gods.gi) {
@@ -8729,14 +9059,24 @@ ${hourState ? '• Hour Branch ' + SAJU.hour.b.c + ': ' + hourState.k + ' (Energ
 ${str.extreme ? '• Special Note: ' + (str.extreme === 'Extreme Strong' ? 'Extremely Strong' : 'Extremely Weak') + ' chart (Possible Special Format)' : ''}
 ${(() => {
     // v4.12.1: 실제 통근 정보 (지장간 기준)
+    // v4.14.3: 무근+장생 특별 케이스 추가
+    const dayState = getTwelveState(SAJU.day.s, SAJU.day.b);
     let rootInfo = '';
+    
     if (str.dayRoot || str.hourRoot) {
         rootInfo = '• ⚡ REAL ROOTS (지장간 기준): ';
         if (str.dayRoot) rootInfo += 'Day Branch has Peer/Seal in hidden stems. ';
         if (str.hourRoot) rootInfo += 'Hour Branch has Peer/Seal in hidden stems. ';
         rootInfo += 'Hidden resilience - not helpless despite low percentage.';
     } else if (str.type === 'weak') {
-        rootInfo = '• ⚠️ NO REAL ROOTS: Day Master lacks Peer/Seal in branch hidden stems. Flexible but needs external support.';
+        // v4.14.3: 일지 무근인데 장생인 경우 특별 메시지
+        if (dayState.k === '長生(Birth)') {
+            rootInfo = '• ⚠️ ROOTLESS but SHELTERED (無根有庇): Day Branch has NO real root (지장간에 비겁/인성 없음), but sits on Birth Stage (長生). ' +
+                       'Metaphor: "A flower floating on water - beautiful but vulnerable." ' +
+                       'Support exists from patrons/mentors, but foundation is weak. Cannot withstand direct attacks.';
+        } else {
+            rootInfo = '• ⚠️ NO REAL ROOTS: Day Master lacks Peer/Seal in branch hidden stems. Flexible but needs external support.';
+        }
     }
     return rootInfo;
 })()}
@@ -8767,12 +9107,16 @@ ${(() => {
     return '';
 })()}
 ${(() => {
-    // Rooted check - 일지/시지에 록왕지가 있는지 확인
+    // Rooted check - 일지/시지에 록왕지(건록/제왕)가 있는지 확인
+    // v4.14.2 FIX: 에너지 레벨(l)이 아닌 12운성 인덱스로 체크
+    // 장생(長生)은 l:12지만 통근이 아님! 건록(臨官)과 제왕(帝旺)만 진짜 록왕지
     const dmEl = SAJU.day.s.e;
     const dayState = getTwelveState(SAJU.day.s, SAJU.day.b);
     const hourState = SAJU.hour ? getTwelveState(SAJU.day.s, SAJU.hour.b) : null;
-    const strongStates = [11, 12]; // 건록(11), 제왕(12)
-    const hasRoot = strongStates.includes(dayState.l) || (hourState && strongStates.includes(hourState.l));
+    // 록왕지: 臨官(index 3), 帝旺(index 4) - 12운성 배열 순서 기준
+    const rokwangNames = ['臨官(Official)', '帝旺(Peak)'];
+    const hasRokwang = rokwangNames.some(n => dayState.k === n) || 
+                       (hourState && rokwangNames.some(n => hourState.k === n));
     
     // 🔥 뿌리 공격 체크 (일지-시지 충) - Gemini Round 3
     let rootUnderAttack = false;
@@ -8787,18 +9131,22 @@ ${(() => {
         }
     }
     
-    if (str.type === 'weak' && hasRoot) {
+    // v4.14.2 FIX: 록왕지(건록/제왕)만 진짜 뿌리로 인정
+    const dayHasRokwang = rokwangNames.some(n => dayState.k === n);
+    const hourHasRokwang = hourState && rokwangNames.some(n => hourState.k === n);
+    
+    if (str.type === 'weak' && hasRokwang) {
         if (rootUnderAttack) {
-            return '• ⚠️ ROOT UNDER ATTACK: Day Master has root in ' + 
-                   (hourState && strongStates.includes(hourState.l) ? 'Hour Branch (' + hourState.k + ')' : 'Day Branch') +
+            return '• ⚠️ ROOT UNDER ATTACK: Day Master has 祿旺之 in ' + 
+                   (hourHasRokwang ? 'Hour Branch (' + hourState.k + ')' : 'Day Branch (' + dayState.k + ')') +
                    ' BUT ' + attackDesc + 
                    ' Late-life instability. Spouse conflicts may drain vitality. Guard cardiovascular health especially in later years.';
         } else {
-            return '• ⚡ ROOT ANALYSIS: Despite low percentage, Day Master has STRONG ROOTS in ' + 
-                   (strongStates.includes(dayState.l) ? 'Day Branch (' + dayState.k + ')' : '') +
-                   (strongStates.includes(dayState.l) && hourState && strongStates.includes(hourState.l) ? ' and ' : '') +
-                   (hourState && strongStates.includes(hourState.l) ? 'Hour Branch (' + hourState.k + ')' : '') +
-                   '. Hidden resilience and late-blooming potential. Not helpless - just selective about when to fight.';
+            return '• ⚡ 祿旺之 (Strong Foundation): Despite low percentage, Day Master sits on ' + 
+                   (dayHasRokwang ? 'Day Branch (' + dayState.k + ')' : '') +
+                   (dayHasRokwang && hourHasRokwang ? ' and ' : '') +
+                   (hourHasRokwang ? 'Hour Branch (' + hourState.k + ')' : '') +
+                   '. This is REAL ROOT - hidden resilience and late-blooming potential.';
         }
     }
     return '';
@@ -8955,6 +9303,10 @@ ${(() => {
     if (yearLuck.bureauFormed) {
         result += '\n• 🔥 BUREAU FORMED: ' + yearLuck.bureauDesc;
     }
+    // v4.14.4 NEW: 방합(Directional Bureau) 완성 시 표시
+    if (yearLuck.directionalBureauCompleted) {
+        result += '\n• 🔥🔥🔥 DIRECTIONAL BUREAU COMPLETED: ' + yearLuck.directionalBureauName + '! ' + yearLuck.directionalBureauElement + ' energy EXPLOSION this year!';
+    }
     // 공망 탈출 표시
     if (yearLuck.voidBreak) {
         result += '\n• 🔓 VOID BREAK (脫空): ' + yearLuck.voidBreakDesc;
@@ -9007,7 +9359,10 @@ ${(() => {
         result += '\n• ' + yearLuck.harmBetrayalDesc;
     }
     // v4.12.6 NEW: 쇠신충왕/편인도식/왕신충발
-    if (yearLuck.yongOverwhelmed) {
+    // [v4.14.1] 반합으로 쇠신충왕 무효화된 경우 표시
+    if (yearLuck.yongOverwhelmedOverridden) {
+        result += '\n• ' + yearLuck.yongOverwhelmedOverrideReason;
+    } else if (yearLuck.yongOverwhelmed) {
         result += '\n• ' + yearLuck.yongOverwhelmedDesc;
     }
     if (yearLuck.pyunInDoShik) {
@@ -9152,6 +9507,45 @@ Interpret the provided "Four Pillars of Destiny" chart data into a personalized 
    - One final, powerful sentence summarizing their destiny
    - Lucky action/item suggestion based on their Beneficial Element (${ELEMENT[gods.yong].n})
    - Empowering closing message
+
+[CORE LOGIC OVERRIDE RULES - THE CONSTITUTION]
+These rules are ABSOLUTE and override ANY other interpretation logic. Apply in order of priority.
+
+**RULE 1. CLIMATE FIRST (조후 우선의 법칙) - HIGHEST PRIORITY**
+- If Month Branch is 巳(Snake), 午(Horse), or 未(Goat) [SUMMER] AND Day Master is 丙(Fire+) or 丁(Fire-):
+  → Water (水) is the ESSENTIAL Beneficial Element, regardless of Strength calculation.
+  → Ignore any "Unfavorable God: Water" designation. Water is LIFE for summer Fire.
+  → Metaphor: "A furnace needs cooling water to function, not more coal."
+- If Month Branch is 亥(Pig), 子(Rat), or 丑(Ox) [WINTER] AND Day Master is 壬(Water+) or 癸(Water-):
+  → Fire (火) is the ESSENTIAL Beneficial Element, regardless of Strength calculation.
+  → Metaphor: "Frozen water needs warmth to flow again."
+- **CONFLICT RESOLUTION:** When Strength Logic and Climate Logic contradict, ALWAYS follow Climate Logic.
+
+**RULE 2. BUREAU POWER (국(局)의 힘) - MULTIPLIER EFFECT**
+- Directional Harmony (方合) or Three Harmony (三合) formations are NOT simple additions.
+- When 巳+午+未 (Southern Fire) forms: Treat as Fire x10 power, not Fire x3.
+- When 寅+卯+辰 (Eastern Wood) forms: Treat as Wood x10 power.
+- When 申+酉+戌 (Western Metal) forms: Treat as Metal x10 power.
+- When 亥+子+丑 (Northern Water) forms: Treat as Water x10 power.
+- **Bureau completion in Annual Fortune = NUCLEAR EVENT. Describe with maximum urgency.**
+
+**RULE 3. ROOT vs STAGE DISTINCTION (통근 vs 12운성)**
+- "Real Root (通根)" = Day Master's element exists in branch hidden stems (Peer/Seal in 지장간).
+- "Birth Stage (長生)" = 12 Life Stage position, NOT a root. It means "patron support" not "self-power."
+- NEVER confuse these two. A chart can be "Rootless but Sheltered" (無根有庇).
+- Example: 癸 Day Master on 卯 Branch = Birth Stage (장생) but NO ROOT (지장간에 水/金 없음).
+
+**RULE 4. DATA OVERRIDE AUTHORITY**
+- If provided data shows logical contradiction (e.g., "Unfavorable: Water" + "Climate: Water needed"):
+  → Trust CLIMATE analysis over Strength-based Beneficial Element.
+  → Explain the override to user: "Despite calculation, climate demands Water."
+- If "CLIMATE CLASH WARNING" appears in 2026 Rating:
+  → This is DANGER regardless of other positive factors. Do not sugarcoat.
+
+**RULE 5. WEALTH INTERPRETATION HIERARCHY**
+- Weak Chart (0-30%) + Wealth Structure = "Anxious Chaser" NOT "Steady Builder"
+- Strong Chart (70%+) + Peer Year = "Robbery Warning" - wealth is threatened by rivals
+- Bureau completing as Wealth element = "Wealth Explosion" but also "Health Drain"
 
 [INTERPRETATION GUIDELINES]
 1. **Handling Conflicts:** If 'Six Relations' shows "Hidden" spouse/children but 'Divine Stars' shows Golden Carriage or similar blessings, prioritize Divine Stars as "hidden potential." Explain that the blessing exists but requires the right timing (Life Cycle) to manifest.
