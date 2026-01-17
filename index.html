@@ -56,10 +56,7 @@
    🔒 Console Protection (PUBLIC VERSION)
    ======================================== */
 (function() {
-    // Disable right-click
     document.addEventListener('contextmenu', e => e.preventDefault());
-    
-    // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || 
             (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
@@ -68,13 +65,6 @@
             return false;
         }
     });
-    
-    // Console clear + warning (safe)
-    try { console.clear(); } catch(e) {}
-    const warningMsg = '%c⚠️ K-MUDANG Pro - Protected Content';
-    const warningStyle = 'color: red; font-size: 20px; font-weight: bold;';
-    console.log(warningMsg, warningStyle);
-    console.log('%cUnauthorized access or modification is prohibited.', 'color: gray;');
 })();
 
 /* ========================================
