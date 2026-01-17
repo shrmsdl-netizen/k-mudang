@@ -3,9 +3,11 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.14.5 [PUBLIC]                                                         ║
+║  K-MUDANG Pro v4.14.6 [PUBLIC]                                                         ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
+║  v4.14.6 Changes (Missing Elements Format Fix):                           ║
+║    - [FIX] Missing Elements 괄호 중복 버그: 火(火(Fire)) → 火(Fire) 수정           ║
 ║  v4.14.5 Changes (AI Constitution - Core Logic Override Rules):           ║
 ║    - [ADD] CORE LOGIC OVERRIDE RULES (헌법) - AI 해석 최상위 규칙 5개 추가           ║
 ║    - [RULE1] Climate First: 여름 火일간=水필수, 겨울 水일간=火필수 (억부 무시)       ║
@@ -9047,10 +9049,11 @@ ${hourState ? '• Hour Branch ' + SAJU.hour.b.c + ': ' + hourState.k + ' (Energ
     const missing = Object.entries(elCount).filter(e => e[1] === 0);
     if (missing.length === 0) return 'None';
     return missing.map(([el, cnt]) => {
+        // v4.14.6 FIX: 괄호 중복 버그 수정 - ELEMENT[el].n만 사용
         if (hiddenElCount[el] > 0) {
-            return ELEMENT[el].c + '(' + ELEMENT[el].n + ') - Weak (Hidden in branches)';
+            return ELEMENT[el].c + '(' + ELEMENT[el].k + ') - Weak (Hidden in branches)';
         }
-        return ELEMENT[el].c + '(' + ELEMENT[el].n + ')';
+        return ELEMENT[el].c + '(' + ELEMENT[el].k + ')';
     }).join(', ');
 })()}
 
