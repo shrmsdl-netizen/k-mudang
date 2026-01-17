@@ -3,10 +3,10 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.12.7                                                         ║
+║  K-MUDANG Pro v4.13.0                                                         ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
-║  v4.12.7 Changes (Hidden Stems Standard Fix):                                 ║
+║  v4.13.0 Changes (Hidden Stems Standard Fix):                                 ║
 ║    - [CRITICAL] 지장간 12지지 전체 표준 수정 (오차 0%)                         ║
 ║    - [FIX] 子: 壬(10)+癸(20) 추가, 卯: 甲(10)+乙(20) 추가                      ║
 ║    - [FIX] 午: 丙(10)+己(9)+丁(11) 추가, 酉: 庚(10)+辛(20) 추가                ║
@@ -20,7 +20,7 @@
 ║    - [NEW] 종격(Follower) 판단 로직 추가                                       ║
 ║    - [NEW] 조후 예외처리 강화 (극한 기후 시 조후 최우선)                       ║
 ║    - [FIX] 12운성과 통근 분리 (장생≠뿌리)                                      ║
-║    - [KEEP] 편인태왕, 금수상관격, Paddle SDK, Premium 잠금                     ║
+║    - [FIX] Paddle→Gumroad 결제 마이그레이션, 서버사이드 License 검증            ║
 ║                                                                                ║
 ║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
 ║  Contact: kmudang.official@gmail.com                                          ║
@@ -49,7 +49,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <!-- Paddle.js -->
-<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<!-- Paddle removed - using Gumroad -->
 
 <script>
 /* ========================================
@@ -68,7 +68,7 @@ function toast(msg) {
 }
 
 /* ========================================
-   Firebase & Paddle Configuration
+   Firebase & Gumroad Configuration
    ======================================== */
 const firebaseConfig = {
     apiKey: "AIzaSyBG8P5KYAo3vTcJBm0rNsAmTgRm8Nt3Rgw",
@@ -80,12 +80,9 @@ const firebaseConfig = {
     measurementId: "G-044J002H6P"
 };
 
-// Paddle Price IDs - 복채(福債) 옵션
-const PADDLE_PRICES = {
-    basic: { id: 'pri_01kf06tck44xzkavtqz38gkmk2', amount: 10, label: '$10' },
-    blessed: { id: 'pri_01kf094v5gc1nj6t9xeptsc0ck', amount: 20, label: '$20' },
-    sacred: { id: 'pri_01kf095hgzg08a5nqy8v1g1vad', amount: 50, label: '$50' }
-};
+// Gumroad Product URL - 복채(福債) 옵션
+const GUMROAD_PRODUCT_URL = 'https://shrmsdl.gumroad.com/l/jsbng';
+const FIREBASE_FUNCTIONS_URL = 'https://us-central1-k-mudang-pro.cloudfunctions.net';
 const PREMIUM_DURATION_HOURS = 24;
 
 /* ========================================
@@ -97,7 +94,7 @@ let currentUser = null;
 let isPremium = false;
 let premiumExpiry = null;
 let firebaseReady = false;
-let paddleReady = false;
+let currentLicenseKey = null; // Gumroad License Key
 
 // Initialize Firebase when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
@@ -146,29 +143,8 @@ document.addEventListener('DOMContentLoaded', function() {
         updateAuthUI(); // Still update UI even on error
     }
     
-    // Initialize Paddle
-    try {
-        if (typeof Paddle !== 'undefined') {
-            Paddle.Initialize({ 
-                token: 'live_8cdfa23600d1d845a7ede32e1be'
-            });
-            paddleReady = true;
-            console.log('Paddle initialized successfully');
-            
-            // Listen for Paddle events
-            if (Paddle.Checkout) {
-                Paddle.Checkout.on('completed', (data) => {
-                    if (currentUser) {
-                        activatePremium(currentUser.uid);
-                    }
-                });
-            }
-        } else {
-            console.warn('Paddle SDK not loaded');
-        }
-    } catch (e) {
-        console.error('Paddle init error:', e);
-    }
+    // Check URL for license key (Gumroad redirect)
+    checkUrlForLicenseKey();
 });
 
 // Check premium status from Firestore
@@ -279,67 +255,142 @@ async function signOut() {
     }
 }
 
-// Paddle Checkout - 복채(福債) 금액 선택
+// Gumroad Checkout - 복채(福債) 결제
 function openPremiumCheckout(tier = 'basic') {
-    // Check local file
-    if (window.location.protocol === 'file:') {
-        toast('⚠️ Payment requires web server. Deploy to GitHub Pages to test.');
+    // Gumroad 결제 페이지로 이동
+    window.open(GUMROAD_PRODUCT_URL, '_blank');
+    
+    // 안내 모달 표시
+    showLicenseInputModal();
+}
+
+// License Key 입력 모달 표시
+function showLicenseInputModal() {
+    const modal = document.createElement('div');
+    modal.id = 'license-modal';
+    modal.innerHTML = `
+        <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;">
+            <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:30px;border-radius:15px;max-width:450px;width:90%;border:1px solid var(--gold);box-shadow:0 0 30px rgba(212,175,55,0.3);">
+                <h3 style="color:var(--gold);margin-bottom:15px;text-align:center;">🔑 Enter License Key</h3>
+                <p style="color:#ccc;font-size:14px;margin-bottom:20px;text-align:center;">
+                    After Gumroad purchase, you'll receive a License Key.<br>
+                    Paste it below to activate 24-hour premium access.
+                </p>
+                <input type="text" id="license-key-input" placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" 
+                    style="width:100%;padding:12px;border-radius:8px;border:1px solid #444;background:#0d0d1a;color:#fff;font-family:monospace;font-size:14px;margin-bottom:15px;box-sizing:border-box;">
+                <div style="display:flex;gap:10px;">
+                    <button onclick="verifyLicenseKey()" style="flex:1;padding:12px;background:linear-gradient(135deg,var(--gold),#b8860b);color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
+                        ✨ Activate Premium
+                    </button>
+                    <button onclick="closeLicenseModal()" style="padding:12px 20px;background:#333;color:#fff;border:none;border-radius:8px;cursor:pointer;">
+                        Cancel
+                    </button>
+                </div>
+                <p id="license-error" style="color:#ff6b6b;font-size:12px;margin-top:10px;text-align:center;display:none;"></p>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    document.getElementById('license-key-input').focus();
+}
+
+function closeLicenseModal() {
+    const modal = document.getElementById('license-modal');
+    if (modal) modal.remove();
+}
+
+// License Key 검증 (서버 호출)
+async function verifyLicenseKey() {
+    const input = document.getElementById('license-key-input');
+    const errorEl = document.getElementById('license-error');
+    const licenseKey = input.value.trim();
+    
+    if (!licenseKey) {
+        errorEl.textContent = 'Please enter a license key';
+        errorEl.style.display = 'block';
         return;
     }
     
-    if (!currentUser) {
-        toast('🔐 Please login first to offer 福債');
-        googleSignIn();
-        return;
-    }
-    
-    if (!paddleReady) {
-        toast('⏳ Payment service loading... Please wait and try again.');
-        return;
-    }
+    // 로딩 표시
+    input.disabled = true;
+    errorEl.style.display = 'none';
+    toast('🔄 Verifying license...');
     
     try {
-        const price = PADDLE_PRICES[tier] || PADDLE_PRICES.basic;
-        
-        Paddle.Checkout.open({
-            items: [{ priceId: price.id, quantity: 1 }],
-            customer: { email: currentUser.email },
-            customData: { 
-                uid: currentUser.uid,
-                tier: tier,
-                amount: price.amount,
-                purchaseTime: new Date().toISOString()
-            },
-            settings: {
-                displayMode: 'overlay',
-                theme: 'dark',
-                locale: 'en'
-            }
+        const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/verifyAndAnalyze`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ license_key: licenseKey })
         });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // 성공!
+            currentLicenseKey = licenseKey;
+            localStorage.setItem('k_mudang_license', licenseKey);
+            isPremium = true;
+            premiumExpiry = new Date(data.license.expiresAt);
+            updateAuthUI();
+            closeLicenseModal();
+            toast(`🎉 Premium activated! ${data.license.remainingTime} remaining`);
+        } else {
+            // 실패
+            errorEl.textContent = data.error || 'Invalid license key';
+            errorEl.style.display = 'block';
+            input.disabled = false;
+        }
     } catch (e) {
-        console.error('Checkout error:', e);
-        toast('❌ Payment error: ' + (e.message || 'Unknown error'));
+        console.error('License verification error:', e);
+        errorEl.textContent = 'Network error. Please try again.';
+        errorEl.style.display = 'block';
+        input.disabled = false;
     }
 }
 
-// Handle successful payment (called by webhook or client-side)
-async function activatePremium(uid) {
-    if (!db) return;
-    const expiry = new Date();
-    expiry.setHours(expiry.getHours() + PREMIUM_DURATION_HOURS);
+// URL에서 License Key 체크 (Gumroad 리다이렉트 후)
+function checkUrlForLicenseKey() {
+    const params = new URLSearchParams(window.location.search);
+    const licenseKey = params.get('license_key');
     
-    try {
-        await db.collection('users').doc(uid).set({
-            premiumExpiry: firebase.firestore.Timestamp.fromDate(expiry),
-            lastPurchase: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
+    if (licenseKey) {
+        // URL에서 license_key 발견 → 자동 검증
+        document.getElementById('license-key-input')?.remove();
+        setTimeout(() => {
+            showLicenseInputModal();
+            document.getElementById('license-key-input').value = licenseKey;
+            verifyLicenseKey();
+        }, 500);
         
-        isPremium = true;
-        premiumExpiry = expiry;
-        updateAuthUI();
-        toast('🎉 Premium activated for 24 hours!');
+        // URL에서 파라미터 제거 (깔끔하게)
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } else {
+        // 저장된 라이센스 체크
+        const savedLicense = localStorage.getItem('k_mudang_license');
+        if (savedLicense) {
+            checkSavedLicense(savedLicense);
+        }
+    }
+}
+
+// 저장된 라이센스 유효성 체크
+async function checkSavedLicense(licenseKey) {
+    try {
+        const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/checkLicense?key=${encodeURIComponent(licenseKey)}`);
+        const data = await response.json();
+        
+        if (data.success && data.status === 'active') {
+            currentLicenseKey = licenseKey;
+            isPremium = true;
+            premiumExpiry = new Date(data.expiresAt);
+            updateAuthUI();
+            console.log('License restored:', data.remainingTime, 'remaining');
+        } else {
+            // 만료됨 - 로컬 스토리지 클리어
+            localStorage.removeItem('k_mudang_license');
+        }
     } catch (e) {
-        console.error('Premium activation error:', e);
+        console.error('License check error:', e);
     }
 }
 
@@ -1790,7 +1841,7 @@ footer a {
                     💫 Greater offerings attract greater blessings
                 </p>
                 <p style="font-size:0.7rem;color:var(--gray);margin-top:10px;opacity:0.6;">
-                    🔒 Secure payment via Paddle · Instant activation
+                    🔒 Secure payment via Gumroad · License Key activation
                 </p>
             </div>
 
@@ -1980,7 +2031,7 @@ const BRANCH = [
 ];
 
 // Hidden Stems(地藏干) - 余氣/中氣/正氣 with days
-// v4.12.7 FIX: 표준 지장간 완전 수정 (오차 0%)
+// v4.13.0 FIX: 표준 지장간 완전 수정 (오차 0%)
 // 순서: 余氣(여기) → 中氣(중기) → 正氣(정기)
 const HIDDEN_STEMS = {
     0: [ // 子 (Rat) - 壬癸 수기
@@ -3530,7 +3581,7 @@ function calcStrength(saju) {
     const officerEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 3) % 5]; // 관성 (나를 극함)
     const myEls = [peerEl, sealEl];
     
-    // ====== 지장간 테이블 (여기, 중기, 정기) - v4.12.7 표준 수정 ======
+    // ====== 지장간 테이블 (여기, 중기, 정기) - v4.13.0 표준 수정 ======
     const JIJANGGAN = {
         0: [{s:8, w:0.33}, {s:9, w:0.67}],                   // 子: 壬(여기), 癸(정기)
         1: [{s:9, w:0.3}, {s:7, w:0.1}, {s:5, w:0.6}],      // 丑: 癸, 辛, 己
