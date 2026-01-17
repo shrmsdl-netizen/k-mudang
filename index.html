@@ -143,8 +143,8 @@ document.addEventListener('DOMContentLoaded', function() {
         updateAuthUI(); // Still update UI even on error
     }
     
-    // Check URL for license key (Gumroad redirect)
-    checkUrlForLicenseKey();
+    // Check premium status on login
+    checkPremiumByEmail();
 });
 
 // Check premium status from Firestore
@@ -257,140 +257,93 @@ async function signOut() {
 
 // Gumroad Checkout - 복채(福債) 결제
 function openPremiumCheckout(tier = 'basic') {
-    // Gumroad 결제 페이지로 이동
-    window.open(GUMROAD_PRODUCT_URL, '_blank');
-    
-    // 안내 모달 표시
-    showLicenseInputModal();
-}
-
-// License Key 입력 모달 표시
-function showLicenseInputModal() {
-    const modal = document.createElement('div');
-    modal.id = 'license-modal';
-    modal.innerHTML = `
-        <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;">
-            <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:30px;border-radius:15px;max-width:450px;width:90%;border:1px solid var(--gold);box-shadow:0 0 30px rgba(212,175,55,0.3);">
-                <h3 style="color:var(--gold);margin-bottom:15px;text-align:center;">🔑 Enter License Key</h3>
-                <p style="color:#ccc;font-size:14px;margin-bottom:20px;text-align:center;">
-                    After Gumroad purchase, you'll receive a License Key.<br>
-                    Paste it below to activate 24-hour premium access.
-                </p>
-                <input type="text" id="license-key-input" placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" 
-                    style="width:100%;padding:12px;border-radius:8px;border:1px solid #444;background:#0d0d1a;color:#fff;font-family:monospace;font-size:14px;margin-bottom:15px;box-sizing:border-box;">
-                <div style="display:flex;gap:10px;">
-                    <button onclick="verifyLicenseKey()" style="flex:1;padding:12px;background:linear-gradient(135deg,var(--gold),#b8860b);color:#000;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
-                        ✨ Activate Premium
-                    </button>
-                    <button onclick="closeLicenseModal()" style="padding:12px 20px;background:#333;color:#fff;border:none;border-radius:8px;cursor:pointer;">
-                        Cancel
-                    </button>
-                </div>
-                <p id="license-error" style="color:#ff6b6b;font-size:12px;margin-top:10px;text-align:center;display:none;"></p>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(modal);
-    document.getElementById('license-key-input').focus();
-}
-
-function closeLicenseModal() {
-    const modal = document.getElementById('license-modal');
-    if (modal) modal.remove();
-}
-
-// License Key 검증 (서버 호출)
-async function verifyLicenseKey() {
-    const input = document.getElementById('license-key-input');
-    const errorEl = document.getElementById('license-error');
-    const licenseKey = input.value.trim();
-    
-    if (!licenseKey) {
-        errorEl.textContent = 'Please enter a license key';
-        errorEl.style.display = 'block';
+    if (!currentUser) {
+        toast('🔐 Please login first');
+        googleSignIn();
         return;
     }
     
-    // 로딩 표시
-    input.disabled = true;
-    errorEl.style.display = 'none';
-    toast('🔄 Verifying license...');
+    // Gumroad 결제 페이지로 이동 (이메일 파라미터 포함)
+    const url = `${GUMROAD_PRODUCT_URL}?email=${encodeURIComponent(currentUser.email)}`;
+    window.open(url, '_blank');
+    
+    toast('💳 Complete payment in Gumroad. Premium will activate automatically!');
+    
+    // 결제 완료 대기 - 5초마다 서버 체크 (최대 5분)
+    startPremiumPolling(currentUser.email);
+}
+
+// 결제 완료 폴링 (자동 감지)
+let pollingInterval = null;
+let pollingCount = 0;
+const MAX_POLLING = 60; // 5분 (5초 * 60회)
+
+function startPremiumPolling(email) {
+    pollingCount = 0;
+    
+    // 이미 폴링 중이면 중지
+    if (pollingInterval) {
+        clearInterval(pollingInterval);
+    }
+    
+    pollingInterval = setInterval(async () => {
+        pollingCount++;
+        
+        if (pollingCount > MAX_POLLING) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+            console.log('Polling stopped - timeout');
+            return;
+        }
+        
+        try {
+            // 이메일로 최근 구매 확인
+            const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/checkPurchaseByEmail`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && data.status === 'active') {
+                // 결제 확인됨!
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+                
+                isPremium = true;
+                premiumExpiry = new Date(data.expiresAt);
+                localStorage.setItem('k_mudang_email', email);
+                updateAuthUI();
+                toast(`🎉 Premium activated! ${data.remainingTime} remaining`);
+            }
+        } catch (e) {
+            console.error('Polling error:', e);
+        }
+    }, 5000); // 5초마다
+}
+
+// 페이지 로드시 이메일로 Premium 상태 확인
+async function checkPremiumByEmail() {
+    if (!currentUser) return;
     
     try {
-        const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/verifyAndAnalyze`, {
+        const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/checkPurchaseByEmail`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ license_key: licenseKey })
+            body: JSON.stringify({ email: currentUser.email })
         });
         
         const data = await response.json();
         
-        if (data.success) {
-            // 성공!
-            currentLicenseKey = licenseKey;
-            localStorage.setItem('k_mudang_license', licenseKey);
-            isPremium = true;
-            premiumExpiry = new Date(data.license.expiresAt);
-            updateAuthUI();
-            closeLicenseModal();
-            toast(`🎉 Premium activated! ${data.license.remainingTime} remaining`);
-        } else {
-            // 실패
-            errorEl.textContent = data.error || 'Invalid license key';
-            errorEl.style.display = 'block';
-            input.disabled = false;
-        }
-    } catch (e) {
-        console.error('License verification error:', e);
-        errorEl.textContent = 'Network error. Please try again.';
-        errorEl.style.display = 'block';
-        input.disabled = false;
-    }
-}
-
-// URL에서 License Key 체크 (Gumroad 리다이렉트 후)
-function checkUrlForLicenseKey() {
-    const params = new URLSearchParams(window.location.search);
-    const licenseKey = params.get('license_key');
-    
-    if (licenseKey) {
-        // URL에서 license_key 발견 → 자동 검증
-        document.getElementById('license-key-input')?.remove();
-        setTimeout(() => {
-            showLicenseInputModal();
-            document.getElementById('license-key-input').value = licenseKey;
-            verifyLicenseKey();
-        }, 500);
-        
-        // URL에서 파라미터 제거 (깔끔하게)
-        window.history.replaceState({}, document.title, window.location.pathname);
-    } else {
-        // 저장된 라이센스 체크
-        const savedLicense = localStorage.getItem('k_mudang_license');
-        if (savedLicense) {
-            checkSavedLicense(savedLicense);
-        }
-    }
-}
-
-// 저장된 라이센스 유효성 체크
-async function checkSavedLicense(licenseKey) {
-    try {
-        const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/checkLicense?key=${encodeURIComponent(licenseKey)}`);
-        const data = await response.json();
-        
         if (data.success && data.status === 'active') {
-            currentLicenseKey = licenseKey;
             isPremium = true;
             premiumExpiry = new Date(data.expiresAt);
             updateAuthUI();
-            console.log('License restored:', data.remainingTime, 'remaining');
-        } else {
-            // 만료됨 - 로컬 스토리지 클리어
-            localStorage.removeItem('k_mudang_license');
+            console.log('Premium active:', data.remainingTime, 'remaining');
         }
     } catch (e) {
-        console.error('License check error:', e);
+        console.error('Premium check error:', e);
     }
 }
 
