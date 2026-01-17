@@ -3,10 +3,10 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.13.0                                                         ║
+║  K-MUDANG Pro v4.14.0 [PUBLIC]                                                         ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
-║  v4.13.0 Changes (Hidden Stems Standard Fix):                                 ║
+║  v4.14.0 Changes (Fortune Talisman Card):                                 ║
 ║    - [CRITICAL] 지장간 12지지 전체 표준 수정 (오차 0%)                         ║
 ║    - [FIX] 子: 壬(10)+癸(20) 추가, 卯: 甲(10)+乙(20) 추가                      ║
 ║    - [FIX] 午: 丙(10)+己(9)+丁(11) 추가, 酉: 庚(10)+辛(20) 추가                ║
@@ -52,6 +52,31 @@
 <!-- Paddle removed - using Gumroad -->
 
 <script>
+/* ========================================
+   🔒 Console Protection (PUBLIC VERSION)
+   ======================================== */
+(function() {
+    // Disable right-click
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    
+    // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+            (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Console clear + warning
+    const warningMsg = '%c⚠️ K-MUDANG Pro - Protected Content';
+    const warningStyle = 'color: red; font-size: 20px; font-weight: bold;';
+    console.clear();
+    console.log(warningMsg, warningStyle);
+    console.log('%cUnauthorized access or modification is prohibited.', 'color: gray;');
+})();
+
 /* ========================================
    Toast Function (Early Definition)
    ======================================== */
@@ -1363,6 +1388,17 @@ footer a {
     .pillar-branch { font-size: 18px; }
     .bagua { font-size: 1.8rem; }
 }
+
+/* Talisman Card Styles */
+#talisman-canvas {
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+#talisman-preview {
+    text-align: center;
+    padding: 20px;
+}
 </style>
 </head>
 <body class="saju-mode">
@@ -1677,6 +1713,47 @@ footer a {
                 </div>
             </div>
 
+            <!-- ===== Fortune Talisman Card ===== -->
+            <div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(139,0,0,0.1),rgba(184,134,11,0.05));border:1px solid rgba(184,134,11,0.3);">
+                <p style="font-size:1.2rem;margin-bottom:8px;">🏮 2026 Fortune Talisman</p>
+                <p style="font-size:0.85rem;color:var(--gray);margin-bottom:15px;">
+                    Generate your personal fortune talisman based on your Yongshin (用神)
+                </p>
+                <!-- Premium Lock Overlay -->
+                <div class="premium-lock" style="position:relative;">
+                    <div style="filter:blur(3px);opacity:0.5;pointer-events:none;">
+                        <div style="background:rgba(139,0,0,0.2);border-radius:12px;padding:30px;margin-bottom:15px;">
+                            <p style="font-size:3rem;">🏮</p>
+                            <p style="color:var(--gold);">Your Personalized Talisman</p>
+                        </div>
+                    </div>
+                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:100%;">
+                        <p style="font-size:2rem;margin-bottom:10px;">🔒</p>
+                        <p style="color:var(--gold);font-weight:bold;margin-bottom:15px;">Premium Feature</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:12px 24px;">
+                            🙏 Unlock with 福債
+                        </button>
+                    </div>
+                </div>
+                <!-- Unlocked Content (hidden by default) -->
+                <div id="talisman-preview" style="display:none;margin-bottom:20px;">
+                    <canvas id="talisman-canvas" width="400" height="640"></canvas>
+                    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:15px;">
+                        <button onclick="downloadTalisman()" style="padding:10px 20px;background:linear-gradient(135deg,#D4AF37,#B8860B);color:#1a1a1a;border:none;border-radius:20px;font-weight:600;cursor:pointer;">
+                            📥 Save Image
+                        </button>
+                        <button onclick="shareTalisman()" style="padding:10px 20px;background:linear-gradient(135deg,#25D366,#128C7E);color:white;border:none;border-radius:20px;font-weight:600;cursor:pointer;">
+                            📤 Share
+                        </button>
+                    </div>
+                </div>
+                <div id="talisman-btn-wrapper" class="premium-section" style="display:none;">
+                    <button class="btn" onclick="generateTalisman()" style="background:linear-gradient(135deg,#8B0000,#DC143C);width:100%;padding:15px;">
+                        🏮 Generate My Talisman
+                    </button>
+                </div>
+            </div>
+
             <!-- ===== Premium Unlock (福債) ===== -->
             <div class="card" id="premium-section" style="text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,193,7,0.03));border:1px solid rgba(212,175,55,0.2);">
                 <p style="font-size:1.4rem;margin-bottom:8px;">🙏 福債 (Karma Offering)</p>
@@ -1891,7 +1968,7 @@ const BRANCH = [
 ];
 
 // Hidden Stems(地藏干) - 余氣/中氣/正氣 with days
-// v4.13.0 FIX: 표준 지장간 완전 수정 (오차 0%)
+// v4.14.0 FIX: 표준 지장간 완전 수정 (오차 0%)
 // 순서: 余氣(여기) → 中氣(중기) → 正氣(정기)
 const HIDDEN_STEMS = {
     0: [ // 子 (Rat) - 壬癸 수기
@@ -2403,6 +2480,321 @@ function copyShareLink() {
         document.body.removeChild(ta);
         toast('📋 Link copied to clipboard!');
     });
+}
+
+/* ========================================
+   3-2. Fortune Talisman Card Generator
+   ======================================== */
+let talismanGenerated = false;
+let talismanDataUrl = null;
+
+function generateTalisman() {
+    if (!SAJU || !SAJU.day) {
+        toast('Please analyze your Four Pillars first! 🔮');
+        return;
+    }
+    
+    const canvas = document.getElementById('talisman-canvas');
+    const ctx = canvas.getContext('2d');
+    const W = 400, H = 640;
+    canvas.width = W;
+    canvas.height = H;
+    
+    // Background gradient (black → dark red)
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+    bgGrad.addColorStop(0, '#1a0a0a');
+    bgGrad.addColorStop(0.5, '#2d0a0a');
+    bgGrad.addColorStop(1, '#1a0505');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, W, H);
+    
+    // Double gold border
+    ctx.strokeStyle = '#8B7355';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(15, 15, W-30, H-30);
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(20, 20, W-40, H-40);
+    
+    // Corner ornaments
+    drawCornerOrnaments(ctx, W, H);
+    
+    // Taegeuk symbol at top
+    drawTaegeuk(ctx, W/2, 60, 22);
+    
+    // Title (Chinese + English)
+    ctx.fillStyle = '#D4AF37';
+    ctx.font = 'bold 22px "Noto Serif KR", serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('二〇二六 開運符', W/2, 110);
+    
+    ctx.fillStyle = '#B8860B';
+    ctx.font = '13px "Noto Sans KR", sans-serif';
+    ctx.fillText('2026 Fortune Talisman', W/2, 132);
+    
+    // Divider line
+    ctx.strokeStyle = '#8B7355';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(50, 148);
+    ctx.lineTo(W-50, 148);
+    ctx.stroke();
+    
+    // ★ Yongshin-based mantra (Chinese characters kept, meaning in English)
+    const yongEl = GODS && GODS.yong ? GODS.yong : 'fire';
+    const yongsinMantras = {
+        'wood': { hanja: '木德生發 萬事亨通', meaning: 'Wood virtue blooms, all things prosper' },
+        'fire': { hanja: '火德昌盛 光明大吉', meaning: 'Fire virtue blazes, great fortune shines' },
+        'earth': { hanja: '土德厚載 財祿豊盈', meaning: 'Earth virtue endures, wealth overflows' },
+        'metal': { hanja: '金德堅固 百事成就', meaning: 'Metal virtue strengthens, all goals achieved' },
+        'water': { hanja: '水德潤澤 智慧通達', meaning: 'Water virtue nourishes, wisdom flows freely' }
+    };
+    const mantra = yongsinMantras[yongEl] || yongsinMantras['fire'];
+    
+    ctx.fillStyle = '#FFD700';
+    ctx.font = 'bold 20px "Noto Serif KR", serif';
+    ctx.fillText(mantra.hanja, W/2, 180);
+    
+    ctx.fillStyle = '#B8860B';
+    ctx.font = '11px "Noto Sans KR", sans-serif';
+    ctx.fillText(mantra.meaning, W/2, 200);
+    
+    // Day Master (large display)
+    const dayStem = SAJU.day.s.c;
+    const dayBranch = SAJU.day.b.c;
+    ctx.fillStyle = '#FFD700';
+    ctx.font = 'bold 44px "Noto Serif KR", serif';
+    ctx.fillText(dayStem + dayBranch, W/2, 260);
+    
+    // Day pillar description
+    ctx.fillStyle = '#C0C0C0';
+    ctx.font = '13px "Noto Sans KR", sans-serif';
+    const iljuKey = dayStem + dayBranch;
+    const dayDesc = (typeof ILJU_60 !== 'undefined' && ILJU_60[iljuKey]) ? ILJU_60[iljuKey].name : '';
+    ctx.fillText(dayDesc + ' Day Pillar', W/2, 285);
+    
+    // Central info box
+    ctx.fillStyle = 'rgba(139, 115, 85, 0.15)';
+    roundRect(ctx, 40, 305, W-80, 130, 10);
+    ctx.fill();
+    ctx.strokeStyle = '#8B7355';
+    ctx.lineWidth = 1;
+    roundRect(ctx, 40, 305, W-80, 130, 10);
+    ctx.stroke();
+    
+    // Yongshin/Huishin/Gishin info
+    ctx.textAlign = 'left';
+    ctx.font = '14px "Noto Sans KR", sans-serif';
+    
+    const yongsinEl = GODS && GODS.yong ? ELEMENT[GODS.yong] : {k:'?', emoji:''};
+    const huisinEl = GODS && GODS.hee ? ELEMENT[GODS.hee] : {k:'?', emoji:''};
+    const gisinEl = GODS && GODS.gi ? ELEMENT[GODS.gi] : {k:'?', emoji:''};
+    
+    ctx.fillStyle = '#FF6B6B';
+    ctx.fillText('用神', 60, 338);
+    ctx.fillStyle = '#FFD700';
+    ctx.fillText(`${yongsinEl.k} ${yongsinEl.emoji || ''}`, 105, 338);
+    
+    ctx.fillStyle = '#4ECDC4';
+    ctx.fillText('喜神', 170, 338);
+    ctx.fillStyle = '#FFD700';
+    ctx.fillText(`${huisinEl.k} ${huisinEl.emoji || ''}`, 215, 338);
+    
+    ctx.fillStyle = '#95A5A6';
+    ctx.fillText('忌神', 280, 338);
+    ctx.fillStyle = '#888';
+    ctx.fillText(`${gisinEl.k}`, 325, 338);
+    
+    // Strength + Day Master
+    ctx.fillStyle = '#B8860B';
+    ctx.fillText('Body', 60, 370);
+    ctx.fillStyle = '#FFD700';
+    const strType = STRENGTH ? (STRENGTH.type === 'strong' ? 'Strong' : STRENGTH.type === 'weak' ? 'Weak' : 'Balanced') : '?';
+    const strPct = STRENGTH ? STRENGTH.pct + '%' : '';
+    ctx.fillText(`${strType} ${strPct}`, 100, 370);
+    
+    ctx.fillStyle = '#B8860B';
+    ctx.fillText('Day', 200, 370);
+    ctx.fillStyle = '#FFD700';
+    const dayElK = ELEMENT[SAJU.day.s.e].k;
+    ctx.fillText(`${SAJU.day.s.k}(${dayElK})`, 235, 370);
+    
+    // 2026 Monthly fortune
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#B8860B';
+    ctx.font = '12px "Noto Sans KR", sans-serif';
+    ctx.fillText('─── 2026 丙午年 ───', W/2, 410);
+    
+    let bestMonth = '?', worstMonth = '?';
+    try {
+        const monthlyLuck = getYearlyMonthLuck(2026, SAJU, GODS);
+        if (monthlyLuck && monthlyLuck.best) bestMonth = monthlyLuck.best.month;
+        if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;
+    } catch(e) {}
+    
+    ctx.font = '13px "Noto Sans KR", sans-serif';
+    ctx.fillStyle = '#4ECDC4';
+    ctx.fillText(`✨ Best: Month ${bestMonth}`, W/2 - 60, 432);
+    ctx.fillStyle = '#FF6B6B';
+    ctx.fillText(`⚠️ Caution: Month ${worstMonth}`, W/2 + 60, 432);
+    
+    // ★ Bottom protection mantra
+    ctx.strokeStyle = '#8B7355';
+    ctx.beginPath();
+    ctx.moveTo(50, 455);
+    ctx.lineTo(W-50, 455);
+    ctx.stroke();
+    
+    ctx.fillStyle = '#D4AF37';
+    ctx.font = 'bold 18px "Noto Serif KR", serif';
+    ctx.fillText('厄退福來 百事大吉', W/2, 485);
+    
+    ctx.fillStyle = '#B8860B';
+    ctx.font = '11px "Noto Sans KR", sans-serif';
+    ctx.fillText('Misfortune retreats, blessings arrive, all is auspicious', W/2, 505);
+    
+    // Divider
+    ctx.strokeStyle = '#8B7355';
+    ctx.beginPath();
+    ctx.moveTo(80, 520);
+    ctx.lineTo(W-80, 520);
+    ctx.stroke();
+    
+    // 2026 specific mantra
+    ctx.fillStyle = '#C0C0C0';
+    ctx.font = '11px "Noto Sans KR", sans-serif';
+    ctx.fillText('丙午年 貴人相助 心想事成', W/2, 545);
+    
+    // Branding
+    ctx.fillStyle = '#8B7355';
+    ctx.font = '10px "Noto Sans KR", sans-serif';
+    ctx.fillText('K-MUDANG Pro ☯', W/2, 575);
+    
+    // Bottom decorative line
+    ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+    ctx.beginPath();
+    ctx.moveTo(120, 590);
+    ctx.lineTo(W-120, 590);
+    ctx.stroke();
+    
+    // Show preview
+    document.getElementById('talisman-preview').style.display = 'block';
+    document.getElementById('talisman-btn-wrapper').style.display = 'none';
+    talismanGenerated = true;
+    talismanDataUrl = canvas.toDataURL('image/png');
+    
+    toast('🏮 Your fortune talisman has been generated!');
+}
+
+// Taegeuk symbol drawing
+function drawTaegeuk(ctx, x, y, r) {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.8, 0, Math.PI, false);
+    ctx.fillStyle = '#C41E3A';
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.8, Math.PI, Math.PI * 2, false);
+    ctx.fillStyle = '#1E3A5F';
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.arc(x - r * 0.35, y, r * 0.25, 0, Math.PI * 2);
+    ctx.fillStyle = '#1E3A5F';
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.arc(x + r * 0.35, y, r * 0.25, 0, Math.PI * 2);
+    ctx.fillStyle = '#C41E3A';
+    ctx.fill();
+}
+
+// Corner ornaments
+function drawCornerOrnaments(ctx, W, H) {
+    ctx.fillStyle = '#D4AF37';
+    ctx.font = '14px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('福', 35, 40);
+    ctx.fillText('祿', W-35, 40);
+    ctx.fillText('壽', 35, H-25);
+    ctx.fillText('喜', W-35, H-25);
+}
+
+// Rounded rectangle helper
+function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+}
+
+// Download talisman image
+function downloadTalisman() {
+    if (!talismanGenerated) {
+        generateTalisman();
+        if (!talismanGenerated) return;
+    }
+    
+    const link = document.createElement('a');
+    link.download = '2026_Fortune_Talisman_K-MUDANG.png';
+    link.href = talismanDataUrl;
+    link.click();
+    toast('📥 Talisman image saved!');
+}
+
+// Share talisman
+function shareTalisman() {
+    if (!talismanGenerated) {
+        generateTalisman();
+        if (!talismanGenerated) return;
+    }
+    
+    if (navigator.share && navigator.canShare) {
+        const canvas = document.getElementById('talisman-canvas');
+        canvas.toBlob(async (blob) => {
+            const file = new File([blob], '2026_Fortune_Talisman.png', { type: 'image/png' });
+            const shareData = {
+                title: '🏮 2026 Fortune Talisman',
+                text: 'My personalized fortune talisman from K-MUDANG Pro!\n\n👉 Create yours:',
+                url: window.location.href,
+                files: [file]
+            };
+            
+            try {
+                if (navigator.canShare(shareData)) {
+                    await navigator.share(shareData);
+                    toast('Shared successfully! 🎉');
+                    return;
+                }
+            } catch(e) {
+                if (e.name !== 'AbortError') {
+                    console.log('Share failed:', e);
+                }
+            }
+            shareTalismanFallback();
+        }, 'image/png');
+        return;
+    }
+    
+    shareTalismanFallback();
+}
+
+function shareTalismanFallback() {
+    copyShareLink();
+    toast('💡 Save the talisman image first, then share it manually!');
 }
 
 /* ========================================
@@ -3441,7 +3833,7 @@ function calcStrength(saju) {
     const officerEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 3) % 5]; // 관성 (나를 극함)
     const myEls = [peerEl, sealEl];
     
-    // ====== 지장간 테이블 (여기, 중기, 정기) - v4.13.0 표준 수정 ======
+    // ====== 지장간 테이블 (여기, 중기, 정기) - v4.14.0 표준 수정 ======
     const JIJANGGAN = {
         0: [{s:8, w:0.33}, {s:9, w:0.67}],                   // 子: 壬(여기), 癸(정기)
         1: [{s:9, w:0.3}, {s:7, w:0.1}, {s:5, w:0.6}],      // 丑: 癸, 辛, 己
