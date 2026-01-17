@@ -69,10 +69,10 @@
         }
     });
     
-    // Console clear + warning
+    // Console clear + warning (safe)
+    try { console.clear(); } catch(e) {}
     const warningMsg = '%c⚠️ K-MUDANG Pro - Protected Content';
     const warningStyle = 'color: red; font-size: 20px; font-weight: bold;';
-    console.clear();
     console.log(warningMsg, warningStyle);
     console.log('%cUnauthorized access or modification is prohibited.', 'color: gray;');
 })();
@@ -1714,28 +1714,22 @@ footer a {
             </div>
 
             <!-- ===== Fortune Talisman Card ===== -->
-            <div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(139,0,0,0.1),rgba(184,134,11,0.05));border:1px solid rgba(184,134,11,0.3);">
-                <p style="font-size:1.2rem;margin-bottom:8px;">🏮 2026 Fortune Talisman</p>
+            <div class="card premium-section" id="card-talisman" style="text-align:center;background:linear-gradient(135deg,rgba(139,0,0,0.1),rgba(184,134,11,0.05));border:1px solid rgba(184,134,11,0.3);">
+                <h3>🏮 2026 Fortune Talisman <span class="premium-tag">👑 Premium</span></h3>
                 <p style="font-size:0.85rem;color:var(--gray);margin-bottom:15px;">
                     Generate your personal fortune talisman based on your Yongshin (用神)
                 </p>
-                <!-- Premium Lock Overlay -->
-                <div class="premium-lock" style="position:relative;">
-                    <div style="filter:blur(3px);opacity:0.5;pointer-events:none;">
-                        <div style="background:rgba(139,0,0,0.2);border-radius:12px;padding:30px;margin-bottom:15px;">
-                            <p style="font-size:3rem;">🏮</p>
-                            <p style="color:var(--gold);">Your Personalized Talisman</p>
-                        </div>
-                    </div>
-                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:100%;">
-                        <p style="font-size:2rem;margin-bottom:10px;">🔒</p>
-                        <p style="color:var(--gold);font-weight:bold;margin-bottom:15px;">Premium Feature</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:12px 24px;">
-                            🙏 Unlock with 福債
-                        </button>
+                
+                <!-- Premium Overlay (hidden when unlocked) -->
+                <div class="premium-overlay">
+                    <div class="premium-overlay-content">
+                        <p>🏮 Personalized Fortune Talisman</p>
+                        <p class="premium-price">$20 · 24-hour access</p>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">🙏 Unlock with 福債</button>
                     </div>
                 </div>
-                <!-- Unlocked Content (hidden by default) -->
+                
+                <!-- Talisman Content (visible when unlocked) -->
                 <div id="talisman-preview" style="display:none;margin-bottom:20px;">
                     <canvas id="talisman-canvas" width="400" height="640"></canvas>
                     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:15px;">
@@ -1747,7 +1741,7 @@ footer a {
                         </button>
                     </div>
                 </div>
-                <div id="talisman-btn-wrapper" class="premium-section" style="display:none;">
+                <div id="talisman-btn-wrapper">
                     <button class="btn" onclick="generateTalisman()" style="background:linear-gradient(135deg,#8B0000,#DC143C);width:100%;padding:15px;">
                         🏮 Generate My Talisman
                     </button>
@@ -2356,6 +2350,7 @@ let GENDER = 'm';
 let CALENDAR = 'solar';
 let SAJU = null;
 let GODS = null;
+let STRENGTH = null;  // 신강/신약 정보
 let BIRTH_YEAR = null;
 let currentNumbers = [];
 let history = [];
@@ -7478,6 +7473,7 @@ function analyzeSaju() {
         BIRTH_YEAR = y;
         const str = calcStrength(SAJU);
         if (!str) { toast('Strength calculation error'); return; }
+        STRENGTH = str;  // 전역 저장
         
         GODS = calcGods(SAJU, str);
         if (!GODS) { toast('Beneficial element calculation error'); return; }
