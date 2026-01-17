@@ -120,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentUser = user;
                 if (user) {
                     await checkPremiumStatus(user.uid);
+                    await checkPremiumByEmail(); // 이메일로도 체크
                     // Create/update user document
                     db.collection('users').doc(user.uid).set({
                         email: user.email,
@@ -142,9 +143,6 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => toast('⚠️ Login service error: ' + e.message), 1500);
         updateAuthUI(); // Still update UI even on error
     }
-    
-    // Check premium status on login
-    checkPremiumByEmail();
 });
 
 // Check premium status from Firestore
@@ -9634,7 +9632,7 @@ window.addEventListener('hashchange', handleUrlHash);
         <p>These Terms are governed by the laws of the Republic of Korea.</p>
         
         <h2>9. CONTACT</h2>
-        <p>For questions: <a href="mailto:kmudang.official@gmail.com">kmudang.official@gmail.com</a></p>
+        <p>For questions: <a href="https://mail.google.com/mail/?view=cm&to=kmudang.official@gmail.com" target="_blank"><span class="__cf_email__" data-cfemail="22494f5746434c450c4d44444b414b434e62454f434b4e0c414d4f">[email&#160;protected]</span></a></p>
     </div>
 </div>
 
@@ -9710,7 +9708,7 @@ window.addEventListener('hashchange', handleUrlHash);
         <p>We may update this Policy. Continued use means acceptance.</p>
         
         <h2>9. CONTACT</h2>
-        <p>Privacy questions: <a href="mailto:kmudang.official@gmail.com">kmudang.official@gmail.com</a></p>
+        <p>Privacy questions: <a href="https://mail.google.com/mail/?view=cm&to=kmudang.official@gmail.com" target="_blank"><span class="__cf_email__" data-cfemail="d3b8bea6b7b2bdb4fdbcb5b5bab0bab2bf93b4beb2babffdb0bcbe">[email&#160;protected]</span></a></p>
     </div>
 </div>
 
@@ -9737,7 +9735,7 @@ window.addEventListener('hashchange', handleUrlHash);
         <h2>3. HOW TO REQUEST</h2>
         <p>If you believe you qualify for an exception:</p>
         <ul>
-            <li>Email: <a href="mailto:kmudang.official@gmail.com">kmudang.official@gmail.com</a></li>
+            <li>Email: <a href="https://mail.google.com/mail/?view=cm&to=kmudang.official@gmail.com" target="_blank"><span class="__cf_email__" data-cfemail="91fafce4f5f0fff6bffef7f7f8f2f8f0fdd1f6fcf0f8fdbff2fefc">[email&#160;protected]</span></a></li>
             <li>Include: Your email, purchase date, reason</li>
             <li>Response time: Within 48 hours</li>
         </ul>
@@ -9746,7 +9744,7 @@ window.addEventListener('hashchange', handleUrlHash);
         <p>Approved refunds will be processed within 5-7 business days to the original payment method.</p>
         
         <h2>5. CONTACT</h2>
-        <p>Questions about refunds: <a href="mailto:kmudang.official@gmail.com">kmudang.official@gmail.com</a></p>
+        <p>Questions about refunds: <a href="https://mail.google.com/mail/?view=cm&to=kmudang.official@gmail.com" target="_blank"><span class="__cf_email__" data-cfemail="9bf0f6eefffaf5fcb5f4fdfdf2f8f2faf7dbfcf6faf2f7b5f8f4f6">[email&#160;protected]</span></a></p>
     </div>
 </div>
 
@@ -9891,28 +9889,4 @@ window.addEventListener('hashchange', handleUrlHash);
 
 .legal-footer .ip-notice {
     font-size: 0.75rem;
-    opacity: 0.7;
-}
-
-.legal-footer .legal-links {
-    margin-top: 15px;
-}
-
-.legal-footer .legal-links a {
-    color: var(--gold);
-    text-decoration: none;
-    transition: opacity 0.3s;
-}
-
-.legal-footer .legal-links a:hover {
-    opacity: 0.7;
-}
-
-/* Mobile Footer */
-@media (max-width: 768px) {
-    .legal-footer {
-        padding: 20px 15px;
-        font-size: 0.8rem;
-    }
-    .legal-footer .disclaimer {
-       
+    opacity: 0.7
