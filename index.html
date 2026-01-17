@@ -351,6 +351,7 @@ async function checkPremiumByEmail() {
    Premium Feature Gating
    ======================================== */
 function requirePremium(feature) {
+// OLD:
     if (!currentUser) {
         toast('🔒 Please login to access ' + feature);
         return false;
@@ -1418,7 +1419,7 @@ footer a {
             </div>
             <h1>K-MUDANG</h1>
             <span class="game-title">FORTUNE</span>
-            <p class="subtitle">Ancient Korean Zodiac Algorithm</p>
+            <p class="subtitle">The State of the Art · Algorithm + AI</p>
         </header>
 
         <div class="card">
@@ -1712,19 +1713,23 @@ footer a {
                     </div>
                 </div>
                 <div id="ai-interpretation"></div>
-                <div style="margin-top:25px;text-align:center;padding:20px;background:linear-gradient(135deg,rgba(103,58,183,0.1),rgba(156,39,176,0.05));border-radius:12px;">
-                    <p style="font-size:0.95rem;color:var(--gold);margin-bottom:8px;font-weight:bold;">
-                        🏆 The Pinnacle of Destiny Science
+                <div style="margin-top:25px; text-align:center; padding:30px 20px; background:linear-gradient(135deg, rgba(20,20,35,0.9), rgba(30,30,50,0.95)); border:1px solid rgba(212,175,55,0.3); border-radius:12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    
+                    <p style="font-size:1.2rem; background:linear-gradient(to right, #D4AF37, #FFE5B4, #D4AF37); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:15px; font-weight:700; letter-spacing:1.5px;">
+                        THE STATE OF THE ART
                     </p>
-                    <p style="font-size:0.85rem;color:var(--gold-light);margin-bottom:15px;font-style:italic;line-height:1.6;">
-                        Precision algorithms forged from classical texts, interpreted through cutting-edge AI.<br>
-                        This is the most advanced Four Pillars reading available today.
+
+                    <p style="font-size:0.95rem; color:#e0e0e0; line-height:1.6; margin-bottom:25px;">
+                        Classical precision meets modern AI.<br>
+                        This hybrid approach—our exact calculations paired with AI's insight—is <span style="color:var(--gold); font-weight:600;">the most advanced reading available today.</span>
                     </p>
-                    <button class="btn" onclick="copySajuForAI()" style="background:linear-gradient(135deg,#8E44AD,#3498DB);margin:5px;padding:14px 28px;font-size:15px;">
-                        📋 Copy for Gemini / ChatGPT
+
+                    <button class="btn" onclick="copySajuForAI()" style="background:linear-gradient(135deg,#6D28D9,#3B82F6); margin:0 auto; padding:16px 32px; font-size:16px; letter-spacing:0.5px; border-radius:50px; box-shadow:0 0 20px rgba(109, 40, 217, 0.4); font-weight:600;">
+                        ✨ Copy Full Analysis
                     </button>
-                    <p style="font-size:0.75rem;color:var(--gray);margin-top:12px;opacity:0.8;">
-                        Paste into AI for a deeply personalized narrative interpretation
+
+                    <p style="font-size:0.8rem; color:#9CA3AF; margin-top:18px;">
+                        Paste into <strong>Gemini</strong> or <strong>ChatGPT</strong> for a deep dive into your destiny.
                     </p>
                 </div>
             </div>
@@ -1838,7 +1843,7 @@ footer a {
             </div>
             <h1>K-MUDANG</h1>
             <span class="game-title">POWERBALL</span>
-            <p class="subtitle">Ancient Korean Zodiac Algorithm</p>
+            <p class="subtitle">The State of the Art · Algorithm + AI</p>
         </header>
 
         <div class="card">
@@ -1896,7 +1901,7 @@ footer a {
             </div>
             <h1>K-MUDANG</h1>
             <span class="game-title">MEGA MILLIONS</span>
-            <p class="subtitle">Ancient Korean Zodiac Algorithm</p>
+            <p class="subtitle">The State of the Art · Algorithm + AI</p>
         </header>
 
         <div class="card">
@@ -3529,7 +3534,7 @@ function calcStrength(saju) {
     // ====== 오행 관계 정의 ======
     const peerEl = dme;  // 비겁 (같은 오행)
     const sealEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 4) % 5];  // 인성 (나를 생함)
-    const exprEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 1) % 5];  // 식상 (내가 생함)
+    const exprEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 1) % 5];  // Expression (내가 생함)
     const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 2) % 5]; // 재성 (내가 극함)
     const officerEl = EL_ORDER[(EL_ORDER.indexOf(dme) + 3) % 5]; // 관성 (나를 극함)
     const myEls = [peerEl, sealEl];
@@ -3592,7 +3597,7 @@ function calcStrength(saju) {
                 if (pair.s2.e === peerEl) disabledPeers.push(idx2);
             }
             
-            factors.push({ l: '🔗 天干合', v: `${pair.s1.c}${pair.s2.c}合 (${pair.pos1}-${pair.pos2}) → 무력화`, p: false });
+            factors.push({ l: '🔗 天干合', v: `${pair.s1.c}${pair.s2.c}合 (${pair.pos1}-${pair.pos2}) → Neutralized`, p: false });
         }
     });
     
@@ -3631,7 +3636,7 @@ function calcStrength(saju) {
     score += ms * 6;  // 강화: *6
     
     const monthNames = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
-    factors.push({ l: '月令 득령', v: `${monthNames[mbi]}월 ${deukRyung ? '✓ 당령' : '✗ 실령'} (${ms >= 0 ? '+' : ''}${ms*6})`, p: deukRyung });
+    factors.push({ l: '月令 (Seasonal Power)', v: `${monthNames[mbi]}월 ${deukRyung ? '✓ In Season' : '✗ Out of Season'} (${ms >= 0 ? '+' : ''}${ms*6})`, p: deukRyung });
     
     // ====== ★★★ 3. 실제 통근 체크 (12운성 아닌 지장간 기준) ★★★ ======
     let realRootScore = 0;
@@ -3656,9 +3661,9 @@ function calcStrength(saju) {
     
     score += Math.min(realRootScore, 10);
     const rootStrong = realRootScore >= 2;
-    factors.push({ l: '通根 (실제뿌리)', v: rootStrong ? `✓ ${realRootScore.toFixed(1)}점` : `✗ 무근 (${realRootScore.toFixed(1)})`, p: rootStrong });
+    factors.push({ l: '通根 (Root Strength)', v: rootStrong ? `✓ ${realRootScore.toFixed(1)}pts` : `✗ No Root (${realRootScore.toFixed(1)})`, p: rootStrong });
     
-    // ====== ★★★ 4. 천간 비겁/인성 투출 (합 무력화 반영) ★★★ ======
+    // ====== ★★★ 4. 천간 비겁/인성 Revealed (합 무력화 반영) ★★★ ======
     let helpCount = 0;
     let attackCount = 0;
     let exprStemCount = 0;
@@ -3668,7 +3673,7 @@ function calcStrength(saju) {
         
         // 합으로 무력화된 천간은 도움 안됨
         if (disabledSeals.includes(si) || disabledPeers.includes(si)) {
-            factors.push({ l: '⚠️ 合去', v: `${st.c} 무력화됨`, p: false });
+            factors.push({ l: '⚠️ Merged Away', v: `${st.c} Neutralized`, p: false });
             return;
         }
         
@@ -3678,31 +3683,31 @@ function calcStrength(saju) {
         if (st.e === wealthEl) { attackCount++; score -= 1; }
         if (st.e === exprEl) { 
             exprStemCount++; 
-            score -= 2;  // 식상 설기
+            score -= 2;  // Expression Drain
         }
     });
     
-    if (helpCount > 0) factors.push({ l: '天干 비겁/인성', v: `${helpCount}개 투출`, p: true });
-    if (attackCount > 0) factors.push({ l: '天干 관/재 압박', v: `${attackCount}개`, p: false });
+    if (helpCount > 0) factors.push({ l: '天干 (Stem) Peer/Seal', v: `${helpCount} Revealed`, p: true });
+    if (attackCount > 0) factors.push({ l: '天干 (Stem) Officer/Wealth Pressure', v: `${attackCount}`, p: false });
     
-    // ====== ★★★ 5. 식상태과 강력 감점 (v4.12.1 강화) ★★★ ======
+    // ====== ★★★ 5. Expression Overflow 강력 감점 (v4.12.1 강화) ★★★ ======
     let exprTotal = exprStemCount;
     allBranches.forEach(b => { if (b.e === exprEl) exprTotal++; });
     
     if (exprTotal >= 3) {
-        score -= 4;  // 식상 3개 이상 = 강력 설기
-        factors.push({ l: '⚠️ 식상태과', v: `${exprTotal}개 → 설기과다 (−4)`, p: false });
+        score -= 4;  // Expression 3개 이상 = 강력 Drain
+        factors.push({ l: '⚠️ Expression Overflow', v: `${exprTotal} → Energy Drain (−4)`, p: false });
     } else if (exprStemCount >= 2) {
         score -= 2;
-        factors.push({ l: '⚠️ 식상 투출', v: `${exprStemCount}天干 (−2)`, p: false });
+        factors.push({ l: '⚠️ Expression Revealed', v: `${exprStemCount}天干 (−2)`, p: false });
     }
     
-    // ====== 6. 관살 압박 ======
+    // ====== 6. Officer Pressure ======
     let officerTotal = 0;
     [...allStems, ...allBranches].forEach(p => { if (p.e === officerEl) officerTotal++; });
     if (officerTotal >= 2) { 
         score -= 2; 
-        factors.push({ l: '관살 압박', v: `${officerTotal}개 (−2)`, p: false }); 
+        factors.push({ l: 'Officer Pressure', v: `${officerTotal} (−2)`, p: false }); 
     }
     
     // ====== 7. 방합(方合) 체크 ======
@@ -3719,16 +3724,16 @@ function calcStrength(saju) {
             directionalFormed = d;
             if (d.element === peerEl) {
                 score += 8;
-                factors.push({ l: '🔥 方合', v: `${d.name} → 비겁 (+8)`, p: true });
+                factors.push({ l: '🔥 方合', v: `${d.name} → Peer (+8)`, p: true });
             } else if (d.element === sealEl) {
                 score += 6;
-                factors.push({ l: '🔥 方合', v: `${d.name} → 인성 (+6)`, p: true });
+                factors.push({ l: '🔥 方合', v: `${d.name} → Seal (+6)`, p: true });
             } else if (d.element === exprEl) {
                 score -= 5;
-                factors.push({ l: '⚠️ 方合', v: `${d.name} → 설기 (−5)`, p: false });
+                factors.push({ l: '⚠️ 方合', v: `${d.name} → Drain (−5)`, p: false });
             } else if (d.element === officerEl) {
                 score -= 6;
-                factors.push({ l: '⚠️ 方合', v: `${d.name} → 압박 (−6)`, p: false });
+                factors.push({ l: '⚠️ 方合', v: `${d.name} → Pressure (−6)`, p: false });
             }
         }
     });
@@ -3746,13 +3751,13 @@ function calcStrength(saju) {
             if (th.branches.every(b => branchIndices.includes(b))) {
                 if (th.element === peerEl) {
                     score += 7;
-                    factors.push({ l: '🔥 三合', v: `${th.name} → 비겁 (+7)`, p: true });
+                    factors.push({ l: '🔥 三合', v: `${th.name} → Peer (+7)`, p: true });
                 } else if (th.element === sealEl) {
                     score += 5;
-                    factors.push({ l: '🔥 三合', v: `${th.name} → 인성 (+5)`, p: true });
+                    factors.push({ l: '🔥 三合', v: `${th.name} → Seal (+5)`, p: true });
                 } else if (th.element === exprEl) {
                     score -= 4;
-                    factors.push({ l: '⚠️ 三合', v: `${th.name} → 설기 (−4)`, p: false });
+                    factors.push({ l: '⚠️ 三合', v: `${th.name} → Drain (−4)`, p: false });
                 }
             }
         });
@@ -3772,7 +3777,7 @@ function calcStrength(saju) {
     if ((hasRealRoot.day || hasRealRoot.hour) && extreme === 'Extreme Weak') {
         extreme = null;
         type = 'weak';
-        factors.push({ l: '⚡ 뿌리 보정', v: '극신약→신약', p: true });
+        factors.push({ l: '⚡ Root Adjustment', v: 'Extremely Weak → Weak', p: true });
     }
     
     // ====== 퍼센트 변환 ======
@@ -4072,7 +4077,7 @@ function calcGods(saju, str) {
     // ★ 오행 카운트 (인성 과다/종격 체크용)
     const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
     const sealEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5]; // 인성 오행
-    const exprEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5]; // 식상 오행
+    const exprEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5]; // Expression 오행
     const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5]; // 재성 오행
     const officerEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5]; // 관성 오행
     
@@ -4082,11 +4087,11 @@ function calcGods(saju, str) {
     });
     
     // ====== 1. 종격(Follower) 체크 - v4.12.1 NEW ======
-    // 조건: 10% 미만 + 일지/시지 모두 무근
+    // 조건: 10% 미만 + 일지/시지 모두 No Root
     const noRoot = !str.dayRoot && !str.hourRoot;
     
     if (str.pct < 10 && noRoot) {
-        // 극신약 + 무근 = 종격 가능성
+        // 극신약 + No Root = 종격 가능성
         // 일간 오행 제외하고 가장 강한 오행
         const dmEl = dm.e;
         let maxEl = null, maxCount = 0;
@@ -4390,7 +4395,7 @@ function analyzeYukcheon(saju, gender) {
     const childCount = (result.counts[childGod[0]] || 0) + (result.counts[childGod[1]] || 0);
     const hourPillar = saju.hour;
     
-    // 🔥 시천간에 자녀성 투출 체크 - Gemini Round 4
+    // 🔥 시천간에 자녀성 Revealed 체크 - Gemini Round 4
     let hourStemChild = null;
     if (hourPillar) {
         const hourGod = getTenGod(hourPillar.s, dm);
@@ -4408,7 +4413,7 @@ function analyzeYukcheon(saju, gender) {
     if (!hourPillar) {
         childAnalysis = 'Birth hour needed for children analysis.';
     } else if (hourStemChild) {
-        // 시천간에 자녀성 투출!
+        // 시천간에 자녀성 Revealed!
         if (hourStemChild.underFire) {
             childAnalysis = `Children star (${hourStemChild.god}) REVEALED on Hour Stem but sitting on Fire - children may face challenges or live far away. Early independence benefits them.`;
         } else {
@@ -4594,7 +4599,7 @@ function checkSpecialFormat(saju, strength) {
     }
     
     if (strength.extreme === 'Extreme Weak') {
-        // Follower of Expression: 식상이 매우 많음
+        // Follower of Expression: Expression이 매우 많음
         if (godCounts.sikSang >= 3) return FORMATS_SPECIAL.jonga;
         // Follower of Wealth: 재성이 매우 많음 (지장간 포함 2.5 이상)
         if (godCounts.jae >= 2.5) return {...FORMATS_SPECIAL.jongjae, fakeFollower: true};
@@ -4691,7 +4696,7 @@ function calcFormat(saju, strength) {
     const mainStem = STEM[mainJj.stem];
     const god = getTenGod(mainStem, saju.day.s);
     
-    // ★★★ BUG-001 FIX: 년간+월간 투출 우선 체크 (v4.5 Patch) ★★★
+    // ★★★ BUG-001 FIX: 년간+월간 Revealed 우선 체크 (v4.5 Patch) ★★★
     const validStructureGods = ['食神(Eating God)','傷官(Expressor)','偏財(Indirect Wealth)','正財(Direct Wealth)','偏官(Challenger)','正官(Direct Officer)','偏印(Indirect Seal)','正印(Direct Seal)'];
     
     // 년간 십신 체크
@@ -4708,7 +4713,7 @@ function calcFormat(saju, strength) {
     const monthStemIdx = STEM.indexOf(saju.month.s);
     const monthHasRoot = jj.some(j => j.stem === monthStemIdx);
     
-    // 투출 십신 집계
+    // Revealed 십신 집계
     let emergentGods = {};
     if (validStructureGods.includes(yearGod.k) && yearHasRoot) {
         emergentGods[yearGod.k] = (emergentGods[yearGod.k] || 0) + 1;
@@ -4717,11 +4722,11 @@ function calcFormat(saju, strength) {
         emergentGods[monthGod.k] = (emergentGods[monthGod.k] || 0) + 1;
     }
     
-    // 가장 많이 투출된 십신을 격국으로 (투출이 없으면 월지 본기 사용)
+    // 가장 많이 Revealed된 십신을 격국으로 (Revealed이 없으면 월지 본기 사용)
     let finalGod = god.k;
     const emergentEntries = Object.entries(emergentGods);
     if (emergentEntries.length > 0) {
-        // 가장 많이 투출된 것 선택
+        // 가장 많이 Revealed된 것 선택
         emergentEntries.sort((a,b) => b[1] - a[1]);
         finalGod = emergentEntries[0][0];
     }
@@ -5109,7 +5114,7 @@ function ylCheckStemCombine(yp, saju, gods) {
                 let score = 0;
                 
                 // 🔥 천간합 배신 시나리오 - Gemini Round 10
-                // 비겁(조력자)이 재성(돈)과 합하여 관성(압박)으로 변하면 배신
+                // 비겁(조력자)이 재성(돈)과 합하여 관성(Pressure)으로 변하면 배신
                 const isPeer = ['比肩(Peer)', '劫財(Competitor)'].includes(ypGod.k);
                 const isWealth = ['偏財(Indirect Wealth)', '正財(Direct Wealth)'].includes(myGod.k);
                 const resultIsGi = resEl === gods.gi;
@@ -5255,7 +5260,7 @@ function ylCheckYongOverwhelmed(saju, gods) {
     const yongCount = elCount[gods.yong] || 0;
     const giCount = elCount[gods.gi] || 0;
     if (giCount >= 3 && yongCount <= 1 && giCount >= yongCount * 3) {
-        return { active: true, score: -2, desc: `⚠️ 쇠신충왕(衰神沖旺): 기신(${ELEMENT[gods.gi].k}) ${giCount}개 vs 용신(${ELEMENT[gods.yong].k}) ${yongCount}개 → 용신이 와도 압도됨!` };
+        return { active: true, score: -2, desc: `⚠️ 쇠신충왕(衰神沖旺): 기신(${ELEMENT[gods.gi].k}) ${giCount}개 vs 용신(${ELEMENT[gods.yong].k}) ${yongCount} → 용신이 와도 압도됨!` };
     }
     return { active: false, score: 0, desc: '' };
 }
@@ -6555,7 +6560,7 @@ function getJijanggan(branch) {
     return HIDDEN_STEMS[bi] || [];
 }
 
-// Check if specific stem exists in Hidden Stems (투출 여부)
+// Check if specific stem exists in Hidden Stems (Revealed 여부)
 function hasHiddenStem(branch, stemIdx) {
     const jj = getJijanggan(branch);
     return jj.some(j => j.stem === stemIdx);
@@ -8519,10 +8524,10 @@ ${(() => {
     return '';
 })()}
 ${(() => {
-    // 🔥 무식상(無食傷) 통관 부재 체크 - Gemini Round 5
+    // 🔥 무Expression(無食傷) 통관 부재 체크 - Gemini Round 5
     // 수화상전(水火相戰)인데 목(木)이 없는 경우
     const dm = SAJU.day.s;
-    const outputEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];  // 식상 오행
+    const outputEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];  // Expression 오행
     const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5];  // 재성 오행
     
     // 일간이 水이고 재성(火)이 강한데 木(통관)이 없는 경우
