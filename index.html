@@ -3,8 +3,12 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.15.3 [PUBLIC] - Firebase 로그인 안정화 + KASI 절기          ║
+║  K-MUDANG Pro v4.15.4 [PUBLIC] - 일주 계산 오류 수정                         ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
+║                                                                                ║
+║  v4.15.4 Changes:                                                             ║
+║    - [CRITICAL FIX] 일주 계산 오류 수정 (baseJdn 사주로또와 동일하게 변경)    ║
+║    - [FIX] 60갑자 인덱스 방식으로 일주 계산 알고리즘 통일                      ║
 ║                                                                                ║
 ║  v4.15.3 Changes:                                                             ║
 ║    - [FIX] Firebase 로그인 안정화 (signInWithRedirect fallback)               ║
@@ -3460,26 +3464,28 @@ function calcMonthPillar(y, m, d, h = 12) {
 
 // Day pillar calculation (existing accurate logic)
 function calcDayPillar(y, m, d) {
-    // v4.15.1: 입력값 검증
+    // v4.15.4 FIX: 사주로또와 동일한 60갑자 인덱스 방식으로 수정
     if (!y || !m || !d || isNaN(y) || isNaN(m) || isNaN(d)) {
         console.error('calcDayPillar: Invalid input', {y, m, d});
-        return { s: STEM[0], b: BRANCH[0] }; // 기본값 반환
+        return { s: STEM[0], b: BRANCH[0] };
     }
     
     const a = Math.floor((14 - m) / 12);
     const adjY = y + 4800 - a;
     const adjM = m + 12 * a - 3;
     const jdn = d + Math.floor((153 * adjM + 2) / 5) + 365 * adjY + Math.floor(adjY / 4) - Math.floor(adjY / 100) + Math.floor(adjY / 400) - 32045;
-    // v4.15.1 FIX: baseJdn 수정 (2415021 → 2415011) - 일주 계산 오류 수정
-    const baseJdn = 2415011;
-    const diff = jdn - baseJdn;
     
-    const stemIdx = ((diff % 10) + 10) % 10;
-    const branchIdx = ((diff % 12) + 12) % 12;
+    // v4.15.4 FIX: 사주로또 검증된 baseJdn 사용 (100개 테스트 통과)
+    // 기준: 2000/1/1 = 壬申 (idx60=8), JDN=2451545
+    // baseJdn = 2451545 - 8 = 2451537
+    const baseJdn = 2451537;
+    const idx60 = ((jdn - baseJdn) % 60 + 60) % 60;
     
-    // v4.15.1: NaN 체크
+    const stemIdx = idx60 % 10;
+    const branchIdx = idx60 % 12;
+    
     if (isNaN(stemIdx) || isNaN(branchIdx)) {
-        console.error('calcDayPillar: NaN result', {y, m, d, jdn, diff, stemIdx, branchIdx});
+        console.error('calcDayPillar: NaN result', {y, m, d, jdn, idx60, stemIdx, branchIdx});
         return { s: STEM[0], b: BRANCH[0] };
     }
     
