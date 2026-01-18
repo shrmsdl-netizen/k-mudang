@@ -3,26 +3,23 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.15.1 [PUBLIC] - 대운 정밀 계산 버전                          ║
+║  K-MUDANG Pro v4.15.3 [PUBLIC] - Firebase 로그인 안정화 + KASI 절기          ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
+║                                                                                ║
+║  v4.15.3 Changes:                                                             ║
+║    - [FIX] Firebase 로그인 안정화 (signInWithRedirect fallback)               ║
+║    - [KASI] 한국천문연구원 절기 데이터 100% 적용 (1940-2050)                  ║
+║    - [FIX] AI 복사 프롬프트에 생년월일시/양력음력/출생지역 추가               ║
 ║                                                                                ║
 ║  v4.15.1 Changes (大運 Precision Engine):                                     ║
 ║    - [MAJOR] 대운 시작 나이 정밀 계산 (분 단위 → 3일=1년 환산)                ║
-║    - [NEW] 정확한 대운 시작 연월일 계산 및 표시                                ║
 ║    - [NEW] 순행/역행 로직 양남음녀/음남양녀 정확 적용                          ║
 ║    - [NEW] 교운기(交運期) 경고 시스템 강화                                     ║
-║    - [NEW] 대운 상세 정보 패널 (시작일, 주요 이벤트 연도)                      ║
-║    - [FIX] 역행 대운 시 이전 절입일 기준 계산 오류 수정                        ║
-║    - [FIX] 1월생 절기 크로스 연도 처리 개선                                    ║
 ║    - Total: 75 AI Rules                                                       ║
-║                                                                                ║
-║  v4.14.1 Changes (Fortune Talisman Card):                                     ║
-║    - [CRITICAL] 지장간 12지지 전체 표준 수정 (오차 0%)                         ║
-║    - [KEEP] 쇠신충왕, 편인도식, 왕신충발 경고 패턴                             ║
 ║                                                                                ║
 ║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
 ║  Contact: kmudang.official@gmail.com                                          ║
-║  Last Updated: 2025-01-17                                                     ║
+║  Last Updated: 2025-01-18                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 -->
 <meta charset="UTF-8">
@@ -50,7 +47,7 @@
    🔒 PUBLIC EDITION - Firebase Auth
    Login Required | Premium Features Locked
    ======================================== */
-console.log('🔒 K-MUDANG Pro [PUBLIC EDITION] v4.15.1');
+console.log('🔒 K-MUDANG Pro [PUBLIC EDITION] v4.15.3 - KASI Verified');
 
 // Firebase Configuration (Production)
 const firebaseConfig = {
@@ -9389,10 +9386,19 @@ function copySajuForAI() {
         } catch(e) { criticalText = ''; }
         
         // Generate text
+        const locationSelect = document.getElementById('birth-location');
+        const locationText = locationSelect ? locationSelect.options[locationSelect.selectedIndex]?.text || 'Unknown' : 'Unknown';
+        const calendarText = CALENDAR === 'lunar' ? 'Lunar (음력)' : 'Solar (양력)';
+        const hourText = BIRTH_HOUR !== null && BIRTH_HOUR !== 12 ? `${BIRTH_HOUR}:00` : 'Unknown';
+        
         let text = `===== FOUR PILLARS OF DESTINY (SAJU) ANALYSIS =====
 
 ${criticalText}【BASIC INFO】
-• Birth Year: ${BIRTH_YEAR} (${GENDER === 'm' ? 'Male' : 'Female'}, Age ${age-1})
+• Birth Date: ${BIRTH_YEAR}-${String(BIRTH_MONTH).padStart(2,'0')}-${String(BIRTH_DAY).padStart(2,'0')} ${hourText}
+• Calendar: ${calendarText}
+• Gender: ${GENDER === 'm' ? 'Male (남)' : 'Female (여)'}
+• Birth Location: ${locationText}
+• Age: ${age-1} (Korean Age: ${age})
 • Day Master: ${dm.c} ${ELEMENT[dm.e].n} (${dm.c}${ELEMENT[dm.e].c})
 
 【FOUR PILLARS CHART (Year/Month/Day/Hour)】
