@@ -1497,6 +1497,11 @@ footer a {
                 </div>
             </div>
             <button class="btn" onclick="analyzeSaju()">🔮 Analyze Fortune</button>
+            <p style="font-size:0.85rem;color:#aaa;margin-top:10px;text-align:center;line-height:1.6;">
+                💡 After analysis, tap <strong style="color:#D4AF37;">Copy AI Prompt</strong> below.<br>
+                Paste into Gemini, ChatGPT, etc. to receive<br>
+                <strong style="color:#FFD700;">expert-level narrative reading based on precise Saju data</strong>.
+            </p>
         </div>
 
         <div id="saju-result" style="display:none;">
@@ -1839,11 +1844,24 @@ footer a {
                 <div class="form-group"><label>Day</label><select id="pb-day"></select></div>
                 <div class="form-group"><label>Year</label><select id="pb-year"></select></div>
             </div>
-            <button class="btn btn-secondary" onclick="generatePowerball('quick')">🎲 Quick Pick (Random)</button>
-            <div style="margin-top:15px;padding:12px;background:rgba(255,215,0,0.05);border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
-                <p style="font-size:0.8rem;color:var(--gold);margin-bottom:8px;">🔮 Want destiny-based numbers?</p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:8px 16px;font-size:12px;">
-                    👑 Unlock Destiny Numbers
+            
+            <!-- v4.15.5: 3-tier system -->
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:15px;">
+                <button class="btn btn-secondary" onclick="generatePowerball('quick')" style="width:100%;">
+                    🎲 Quick Pick <span style="font-size:0.75rem;opacity:0.7;">(Random)</span>
+                </button>
+                <button class="btn" onclick="generatePowerball('destiny')" style="width:100%;background:linear-gradient(135deg,#2d5016,#4a7c23);">
+                    🔮 Basic Destiny <span style="font-size:0.75rem;opacity:0.7;">(Yongsin Only - FREE)</span>
+                </button>
+            </div>
+            
+            <div style="margin-top:15px;padding:12px;background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,193,7,0.05));border-radius:8px;border:1px solid rgba(212,175,55,0.3);">
+                <p style="font-size:0.85rem;color:var(--gold);margin-bottom:8px;font-weight:600;">✨ Advanced Destiny Algorithm</p>
+                <p style="font-size:0.75rem;color:#aaa;margin-bottom:10px;">
+                    Weighted system using Yongsin (3×), Heesin (2×), and avoiding Gisin (0.5×)
+                </p>
+                <button class="btn" onclick="generatePowerball('advanced')" style="width:100%;background:linear-gradient(135deg,#8B0000,#DC143C);">
+                    👑 Advanced Destiny <span style="font-size:0.75rem;opacity:0.9;">(Premium)</span>
                 </button>
             </div>
         </div>
@@ -1897,11 +1915,24 @@ footer a {
                 <div class="form-group"><label>Day</label><select id="mega-day"></select></div>
                 <div class="form-group"><label>Year</label><select id="mega-year"></select></div>
             </div>
-            <button class="btn btn-secondary" onclick="generateMega('quick')">🎲 Quick Pick (Random)</button>
-            <div style="margin-top:15px;padding:12px;background:rgba(255,215,0,0.05);border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
-                <p style="font-size:0.8rem;color:var(--gold);margin-bottom:8px;">🔮 Want destiny-based numbers?</p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:8px 16px;font-size:12px;">
-                    👑 Unlock Destiny Numbers
+            
+            <!-- v4.15.5: 3-tier system -->
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:15px;">
+                <button class="btn btn-secondary" onclick="generateMega('quick')" style="width:100%;">
+                    🎲 Quick Pick <span style="font-size:0.75rem;opacity:0.7;">(Random)</span>
+                </button>
+                <button class="btn" onclick="generateMega('destiny')" style="width:100%;background:linear-gradient(135deg,#1a3a5c,#2d5a87);">
+                    🔮 Basic Destiny <span style="font-size:0.75rem;opacity:0.7;">(Yongsin Only - FREE)</span>
+                </button>
+            </div>
+            
+            <div style="margin-top:15px;padding:12px;background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,193,7,0.05));border-radius:8px;border:1px solid rgba(212,175,55,0.3);">
+                <p style="font-size:0.85rem;color:var(--gold);margin-bottom:8px;font-weight:600;">✨ Advanced Destiny Algorithm</p>
+                <p style="font-size:0.75rem;color:#aaa;margin-bottom:10px;">
+                    Weighted system using Yongsin (3×), Heesin (2×), and avoiding Gisin (0.5×)
+                </p>
+                <button class="btn" onclick="generateMega('advanced')" style="width:100%;background:linear-gradient(135deg,#8B0000,#DC143C);">
+                    👑 Advanced Destiny <span style="font-size:0.75rem;opacity:0.9;">(Premium)</span>
                 </button>
             </div>
         </div>
@@ -9951,8 +9982,9 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - Example: Winter chart shows Fire=0, but Day Branch 未 contains hidden 丁火 → "Your only warmth hides in spouse palace. Domestic harmony is your key to fortune."
 - Example: Summer chart shows Water=0, but Day Branch 辰 contains hidden 癸水 → "Inner wisdom (day branch) cools your excess heat. Meditation and study are your remedies."
 
-**RULE 8. DOMINANT CLASH CONSERVATIVE STANCE (旺神沖發 守成論)**
+**RULE 8. DOMINANT CLASH CONSERVATIVE STANCE (旺神沖發 守成論) - OVERRIDES RULE 1**
 - When one element has 4+ count (DOMINANT) and Annual Branch clashes it, even if it brings Beneficial Element, prioritize "DEFENSE" over "EXPANSION."
+- **CRITICAL: This rule OVERRIDES Rule 1 (Climate First).** Even if Fire is the climate savior for a winter chart, if Water is DOMINANT (4+) and Fire clashes it, the danger outweighs the benefit.
 - Example: Water=5 + 2026 午(Fire) clash 子 → "Beneficial Fire arrived BUT it pokes the tsunami. Expansion is dangerous. Health management and status quo are best."
 - Dominant Clash + Beneficial Year = "Opportunity arrived but risk is maximized. No aggressive investment/expansion. Switch to defense mode."
 - Health: BOTH dominant element organs AND clashing element organs are at risk. Water dominant + Fire clash → Kidney/Bladder + Heart/Blood vessels both require attention.
@@ -10393,9 +10425,9 @@ function getYongsinElement(saju) {
 }
 
 function generatePowerball(type) {
-    // Premium check for destiny-based numbers
-    if (type === 'destiny' && !isPremium) {
-        toast('👑 Destiny Numbers require Premium. Please offer 福債.');
+    // v4.15.5: Premium check only for 'advanced' type
+    if (type === 'advanced' && !isPremium) {
+        toast('👑 Advanced Destiny requires Premium. Please offer 福債.');
         openPremiumCheckout();
         return;
     }
@@ -10406,70 +10438,10 @@ function generatePowerball(type) {
     
     let numbers = [];
     let powerball;
+    let typeLabel = 'QUICK';
     
-    if(type === 'destiny' && y && m && d) {
-        // v4.14.7: 사주 탭에서 이미 분석된 데이터가 있으면 활용
-        let saju, yongsin;
-        if (SAJU && GODS && BIRTH_YEAR === y) {
-            saju = SAJU;
-            yongsin = GODS.yong;
-        } else {
-            // 사주 분석이 안 됐으면 직접 계산
-            saju = {
-                year: calcYearPillar(y, m, d),
-                month: calcMonthPillar(y, m, d),
-                day: calcDayPillar(y, m, d)
-            };
-            yongsin = getYongsinElement(saju);
-        }
-        
-        const luckyNums = getElementNumbers(yongsin, 69);
-        
-        // Generate hash seed (including Saju info)
-        const dayElement = saju.day.s.e;
-        const seed = `${y}-${m}-${d}-${dayElement}-${yongsin}-PB-${Date.now()}`;
-        let hash = 0;
-        for(let i = 0; i < seed.length; i++) {
-            hash = ((hash << 5) - hash) + seed.charCodeAt(i);
-            hash = hash & hash;
-        }
-        
-        const used = new Set();
-        
-        // 1) Include 2 Yongsin element numbers
-        for(let i = 0; i < 2 && luckyNums.length > 0; i++) {
-            hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
-            const idx = hash % luckyNums.length;
-            const n = luckyNums[idx];
-            if(!used.has(n)) {
-                used.add(n);
-                numbers.push(n);
-            }
-        }
-        
-        // 2) Remaining numbers hash-based
-        while(numbers.length < 5) {
-            hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
-            const n = (hash % 69) + 1;
-            if(!used.has(n)) {
-                used.add(n);
-                numbers.push(n);
-            }
-        }
-        numbers.sort((a,b) => a-b);
-        
-        // Powerball (1-26) - 용신 오행 반영
-        const luckyPB = getElementNumbers(yongsin, 26);
-        hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
-        if(luckyPB.length > 0 && hash % 3 !== 0) {  // 66% chance for Yongsin number
-            powerball = luckyPB[hash % luckyPB.length];
-        } else {
-            powerball = (hash % 26) + 1;
-        }
-        
-        toast(`🔮 Destiny numbers generated! (${yongsin.toUpperCase()} energy)`);
-    } else {
-        // Quick Pick
+    if (type === 'quick') {
+        // ========== QUICK PICK (FREE) - Pure Random ==========
         const used = new Set();
         while(numbers.length < 5) {
             const n = Math.floor(Math.random() * 69) + 1;
@@ -10480,8 +10452,140 @@ function generatePowerball(type) {
         }
         numbers.sort((a,b) => a-b);
         powerball = Math.floor(Math.random() * 26) + 1;
-        
+        typeLabel = 'QUICK';
         toast('🎲 Quick Pick generated!');
+        
+    } else if (type === 'destiny' && y && m && d) {
+        // ========== BASIC DESTINY (FREE) - Yongsin Only ==========
+        let saju, yongsin;
+        if (SAJU && GODS && BIRTH_YEAR === y) {
+            saju = SAJU;
+            yongsin = GODS.yong;
+        } else {
+            saju = {
+                year: calcYearPillar(y, m, d),
+                month: calcMonthPillar(y, m, d),
+                day: calcDayPillar(y, m, d)
+            };
+            yongsin = getYongsinElement(saju);
+        }
+        
+        const luckyNums = getElementNumbers(yongsin, 69);
+        
+        // Hash seed for reproducibility
+        const seed = `${y}-${m}-${d}-${yongsin}-PB-${Date.now()}`;
+        let hash = 0;
+        for(let i = 0; i < seed.length; i++) {
+            hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+            hash = hash & hash;
+        }
+        
+        const used = new Set();
+        
+        // Include 2 Yongsin element numbers
+        for(let i = 0; i < 2 && luckyNums.length > 0; i++) {
+            hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+            const idx = hash % luckyNums.length;
+            const n = luckyNums[idx];
+            if(!used.has(n)) {
+                used.add(n);
+                numbers.push(n);
+            }
+        }
+        
+        // Remaining numbers hash-based
+        while(numbers.length < 5) {
+            hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+            const n = (hash % 69) + 1;
+            if(!used.has(n)) {
+                used.add(n);
+                numbers.push(n);
+            }
+        }
+        numbers.sort((a,b) => a-b);
+        
+        // Powerball
+        const luckyPB = getElementNumbers(yongsin, 26);
+        hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+        if(luckyPB.length > 0 && hash % 3 !== 0) {
+            powerball = luckyPB[hash % luckyPB.length];
+        } else {
+            powerball = (hash % 26) + 1;
+        }
+        
+        typeLabel = 'DESTINY';
+        toast(`🔮 Basic Destiny: ${yongsin.toUpperCase()} energy`);
+        
+    } else if (type === 'advanced' && y && m && d) {
+        // ========== ADVANCED DESTINY (PREMIUM) - Weighted Algorithm ==========
+        let saju, gods;
+        if (SAJU && GODS && BIRTH_YEAR === y) {
+            saju = SAJU;
+            gods = GODS;
+        } else {
+            saju = {
+                year: calcYearPillar(y, m, d),
+                month: calcMonthPillar(y, m, d),
+                day: calcDayPillar(y, m, d)
+            };
+            const yongEl = getYongsinElement(saju);
+            const supportMap = {water:'wood', wood:'fire', fire:'earth', earth:'metal', metal:'water'};
+            const attackMap = {water:'fire', fire:'metal', metal:'wood', wood:'earth', earth:'water'};
+            gods = {
+                yong: yongEl,
+                hee: supportMap[yongEl] || 'fire',
+                gi: attackMap[yongEl] || 'water'
+            };
+        }
+        
+        // 용신/희신/기신 번호 추출
+        const yongNums = getElementNumbers(gods.yong, 69);
+        const heeNums = getElementNumbers(gods.hee, 69);
+        const giNums = getElementNumbers(gods.gi, 69);
+        
+        // 가중치 풀 생성 (사주로또 Pro 방식)
+        let weightedPool = [];
+        for (let i = 1; i <= 69; i++) {
+            let weight = 1;
+            if (yongNums.includes(i)) weight = 3;       // 용신: 3배
+            else if (heeNums.includes(i)) weight = 2;   // 희신: 2배
+            else if (giNums.includes(i)) weight = 0.5;  // 기신: 0.5배 (회피)
+            for (let j = 0; j < weight * 2; j++) weightedPool.push(i);
+        }
+        
+        // 가중치 풀에서 5개 선택
+        const selected = new Set();
+        let attempts = 0;
+        while (selected.size < 5 && attempts < 1000) {
+            const idx = Math.floor(Math.random() * weightedPool.length);
+            selected.add(weightedPool[idx]);
+            attempts++;
+        }
+        numbers = [...selected].sort((a, b) => a - b);
+        
+        // Powerball (1-26) - 가중치 적용
+        const yongPB = getElementNumbers(gods.yong, 26);
+        const heePB = getElementNumbers(gods.hee, 26);
+        const giPB = getElementNumbers(gods.gi, 26);
+        
+        let pbPool = [];
+        for (let i = 1; i <= 26; i++) {
+            let weight = 1;
+            if (yongPB.includes(i)) weight = 3;
+            else if (heePB.includes(i)) weight = 2;
+            else if (giPB.includes(i)) weight = 0.5;
+            for (let j = 0; j < weight * 2; j++) pbPool.push(i);
+        }
+        powerball = pbPool[Math.floor(Math.random() * pbPool.length)];
+        
+        const yongCount = numbers.filter(n => yongNums.includes(n)).length;
+        const giCount = numbers.filter(n => giNums.includes(n)).length;
+        typeLabel = 'ADVANCED';
+        toast(`✨ Advanced: ${gods.yong.toUpperCase()} ×${yongCount} | Avoided ${gods.gi.toUpperCase()}`);
+        
+    } else {
+        toast('⚠️ Please enter your birth date');
+        return;
     }
     
     // Display
@@ -10508,7 +10612,7 @@ function generatePowerball(type) {
     document.getElementById('pb-result').style.display = 'block';
     
     // Save to history
-    pbHistory.unshift({ type: type === 'destiny' ? 'DESTINY' : 'QUICK', numbers, powerball });
+    pbHistory.unshift({ type: typeLabel, numbers, powerball });
     if(pbHistory.length > 5) pbHistory.pop();
     renderPbHistory();
 }
@@ -10528,9 +10632,9 @@ function renderPbHistory() {
 }
 
 function generateMega(type) {
-    // Premium check for destiny-based numbers
-    if (type === 'destiny' && !isPremium) {
-        toast('👑 Destiny Numbers require Premium. Please offer 福債.');
+    // v4.15.5: Premium check only for 'advanced' type
+    if (type === 'advanced' && !isPremium) {
+        toast('👑 Advanced Destiny requires Premium. Please offer 福債.');
         openPremiumCheckout();
         return;
     }
@@ -10541,69 +10645,10 @@ function generateMega(type) {
     
     let numbers = [];
     let megaball;
+    let typeLabel = 'QUICK';
     
-    if(type === 'destiny' && y && m && d) {
-        // v4.14.7: 사주 탭에서 이미 분석된 데이터가 있으면 활용
-        let saju, yongsin;
-        if (SAJU && GODS && BIRTH_YEAR === y) {
-            saju = SAJU;
-            yongsin = GODS.yong;
-        } else {
-            // 사주 분석이 안 됐으면 직접 계산
-            saju = {
-                year: calcYearPillar(y, m, d),
-                month: calcMonthPillar(y, m, d),
-                day: calcDayPillar(y, m, d)
-            };
-            yongsin = getYongsinElement(saju);
-        }
-        
-        const luckyNums = getElementNumbers(yongsin, 70);
-        
-        // Generate hash seed (including Saju info)
-        const dayElement = saju.day.s.e;
-        const seed = `${y}-${m}-${d}-${dayElement}-${yongsin}-MEGA-${Date.now()}`;
-        let hash = 0;
-        for(let i = 0; i < seed.length; i++) {
-            hash = ((hash << 5) - hash) + seed.charCodeAt(i);
-            hash = hash & hash;
-        }
-        
-        const used = new Set();
-        
-        // 1) Include 2 Yongsin element numbers
-        for(let i = 0; i < 2 && luckyNums.length > 0; i++) {
-            hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
-            const idx = hash % luckyNums.length;
-            const n = luckyNums[idx];
-            if(!used.has(n)) {
-                used.add(n);
-                numbers.push(n);
-            }
-        }
-        
-        // 2) Remaining numbers hash-based
-        while(numbers.length < 5) {
-            hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
-            const n = (hash % 70) + 1;
-            if(!used.has(n)) {
-                used.add(n);
-                numbers.push(n);
-            }
-        }
-        numbers.sort((a,b) => a-b);
-        
-        // Megaball (1-25) - 용신 오행 반영
-        const luckyMB = getElementNumbers(yongsin, 25);
-        hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
-        if(luckyMB.length > 0 && hash % 3 !== 0) {  // 66% chance for Yongsin number
-            megaball = luckyMB[hash % luckyMB.length];
-        } else {
-            megaball = (hash % 25) + 1;
-        }
-        
-        toast(`🔮 Destiny numbers generated! (${yongsin.toUpperCase()} energy)`);
-    } else {
+    if (type === 'quick') {
+        // ========== QUICK PICK (FREE) - Pure Random ==========
         const used = new Set();
         while(numbers.length < 5) {
             const n = Math.floor(Math.random() * 70) + 1;
@@ -10614,8 +10659,139 @@ function generateMega(type) {
         }
         numbers.sort((a,b) => a-b);
         megaball = Math.floor(Math.random() * 25) + 1;
-        
+        typeLabel = 'QUICK';
         toast('🎲 Quick Pick generated!');
+        
+    } else if (type === 'destiny' && y && m && d) {
+        // ========== BASIC DESTINY (FREE) - Yongsin Only ==========
+        let saju, yongsin;
+        if (SAJU && GODS && BIRTH_YEAR === y) {
+            saju = SAJU;
+            yongsin = GODS.yong;
+        } else {
+            saju = {
+                year: calcYearPillar(y, m, d),
+                month: calcMonthPillar(y, m, d),
+                day: calcDayPillar(y, m, d)
+            };
+            yongsin = getYongsinElement(saju);
+        }
+        
+        const luckyNums = getElementNumbers(yongsin, 70);
+        
+        // Hash seed for reproducibility
+        const seed = `${y}-${m}-${d}-${yongsin}-MEGA-${Date.now()}`;
+        let hash = 0;
+        for(let i = 0; i < seed.length; i++) {
+            hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+            hash = hash & hash;
+        }
+        
+        const used = new Set();
+        
+        // Include 2 Yongsin element numbers
+        for(let i = 0; i < 2 && luckyNums.length > 0; i++) {
+            hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+            const idx = hash % luckyNums.length;
+            const n = luckyNums[idx];
+            if(!used.has(n)) {
+                used.add(n);
+                numbers.push(n);
+            }
+        }
+        
+        // Remaining numbers hash-based
+        while(numbers.length < 5) {
+            hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+            const n = (hash % 70) + 1;
+            if(!used.has(n)) {
+                used.add(n);
+                numbers.push(n);
+            }
+        }
+        numbers.sort((a,b) => a-b);
+        
+        // Megaball
+        const luckyMB = getElementNumbers(yongsin, 25);
+        hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+        if(luckyMB.length > 0 && hash % 3 !== 0) {
+            megaball = luckyMB[hash % luckyMB.length];
+        } else {
+            megaball = (hash % 25) + 1;
+        }
+        
+        typeLabel = 'DESTINY';
+        toast(`🔮 Basic Destiny: ${yongsin.toUpperCase()} energy`);
+        
+    } else if (type === 'advanced' && y && m && d) {
+        // ========== ADVANCED DESTINY (PREMIUM) - Weighted Algorithm ==========
+        let saju, gods;
+        if (SAJU && GODS && BIRTH_YEAR === y) {
+            saju = SAJU;
+            gods = GODS;
+        } else {
+            saju = {
+                year: calcYearPillar(y, m, d),
+                month: calcMonthPillar(y, m, d),
+                day: calcDayPillar(y, m, d)
+            };
+            const yongEl = getYongsinElement(saju);
+            const supportMap = {water:'wood', wood:'fire', fire:'earth', earth:'metal', metal:'water'};
+            const attackMap = {water:'fire', fire:'metal', metal:'wood', wood:'earth', earth:'water'};
+            gods = {
+                yong: yongEl,
+                hee: supportMap[yongEl] || 'fire',
+                gi: attackMap[yongEl] || 'water'
+            };
+        }
+        
+        // 용신/희신/기신 번호 추출
+        const yongNums = getElementNumbers(gods.yong, 70);
+        const heeNums = getElementNumbers(gods.hee, 70);
+        const giNums = getElementNumbers(gods.gi, 70);
+        
+        // 가중치 풀 생성 (사주로또 Pro 방식)
+        let weightedPool = [];
+        for (let i = 1; i <= 70; i++) {
+            let weight = 1;
+            if (yongNums.includes(i)) weight = 3;       // 용신: 3배
+            else if (heeNums.includes(i)) weight = 2;   // 희신: 2배
+            else if (giNums.includes(i)) weight = 0.5;  // 기신: 0.5배 (회피)
+            for (let j = 0; j < weight * 2; j++) weightedPool.push(i);
+        }
+        
+        // 가중치 풀에서 5개 선택
+        const selected = new Set();
+        let attempts = 0;
+        while (selected.size < 5 && attempts < 1000) {
+            const idx = Math.floor(Math.random() * weightedPool.length);
+            selected.add(weightedPool[idx]);
+            attempts++;
+        }
+        numbers = [...selected].sort((a, b) => a - b);
+        
+        // Megaball (1-25) - 가중치 적용
+        const yongMB = getElementNumbers(gods.yong, 25);
+        const heeMB = getElementNumbers(gods.hee, 25);
+        const giMB = getElementNumbers(gods.gi, 25);
+        
+        let mbPool = [];
+        for (let i = 1; i <= 25; i++) {
+            let weight = 1;
+            if (yongMB.includes(i)) weight = 3;
+            else if (heeMB.includes(i)) weight = 2;
+            else if (giMB.includes(i)) weight = 0.5;
+            for (let j = 0; j < weight * 2; j++) mbPool.push(i);
+        }
+        megaball = mbPool[Math.floor(Math.random() * mbPool.length)];
+        
+        const yongCount = numbers.filter(n => yongNums.includes(n)).length;
+        typeLabel = 'ADVANCED';
+        toast(`✨ Advanced: ${gods.yong.toUpperCase()} ×${yongCount} | Avoided ${gods.gi.toUpperCase()}`);
+        
+    } else {
+        toast('⚠️ Please enter your birth date');
+        return;
     }
     
     const container = document.getElementById('mega-balls');
@@ -10640,7 +10816,7 @@ function generateMega(type) {
     
     document.getElementById('mega-result').style.display = 'block';
     
-    megaHistory.unshift({ type: type === 'destiny' ? 'DESTINY' : 'QUICK', numbers, megaball });
+    megaHistory.unshift({ type: typeLabel, numbers, megaball });
     if(megaHistory.length > 5) megaHistory.pop();
     renderMegaHistory();
 }
