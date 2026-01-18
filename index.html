@@ -3,7 +3,7 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.15.4 [PUBLIC] - 일주 계산 오류 수정                         ║
+║  K-MUDANG Pro v4.15.5 [PUBLIC] - Rule 6~8 추가 + 음력 표기 개선              ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  v4.15.4 Changes:                                                             ║
@@ -19,7 +19,7 @@
 ║    - [MAJOR] 대운 시작 나이 정밀 계산 (분 단위 → 3일=1년 환산)                ║
 ║    - [NEW] 순행/역행 로직 양남음녀/음남양녀 정확 적용                          ║
 ║    - [NEW] 교운기(交運期) 경고 시스템 강화                                     ║
-║    - Total: 75 AI Rules                                                       ║
+║    - Total: 78 AI Rules                                                       ║
 ║                                                                                ║
 ║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
 ║  Contact: kmudang.official@gmail.com                                          ║
@@ -2357,6 +2357,10 @@ let BIRTH_YEAR = null;
 let BIRTH_MONTH = null;  // v4.15.1: 대운 정밀 계산용
 let BIRTH_DAY = null;    // v4.15.1: 대운 정밀 계산용
 let BIRTH_HOUR = null;   // v4.15.1: 대운 정밀 계산용
+// v4.15.5: 음력 입력 시 원래 값 저장 (표시용)
+let ORIGINAL_LUNAR_YEAR = null;
+let ORIGINAL_LUNAR_MONTH = null;
+let ORIGINAL_LUNAR_DAY = null;
 let currentNumbers = [];
 let history = [];
 
@@ -8053,10 +8057,18 @@ function analyzeSaju() {
         if (d < 1 || d > 31) { toast('Day must be between 1-31'); return; }
         
         let sy = y, sm = m, sd = d;
+        // v4.15.5: 음력 입력 시 원래 값 저장 (표시용)
         if (CALENDAR === 'lunar') {
+            ORIGINAL_LUNAR_YEAR = y;
+            ORIGINAL_LUNAR_MONTH = m;
+            ORIGINAL_LUNAR_DAY = d;
             const conv = lunarToSolar(y, m, d);
             if (!conv || !conv.year) { toast('Lunar conversion error. Try solar calendar'); return; }
             sy = conv.year; sm = conv.month; sd = conv.day;
+        } else {
+            ORIGINAL_LUNAR_YEAR = null;
+            ORIGINAL_LUNAR_MONTH = null;
+            ORIGINAL_LUNAR_DAY = null;
         }
         
         const adj = adjustTime(sy, sm, sd, hourVal);
@@ -9394,7 +9406,14 @@ function copySajuForAI() {
         // Generate text
         const locationSelect = document.getElementById('birth-location');
         const locationText = locationSelect ? locationSelect.options[locationSelect.selectedIndex]?.text || 'Unknown' : 'Unknown';
-        const calendarText = CALENDAR === 'lunar' ? 'Lunar (음력)' : 'Solar (양력)';
+        
+        // v4.15.5: 음력 입력 시 원래 날짜도 명확히 표시
+        let calendarText;
+        if (CALENDAR === 'lunar' && ORIGINAL_LUNAR_YEAR) {
+            calendarText = `Solar (양력) ← Converted from Lunar ${ORIGINAL_LUNAR_MONTH}/${ORIGINAL_LUNAR_DAY} (음력 ${ORIGINAL_LUNAR_MONTH}월 ${ORIGINAL_LUNAR_DAY}일)`;
+        } else {
+            calendarText = 'Solar (양력)';
+        }
         
         // 시(時) 정보 - 진태양시 기준 시간대 포함
         const HOUR_RANGES = {
@@ -9919,6 +9938,24 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 **RULE 5. WEALTH INTERPRETATION HIERARCHY**
 - Weak Chart (0-30%) + Wealth Structure = "Anxious Chaser" NOT "Steady Builder"
 - Strong Chart (70%+) + Peer Year = "Robbery Warning" - wealth is threatened by rivals
+
+**RULE 6. STRUCTURE LABEL vs ACTUAL POWER CORRECTION (格局 vs 透出)**
+- Even if data shows "Direct Wealth Structure," if Indirect Wealth (偏財) is revealed in stems AND wealth stars total 3+, interpret as "Wealth-Heavy Weak Chart" perspective.
+- Direct Wealth label + Indirect Wealth revealed = NOT "Steady Salaryman" but "Speculative tendencies with insufficient stamina"
+- Direct Officer label + Seven Killings revealed = NOT "Gentle employee" but "Leader burdened with heavy responsibility and pressure"
+- CORE: Prioritize REVEALED TEN GODS in stems and ELEMENT COUNT over the Structure label name.
+
+**RULE 7. HIDDEN STEM CLIMATE SAVIOR (支藏干 調候)**
+- Even if data shows "0 count" for an element, CHECK hidden stems for that element.
+- If the CLIMATE BENEFICIAL (Fire for cold chart, Water for hot chart) exists ONLY in hidden stems, it is the "Hidden Lifeline."
+- Example: Winter chart shows Fire=0, but Day Branch 未 contains hidden 丁火 → "Your only warmth hides in spouse palace. Domestic harmony is your key to fortune."
+- Example: Summer chart shows Water=0, but Day Branch 辰 contains hidden 癸水 → "Inner wisdom (day branch) cools your excess heat. Meditation and study are your remedies."
+
+**RULE 8. DOMINANT CLASH CONSERVATIVE STANCE (旺神沖發 守成論)**
+- When one element has 4+ count (DOMINANT) and Annual Branch clashes it, even if it brings Beneficial Element, prioritize "DEFENSE" over "EXPANSION."
+- Example: Water=5 + 2026 午(Fire) clash 子 → "Beneficial Fire arrived BUT it pokes the tsunami. Expansion is dangerous. Health management and status quo are best."
+- Dominant Clash + Beneficial Year = "Opportunity arrived but risk is maximized. No aggressive investment/expansion. Switch to defense mode."
+- Health: BOTH dominant element organs AND clashing element organs are at risk. Water dominant + Fire clash → Kidney/Bladder + Heart/Blood vessels both require attention.
 
 [INTERPRETATION GUIDELINES]
 1. **Handling Conflicts:** If 'Six Relations' shows "Hidden" spouse/children but 'Divine Stars' shows Golden Carriage or similar blessings, prioritize Divine Stars as "hidden potential." Explain that the blessing exists but requires the right timing (Life Cycle) to manifest.
