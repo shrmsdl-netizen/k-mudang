@@ -3243,66 +3243,67 @@ function updateTimezoneInfo() {
     const info = document.getElementById('timezone-info');
     if (!info) return;
     
-    // 한국은 메시지 없음, 나머지는 자동 변환 안내
+    // Korea/Japan: no message, others: auto-conversion notice
     if (loc === 'korea' || loc === 'japan') {
         info.style.display = 'none';
     } else {
-        info.textContent = '💡 현지 출생시간 → 한국 표준시로 자동 변환';
+        info.textContent = '💡 Local birth time → Auto-converted to Korea Standard Time';
         info.style.display = 'block';
     }
 }
 
-// v4.14.7: 지역별 시차 계산 (한국시 UTC+9 기준 오프셋)
+// v4.15.5: Timezone offset calculation (relative to Korea UTC+9)
 function getTimezoneOffset(location, year, month) {
-    // 서머타임 대략 체크 (북반구 3~10월, 남반구는 반대)
+    // DST check (Northern Hemisphere: Mar-Oct, Southern: opposite)
     const isDST = (month >= 3 && month <= 10);
     
-    // 한국시(UTC+9) 기준 오프셋 (해당 지역 현지시간에 더해서 한국시로 변환)
+    // Offset to ADD to local time to get Korea time (UTC+9)
+    // Formula: Korea(+9) - LocalTZ = offset
     const offsets = {
-        // 한국/일본 (UTC+9) - 오프셋 0
+        // Korea/Japan (UTC+9) - no offset
         'korea': 0, 'japan': 0,
         
-        // 미국
-        'us-pacific': isDST ? -16 : -17,      // CA, WA, OR (UTC-7/-8)
-        'us-mountain': isDST ? -15 : -16,     // CO, AZ, UT, NV (UTC-6/-7)
-        'us-central': isDST ? -14 : -15,      // TX, IL, MN (UTC-5/-6)
-        'us-eastern': isDST ? -13 : -14,      // NY, FL, GA (UTC-4/-5)
-        'us-alaska': isDST ? -17 : -18,       // UTC-8/-9
-        'us-hawaii': -19,                      // UTC-10 (no DST)
+        // USA (add hours to get Korea time)
+        'us-pacific': isDST ? 16 : 17,       // UTC-7/-8 → +9 = 16/17
+        'us-mountain': isDST ? 15 : 16,      // UTC-6/-7 → +9 = 15/16
+        'us-central': isDST ? 14 : 15,       // UTC-5/-6 → +9 = 14/15
+        'us-eastern': isDST ? 13 : 14,       // UTC-4/-5 → +9 = 13/14
+        'us-alaska': isDST ? 17 : 18,        // UTC-8/-9 → +9 = 17/18
+        'us-hawaii': 19,                      // UTC-10 → +9 = 19 (no DST)
         
-        // 캐나다
-        'canada-west': isDST ? -16 : -17,
-        'canada-east': isDST ? -13 : -14,
+        // Canada
+        'canada-west': isDST ? 16 : 17,
+        'canada-east': isDST ? 13 : 14,
         
-        // 중남미
-        'mexico': isDST ? -14 : -15,
-        'brazil': -12,                         // UTC-3
+        // Latin America
+        'mexico': isDST ? 14 : 15,
+        'brazil': 12,                         // UTC-3 → +9 = 12
         
-        // 동아시아 (UTC+8)
-        'china': -1, 'taiwan': -1, 'hongkong': -1,
-        'singapore': -1, 'philippines': -1,
+        // East Asia (UTC+8) → +9 = 1
+        'china': 1, 'taiwan': 1, 'hongkong': 1,
+        'singapore': 1, 'philippines': 1,
         
-        // 동남아시아 (UTC+7)
-        'vietnam': -2, 'thailand': -2, 'indonesia': -2,
+        // Southeast Asia (UTC+7) → +9 = 2
+        'vietnam': 2, 'thailand': 2, 'indonesia': 2,
         
-        // 남아시아/중동
-        'india': -3.5,                         // UTC+5:30
-        'uae': -5,                             // UTC+4
-        'israel': isDST ? -6 : -7,            // UTC+2/+3
-        'saudi': -6,                           // UTC+3
+        // South Asia / Middle East
+        'india': 3.5,                         // UTC+5:30 → +9 = 3.5
+        'uae': 5,                             // UTC+4 → +9 = 5
+        'israel': isDST ? 6 : 7,             // UTC+3/+2 → +9 = 6/7
+        'saudi': 6,                           // UTC+3 → +9 = 6
         
-        // 유럽 (CET = UTC+1/+2)
-        'uk': isDST ? -8 : -9,                // UTC+0/+1
-        'germany': isDST ? -7 : -8,
-        'france': isDST ? -7 : -8,
-        'spain': isDST ? -7 : -8,
-        'italy': isDST ? -7 : -8,
-        'russia': -6,                          // Moscow UTC+3
+        // Europe (CET = UTC+1/+2)
+        'uk': isDST ? 8 : 9,                 // UTC+1/+0 → +9 = 8/9
+        'germany': isDST ? 7 : 8,            // UTC+2/+1 → +9 = 7/8
+        'france': isDST ? 7 : 8,
+        'spain': isDST ? 7 : 8,
+        'italy': isDST ? 7 : 8,
+        'russia': 6,                          // Moscow UTC+3 → +9 = 6
         
-        // 오세아니아 (남반구 - DST 반대)
-        'australia-east': isDST ? 1 : 2,      // UTC+10/+11
-        'australia-west': -1,                  // UTC+8
-        'newzealand': isDST ? 3 : 4           // UTC+12/+13
+        // Oceania (Southern Hemisphere - DST opposite)
+        'australia-east': isDST ? -1 : -2,   // UTC+11/+10 → +9 = -2/-1
+        'australia-west': 1,                  // UTC+8 → +9 = 1
+        'newzealand': isDST ? -3 : -4        // UTC+13/+12 → +9 = -4/-3
     };
     return offsets[location] || 0;
 }
@@ -3311,7 +3312,7 @@ function adjustTime(y, m, d, h) {
     if (h < 0) return { y, m, d, h };
     let hour = h;
     
-    // v4.14.7: 지역별 타임존 보정
+    // v4.15.5: Timezone adjustment to Korea Standard Time
     const location = document.getElementById('birth-location')?.value || 'us-pacific';
     hour += getTimezoneOffset(location, y, m);
     while (hour >= 24) { hour -= 24; d += 1; }
@@ -3320,12 +3321,12 @@ function adjustTime(y, m, d, h) {
     if (d < 1) { m--; if (m < 1) { m = 12; y--; } d = daysInMonth[m - 1]; }
     if (d > daysInMonth[m - 1]) { d = 1; m++; if (m > 12) { m = 1; y++; } }
     
-    // Korea DST correction (한국 출생만)
+    // Korea historical DST correction (Korea birth only)
     if (location === 'korea') {
         const isDST = ((y >= 1948 && y <= 1951) || (y >= 1955 && y <= 1960) || (y >= 1987 && y <= 1988));
         if (isDST) hour -= 1;
     }
-    // True solar time correction
+    // True solar time correction (-32 min ≈ -0.5 hour)
     hour = hour - 0.5;
     if (hour < 0) { hour += 12; d -= 1; }
     if (d < 1) { m -= 1; if (m < 1) { m = 12; y -= 1; } d = 28; }
