@@ -3,13 +3,20 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.16.0 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.16.1 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
 ║  🔒 Basic Security Enabled (DevTools, Right-click disabled)                   ║
 ║                                                                                ║
-║  v4.16.0 Changes:                                                             ║
+║  v4.16.1 Changes:                                                             ║
+║    - [FIX] 조후용신 통관(Bridge) 전략 적용 (사주로또와 동일)                  ║
+║    - [FIX] 한냉사주: 희신=木, 기신=水 (水→木→火 통관)                        ║
+║    - [FIX] 조열사주: 희신=金, 기신=火 (火→金→水 통관)                        ║
+║    - [FIX] 신강 용신: 식상(설기) 우선 (적천수 정통 이론)                      ║
+║    - [NEW] 띠 룰렛 애니메이션 추가 (부적 생성 전)                             ║
+║                                                                                ║
+║  v4.16.1 Changes:                                                             ║
 ║    - [NEW] 무료 배포 버전 전환 (모든 기능 해금)                               ║
 ║    - [NEW] Ko-fi 후원 연동 (ko-fi.com/kmudang)                                ║
 ║    - [REMOVE] Firebase/Gumroad 결제 시스템 제거                               ║
@@ -22,7 +29,7 @@
 ║                                                                                ║
 ║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
 ║  Contact: kmudang.official@gmail.com                                          ║
-║  Last Updated: 2025-01-19                                                     ║
+║  Last Updated: 2026-01-19                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 -->
 <meta charset="UTF-8">
@@ -46,7 +53,7 @@
    🆓 FREE EDITION - All Features Unlocked
    No Login Required | Ko-fi Support Welcome
    ======================================== */
-console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.16.0');
+console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.16.1');
 
 /* ========================================
    🔒 Basic Security Protection
@@ -1873,7 +1880,7 @@ footer a {
     <p style="color:var(--gold);margin-bottom:8px;">🆓 FREE · All Features Unlocked · No Ads</p>
     <p style="font-size:0.85rem;color:var(--gray);margin-bottom:10px;">Ancient Korean Zodiac Algorithm · Four Pillars of Destiny</p>
     <p style="margin-bottom:10px;"><a href="https://ko-fi.com/kmudang" target="_blank" style="color:var(--gold-light);text-decoration:none;">☕ Support on Ko-fi</a></p>
-    <p style="opacity:0.5;font-size:0.8rem;">© 2026 K-MUDANG Pro · Institute of Destiny Studies (命理硏究所)</p>
+    <p style="opacity:0.5;font-size:0.8rem;">© K-MUDANG Pro · Institute of Destiny Studies (命理硏究所)</p>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -4600,9 +4607,9 @@ function calcGods(saju, str) {
     
     // ====== 0. 기후 분석 (조후 체크를 위해 먼저 실행) ======
     const climate = analyzeClimate(saju);
-    const isTooCold = climate && (climate.type === 'Cold' || climate.type === 'Very Cold');
-    const isTooHot = climate && (climate.type === 'Hot' || climate.type === 'Very Hot');
-    const isTooDamp = climate && (climate.type === 'Humid' || climate.type === 'Very Humid');
+    const isTooCold = climate && (climate.type === 'Cold' || climate.type === 'Extreme Cold');
+    const isTooHot = climate && (climate.type === 'Dry' || climate.type === 'Extreme Dry');
+    const isTooDamp = climate && (climate.type === 'Humid');
     
     // ★ 오행 카운트 (인성 과다/종격 체크용)
     const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
@@ -4663,10 +4670,11 @@ function calcGods(saju, str) {
     }
     
     // ====== 2. 일반 격국 - 신강/신약 용신 ======
+    // v4.16.1 FIX: 적천수 정통 이론 - 신강은 설기(食傷) 우선
     if (!isFollower) {
         if (str.type === 'strong') { 
-            yong = wealthEl;
-            hee = exprEl;
+            yong = exprEl;    // 식상 (설기 우선 - 적천수 정통)
+            hee = wealthEl;   // 재성
             gi = sealEl;
         }
         else if (str.type === 'weak') { 
@@ -4709,8 +4717,22 @@ function calcGods(saju, str) {
             ).length;
             const isGeumsooSanggwan = isMetalDM && isWinterMonth && waterCount >= 2;
             
-            // 🔥 핵심: 극한 기후(너무 춥거나/뜨겁거나/습하면) 조후 최우선
-            if (isTooCold || isTooHot || isTooDamp) {
+            // 🔥 핵심: 극한 기후 시 통관(Bridge) 전략 적용 (v4.16 UPDATE)
+            // 사주로또와 동일한 명리학 정통 이론 적용
+            if (isTooCold && johu === 'fire') {
+                // 한냉 사주: 水→木→火 통관 (수다화식 방지)
+                yong = 'fire';
+                hee = 'wood';    // Fire를 생하는 Wood가 희신 (통관)
+                gi = 'water';    // Water 과다 방지
+                johuDesc += ' (Climate Priority: Bridge Strategy 水→木→火)';
+            } else if ((isTooHot || isTooDamp) && johu === 'water') {
+                // 조열 사주: 火→金→水 통관
+                yong = 'water';
+                hee = 'metal';   // Water를 생하는 Metal이 희신 (통관)
+                gi = 'fire';     // Fire 과다 방지
+                johuDesc += ' (Climate Priority: Bridge Strategy 火→金→水)';
+            } else if (isTooCold || isTooHot || isTooDamp) {
+                // 기타 극한 기후
                 if (johu !== gi) {
                     const prevYong = yong;
                     yong = johu;
@@ -10482,7 +10504,7 @@ function renderPbHistory() {
     `).join('');
 }
 
-// v4.16.0: Destiny Numbers - 같은 날 같은 사주면 고정 번호
+// v4.16.1: Destiny Numbers - 같은 날 같은 사주면 고정 번호
 function generatePowerballDestiny() {
     const y = +document.getElementById('pb-year').value;
     const m = +document.getElementById('pb-month').value;
@@ -10566,7 +10588,7 @@ function generatePowerballDestiny() {
     toast(`🔮 Destiny Numbers (${yongsin.toUpperCase()} energy)`);
 }
 
-// v4.16.0: Quick Pick - 매번 랜덤
+// v4.16.1: Quick Pick - 매번 랜덤
 function generatePowerballQuick() {
     let quickNumbers = [];
     const quickUsed = new Set();
@@ -10734,7 +10756,7 @@ function renderMegaHistory() {
     `).join('');
 }
 
-// v4.16.0: Mega Destiny Numbers - 같은 날 같은 사주면 고정 번호
+// v4.16.1: Mega Destiny Numbers - 같은 날 같은 사주면 고정 번호
 function generateMegaDestiny() {
     const y = +document.getElementById('mega-year').value;
     const m = +document.getElementById('mega-month').value;
@@ -10818,7 +10840,7 @@ function generateMegaDestiny() {
     toast(`🔮 Destiny Numbers (${yongsin.toUpperCase()} energy)`);
 }
 
-// v4.16.0: Mega Quick Pick - 매번 랜덤
+// v4.16.1: Mega Quick Pick - 매번 랜덤
 function generateMegaQuick() {
     let quickNumbers = [];
     const quickUsed = new Set();
@@ -11184,7 +11206,7 @@ window.addEventListener('hashchange', handleUrlHash);
     </div>
     
     <div class="copyright">
-        © 2026 K-MUDANG. All Rights Reserved.<br>
+        © K-MUDANG. All Rights Reserved.<br>
         <span class="ip-notice">The AI-Saju Integration Protocol™ is a proprietary methodology of K-MUDANG..</span><br>
         <span style="color:#999;font-size:0.95rem;">Business License: 487-20-02668</span>
     </div>
