@@ -8324,7 +8324,7 @@ function analyzeSaju() {
             return; 
         }
         
-        BIRTH_YEAR = y;
+        BIRTH_YEAR = sy;  // [v4.16.4 FIX] 양력 변환된 연도 사용
         BIRTH_MONTH = sm;  // v4.15.1: 양력 월 저장 (대운 계산용)
         BIRTH_DAY = sd;    // v4.15.1: 양력 일 저장 (대운 계산용)
         BIRTH_HOUR = hourVal >= 0 ? adj.h : 12;  // v4.15.1: 시간 저장
