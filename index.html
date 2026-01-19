@@ -3,20 +3,29 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.16.1 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.16.3 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
 ║  🔒 Basic Security Enabled (DevTools, Right-click disabled)                   ║
 ║                                                                                ║
-║  v4.16.1 Changes:                                                             ║
+║  v4.16.3 Changes:                                                             ║
 ║    - [FIX] 조후용신 통관(Bridge) 전략 적용 (사주로또와 동일)                  ║
 ║    - [FIX] 한냉사주: 희신=木, 기신=水 (水→木→火 통관)                        ║
 ║    - [FIX] 조열사주: 희신=金, 기신=火 (火→金→水 통관)                        ║
 ║    - [FIX] 신강 용신: 식상(설기) 우선 (적천수 정통 이론)                      ║
+║    - [FIX] 신강도 계산: 12운성 점수 추가 (사주로또와 동일)                    ║
+║      • 건록/제왕 = +4점, 관대/장생 = +2점                                    ║
+║      • 통근 캡 상향 (10→15), rootStrong 기준 상향 (2→4)                      ║
+║    - [NEW] 사주로또 고급 분석 룰 이식:                                        ║
+║      • 쇠신충왕(衰神沖旺) - 용신이 기신에 압도됨 경고                        ║
+║      • 편인도식(偏印倒食) - 식신격 편인충 경고                               ║
+║      • 왕신충발(旺神沖發) - 왕한 오행 세운충 경고                            ║
+║      • 삼합국(三合局) 정밀 분석                                              ║
 ║    - [NEW] 띠 룰렛 애니메이션 추가 (부적 생성 전)                             ║
+║    - Total: 80 AI Rules                                                       ║
 ║                                                                                ║
-║  v4.16.1 Changes:                                                             ║
+║  v4.16.0 Changes:                                                             ║
 ║    - [NEW] 무료 배포 버전 전환 (모든 기능 해금)                               ║
 ║    - [NEW] Ko-fi 후원 연동 (ko-fi.com/kmudang)                                ║
 ║    - [REMOVE] Firebase/Gumroad 결제 시스템 제거                               ║
@@ -53,7 +62,7 @@
    🆓 FREE EDITION - All Features Unlocked
    No Login Required | Ko-fi Support Welcome
    ======================================== */
-console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.16.1');
+console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.16.3');
 
 /* ========================================
    🔒 Basic Security Protection
@@ -2307,6 +2316,12 @@ let BIRTH_YEAR = null;
 let BIRTH_MONTH = null;  // v4.15.1: 대운 정밀 계산용
 let BIRTH_DAY = null;    // v4.15.1: 대운 정밀 계산용
 let BIRTH_HOUR = null;   // v4.15.1: 대운 정밀 계산용
+// v4.16.3: 사용자 입력 원본 날짜 (AI Prompt 표시용)
+let INPUT_YEAR = null;
+let INPUT_MONTH = null;
+let INPUT_DAY = null;
+let INPUT_IS_LUNAR = false;
+let INPUT_HOUR_INDEX = null;  // v4.16.3: 원래 선택한 시간 인덱스 (0-11)
 let currentNumbers = [];
 let history = [];
 
@@ -3131,66 +3146,113 @@ function generateSajuLotto() {
    ======================================== */
 
 // Lunar calendar data decoding (using LUNAR_DATA)
-function getLunarYearDays(year) {
+// v4.16.3 FIX: 사주로또Pro와 동일한 정확한 음력 변환 알고리즘 적용
+// 기존 비트 연산 오류 수정 (월별 일수가 1비트 어긋나는 버그 해결)
+
+/**
+ * 해당 연도의 윤달 (0이면 윤달 없음)
+ */
+function getLeapMonth(year) {
     const idx = year - LUNAR_START;
-    if (idx < 0 || idx >= LUNAR_DATA.length) return null;
-    const code = LUNAR_DATA[idx];
-    
-    const leapMonth = code & 0xF; // Leap month (0 if none)
-    let totalDays = 0;
-    const monthDays = [];
-    
-    // months 1-12 long/short
-    for (let i = 0; i < 12; i++) {
-        const bit = (code >> (16 - i)) & 1;
-        const days = bit ? 30 : 29;
-        monthDays.push(days);
-        totalDays += days;
-    }
-    
-    // Leap month
-    let leapDays = 0;
-    if (leapMonth > 0) {
-        leapDays = ((code >> 16) & 1) ? 30 : 29;
-        totalDays += leapDays;
-    }
-    
-    return { leapMonth, monthDays, leapDays, totalDays };
+    if (idx < 0 || idx >= LUNAR_DATA.length) return 0;
+    return LUNAR_DATA[idx] & 0xf;
 }
 
+/**
+ * 음력 해당 월의 일수 (29일 또는 30일)
+ * 핵심 수정: 0x10000 >> month 방식 사용 (사주로또Pro와 동일)
+ */
+function getLunarMonthDays(year, month) {
+    const idx = year - LUNAR_START;
+    if (idx < 0 || idx >= LUNAR_DATA.length) return 30;
+    
+    const data = LUNAR_DATA[idx];
+    // 비트 연산으로 해당 월이 큰달(30일)인지 작은달(29일)인지 확인
+    // 상위 12비트가 각 월의 대소월 정보
+    return (data & (0x10000 >> month)) ? 30 : 29;
+}
+
+/**
+ * 윤달의 일수
+ */
+function getLeapMonthDays(year) {
+    const idx = year - LUNAR_START;
+    if (idx < 0 || idx >= LUNAR_DATA.length) return 0;
+    
+    const leapMonth = LUNAR_DATA[idx] & 0xf;
+    if (!leapMonth) return 0;
+    
+    // 윤달 대소월 정보는 bit 16 (0x10000)
+    return (LUNAR_DATA[idx] & 0x10000) ? 30 : 29;
+}
+
+/**
+ * 음력 연도의 총 일수
+ */
+function getLunarYearDays(year) {
+    const idx = year - LUNAR_START;
+    if (idx < 0 || idx >= LUNAR_DATA.length) return 365;
+    
+    let sum = 0;
+    
+    // 12개월 일수 합산
+    for (let i = 1; i <= 12; i++) {
+        sum += getLunarMonthDays(year, i);
+    }
+    
+    // 윤달이 있으면 추가
+    const leapMonth = getLeapMonth(year);
+    if (leapMonth > 0) {
+        sum += getLeapMonthDays(year);
+    }
+    
+    return sum;
+}
+
+/**
+ * 음력 → 양력 변환 (사주로또Pro와 동일한 알고리즘)
+ */
 function lunarToSolar(ly, lm, ld, isLeap = false) {
-    if (ly < LUNAR_START || ly > LUNAR_START + LUNAR_DATA.length - 1) {
-        return { year: ly, month: lm, day: ld };
+    // 유효 범위 체크 (1900-2049)
+    if (ly < 1900 || ly > 2049) {
+        console.warn('Lunar conversion: year out of range', ly);
+        return null;
     }
     
-    // Base date: 1900-01-31 = Lunar 1900-01-01
-    let offset = 0;
-    
-    // Yearly accumulation
-    for (let y = LUNAR_START; y < ly; y++) {
-        const data = getLunarYearDays(y);
-        if (data) offset += data.totalDays;
+    const yearIdx = ly - LUNAR_START;
+    if (yearIdx < 0 || yearIdx >= LUNAR_DATA.length) {
+        return null;
     }
     
-    // Monthly accumulation
-    const yearData = getLunarYearDays(ly);
-    if (yearData) {
-        for (let m = 1; m < lm; m++) {
-            offset += yearData.monthDays[m - 1];
-            if (yearData.leapMonth === m) {
-                offset += yearData.leapDays;
-            }
-        }
-        if (isLeap && yearData.leapMonth === lm) {
-            offset += yearData.monthDays[lm - 1];
-        }
-    }
-    
-    offset += ld - 1;
-    
-    // Calculate from base date
+    // 1900년 1월 31일이 음력 1900년 1월 1일
     const baseDate = new Date(1900, 0, 31);
-    const resultDate = new Date(baseDate.getTime() + offset * 24 * 60 * 60 * 1000);
+    
+    // 1900년부터 해당 연도 전까지의 총 일수 계산
+    let totalDays = 0;
+    for (let i = 0; i < yearIdx; i++) {
+        totalDays += getLunarYearDays(LUNAR_START + i);
+    }
+    
+    // 해당 연도의 1월부터 해당 월 전까지의 일수
+    const leapMonth = getLeapMonth(ly);
+    for (let i = 1; i < lm; i++) {
+        totalDays += getLunarMonthDays(ly, i);
+        // 윤달이 해당 월 앞에 있으면 윤달 일수도 추가
+        if (leapMonth === i) {
+            totalDays += getLeapMonthDays(ly);
+        }
+    }
+    
+    // 윤달 처리
+    if (isLeap && leapMonth === lm) {
+        totalDays += getLunarMonthDays(ly, lm);
+    }
+    
+    // 해당 월의 일수 추가 (1일 = 0일 추가)
+    totalDays += ld - 1;
+    
+    // 양력 날짜 계산
+    const resultDate = new Date(baseDate.getTime() + totalDays * 24 * 60 * 60 * 1000);
     
     return {
         year: resultDate.getFullYear(),
@@ -4175,15 +4237,40 @@ function calcStrength(saju) {
     const monthNames = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
     factors.push({ l: '月令 (Seasonal Power)', v: `${monthNames[mbi]}월 ${deukRyung ? '✓ In Season' : '✗ Out of Season'} (${ms >= 0 ? '+' : ''}${ms*6})`, p: deukRyung });
     
-    // ====== ★★★ 3. 실제 통근 체크 (12운성 아닌 지장간 기준) ★★★ ======
+    // ====== ★★★ 3. 실제 통근 (지장간 + 12운성 가중치) ★★★ ======
+    // v4.16.3 FIX: 사주로또와 동일하게 12운성 점수 추가
     let realRootScore = 0;
     let hasRealRoot = { day: false, hour: false };
+    
+    // 12운성 시작점 (건록 위치)
+    const TWELVE_STARTS = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3]; // 甲~癸
+    const TWELVE_NAMES = ['장생','목욕','관대','건록','제왕','쇠','병','사','묘','절','태','양'];
+    const dmIdx = STEM.findIndex(s => s.c === dm.c);
+    const isYangGan = dmIdx % 2 === 0;
     
     allBranches.forEach((b, idx) => {
         const bi = BRANCH.indexOf(b);
         const position = ['year', 'month', 'day', 'hour'][idx];
         const posWeight = position === 'day' ? 1.5 : position === 'hour' ? 1.3 : position === 'month' ? 1.2 : 1.0;
         
+        // [v4.16.3 NEW] 12운성 점수 추가
+        let twIdx = bi - TWELVE_STARTS[dmIdx];
+        if (!isYangGan) twIdx = -twIdx;
+        twIdx = ((twIdx % 12) + 12) % 12;
+        const twName = TWELVE_NAMES[twIdx];
+        
+        // 건록/제왕/관대/장생은 강한 뿌리
+        let twelveBonus = 0;
+        if (twName === '건록' || twName === '제왕') {
+            twelveBonus = 4 * posWeight;  // 가장 강한 뿌리
+            if (position === 'day' || position === 'hour') hasRealRoot[position] = true;
+        } else if (twName === '관대' || twName === '장생') {
+            twelveBonus = 2 * posWeight;  // 강한 뿌리
+            if (position === 'day' || position === 'hour') hasRealRoot[position] = true;
+        }
+        realRootScore += twelveBonus;
+        
+        // 지장간 통근
         const hidden = JIJANGGAN[bi] || [];
         hidden.forEach(h => {
             const hStem = STEM[h.s];
@@ -4196,9 +4283,9 @@ function calcStrength(saju) {
         });
     });
     
-    score += Math.min(realRootScore, 10);
-    const rootStrong = realRootScore >= 2;
-    factors.push({ l: '通根 (Root Strength)', v: rootStrong ? `✓ ${realRootScore.toFixed(1)}pts` : `✗ No Root (${realRootScore.toFixed(1)})`, p: rootStrong });
+    score += Math.min(realRootScore, 15);  // 캡 상향 (10 → 15)
+    const rootStrong = realRootScore >= 4;  // 기준 상향 (2 → 4)
+    factors.push({ l: '通根 (Root Strength)', v: rootStrong ? `✓ ${realRootScore.toFixed(1)}pts` : `✗ Weak Root (${realRootScore.toFixed(1)})`, p: rootStrong });
     
     // ====== ★★★ 4. 천간 비겁/인성 Revealed (합 무력화 반영) ★★★ ======
     let helpCount = 0;
@@ -4670,7 +4757,7 @@ function calcGods(saju, str) {
     }
     
     // ====== 2. 일반 격국 - 신강/신약 용신 ======
-    // v4.16.1 FIX: 적천수 정통 이론 - 신강은 설기(食傷) 우선
+    // v4.16.3 FIX: 적천수 정통 이론 - 신강은 설기(食傷) 우선
     if (!isFollower) {
         if (str.type === 'strong') { 
             yong = exprEl;    // 식상 (설기 우선 - 적천수 정통)
@@ -6111,7 +6198,7 @@ function ylCheckYongOverwhelmed(saju, gods) {
     const yongCount = elCount[gods.yong] || 0;
     const giCount = elCount[gods.gi] || 0;
     if (giCount >= 3 && yongCount <= 1 && giCount >= yongCount * 3) {
-        return { active: true, score: -2, desc: `⚠️ 쇠신충왕(衰神沖旺): 기신(${ELEMENT[gods.gi].k}) ${giCount}개 vs 용신(${ELEMENT[gods.yong].k}) ${yongCount} → 용신이 와도 압도됨!` };
+        return { active: true, score: -2, desc: `⚠️ Declining God Clashes Strong (衰神沖旺): Unfavorable (${ELEMENT[gods.gi].n}) ${giCount} vs Beneficial (${ELEMENT[gods.yong].n}) ${yongCount} → Good fortune gets overwhelmed!` };
     }
     return { active: false, score: 0, desc: '' };
 }
@@ -6132,13 +6219,13 @@ function ylCheckPyunInDoShik(saju, gods) {
             clashPairs.forEach(([a, c]) => {
                 if ((bi === a && monthBi === c) || (bi === c && monthBi === a)) {
                     found = true;
-                    detail = `${b.c}(편인)↔${saju.month.b.c}(식신)`;
+                    detail = `${b.c}(Indirect Resource)↔${saju.month.b.c}(Eating God)`;
                 }
             });
         }
     });
     if (found) {
-        return { active: true, score: -2, desc: `⚠️ 편인도식(偏印倒食): ${detail} 충 → 재능은 있으나 예민함 때문에 기회를 걷어차는 형국!` };
+        return { active: true, score: -2, desc: `⚠️ Owl Destroys Eating God (偏印倒食): ${detail} Clash → Talent exists but sensitivity causes missed opportunities!` };
     }
     return { active: false, score: 0, desc: '' };
 }
@@ -6163,7 +6250,7 @@ function ylCheckWangShinChungBal(yp, saju) {
     const isWang = wangElements.some(([el]) => el === targetEl);
     if (isWang) {
         const wangCount = elCount[targetEl];
-        return { active: true, score: -3, desc: `🚨 왕신충발(旺神沖發): ${yearBranch}(세운)이 ${clashTarget}(원국)을 충! ${ELEMENT[targetEl].k}이 ${wangCount}개로 왕한데 건드림 → 대격변/사고/파재 극도 주의!` };
+        return { active: true, score: -3, desc: `🚨 Strong God Clashes & Explodes (旺神沖發): ${yearBranch}(Year) clashes ${clashTarget}(Chart)! ${ELEMENT[targetEl].n} is dominant with ${wangCount} → Extreme caution: major upheaval/accidents/financial loss!` };
     }
     return { active: false, score: 0, desc: '' };
 }
@@ -6982,6 +7069,135 @@ function analyzeYukChinRon(saju, gender) {
     }
     
     return result;
+}
+
+/* ========================================
+   14-0-1. Advanced Analysis Rules (v4.16.3)
+   사주로또 고급 분석 룰 이식
+   ======================================== */
+
+// v4.16.3 NEW: 쇠신충왕(衰神沖旺) - 용신이 와도 기신에 압도됨
+function checkYongOverwhelmed(saju, gods) {
+    const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
+    [saju.year, saju.month, saju.day, saju.hour].forEach(p => {
+        if (p?.s) elCount[p.s.e]++;
+        if (p?.b) elCount[p.b.e]++;
+    });
+    const yongCount = elCount[gods.yong] || 0;
+    const giCount = elCount[gods.gi] || 0;
+    if (giCount >= 3 && yongCount <= 1 && giCount >= yongCount * 3) {
+        return { active: true, score: -2, desc: `⚠️ Declining God Clashes Strong (衰神沖旺): Unfavorable Element (${ELEMENT[gods.gi].n}) ${giCount} vs Beneficial Element (${ELEMENT[gods.yong].n}) ${yongCount} → Good fortune gets overwhelmed!` };
+    }
+    return { active: false, score: 0, desc: '' };
+}
+
+// v4.16.3 NEW: 편인도식(偏印倒食) - 식신격인데 편인이 충하면 밥그릇 깨짐
+function checkPyunInDoShik(saju, gods) {
+    const dm = saju.day.s;
+    const monthBi = BRANCH.indexOf(saju.month.b);
+    const shikShinEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5]; // 식상
+    const pyunInEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];   // 인성
+    if (saju.month.b.e !== shikShinEl) return { active: false, score: 0, desc: '' };
+    const clashPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
+    const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);
+    let found = false, detail = '';
+    branches.forEach(b => {
+        if (b.e === pyunInEl) {
+            const bi = BRANCH.indexOf(b);
+            clashPairs.forEach(([a, c]) => {
+                if ((bi === a && monthBi === c) || (bi === c && monthBi === a)) {
+                    found = true;
+                    detail = `${b.c}(Indirect Resource)↔${saju.month.b.c}(Eating God)`;
+                }
+            });
+        }
+    });
+    if (found) {
+        return { active: true, score: -2, desc: `⚠️ Owl Destroys Eating God (偏印倒食): ${detail} Clash → Talent exists but sensitivity causes missed opportunities!` };
+    }
+    return { active: false, score: 0, desc: '' };
+}
+
+// v4.16.3 NEW: 왕신충발(旺神沖發) - 4개 이상 왕한 오행을 세운이 충하면 폭발
+function checkWangShinChungBal(yp, saju) {
+    const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};
+    [saju.year, saju.month, saju.day, saju.hour].forEach(p => {
+        if (p?.s) elCount[p.s.e]++;
+        if (p?.b) elCount[p.b.e]++;
+    });
+    const wangElements = Object.entries(elCount).filter(([el, cnt]) => cnt >= 4);
+    if (wangElements.length === 0) return { active: false, score: 0, desc: '' };
+    const clashPairs = {'子':'午','午':'子','丑':'未','未':'丑','寅':'申','申':'寅','卯':'酉','酉':'卯','辰':'戌','戌':'辰','巳':'亥','亥':'巳'};
+    const yearBranch = yp.b.c;
+    const clashTarget = clashPairs[yearBranch];
+    if (!clashTarget) return { active: false, score: 0, desc: '' };
+    const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);
+    const targetBranches = branches.filter(b => b.c === clashTarget);
+    if (targetBranches.length === 0) return { active: false, score: 0, desc: '' };
+    const targetEl = targetBranches[0].e;
+    const isWang = wangElements.some(([el]) => el === targetEl);
+    if (isWang) {
+        const wangCount = elCount[targetEl];
+        return { active: true, score: -3, desc: `🚨 Strong God Clashes & Explodes (旺神沖發): ${yearBranch}(Year) clashes ${clashTarget}(Chart)! ${ELEMENT[targetEl].n} is dominant with ${wangCount} → Extreme caution: major upheaval/accidents/financial loss!` };
+    }
+    return { active: false, score: 0, desc: '' };
+}
+
+// v4.16.3 NEW: 삼합국(三合局) 정밀 분석
+function analyzeSamhapBureau(saju) {
+    const brs = [saju.year?.b, saju.month?.b, saju.day?.b, saju.hour?.b].filter(b => b);
+    const brIdxs = brs.map(b => BRANCH.indexOf(b));
+    
+    const THREE_HARMONY = [
+        { branches: [2, 6, 10], element: 'fire', name: 'Tiger-Horse-Dog Fire Bureau (寅午戌 火局)' },
+        { branches: [8, 0, 4], element: 'water', name: 'Monkey-Rat-Dragon Water Bureau (申子辰 水局)' },
+        { branches: [5, 9, 1], element: 'metal', name: 'Snake-Rooster-Ox Metal Bureau (巳酉丑 金局)' },
+        { branches: [11, 3, 7], element: 'wood', name: 'Pig-Rabbit-Goat Wood Bureau (亥卯未 木局)' }
+    ];
+    
+    let result = { complete: false, partial: false, element: null, name: null, count: 0 };
+    
+    for (const th of THREE_HARMONY) {
+        const hasCount = th.branches.filter(b => brIdxs.includes(b)).length;
+        const hasCenter = brIdxs.includes(th.branches[1]); // 왕지(중심) 존재 여부
+        
+        if (hasCount === 3) {
+            // 완전한 삼합국
+            result = { complete: true, partial: false, element: th.element, name: th.name, count: 3 };
+            break;
+        } else if (hasCount === 2 && hasCenter) {
+            // 반합 (왕지 포함)
+            if (!result.complete) {
+                const presentBranches = th.branches.filter(b => brIdxs.includes(b));
+                const branchChars = presentBranches.map(b => BRANCH[b].c).join('');
+                result = { 
+                    complete: false, 
+                    partial: true, 
+                    element: th.element, 
+                    name: branchChars + ' Half-Bureau', 
+                    count: 2,
+                    presentBranches
+                };
+            }
+        }
+    }
+    
+    return result;
+}
+
+// v4.16.3 NEW: 세운 위험도 종합 판정
+function determineYearRating(yearLuck, saju, gods) {
+    const yp = yearLuck.pillar;
+    const wangChk = checkWangShinChungBal(yp, saju);
+    const yongChk = checkYongOverwhelmed(saju, gods);
+    const pyunChk = checkPyunInDoShik(saju, gods);
+    
+    // 위험도 우선순위: 왕신충발 > 쇠신충왕 > 편인도식
+    if (wangChk.active) return { rating: 'wang_shin_chung_bal', warning: wangChk };
+    if (yongChk.active) return { rating: 'yong_overwhelmed', warning: yongChk };
+    if (pyunChk.active) return { rating: 'pyunin_doshik', warning: pyunChk };
+    
+    return { rating: yearLuck.rating, warning: null };
 }
 
 /* ========================================
@@ -8073,7 +8289,11 @@ function analyzeSaju() {
             sy = conv.year; sm = conv.month; sd = conv.day;
         }
         
-        const adj = adjustTime(sy, sm, sd, hourVal);
+        // v4.16.3 FIX: 지지 인덱스(0-11)를 실제 시간(0-23)으로 변환
+        // 子(0)→0시, 丑(1)→2시, 寅(2)→4시, 卯(3)→6시, 辰(4)→8시, 巳(5)→10시
+        // 午(6)→12시, 未(7)→14시, 申(8)→16시, 酉(9)→18시, 戌(10)→20시, 亥(11)→22시
+        const realHour = hourVal >= 0 ? (hourVal === 0 ? 0 : hourVal * 2) : -1;
+        const adj = adjustTime(sy, sm, sd, realHour);
         if (!adj || !adj.y) { toast('Time adjustment error'); return; }
         
         // v4.15.1 FIX: 시간(0-23)을 지지 인덱스(0-11)로 변환
@@ -8103,6 +8323,12 @@ function analyzeSaju() {
         BIRTH_MONTH = sm;  // v4.15.1: 양력 월 저장 (대운 계산용)
         BIRTH_DAY = sd;    // v4.15.1: 양력 일 저장 (대운 계산용)
         BIRTH_HOUR = hourVal >= 0 ? adj.h : 12;  // v4.15.1: 시간 저장
+        // v4.16.3: 사용자 입력 원본 날짜 저장 (AI Prompt 표시용)
+        INPUT_YEAR = y;
+        INPUT_MONTH = m;
+        INPUT_DAY = d;
+        INPUT_IS_LUNAR = (CALENDAR === 'lunar');
+        INPUT_HOUR_INDEX = hourVal;  // 원래 선택한 시간 인덱스 저장
         const str = calcStrength(SAJU);
         if (!str) { toast('Strength calculation error'); return; }
         STRENGTH = str;  // 전역 저장
@@ -9410,14 +9636,20 @@ function copySajuForAI() {
         const locationText = locationSelect ? locationSelect.options[locationSelect.selectedIndex]?.text || 'Unknown' : 'Unknown';
         const calendarText = CALENDAR === 'lunar' ? 'Lunar (음력)' : 'Solar (양력)';
         
-        // 시(時) 정보 - 진태양시 기준 시간대 포함
+        // 시(時) 정보 - v4.16.3: 사용자가 선택한 원래 시간 표시
         const HOUR_RANGES = {
             '子': '23:30-01:29', '丑': '01:30-03:29', '寅': '03:30-05:29', '卯': '05:30-07:29',
             '辰': '07:30-09:29', '巳': '09:30-11:29', '午': '11:30-13:29', '未': '13:30-15:29',
             '申': '15:30-17:29', '酉': '17:30-19:29', '戌': '19:30-21:29', '亥': '21:30-23:29'
         };
         let hourText = 'Unknown';
-        if (SAJU.hour && SAJU.hour.b) {
+        // v4.16.3 FIX: 원래 선택한 시간 인덱스 사용 (adjustTime 보정 전 값)
+        if (INPUT_HOUR_INDEX !== null && INPUT_HOUR_INDEX >= 0 && INPUT_HOUR_INDEX <= 11) {
+            const hourBranch = BRANCH[INPUT_HOUR_INDEX].c;
+            const hourRange = HOUR_RANGES[hourBranch] || '';
+            hourText = `${hourBranch}時 (${hourRange}) - True Solar Time`;
+        } else if (SAJU.hour && SAJU.hour.b) {
+            // 폴백: SAJU에서 가져오기
             const hourBranch = SAJU.hour.b.c;
             const hourRange = HOUR_RANGES[hourBranch] || '';
             hourText = `${hourBranch}時 (${hourRange}) - True Solar Time`;
@@ -9426,7 +9658,7 @@ function copySajuForAI() {
         let text = `===== FOUR PILLARS OF DESTINY (SAJU) ANALYSIS =====
 
 ${criticalText}【BASIC INFO】
-• Birth Date: ${BIRTH_YEAR}-${String(BIRTH_MONTH).padStart(2,'0')}-${String(BIRTH_DAY).padStart(2,'0')}
+• Birth Date: ${INPUT_YEAR}-${String(INPUT_MONTH).padStart(2,'0')}-${String(INPUT_DAY).padStart(2,'0')}${INPUT_IS_LUNAR ? ' (Lunar) → Solar: ' + BIRTH_YEAR + '-' + String(BIRTH_MONTH).padStart(2,'0') + '-' + String(BIRTH_DAY).padStart(2,'0') : ''}
 • Birth Hour: ${hourText}
 • Calendar: ${calendarText}
 • Gender: ${GENDER === 'm' ? 'Male (남)' : 'Female (여)'}
@@ -10504,7 +10736,7 @@ function renderPbHistory() {
     `).join('');
 }
 
-// v4.16.1: Destiny Numbers - 같은 날 같은 사주면 고정 번호
+// v4.16.3: Destiny Numbers - 같은 날 같은 사주면 고정 번호
 function generatePowerballDestiny() {
     const y = +document.getElementById('pb-year').value;
     const m = +document.getElementById('pb-month').value;
@@ -10588,7 +10820,7 @@ function generatePowerballDestiny() {
     toast(`🔮 Destiny Numbers (${yongsin.toUpperCase()} energy)`);
 }
 
-// v4.16.1: Quick Pick - 매번 랜덤
+// v4.16.3: Quick Pick - 매번 랜덤
 function generatePowerballQuick() {
     let quickNumbers = [];
     const quickUsed = new Set();
@@ -10756,7 +10988,7 @@ function renderMegaHistory() {
     `).join('');
 }
 
-// v4.16.1: Mega Destiny Numbers - 같은 날 같은 사주면 고정 번호
+// v4.16.3: Mega Destiny Numbers - 같은 날 같은 사주면 고정 번호
 function generateMegaDestiny() {
     const y = +document.getElementById('mega-year').value;
     const m = +document.getElementById('mega-month').value;
@@ -10840,7 +11072,7 @@ function generateMegaDestiny() {
     toast(`🔮 Destiny Numbers (${yongsin.toUpperCase()} energy)`);
 }
 
-// v4.16.1: Mega Quick Pick - 매번 랜덤
+// v4.16.3: Mega Quick Pick - 매번 랜덤
 function generateMegaQuick() {
     let quickNumbers = [];
     const quickUsed = new Set();
