@@ -1172,6 +1172,114 @@ footer a {
     0%, 100% { opacity: 0.5; }
     50% { opacity: 1; }
 }
+
+/* ========================================
+   Zodiac Wheel Roulette
+   ======================================== */
+.zodiac-wheel-container {
+    display: none;
+    text-align: center;
+    margin: 20px auto;
+    padding: 20px;
+}
+.wheel-wrapper {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    box-shadow: 
+        0 8px 25px rgba(0,0,0,0.3),
+        0 0 0 3px var(--gold),
+        0 0 20px rgba(212,175,55,0.3);
+}
+.wheel-wrapper::after {
+    content: '▼';
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    color: #C41E3A;
+    z-index: 10;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+.wheel-glow {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        transparent,
+        rgba(212,175,55,0.5),
+        transparent,
+        rgba(212,175,55,0.5),
+        transparent
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+.wheel-glow.active {
+    opacity: 1;
+    animation: wheelGlowRotate 0.8s linear infinite;
+}
+@keyframes wheelGlowRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+#zodiacWheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transition: transform 1.5s cubic-bezier(0.15, 0.6, 0.2, 1);
+}
+.sparkle-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.5) 0%, transparent 20%),
+        radial-gradient(circle at 75% 30%, rgba(255,255,255,0.3) 0%, transparent 15%);
+}
+.sparkle-overlay.active {
+    opacity: 1;
+    animation: wheelSparkle 0.15s ease-in-out infinite alternate;
+}
+@keyframes wheelSparkle {
+    0% { 
+        background: 
+            radial-gradient(circle at 25% 25%, rgba(255,255,255,0.5) 0%, transparent 20%),
+            radial-gradient(circle at 75% 30%, rgba(255,255,255,0.3) 0%, transparent 15%);
+    }
+    100% { 
+        background: 
+            radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6) 0%, transparent 25%),
+            radial-gradient(circle at 70% 25%, rgba(255,255,255,0.4) 0%, transparent 20%);
+    }
+}
+.zodiac-result-text {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--gold);
+    min-height: 1.5em;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.zodiac-loading {
+    display: none;
+    color: #C41E3A;
+    font-weight: 500;
+}
 </style>
 </head>
 <body class="saju-mode">
@@ -1226,8 +1334,8 @@ footer a {
                 </svg>
             </div>
             <h1>K-MUDANG</h1>
-            <span class="game-title">FORTUNE</span>
-            <p class="subtitle">The State of the Art · Algorithm + AI</p>
+            <span class="game-title">DESTINY ORACLE</span>
+            <p class="subtitle">Extensive Metaphysical Data · Flawless Precision · Deep AI Insight</p>
         </header>
 
         <div class="card">
@@ -1341,7 +1449,7 @@ footer a {
                 </div>
                 
                 <p style="font-size:0.8rem;color:var(--gray);margin-top:10px;opacity:0.8;">
-                    ☕ Buy me a coffee · 커피 한 잔 사주기
+                    🔮 Offer Bokchae (Karma Fee)
                 </p>
             </div>
 
@@ -1583,6 +1691,17 @@ footer a {
                     <canvas id="ritual-canvas" width="300" height="400" style="border:2px solid #8B7355;border-radius:8px;margin-top:20px;"></canvas>
                 </div>
                 
+                <!-- Zodiac Wheel Roulette -->
+                <div id="zodiac-wheel-container" class="zodiac-wheel-container">
+                    <div class="wheel-wrapper">
+                        <div class="wheel-glow" id="wheelGlow"></div>
+                        <img id="zodiacWheel" src="zodiac-wheel.png" alt="Chinese Zodiac Wheel">
+                        <div class="sparkle-overlay" id="sparkleOverlay"></div>
+                    </div>
+                    <div class="zodiac-loading" id="zodiacLoading">✦ Discovering your destiny sign... ✦</div>
+                    <div class="zodiac-result-text" id="zodiacResultText"></div>
+                </div>
+                
                 <div id="talisman-btn-wrapper">
                     <button class="btn" onclick="generateTalisman()" style="background:#FFD700;color:#000;width:100%;padding:20px;font-size:1.2rem;font-weight:bold;">
                         🏮 Generate My Talisman 🏮
@@ -1614,7 +1733,7 @@ footer a {
                 </div>
                 
                 <p style="font-size:0.8rem;color:var(--gray);margin-top:10px;opacity:0.8;">
-                    ☕ Buy me a coffee · 커피 한 잔 사주기
+                    🔮 Offer Bokchae (Karma Fee)
                 </p>
             </div>
 
@@ -1658,7 +1777,7 @@ footer a {
             </div>
             <h1>K-MUDANG</h1>
             <span class="game-title">POWERBALL</span>
-            <p class="subtitle">The State of the Art · Algorithm + AI</p>
+            <p class="subtitle">Extensive Metaphysical Data · Flawless Precision · Deep AI Insight</p>
         </header>
 
         <div class="card">
@@ -1713,7 +1832,7 @@ footer a {
             </div>
             <h1>K-MUDANG</h1>
             <span class="game-title">MEGA MILLIONS</span>
-            <p class="subtitle">The State of the Art · Algorithm + AI</p>
+            <p class="subtitle">Extensive Metaphysical Data · Flawless Precision · Deep AI Insight</p>
         </header>
 
         <div class="card">
@@ -2312,22 +2431,69 @@ function copyShareLink() {
 let talismanGenerated = false;
 let talismanDataUrl = null;
 
+/* ========================================
+   Zodiac Wheel Roulette Animation
+   ======================================== */
+let wheelRotation = 0;
+let isWheelSpinning = false;
+
+function spinZodiacWheel(targetIndex, callback) {
+    if (isWheelSpinning) return;
+    isWheelSpinning = true;
+    
+    const container = document.getElementById('zodiac-wheel-container');
+    const wheel = document.getElementById('zodiacWheel');
+    const glow = document.getElementById('wheelGlow');
+    const sparkle = document.getElementById('sparkleOverlay');
+    const loading = document.getElementById('zodiacLoading');
+    const resultText = document.getElementById('zodiacResultText');
+    
+    // UI 표시
+    container.style.display = 'block';
+    resultText.style.opacity = '0';
+    resultText.textContent = '';
+    loading.style.display = 'block';
+    glow.classList.add('active');
+    sparkle.classList.add('active');
+    
+    // 시계방향 2바퀴 + 정확한 띠 중앙에 멈춤
+    const targetPos = ((12 - targetIndex) % 12) * 30 + 15;
+    const currentPos = wheelRotation % 360;
+    let diff = targetPos - currentPos;
+    if (diff <= 0) diff += 360;
+    wheelRotation = wheelRotation + 720 + diff;
+    
+    // display 변경 후 딜레이 줘야 transition 작동
+    setTimeout(() => {
+        wheel.style.transform = `rotate(${wheelRotation}deg)`;
+    }, 50);
+    
+    // 1.5초 후 결과
+    setTimeout(() => {
+        loading.style.display = 'none';
+        glow.classList.remove('active');
+        sparkle.classList.remove('active');
+        
+        const animal = BRANCH[targetIndex];
+        resultText.textContent = `✨ ${animal.a} (${animal.c}) ✨`;
+        resultText.style.opacity = '1';
+        
+        isWheelSpinning = false;
+        if (callback) callback();
+    }, 1550);
+}
+
 function generateTalisman() {
     if (!SAJU || !SAJU.day) {
         toast('Please analyze your Four Pillars first! 🔮');
         return;
     }
     
-    // [v4.14.1] 의식 애니메이션 시작
-    const overlay = document.getElementById('talisman-ritual-overlay');
-    overlay.classList.add('active');
-    
-    // 붓으로 그리는 애니메이션
-    playRitualAnimation(() => {
-        // 애니메이션 완료 후 실제 부적 생성
+    // 띠 룰렛 먼저 돌리기 (연지 기준)
+    const yearBranchIdx = BRANCH.findIndex(b => b.c === SAJU.year.b.c);
+    spinZodiacWheel(yearBranchIdx, function() {
+        // 룰렛 완료 후 부적 생성
         createHighResTalisman();
-        overlay.classList.remove('active');
-        
         document.getElementById('talisman-preview').style.display = 'block';
         document.getElementById('talisman-btn-wrapper').style.display = 'none';
         toast('🏮 Your fortune talisman has been created!');
@@ -10714,17 +10880,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const sajuDay = document.getElementById('saju-day');
     const sajuHour = document.getElementById('saju-hour');
     
+    // Year - empty placeholder first
+    const yearPlaceholder = document.createElement('option');
+    yearPlaceholder.value = ''; yearPlaceholder.textContent = 'Year';
+    yearPlaceholder.disabled = true; yearPlaceholder.selected = true;
+    sajuYear.appendChild(yearPlaceholder);
     for(let y = 2026; y >= 1940; y--) {
         const opt = document.createElement('option');
         opt.value = y; opt.textContent = y;
-        if(y === 1990) opt.selected = true;
         sajuYear.appendChild(opt);
     }
+    
+    // Month - empty placeholder first
+    const monthPlaceholder = document.createElement('option');
+    monthPlaceholder.value = ''; monthPlaceholder.textContent = 'Month';
+    monthPlaceholder.disabled = true; monthPlaceholder.selected = true;
+    sajuMonth.appendChild(monthPlaceholder);
     for(let m = 1; m <= 12; m++) {
         const opt = document.createElement('option');
         opt.value = m; opt.textContent = MONTH_ABBR[m - 1];
         sajuMonth.appendChild(opt);
     }
+    
+    // Day - empty placeholder first
+    const dayPlaceholder = document.createElement('option');
+    dayPlaceholder.value = ''; dayPlaceholder.textContent = 'Day';
+    dayPlaceholder.disabled = true; dayPlaceholder.selected = true;
+    sajuDay.appendChild(dayPlaceholder);
     for(let d = 1; d <= 31; d++) {
         const opt = document.createElement('option');
         opt.value = d; opt.textContent = d;
@@ -11002,9 +11184,9 @@ window.addEventListener('hashchange', handleUrlHash);
     </div>
     
     <div class="copyright">
-        © 2025 K-MUDANG. All Rights Reserved.<br>
-        <span class="ip-notice">The AI-Saju Integration Protocol is a proprietary methodology of K-MUDANG.</span><br>
-        <span style="color:#666;font-size:0.75rem;">Business License: 487-20-02668</span>
+        © 2026 K-MUDANG. All Rights Reserved.<br>
+        <span class="ip-notice">The AI-Saju Integration Protocol™ is a proprietary methodology of K-MUDANG..</span><br>
+        <span style="color:#999;font-size:0.95rem;">Business License: 487-20-02668</span>
     </div>
     
     <div class="legal-links">
@@ -11112,8 +11294,8 @@ window.addEventListener('hashchange', handleUrlHash);
     padding: 30px 20px;
     margin-top: 50px;
     text-align: center;
-    font-size: 0.85rem;
-    color: #9CA3AF;
+    font-size: 1rem;
+    color: #ccc;
 }
 
 .legal-footer .disclaimer {
@@ -11127,11 +11309,13 @@ window.addEventListener('hashchange', handleUrlHash);
 
 .legal-footer .copyright {
     margin-bottom: 15px;
+    font-size: 1rem;
+    color: #bbb;
 }
 
 .legal-footer .ip-notice {
-    font-size: 0.75rem;
-    opacity: 0.7
+    font-size: 0.95rem;
+    color: #aaa;
 }
 </style>
 </body>
