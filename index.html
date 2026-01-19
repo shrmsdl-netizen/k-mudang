@@ -2327,6 +2327,9 @@ let INPUT_MONTH = null;
 let INPUT_DAY = null;
 let INPUT_IS_LUNAR = false;
 let INPUT_HOUR_INDEX = null;  // v4.16.3: 원래 선택한 시간 인덱스 (0-11)
+let INPUT_HOUR_BEFORE = null; // v4.16.4: 보정 전 시간 (0-23)
+let INPUT_HOUR_AFTER = null;  // v4.16.4: 보정 후 시간 (0-23)
+let ADJUSTED_HOUR_BRANCH_IDX = null; // v4.16.4: 보정 후 지지 인덱스
 let currentNumbers = [];
 let history = [];
 
@@ -8334,6 +8337,10 @@ function analyzeSaju() {
         INPUT_DAY = d;
         INPUT_IS_LUNAR = (CALENDAR === 'lunar');
         INPUT_HOUR_INDEX = hourVal;  // 원래 선택한 시간 인덱스 저장
+        // v4.16.4: 보정 전/후 시간 저장 (AI 프롬프트 표시용)
+        INPUT_HOUR_BEFORE = realHour;  // 보정 전 시간 (0-23)
+        INPUT_HOUR_AFTER = adj.h;      // 보정 후 시간 (0-23)
+        ADJUSTED_HOUR_BRANCH_IDX = hourBranchIdx;  // 보정 후 지지 인덱스
         const str = calcStrength(SAJU);
         if (!str) { toast('Strength calculation error'); return; }
         STRENGTH = str;  // 전역 저장
@@ -9641,18 +9648,29 @@ function copySajuForAI() {
         const locationText = locationSelect ? locationSelect.options[locationSelect.selectedIndex]?.text || 'Unknown' : 'Unknown';
         const calendarText = CALENDAR === 'lunar' ? 'Lunar (음력)' : 'Solar (양력)';
         
-        // 시(時) 정보 - v4.16.3: 사용자가 선택한 원래 시간 표시
+        // 시(時) 정보 - v4.16.4: 보정 전/후 시간 모두 표시
         const HOUR_RANGES = {
             '子': '23:30-01:29', '丑': '01:30-03:29', '寅': '03:30-05:29', '卯': '05:30-07:29',
             '辰': '07:30-09:29', '巳': '09:30-11:29', '午': '11:30-13:29', '未': '13:30-15:29',
             '申': '15:30-17:29', '酉': '17:30-19:29', '戌': '19:30-21:29', '亥': '21:30-23:29'
         };
         let hourText = 'Unknown';
-        // v4.16.3 FIX: 원래 선택한 시간 인덱스 사용 (adjustTime 보정 전 값)
+        let timeCorrection = '';
+        
+        // v4.16.4: 보정 전/후 시간 비교하여 설명 생성
         if (INPUT_HOUR_INDEX !== null && INPUT_HOUR_INDEX >= 0 && INPUT_HOUR_INDEX <= 11) {
-            const hourBranch = BRANCH[INPUT_HOUR_INDEX].c;
-            const hourRange = HOUR_RANGES[hourBranch] || '';
-            hourText = `${hourBranch}時 (${hourRange}) - True Solar Time`;
+            const inputBranch = BRANCH[INPUT_HOUR_INDEX].c;  // 사용자 입력 시간
+            const inputRange = HOUR_RANGES[inputBranch] || '';
+            
+            // 실제 계산에 사용된 시간 (보정 후)
+            if (ADJUSTED_HOUR_BRANCH_IDX !== null && ADJUSTED_HOUR_BRANCH_IDX !== INPUT_HOUR_INDEX) {
+                const adjustedBranch = BRANCH[ADJUSTED_HOUR_BRANCH_IDX].c;
+                const adjustedRange = HOUR_RANGES[adjustedBranch] || '';
+                hourText = `${adjustedBranch}時 (${adjustedRange}) - True Solar Time`;
+                timeCorrection = `\n• Time Correction: Input ${inputBranch}時 → Adjusted to ${adjustedBranch}時 (DST/Longitude correction applied)`;
+            } else {
+                hourText = `${inputBranch}時 (${inputRange}) - True Solar Time`;
+            }
         } else if (SAJU.hour && SAJU.hour.b) {
             // 폴백: SAJU에서 가져오기
             const hourBranch = SAJU.hour.b.c;
@@ -9664,7 +9682,7 @@ function copySajuForAI() {
 
 ${criticalText}【BASIC INFO】
 • Birth Date: ${INPUT_YEAR}-${String(INPUT_MONTH).padStart(2,'0')}-${String(INPUT_DAY).padStart(2,'0')}${INPUT_IS_LUNAR ? ' (Lunar) → Solar: ' + BIRTH_YEAR + '-' + String(BIRTH_MONTH).padStart(2,'0') + '-' + String(BIRTH_DAY).padStart(2,'0') : ''}
-• Birth Hour: ${hourText}
+• Birth Hour: ${hourText}${timeCorrection}
 • Calendar: ${calendarText}
 • Gender: ${GENDER === 'm' ? 'Male (남)' : 'Female (여)'}
 • Birth Location: ${locationText}
