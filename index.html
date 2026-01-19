@@ -3,33 +3,32 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.15.5 [PUBLIC] - Rule 6~8 추가 + 음력 표기 개선              ║
+║  K-MUDANG Pro v4.16.0 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
+║                                                                                ║
+║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
+║  🔒 Basic Security Enabled (DevTools, Right-click disabled)                   ║
+║                                                                                ║
+║  v4.16.0 Changes:                                                             ║
+║    - [NEW] 무료 배포 버전 전환 (모든 기능 해금)                               ║
+║    - [NEW] Ko-fi 후원 연동 (ko-fi.com/kmudang)                                ║
+║    - [REMOVE] Firebase/Gumroad 결제 시스템 제거                               ║
 ║                                                                                ║
 ║  v4.15.4 Changes:                                                             ║
 ║    - [CRITICAL FIX] 일주 계산 오류 수정 (baseJdn 사주로또와 동일하게 변경)    ║
 ║    - [FIX] 60갑자 인덱스 방식으로 일주 계산 알고리즘 통일                      ║
-║                                                                                ║
-║  v4.15.3 Changes:                                                             ║
-║    - [FIX] Firebase 로그인 안정화 (signInWithRedirect fallback)               ║
 ║    - [KASI] 한국천문연구원 절기 데이터 100% 적용 (1940-2050)                  ║
-║    - [FIX] AI 복사 프롬프트에 생년월일시/양력음력/출생지역 추가               ║
-║                                                                                ║
-║  v4.15.1 Changes (大運 Precision Engine):                                     ║
-║    - [MAJOR] 대운 시작 나이 정밀 계산 (분 단위 → 3일=1년 환산)                ║
-║    - [NEW] 순행/역행 로직 양남음녀/음남양녀 정확 적용                          ║
-║    - [NEW] 교운기(交運期) 경고 시스템 강화                                     ║
-║    - Total: 78 AI Rules                                                       ║
+║    - Total: 75 AI Rules                                                       ║
 ║                                                                                ║
 ║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
 ║  Contact: kmudang.official@gmail.com                                          ║
-║  Last Updated: 2025-01-18                                                     ║
+║  Last Updated: 2025-01-19                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title>
-<meta name="description" content="Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading.">
+<meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading.">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -42,89 +41,74 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
-<!-- Firebase SDK for Authentication -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
 <script>
 /* ========================================
-   🔒 PUBLIC EDITION - Firebase Auth
-   Login Required | Premium Features Locked
+   🆓 FREE EDITION - All Features Unlocked
+   No Login Required | Ko-fi Support Welcome
    ======================================== */
-console.log('🔒 K-MUDANG Pro [PUBLIC EDITION] v4.15.3 - KASI Verified');
-
-// Firebase Configuration (Production)
-const firebaseConfig = {
-    apiKey: "AIzaSyBG8P5KYAo3vTcJBm0rNsAmTgRm8Nt3Rgw",
-    authDomain: "k-mudang-pro.firebaseapp.com",
-    projectId: "k-mudang-pro",
-    storageBucket: "k-mudang-pro.firebasestorage.app",
-    messagingSenderId: "287683280564",
-    appId: "1:287683280564:web:6168a13d4f1302f0fe21e1",
-    measurementId: "G-044J002H6P"
-};
-
-// Initialize Firebase
-let auth = null;
-let firebaseReady = false;
-
-function initFirebase() {
-    if (typeof firebase !== 'undefined' && firebase.apps) {
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        auth = firebase.auth();
-        firebaseReady = true;
-        console.log('✅ Firebase initialized successfully');
-        
-        // Check for redirect result (for browsers that don't support popup)
-        auth.getRedirectResult().then((result) => {
-            if (result.user) {
-                console.log('Redirect login successful:', result.user.email);
-            }
-        }).catch((error) => {
-            console.log('Redirect result check:', error.code);
-        });
-        
-        // Auth state observer
-        auth.onAuthStateChanged(async (user) => {
-            currentUser = user;
-            if (user) {
-                console.log('User signed in:', user.email);
-                isPremium = await checkPremiumStatus(user.email);
-                updateAuthUI();
-                if (isPremium) {
-                    unlockAllPremium();
-                    toast('👑 Premium features unlocked!');
-                }
-            } else {
-                console.log('User signed out');
-                isPremium = false;
-                currentUser = null;
-                updateAuthUI();
-                lockPremiumFeatures();
-            }
-        });
-        
-        return true;
-    }
-    return false;
-}
-
-// Try to init immediately, then retry on DOMContentLoaded
-if (!initFirebase()) {
-    document.addEventListener('DOMContentLoaded', function() {
-        if (!firebaseReady) {
-            setTimeout(initFirebase, 100);
-        }
-    });
-}
-
-console.log('Public Edition initialized');
+console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.16.0');
 
 /* ========================================
-   Toast Function (Early Definition)
+   🔒 Basic Security Protection
    ======================================== */
+// Disable right-click context menu
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+});
+
+// Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+document.addEventListener('keydown', function(e) {
+    // F12
+    if (e.key === 'F12' || e.keyCode === 123) {
+        e.preventDefault();
+        return false;
+    }
+    // Ctrl+Shift+I (DevTools)
+    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {
+        e.preventDefault();
+        return false;
+    }
+    // Ctrl+Shift+J (Console)
+    if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {
+        e.preventDefault();
+        return false;
+    }
+    // Ctrl+Shift+C (Element picker)
+    if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) {
+        e.preventDefault();
+        return false;
+    }
+    // Ctrl+U (View source)
+    if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) {
+        e.preventDefault();
+        return false;
+    }
+    // Ctrl+S (Save page)
+    if (e.ctrlKey && (e.key === 'S' || e.key === 's' || e.keyCode === 83)) {
+        e.preventDefault();
+        return false;
+    }
+});
+
+// Disable text selection (optional - for content protection)
+document.addEventListener('selectstart', function(e) {
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        return false;
+    }
+});
+
+// Disable drag
+document.addEventListener('dragstart', function(e) {
+    e.preventDefault();
+    return false;
+});
+
+// FREE EDITION: No authentication needed - All features unlocked
+let isPremium = true;
+let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };
+
 function toast(msg) {
     const t = document.getElementById('toast');
     if (t) {
@@ -136,198 +120,28 @@ function toast(msg) {
     }
 }
 
-/* ========================================
-   Premium State Management
-   ======================================== */
-let isPremium = false;
-let currentUser = null;
+// Stub functions for compatibility
+function googleSignIn() { toast('🔓 PERSONAL Edition - Already unlocked!'); }
+function signOut() { toast('🔓 PERSONAL Edition - No login required'); }
+function checkPremiumStatus() { return true; }
+function updateAuthUI() {}
+function lockPremiumFeatures() {}
+function requirePremium() { return true; }  // Always unlocked
+function openPremiumCheckout() { window.open('https://ko-fi.com/kmudang', '_blank'); }
 
-// Check premium status via server
-async function checkPremiumStatus(email) {
-    try {
-        const response = await fetch('https://us-central1-k-mudang-pro.cloudfunctions.net/checkPurchaseByEmail', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
-        });
-        const data = await response.json();
-        // Firebase Functions returns {status: "active"} for valid premium
-        return data.success && data.status === 'active';
-    } catch (e) {
-        console.warn('Premium check failed:', e);
-        return false;
-    }
-}
-
-// Google Sign In
-function googleSignIn() {
-    // Try to init Firebase if not ready
-    if (!firebaseReady) {
-        initFirebase();
-    }
-    
-    if (!auth) {
-        toast('❌ Firebase SDK failed to load. Please refresh the page.');
-        console.error('Firebase auth is null. Check if SDK loaded correctly.');
-        return;
-    }
-    
-    const provider = new firebase.auth.GoogleAuthProvider();
-    
-    // Try popup first, fallback to redirect
-    auth.signInWithPopup(provider)
-        .then((result) => {
-            toast('✅ Logged in as ' + result.user.displayName);
-        })
-        .catch((error) => {
-            console.error('Login error:', error);
-            if (error.code === 'auth/operation-not-supported-in-this-environment' ||
-                error.code === 'auth/popup-blocked') {
-                // Fallback to redirect
-                auth.signInWithRedirect(provider);
-            } else {
-                toast('❌ Login failed: ' + error.message);
-            }
-        });
-}
-
-// Sign Out
-function signOut() {
-    if (!auth) {
-        toast('❌ Firebase not loaded. Please refresh.');
-        return;
-    }
-    auth.signOut()
-        .then(() => {
-            toast('👋 Signed out successfully');
-        })
-        .catch((error) => {
-            toast('❌ Sign out failed');
-        });
-}
-
-// Update UI based on auth state
-function updateAuthUI() {
-    const loginBtn = document.getElementById('login-btn');
-    const userInfo = document.getElementById('user-info');
-    const userName = document.getElementById('user-name');
-    const premiumBadge = document.getElementById('premium-badge');
-    const premiumSection = document.getElementById('premium-section');
-    
-    if (currentUser) {
-        // 로그인 상태
-        if (loginBtn) loginBtn.style.display = 'none';
-        if (userInfo) userInfo.style.display = 'flex';
-        if (userName) userName.textContent = currentUser.displayName || currentUser.email;
-        if (premiumBadge) {
-            premiumBadge.style.display = isPremium ? 'inline' : 'none';
-        }
-        // 프리미엄이면 구매 유도 섹션 숨기기
-        if (premiumSection) {
-            premiumSection.style.display = isPremium ? 'none' : 'block';
-        }
-    } else {
-        // 로그아웃 상태
-        if (loginBtn) loginBtn.style.display = 'inline-flex';
-        if (userInfo) userInfo.style.display = 'none';
-        if (premiumBadge) premiumBadge.style.display = 'none';
-        // 비로그인시 구매 유도 섹션 표시
-        if (premiumSection) premiumSection.style.display = 'block';
-    }
-}
-
-// Lock premium features
-function lockPremiumFeatures() {
-    // .premium-section 클래스를 가진 프리미엄 콘텐츠 잠금
-    document.querySelectorAll('.premium-section').forEach(el => {
-        el.classList.remove('unlocked');
-    });
-    document.querySelectorAll('.premium-lock').forEach(el => {
-        el.style.display = 'flex';
-    });
-    document.querySelectorAll('.premium-overlay').forEach(el => {
-        el.style.display = 'flex';
-    });
-    // 구매 유도 섹션은 표시
-    const premiumSection = document.getElementById('premium-section');
-    if (premiumSection) premiumSection.style.display = 'block';
-}
-
-// Unlock all premium content
+// Unlock all features on load (FREE version)
 function unlockAllPremium() {
-    // .premium-section 클래스를 가진 프리미엄 콘텐츠 해금
-    document.querySelectorAll('.premium-section').forEach(el => {
-        el.classList.add('unlocked');
-    });
-    document.querySelectorAll('.premium-lock').forEach(el => {
-        el.style.display = 'none';
-    });
-    document.querySelectorAll('.premium-overlay').forEach(el => {
-        el.style.display = 'none';
-    });
-    // 프리미엄 해금 시 구매 유도 섹션 숨기기
-    const premiumSection = document.getElementById('premium-section');
-    if (premiumSection) premiumSection.style.display = 'none';
-    console.log('All premium features unlocked');
+    document.querySelectorAll('.premium-section').forEach(el => el.classList.add('unlocked'));
+    document.querySelectorAll('.premium-lock').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.premium-overlay').forEach(el => el.style.display = 'none');
+    const loginBtn = document.getElementById('login-btn');
+    if (loginBtn) loginBtn.style.display = 'none';
+    console.log('🔓 All features unlocked - FREE Edition');
 }
 
-// Open premium checkout (Gumroad)
-function openPremiumCheckout() {
-    if (!currentUser) {
-        toast('⚠️ Please sign in first');
-        googleSignIn();
-        return;
-    }
-    
-    // Gumroad checkout URL with email prefill
-    const checkoutUrl = `https://kmudang.gumroad.com/l/premium?email=${encodeURIComponent(currentUser.email)}`;
-    window.open(checkoutUrl, '_blank');
-    toast('🛒 Opening checkout...');
-}
+document.addEventListener('DOMContentLoaded', unlockAllPremium);
 
-/* ========================================
-   Premium Feature Gating
-   ======================================== */
-function requirePremium(feature) {
-    if (isPremium) return true;
-    
-    toast(`👑 ${feature} requires Premium`);
-    
-    // Show premium modal
-    const premiumSection = document.getElementById('premium-section');
-    if (premiumSection) {
-        premiumSection.scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    return false;
-}
-
-// Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Public Edition initialized');
-    updateAuthUI();
-    
-    // Show premium overlay on locked sections
-    if (!isPremium) {
-        lockPremiumFeatures();
-    }
-});
-
-</script>
-
-<!-- Console Protection -->
-<script>
-(function() {
-    const block = function() { return false; };
-    document.addEventListener('contextmenu', block);
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || 
-            (e.ctrlKey && e.shiftKey && e.key === 'J') || (e.ctrlKey && e.key === 'U')) {
-            e.preventDefault();
-            return false;
-        }
-    });
-})();
+console.log('FREE Edition initialized - All features unlocked');
 </script>
 
 
@@ -1497,11 +1311,6 @@ footer a {
                 </div>
             </div>
             <button class="btn" onclick="analyzeSaju()">🔮 Analyze Fortune</button>
-            <p style="font-size:0.85rem;color:#aaa;margin-top:10px;text-align:center;line-height:1.6;">
-                💡 After analysis, tap <strong style="color:#D4AF37;">Copy AI Prompt</strong> below.<br>
-                Paste into Gemini, ChatGPT, etc. to receive<br>
-                <strong style="color:#FFD700;">expert-level narrative reading based on precise Saju data</strong>.
-            </p>
         </div>
 
         <div id="saju-result" style="display:none;">
@@ -1766,8 +1575,8 @@ footer a {
                 </div>
             </div>
 
-            <!-- ===== Premium Unlock (福債) ===== -->
-            <div class="card" id="premium-section" style="text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,193,7,0.03));border:1px solid rgba(212,175,55,0.2);">
+            <!-- ===== Ko-fi Support (福債) ===== -->
+            <div class="card" id="kofi-section" style="text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,193,7,0.03));border:1px solid rgba(212,175,55,0.2);">
                 <p style="font-size:1.4rem;margin-bottom:8px;">🙏 福債 (Karma Offering)</p>
                 <p style="font-size:0.95rem;color:var(--gold-light);line-height:1.7;margin-bottom:15px;font-style:italic;">
                     "복을 받았으면 복채를 내어야 한다"<br>
@@ -1777,20 +1586,20 @@ footer a {
                     In Korean fortune-telling tradition, <strong style="color:var(--gold);">福債 (Bokchae)</strong> is the sacred exchange —<br>
                     a grateful offering for cosmic insight received.
                 </p>
-                <p style="font-size:0.8rem;color:var(--gray);margin-bottom:20px;">
-                    Unlock: Life Cycles (大運) · 10-Year Fortune · Monthly Fortune · AI Copy
+                <p style="font-size:0.8rem;color:var(--gold-light);margin-bottom:20px;">
+                    ✨ All features are FREE · Support development if you find it helpful ✨
                 </p>
                 
-                <!-- Single Offering Button -->
+                <!-- Ko-fi Support Button -->
                 <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:15px;">
-                    <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:18px 40px;background:linear-gradient(135deg,#FFD700,#FFA500);box-shadow:0 0 20px rgba(255,215,0,0.3);">
-                        <span style="display:block;font-size:1.4rem;font-weight:700;">Unlock Premium · $20</span>
-                    </button>
+                    <a href="https://ko-fi.com/kmudang" target="_blank" class="kofi-btn" style="text-decoration:none;padding:18px 40px;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:12px;box-shadow:0 0 20px rgba(255,215,0,0.3);display:inline-flex;align-items:center;gap:10px;">
+                        <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="Ko-fi" style="width:28px;height:28px;">
+                        <span style="font-size:1.2rem;font-weight:700;color:#1a1a2e;">Support on Ko-fi</span>
+                    </a>
                 </div>
                 
-                <p class="duration" style="font-size:0.85rem;color:var(--gray);margin-bottom:15px;">24-hour full access</p>
-                <p style="font-size:0.7rem;color:var(--gray);margin-top:10px;opacity:0.6;">
-                    🔒 Secure payment via Gumroad
+                <p style="font-size:0.8rem;color:var(--gray);margin-top:10px;opacity:0.8;">
+                    ☕ Buy me a coffee · 커피 한 잔 사주기
                 </p>
             </div>
 
@@ -1844,24 +1653,11 @@ footer a {
                 <div class="form-group"><label>Day</label><select id="pb-day"></select></div>
                 <div class="form-group"><label>Year</label><select id="pb-year"></select></div>
             </div>
-            
-            <!-- v4.15.5: 3-tier system -->
-            <div style="display:flex;flex-direction:column;gap:10px;margin-top:15px;">
-                <button class="btn btn-secondary" onclick="generatePowerball('quick')" style="width:100%;">
-                    🎲 Quick Pick <span style="font-size:0.75rem;opacity:0.7;">(Random)</span>
-                </button>
-                <button class="btn" onclick="generatePowerball('destiny')" style="width:100%;background:linear-gradient(135deg,#2d5016,#4a7c23);">
-                    🔮 Basic Destiny <span style="font-size:0.75rem;opacity:0.7;">(Yongsin Only - FREE)</span>
-                </button>
-            </div>
-            
-            <div style="margin-top:15px;padding:12px;background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,193,7,0.05));border-radius:8px;border:1px solid rgba(212,175,55,0.3);">
-                <p style="font-size:0.85rem;color:var(--gold);margin-bottom:8px;font-weight:600;">✨ Advanced Destiny Algorithm</p>
-                <p style="font-size:0.75rem;color:#aaa;margin-bottom:10px;">
-                    Weighted system using Yongsin (3×), Heesin (2×), and avoiding Gisin (0.5×)
-                </p>
-                <button class="btn" onclick="generatePowerball('advanced')" style="width:100%;background:linear-gradient(135deg,#8B0000,#DC143C);">
-                    👑 Advanced Destiny <span style="font-size:0.75rem;opacity:0.9;">(Premium)</span>
+            <button class="btn btn-secondary" onclick="generatePowerball('quick')">🎲 Quick Pick (Random)</button>
+            <div style="margin-top:15px;padding:12px;background:rgba(255,215,0,0.05);border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
+                <p style="font-size:0.8rem;color:var(--gold);margin-bottom:8px;">🔮 Want destiny-based numbers?</p>
+                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:8px 16px;font-size:12px;">
+                    👑 Unlock Destiny Numbers
                 </button>
             </div>
         </div>
@@ -1915,24 +1711,11 @@ footer a {
                 <div class="form-group"><label>Day</label><select id="mega-day"></select></div>
                 <div class="form-group"><label>Year</label><select id="mega-year"></select></div>
             </div>
-            
-            <!-- v4.15.5: 3-tier system -->
-            <div style="display:flex;flex-direction:column;gap:10px;margin-top:15px;">
-                <button class="btn btn-secondary" onclick="generateMega('quick')" style="width:100%;">
-                    🎲 Quick Pick <span style="font-size:0.75rem;opacity:0.7;">(Random)</span>
-                </button>
-                <button class="btn" onclick="generateMega('destiny')" style="width:100%;background:linear-gradient(135deg,#1a3a5c,#2d5a87);">
-                    🔮 Basic Destiny <span style="font-size:0.75rem;opacity:0.7;">(Yongsin Only - FREE)</span>
-                </button>
-            </div>
-            
-            <div style="margin-top:15px;padding:12px;background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,193,7,0.05));border-radius:8px;border:1px solid rgba(212,175,55,0.3);">
-                <p style="font-size:0.85rem;color:var(--gold);margin-bottom:8px;font-weight:600;">✨ Advanced Destiny Algorithm</p>
-                <p style="font-size:0.75rem;color:#aaa;margin-bottom:10px;">
-                    Weighted system using Yongsin (3×), Heesin (2×), and avoiding Gisin (0.5×)
-                </p>
-                <button class="btn" onclick="generateMega('advanced')" style="width:100%;background:linear-gradient(135deg,#8B0000,#DC143C);">
-                    👑 Advanced Destiny <span style="font-size:0.75rem;opacity:0.9;">(Premium)</span>
+            <button class="btn btn-secondary" onclick="generateMega('quick')">🎲 Quick Pick (Random)</button>
+            <div style="margin-top:15px;padding:12px;background:rgba(255,215,0,0.05);border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
+                <p style="font-size:0.8rem;color:var(--gold);margin-bottom:8px;">🔮 Want destiny-based numbers?</p>
+                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:8px 16px;font-size:12px;">
+                    👑 Unlock Destiny Numbers
                 </button>
             </div>
         </div>
@@ -1959,8 +1742,9 @@ footer a {
 </div>
 
 <footer>
-    <p style="color:var(--gold);margin-bottom:8px;">🔒 Pursuing pure scholarly research without any advertisements</p>
+    <p style="color:var(--gold);margin-bottom:8px;">🆓 FREE · All Features Unlocked · No Ads</p>
     <p style="font-size:0.85rem;color:var(--gray);margin-bottom:10px;">Ancient Korean Zodiac Algorithm · Four Pillars of Destiny</p>
+    <p style="margin-bottom:10px;"><a href="https://ko-fi.com/kmudang" target="_blank" style="color:var(--gold-light);text-decoration:none;">☕ Support on Ko-fi</a></p>
     <p style="opacity:0.5;font-size:0.8rem;">© 2026 K-MUDANG Pro · Institute of Destiny Studies (命理硏究所)</p>
 </footer>
 
@@ -2388,10 +2172,6 @@ let BIRTH_YEAR = null;
 let BIRTH_MONTH = null;  // v4.15.1: 대운 정밀 계산용
 let BIRTH_DAY = null;    // v4.15.1: 대운 정밀 계산용
 let BIRTH_HOUR = null;   // v4.15.1: 대운 정밀 계산용
-// v4.15.5: 음력 입력 시 원래 값 저장 (표시용)
-let ORIGINAL_LUNAR_YEAR = null;
-let ORIGINAL_LUNAR_MONTH = null;
-let ORIGINAL_LUNAR_DAY = null;
 let currentNumbers = [];
 let history = [];
 
@@ -3243,67 +3023,66 @@ function updateTimezoneInfo() {
     const info = document.getElementById('timezone-info');
     if (!info) return;
     
-    // Korea/Japan: no message, others: auto-conversion notice
+    // 한국은 메시지 없음, 나머지는 자동 변환 안내
     if (loc === 'korea' || loc === 'japan') {
         info.style.display = 'none';
     } else {
-        info.textContent = '💡 Local birth time → Auto-converted to Korea Standard Time';
+        info.textContent = '💡 현지 출생시간 → 한국 표준시로 자동 변환';
         info.style.display = 'block';
     }
 }
 
-// v4.15.5: Timezone offset calculation (relative to Korea UTC+9)
+// v4.14.7: 지역별 시차 계산 (한국시 UTC+9 기준 오프셋)
 function getTimezoneOffset(location, year, month) {
-    // DST check (Northern Hemisphere: Mar-Oct, Southern: opposite)
+    // 서머타임 대략 체크 (북반구 3~10월, 남반구는 반대)
     const isDST = (month >= 3 && month <= 10);
     
-    // Offset to ADD to local time to get Korea time (UTC+9)
-    // Formula: Korea(+9) - LocalTZ = offset
+    // 한국시(UTC+9) 기준 오프셋 (해당 지역 현지시간에 더해서 한국시로 변환)
     const offsets = {
-        // Korea/Japan (UTC+9) - no offset
+        // 한국/일본 (UTC+9) - 오프셋 0
         'korea': 0, 'japan': 0,
         
-        // USA (add hours to get Korea time)
-        'us-pacific': isDST ? 16 : 17,       // UTC-7/-8 → +9 = 16/17
-        'us-mountain': isDST ? 15 : 16,      // UTC-6/-7 → +9 = 15/16
-        'us-central': isDST ? 14 : 15,       // UTC-5/-6 → +9 = 14/15
-        'us-eastern': isDST ? 13 : 14,       // UTC-4/-5 → +9 = 13/14
-        'us-alaska': isDST ? 17 : 18,        // UTC-8/-9 → +9 = 17/18
-        'us-hawaii': 19,                      // UTC-10 → +9 = 19 (no DST)
+        // 미국
+        'us-pacific': isDST ? -16 : -17,      // CA, WA, OR (UTC-7/-8)
+        'us-mountain': isDST ? -15 : -16,     // CO, AZ, UT, NV (UTC-6/-7)
+        'us-central': isDST ? -14 : -15,      // TX, IL, MN (UTC-5/-6)
+        'us-eastern': isDST ? -13 : -14,      // NY, FL, GA (UTC-4/-5)
+        'us-alaska': isDST ? -17 : -18,       // UTC-8/-9
+        'us-hawaii': -19,                      // UTC-10 (no DST)
         
-        // Canada
-        'canada-west': isDST ? 16 : 17,
-        'canada-east': isDST ? 13 : 14,
+        // 캐나다
+        'canada-west': isDST ? -16 : -17,
+        'canada-east': isDST ? -13 : -14,
         
-        // Latin America
-        'mexico': isDST ? 14 : 15,
-        'brazil': 12,                         // UTC-3 → +9 = 12
+        // 중남미
+        'mexico': isDST ? -14 : -15,
+        'brazil': -12,                         // UTC-3
         
-        // East Asia (UTC+8) → +9 = 1
-        'china': 1, 'taiwan': 1, 'hongkong': 1,
-        'singapore': 1, 'philippines': 1,
+        // 동아시아 (UTC+8)
+        'china': -1, 'taiwan': -1, 'hongkong': -1,
+        'singapore': -1, 'philippines': -1,
         
-        // Southeast Asia (UTC+7) → +9 = 2
-        'vietnam': 2, 'thailand': 2, 'indonesia': 2,
+        // 동남아시아 (UTC+7)
+        'vietnam': -2, 'thailand': -2, 'indonesia': -2,
         
-        // South Asia / Middle East
-        'india': 3.5,                         // UTC+5:30 → +9 = 3.5
-        'uae': 5,                             // UTC+4 → +9 = 5
-        'israel': isDST ? 6 : 7,             // UTC+3/+2 → +9 = 6/7
-        'saudi': 6,                           // UTC+3 → +9 = 6
+        // 남아시아/중동
+        'india': -3.5,                         // UTC+5:30
+        'uae': -5,                             // UTC+4
+        'israel': isDST ? -6 : -7,            // UTC+2/+3
+        'saudi': -6,                           // UTC+3
         
-        // Europe (CET = UTC+1/+2)
-        'uk': isDST ? 8 : 9,                 // UTC+1/+0 → +9 = 8/9
-        'germany': isDST ? 7 : 8,            // UTC+2/+1 → +9 = 7/8
-        'france': isDST ? 7 : 8,
-        'spain': isDST ? 7 : 8,
-        'italy': isDST ? 7 : 8,
-        'russia': 6,                          // Moscow UTC+3 → +9 = 6
+        // 유럽 (CET = UTC+1/+2)
+        'uk': isDST ? -8 : -9,                // UTC+0/+1
+        'germany': isDST ? -7 : -8,
+        'france': isDST ? -7 : -8,
+        'spain': isDST ? -7 : -8,
+        'italy': isDST ? -7 : -8,
+        'russia': -6,                          // Moscow UTC+3
         
-        // Oceania (Southern Hemisphere - DST opposite)
-        'australia-east': isDST ? -1 : -2,   // UTC+11/+10 → +9 = -2/-1
-        'australia-west': 1,                  // UTC+8 → +9 = 1
-        'newzealand': isDST ? -3 : -4        // UTC+13/+12 → +9 = -4/-3
+        // 오세아니아 (남반구 - DST 반대)
+        'australia-east': isDST ? 1 : 2,      // UTC+10/+11
+        'australia-west': -1,                  // UTC+8
+        'newzealand': isDST ? 3 : 4           // UTC+12/+13
     };
     return offsets[location] || 0;
 }
@@ -3312,7 +3091,7 @@ function adjustTime(y, m, d, h) {
     if (h < 0) return { y, m, d, h };
     let hour = h;
     
-    // v4.15.5: Timezone adjustment to Korea Standard Time
+    // v4.14.7: 지역별 타임존 보정
     const location = document.getElementById('birth-location')?.value || 'us-pacific';
     hour += getTimezoneOffset(location, y, m);
     while (hour >= 24) { hour -= 24; d += 1; }
@@ -3321,12 +3100,12 @@ function adjustTime(y, m, d, h) {
     if (d < 1) { m--; if (m < 1) { m = 12; y--; } d = daysInMonth[m - 1]; }
     if (d > daysInMonth[m - 1]) { d = 1; m++; if (m > 12) { m = 1; y++; } }
     
-    // Korea historical DST correction (Korea birth only)
+    // Korea DST correction (한국 출생만)
     if (location === 'korea') {
         const isDST = ((y >= 1948 && y <= 1951) || (y >= 1955 && y <= 1960) || (y >= 1987 && y <= 1988));
         if (isDST) hour -= 1;
     }
-    // True solar time correction (-32 min ≈ -0.5 hour)
+    // True solar time correction
     hour = hour - 0.5;
     if (hour < 0) { hour += 12; d -= 1; }
     if (d < 1) { m -= 1; if (m < 1) { m = 12; y -= 1; } d = 28; }
@@ -8089,18 +7868,10 @@ function analyzeSaju() {
         if (d < 1 || d > 31) { toast('Day must be between 1-31'); return; }
         
         let sy = y, sm = m, sd = d;
-        // v4.15.5: 음력 입력 시 원래 값 저장 (표시용)
         if (CALENDAR === 'lunar') {
-            ORIGINAL_LUNAR_YEAR = y;
-            ORIGINAL_LUNAR_MONTH = m;
-            ORIGINAL_LUNAR_DAY = d;
             const conv = lunarToSolar(y, m, d);
             if (!conv || !conv.year) { toast('Lunar conversion error. Try solar calendar'); return; }
             sy = conv.year; sm = conv.month; sd = conv.day;
-        } else {
-            ORIGINAL_LUNAR_YEAR = null;
-            ORIGINAL_LUNAR_MONTH = null;
-            ORIGINAL_LUNAR_DAY = null;
         }
         
         const adj = adjustTime(sy, sm, sd, hourVal);
@@ -9438,14 +9209,7 @@ function copySajuForAI() {
         // Generate text
         const locationSelect = document.getElementById('birth-location');
         const locationText = locationSelect ? locationSelect.options[locationSelect.selectedIndex]?.text || 'Unknown' : 'Unknown';
-        
-        // v4.15.5: 음력 입력 시 원래 날짜도 명확히 표시
-        let calendarText;
-        if (CALENDAR === 'lunar' && ORIGINAL_LUNAR_YEAR) {
-            calendarText = `Solar (양력) ← Converted from Lunar ${ORIGINAL_LUNAR_MONTH}/${ORIGINAL_LUNAR_DAY} (음력 ${ORIGINAL_LUNAR_MONTH}월 ${ORIGINAL_LUNAR_DAY}일)`;
-        } else {
-            calendarText = 'Solar (양력)';
-        }
+        const calendarText = CALENDAR === 'lunar' ? 'Lunar (음력)' : 'Solar (양력)';
         
         // 시(時) 정보 - 진태양시 기준 시간대 포함
         const HOUR_RANGES = {
@@ -9971,25 +9735,6 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - Weak Chart (0-30%) + Wealth Structure = "Anxious Chaser" NOT "Steady Builder"
 - Strong Chart (70%+) + Peer Year = "Robbery Warning" - wealth is threatened by rivals
 
-**RULE 6. STRUCTURE LABEL vs ACTUAL POWER CORRECTION (格局 vs 透出)**
-- Even if data shows "Direct Wealth Structure," if Indirect Wealth (偏財) is revealed in stems AND wealth stars total 3+, interpret as "Wealth-Heavy Weak Chart" perspective.
-- Direct Wealth label + Indirect Wealth revealed = NOT "Steady Salaryman" but "Speculative tendencies with insufficient stamina"
-- Direct Officer label + Seven Killings revealed = NOT "Gentle employee" but "Leader burdened with heavy responsibility and pressure"
-- CORE: Prioritize REVEALED TEN GODS in stems and ELEMENT COUNT over the Structure label name.
-
-**RULE 7. HIDDEN STEM CLIMATE SAVIOR (支藏干 調候)**
-- Even if data shows "0 count" for an element, CHECK hidden stems for that element.
-- If the CLIMATE BENEFICIAL (Fire for cold chart, Water for hot chart) exists ONLY in hidden stems, it is the "Hidden Lifeline."
-- Example: Winter chart shows Fire=0, but Day Branch 未 contains hidden 丁火 → "Your only warmth hides in spouse palace. Domestic harmony is your key to fortune."
-- Example: Summer chart shows Water=0, but Day Branch 辰 contains hidden 癸水 → "Inner wisdom (day branch) cools your excess heat. Meditation and study are your remedies."
-
-**RULE 8. DOMINANT CLASH CONSERVATIVE STANCE (旺神沖發 守成論) - OVERRIDES RULE 1**
-- When one element has 4+ count (DOMINANT) and Annual Branch clashes it, even if it brings Beneficial Element, prioritize "DEFENSE" over "EXPANSION."
-- **CRITICAL: This rule OVERRIDES Rule 1 (Climate First).** Even if Fire is the climate savior for a winter chart, if Water is DOMINANT (4+) and Fire clashes it, the danger outweighs the benefit.
-- Example: Water=5 + 2026 午(Fire) clash 子 → "Beneficial Fire arrived BUT it pokes the tsunami. Expansion is dangerous. Health management and status quo are best."
-- Dominant Clash + Beneficial Year = "Opportunity arrived but risk is maximized. No aggressive investment/expansion. Switch to defense mode."
-- Health: BOTH dominant element organs AND clashing element organs are at risk. Water dominant + Fire clash → Kidney/Bladder + Heart/Blood vessels both require attention.
-
 [INTERPRETATION GUIDELINES]
 1. **Handling Conflicts:** If 'Six Relations' shows "Hidden" spouse/children but 'Divine Stars' shows Golden Carriage or similar blessings, prioritize Divine Stars as "hidden potential." Explain that the blessing exists but requires the right timing (Life Cycle) to manifest.
 2. **"Hidden" means "Latent," not "Never":** When spouse/children stars are hidden, interpret as requiring conscious effort or patience until the favorable Life Cycle arrives—never as permanent absence.
@@ -10426,9 +10171,9 @@ function getYongsinElement(saju) {
 }
 
 function generatePowerball(type) {
-    // v4.15.5: Premium check only for 'advanced' type
-    if (type === 'advanced' && !isPremium) {
-        toast('👑 Advanced Destiny requires Premium. Please offer 福債.');
+    // Premium check for destiny-based numbers
+    if (type === 'destiny' && !isPremium) {
+        toast('👑 Destiny Numbers require Premium. Please offer 福債.');
         openPremiumCheckout();
         return;
     }
@@ -10439,30 +10184,15 @@ function generatePowerball(type) {
     
     let numbers = [];
     let powerball;
-    let typeLabel = 'QUICK';
     
-    if (type === 'quick') {
-        // ========== QUICK PICK (FREE) - Pure Random ==========
-        const used = new Set();
-        while(numbers.length < 5) {
-            const n = Math.floor(Math.random() * 69) + 1;
-            if(!used.has(n)) {
-                used.add(n);
-                numbers.push(n);
-            }
-        }
-        numbers.sort((a,b) => a-b);
-        powerball = Math.floor(Math.random() * 26) + 1;
-        typeLabel = 'QUICK';
-        toast('🎲 Quick Pick generated!');
-        
-    } else if (type === 'destiny' && y && m && d) {
-        // ========== BASIC DESTINY (FREE) - Yongsin Only ==========
+    if(type === 'destiny' && y && m && d) {
+        // v4.14.7: 사주 탭에서 이미 분석된 데이터가 있으면 활용
         let saju, yongsin;
         if (SAJU && GODS && BIRTH_YEAR === y) {
             saju = SAJU;
             yongsin = GODS.yong;
         } else {
+            // 사주 분석이 안 됐으면 직접 계산
             saju = {
                 year: calcYearPillar(y, m, d),
                 month: calcMonthPillar(y, m, d),
@@ -10473,8 +10203,9 @@ function generatePowerball(type) {
         
         const luckyNums = getElementNumbers(yongsin, 69);
         
-        // Hash seed for reproducibility
-        const seed = `${y}-${m}-${d}-${yongsin}-PB-${Date.now()}`;
+        // Generate hash seed (including Saju info)
+        const dayElement = saju.day.s.e;
+        const seed = `${y}-${m}-${d}-${dayElement}-${yongsin}-PB-${Date.now()}`;
         let hash = 0;
         for(let i = 0; i < seed.length; i++) {
             hash = ((hash << 5) - hash) + seed.charCodeAt(i);
@@ -10483,7 +10214,7 @@ function generatePowerball(type) {
         
         const used = new Set();
         
-        // Include 2 Yongsin element numbers
+        // 1) Include 2 Yongsin element numbers
         for(let i = 0; i < 2 && luckyNums.length > 0; i++) {
             hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
             const idx = hash % luckyNums.length;
@@ -10494,7 +10225,7 @@ function generatePowerball(type) {
             }
         }
         
-        // Remaining numbers hash-based
+        // 2) Remaining numbers hash-based
         while(numbers.length < 5) {
             hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
             const n = (hash % 69) + 1;
@@ -10505,88 +10236,30 @@ function generatePowerball(type) {
         }
         numbers.sort((a,b) => a-b);
         
-        // Powerball
+        // Powerball (1-26) - 용신 오행 반영
         const luckyPB = getElementNumbers(yongsin, 26);
         hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
-        if(luckyPB.length > 0 && hash % 3 !== 0) {
+        if(luckyPB.length > 0 && hash % 3 !== 0) {  // 66% chance for Yongsin number
             powerball = luckyPB[hash % luckyPB.length];
         } else {
             powerball = (hash % 26) + 1;
         }
         
-        typeLabel = 'DESTINY';
-        toast(`🔮 Basic Destiny: ${yongsin.toUpperCase()} energy`);
-        
-    } else if (type === 'advanced' && y && m && d) {
-        // ========== ADVANCED DESTINY (PREMIUM) - Weighted Algorithm ==========
-        let saju, gods;
-        if (SAJU && GODS && BIRTH_YEAR === y) {
-            saju = SAJU;
-            gods = GODS;
-        } else {
-            saju = {
-                year: calcYearPillar(y, m, d),
-                month: calcMonthPillar(y, m, d),
-                day: calcDayPillar(y, m, d)
-            };
-            const yongEl = getYongsinElement(saju);
-            const supportMap = {water:'wood', wood:'fire', fire:'earth', earth:'metal', metal:'water'};
-            const attackMap = {water:'fire', fire:'metal', metal:'wood', wood:'earth', earth:'water'};
-            gods = {
-                yong: yongEl,
-                hee: supportMap[yongEl] || 'fire',
-                gi: attackMap[yongEl] || 'water'
-            };
-        }
-        
-        // 용신/희신/기신 번호 추출
-        const yongNums = getElementNumbers(gods.yong, 69);
-        const heeNums = getElementNumbers(gods.hee, 69);
-        const giNums = getElementNumbers(gods.gi, 69);
-        
-        // 가중치 풀 생성 (사주로또 Pro 방식)
-        let weightedPool = [];
-        for (let i = 1; i <= 69; i++) {
-            let weight = 1;
-            if (yongNums.includes(i)) weight = 3;       // 용신: 3배
-            else if (heeNums.includes(i)) weight = 2;   // 희신: 2배
-            else if (giNums.includes(i)) weight = 0.5;  // 기신: 0.5배 (회피)
-            for (let j = 0; j < weight * 2; j++) weightedPool.push(i);
-        }
-        
-        // 가중치 풀에서 5개 선택
-        const selected = new Set();
-        let attempts = 0;
-        while (selected.size < 5 && attempts < 1000) {
-            const idx = Math.floor(Math.random() * weightedPool.length);
-            selected.add(weightedPool[idx]);
-            attempts++;
-        }
-        numbers = [...selected].sort((a, b) => a - b);
-        
-        // Powerball (1-26) - 가중치 적용
-        const yongPB = getElementNumbers(gods.yong, 26);
-        const heePB = getElementNumbers(gods.hee, 26);
-        const giPB = getElementNumbers(gods.gi, 26);
-        
-        let pbPool = [];
-        for (let i = 1; i <= 26; i++) {
-            let weight = 1;
-            if (yongPB.includes(i)) weight = 3;
-            else if (heePB.includes(i)) weight = 2;
-            else if (giPB.includes(i)) weight = 0.5;
-            for (let j = 0; j < weight * 2; j++) pbPool.push(i);
-        }
-        powerball = pbPool[Math.floor(Math.random() * pbPool.length)];
-        
-        const yongCount = numbers.filter(n => yongNums.includes(n)).length;
-        const giCount = numbers.filter(n => giNums.includes(n)).length;
-        typeLabel = 'ADVANCED';
-        toast(`✨ Advanced: ${gods.yong.toUpperCase()} ×${yongCount} | Avoided ${gods.gi.toUpperCase()}`);
-        
+        toast(`🔮 Destiny numbers generated! (${yongsin.toUpperCase()} energy)`);
     } else {
-        toast('⚠️ Please enter your birth date');
-        return;
+        // Quick Pick
+        const used = new Set();
+        while(numbers.length < 5) {
+            const n = Math.floor(Math.random() * 69) + 1;
+            if(!used.has(n)) {
+                used.add(n);
+                numbers.push(n);
+            }
+        }
+        numbers.sort((a,b) => a-b);
+        powerball = Math.floor(Math.random() * 26) + 1;
+        
+        toast('🎲 Quick Pick generated!');
     }
     
     // Display
@@ -10613,7 +10286,7 @@ function generatePowerball(type) {
     document.getElementById('pb-result').style.display = 'block';
     
     // Save to history
-    pbHistory.unshift({ type: typeLabel, numbers, powerball });
+    pbHistory.unshift({ type: type === 'destiny' ? 'DESTINY' : 'QUICK', numbers, powerball });
     if(pbHistory.length > 5) pbHistory.pop();
     renderPbHistory();
 }
@@ -10633,9 +10306,9 @@ function renderPbHistory() {
 }
 
 function generateMega(type) {
-    // v4.15.5: Premium check only for 'advanced' type
-    if (type === 'advanced' && !isPremium) {
-        toast('👑 Advanced Destiny requires Premium. Please offer 福債.');
+    // Premium check for destiny-based numbers
+    if (type === 'destiny' && !isPremium) {
+        toast('👑 Destiny Numbers require Premium. Please offer 福債.');
         openPremiumCheckout();
         return;
     }
@@ -10646,30 +10319,15 @@ function generateMega(type) {
     
     let numbers = [];
     let megaball;
-    let typeLabel = 'QUICK';
     
-    if (type === 'quick') {
-        // ========== QUICK PICK (FREE) - Pure Random ==========
-        const used = new Set();
-        while(numbers.length < 5) {
-            const n = Math.floor(Math.random() * 70) + 1;
-            if(!used.has(n)) {
-                used.add(n);
-                numbers.push(n);
-            }
-        }
-        numbers.sort((a,b) => a-b);
-        megaball = Math.floor(Math.random() * 25) + 1;
-        typeLabel = 'QUICK';
-        toast('🎲 Quick Pick generated!');
-        
-    } else if (type === 'destiny' && y && m && d) {
-        // ========== BASIC DESTINY (FREE) - Yongsin Only ==========
+    if(type === 'destiny' && y && m && d) {
+        // v4.14.7: 사주 탭에서 이미 분석된 데이터가 있으면 활용
         let saju, yongsin;
         if (SAJU && GODS && BIRTH_YEAR === y) {
             saju = SAJU;
             yongsin = GODS.yong;
         } else {
+            // 사주 분석이 안 됐으면 직접 계산
             saju = {
                 year: calcYearPillar(y, m, d),
                 month: calcMonthPillar(y, m, d),
@@ -10680,8 +10338,9 @@ function generateMega(type) {
         
         const luckyNums = getElementNumbers(yongsin, 70);
         
-        // Hash seed for reproducibility
-        const seed = `${y}-${m}-${d}-${yongsin}-MEGA-${Date.now()}`;
+        // Generate hash seed (including Saju info)
+        const dayElement = saju.day.s.e;
+        const seed = `${y}-${m}-${d}-${dayElement}-${yongsin}-MEGA-${Date.now()}`;
         let hash = 0;
         for(let i = 0; i < seed.length; i++) {
             hash = ((hash << 5) - hash) + seed.charCodeAt(i);
@@ -10690,7 +10349,7 @@ function generateMega(type) {
         
         const used = new Set();
         
-        // Include 2 Yongsin element numbers
+        // 1) Include 2 Yongsin element numbers
         for(let i = 0; i < 2 && luckyNums.length > 0; i++) {
             hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
             const idx = hash % luckyNums.length;
@@ -10701,7 +10360,7 @@ function generateMega(type) {
             }
         }
         
-        // Remaining numbers hash-based
+        // 2) Remaining numbers hash-based
         while(numbers.length < 5) {
             hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
             const n = (hash % 70) + 1;
@@ -10712,87 +10371,29 @@ function generateMega(type) {
         }
         numbers.sort((a,b) => a-b);
         
-        // Megaball
+        // Megaball (1-25) - 용신 오행 반영
         const luckyMB = getElementNumbers(yongsin, 25);
         hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
-        if(luckyMB.length > 0 && hash % 3 !== 0) {
+        if(luckyMB.length > 0 && hash % 3 !== 0) {  // 66% chance for Yongsin number
             megaball = luckyMB[hash % luckyMB.length];
         } else {
             megaball = (hash % 25) + 1;
         }
         
-        typeLabel = 'DESTINY';
-        toast(`🔮 Basic Destiny: ${yongsin.toUpperCase()} energy`);
-        
-    } else if (type === 'advanced' && y && m && d) {
-        // ========== ADVANCED DESTINY (PREMIUM) - Weighted Algorithm ==========
-        let saju, gods;
-        if (SAJU && GODS && BIRTH_YEAR === y) {
-            saju = SAJU;
-            gods = GODS;
-        } else {
-            saju = {
-                year: calcYearPillar(y, m, d),
-                month: calcMonthPillar(y, m, d),
-                day: calcDayPillar(y, m, d)
-            };
-            const yongEl = getYongsinElement(saju);
-            const supportMap = {water:'wood', wood:'fire', fire:'earth', earth:'metal', metal:'water'};
-            const attackMap = {water:'fire', fire:'metal', metal:'wood', wood:'earth', earth:'water'};
-            gods = {
-                yong: yongEl,
-                hee: supportMap[yongEl] || 'fire',
-                gi: attackMap[yongEl] || 'water'
-            };
-        }
-        
-        // 용신/희신/기신 번호 추출
-        const yongNums = getElementNumbers(gods.yong, 70);
-        const heeNums = getElementNumbers(gods.hee, 70);
-        const giNums = getElementNumbers(gods.gi, 70);
-        
-        // 가중치 풀 생성 (사주로또 Pro 방식)
-        let weightedPool = [];
-        for (let i = 1; i <= 70; i++) {
-            let weight = 1;
-            if (yongNums.includes(i)) weight = 3;       // 용신: 3배
-            else if (heeNums.includes(i)) weight = 2;   // 희신: 2배
-            else if (giNums.includes(i)) weight = 0.5;  // 기신: 0.5배 (회피)
-            for (let j = 0; j < weight * 2; j++) weightedPool.push(i);
-        }
-        
-        // 가중치 풀에서 5개 선택
-        const selected = new Set();
-        let attempts = 0;
-        while (selected.size < 5 && attempts < 1000) {
-            const idx = Math.floor(Math.random() * weightedPool.length);
-            selected.add(weightedPool[idx]);
-            attempts++;
-        }
-        numbers = [...selected].sort((a, b) => a - b);
-        
-        // Megaball (1-25) - 가중치 적용
-        const yongMB = getElementNumbers(gods.yong, 25);
-        const heeMB = getElementNumbers(gods.hee, 25);
-        const giMB = getElementNumbers(gods.gi, 25);
-        
-        let mbPool = [];
-        for (let i = 1; i <= 25; i++) {
-            let weight = 1;
-            if (yongMB.includes(i)) weight = 3;
-            else if (heeMB.includes(i)) weight = 2;
-            else if (giMB.includes(i)) weight = 0.5;
-            for (let j = 0; j < weight * 2; j++) mbPool.push(i);
-        }
-        megaball = mbPool[Math.floor(Math.random() * mbPool.length)];
-        
-        const yongCount = numbers.filter(n => yongNums.includes(n)).length;
-        typeLabel = 'ADVANCED';
-        toast(`✨ Advanced: ${gods.yong.toUpperCase()} ×${yongCount} | Avoided ${gods.gi.toUpperCase()}`);
-        
+        toast(`🔮 Destiny numbers generated! (${yongsin.toUpperCase()} energy)`);
     } else {
-        toast('⚠️ Please enter your birth date');
-        return;
+        const used = new Set();
+        while(numbers.length < 5) {
+            const n = Math.floor(Math.random() * 70) + 1;
+            if(!used.has(n)) {
+                used.add(n);
+                numbers.push(n);
+            }
+        }
+        numbers.sort((a,b) => a-b);
+        megaball = Math.floor(Math.random() * 25) + 1;
+        
+        toast('🎲 Quick Pick generated!');
     }
     
     const container = document.getElementById('mega-balls');
@@ -10817,7 +10418,7 @@ function generateMega(type) {
     
     document.getElementById('mega-result').style.display = 'block';
     
-    megaHistory.unshift({ type: typeLabel, numbers, megaball });
+    megaHistory.unshift({ type: type === 'destiny' ? 'DESTINY' : 'QUICK', numbers, megaball });
     if(megaHistory.length > 5) megaHistory.pop();
     renderMegaHistory();
 }
@@ -11042,24 +10643,22 @@ window.addEventListener('hashchange', handleUrlHash);
         <h2>2. HOW WE USE YOUR INFORMATION</h2>
         <ul>
             <li>To provide Saju analysis</li>
-            <li>To process payments</li>
             <li>To improve our Service</li>
-            <li>To send service-related notifications</li>
         </ul>
         
         <h2>3. DATA STORAGE</h2>
         <ul>
-            <li>Stored securely in Google Firebase (Seoul, Korea)</li>
-            <li>Birth data is encrypted</li>
-            <li>Retained until account deletion</li>
+            <li>All calculations are performed locally in your browser</li>
+            <li>No personal data is sent to external servers</li>
+            <li>Birth data is NOT stored or transmitted</li>
         </ul>
         
         <h2>4. DATA SHARING</h2>
-        <p>We do NOT sell your data. We share data only with:</p>
+        <p>We do NOT collect, store, or sell your data.</p>
         <ul>
-            <li>Google (Authentication)</li>
-            <li>Paddle (Payment processing)</li>
-            <li>Analytics providers</li>
+            <li>No server-side data storage</li>
+            <li>No authentication required</li>
+            <li>100% client-side application</li>
         </ul>
         
         <h2>5. YOUR RIGHTS</h2>
