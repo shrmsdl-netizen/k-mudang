@@ -1321,13 +1321,28 @@ footer a {
                 <!-- 12운성/강약은 Premium으로 이동 -->
             </div>
 
-            <!-- Premium Upsell for Full Analysis -->
+            <!-- Ko-fi Support for Development -->
             <div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,193,7,0.03));border:1px solid rgba(212,175,55,0.2);">
-                <p style="font-size:1.2rem;margin-bottom:10px;">🔮 Unlock Full Destiny Analysis</p>
-                <p style="font-size:0.85rem;color:var(--gray);margin-bottom:15px;">
-                    70+ Advanced interpretations · Life Cycles · Divine Stars · Monthly Fortune
+                <p style="font-size:1.4rem;margin-bottom:8px;">🙏 福債 (Karma Offering)</p>
+                <p style="font-size:0.95rem;color:var(--gold-light);line-height:1.7;margin-bottom:15px;font-style:italic;">
+                    "복을 받았으면 복채를 내어야 한다"<br>
+                    <span style="font-size:0.8rem;color:var(--gray);">"Having received wisdom, an offering honors tradition."</span>
                 </p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()">🙏 Offer 福債 · Unlock Premium</button>
+                <p style="font-size:0.8rem;color:var(--gold-light);margin-bottom:20px;">
+                    ✨ All features are FREE · Support development if you find it helpful ✨
+                </p>
+                
+                <!-- Ko-fi Support Button -->
+                <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:15px;">
+                    <a href="https://ko-fi.com/kmudang" target="_blank" class="kofi-btn" style="text-decoration:none;padding:18px 40px;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:12px;box-shadow:0 0 20px rgba(255,215,0,0.3);display:inline-flex;align-items:center;gap:10px;">
+                        <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="Ko-fi" style="width:28px;height:28px;">
+                        <span style="font-size:1.2rem;font-weight:700;color:#1a1a2e;">Support on Ko-fi</span>
+                    </a>
+                </div>
+                
+                <p style="font-size:0.8rem;color:var(--gray);margin-top:10px;opacity:0.8;">
+                    ☕ Buy me a coffee · 커피 한 잔 사주기
+                </p>
             </div>
 
             <!-- Strength & 12 States - PREMIUM -->
@@ -1414,7 +1429,7 @@ footer a {
                     <div class="premium-overlay-content">
                         <p>🙏 福債 (Karma Offering)</p>
                         <p class="premium-price">$20 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">☕ Support on Ko-fi</button>
                     </div>
                 </div>
                 <div class="luck-timeline" id="luck-timeline"></div>
@@ -1429,7 +1444,7 @@ footer a {
                     <div class="premium-overlay-content">
                         <p>🙏 福債 (Karma Offering)</p>
                         <p class="premium-price">$20 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">☕ Support on Ko-fi</button>
                     </div>
                 </div>
                 <div id="ten-years-luck"></div>
@@ -1442,7 +1457,7 @@ footer a {
                     <div class="premium-overlay-content">
                         <p>🙏 福債 (Karma Offering)</p>
                         <p class="premium-price">$20 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">☕ Support on Ko-fi</button>
                     </div>
                 </div>
                 <div id="monthly-luck"></div>
@@ -1481,7 +1496,7 @@ footer a {
                     <div class="premium-overlay-content">
                         <p>🙏 福債 (Karma Offering)</p>
                         <p class="premium-price">$20 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">☕ Support on Ko-fi</button>
                     </div>
                 </div>
                 <div id="today-fortune"></div>
@@ -1520,7 +1535,7 @@ footer a {
                     <div class="premium-overlay-content">
                         <p>🙏 福債 (Karma Offering)</p>
                         <p class="premium-price">$20 · 24-hour access</p>
-                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">Offer 福債</button>
+                        <button class="premium-unlock-btn" onclick="openPremiumCheckout()">☕ Support on Ko-fi</button>
                     </div>
                 </div>
                 <div id="summary-analysis"></div>
@@ -1653,25 +1668,22 @@ footer a {
                 <div class="form-group"><label>Day</label><select id="pb-day"></select></div>
                 <div class="form-group"><label>Year</label><select id="pb-year"></select></div>
             </div>
-            <button class="btn btn-secondary" onclick="generatePowerball('quick')">🎲 Quick Pick (Random)</button>
-            <div style="margin-top:15px;padding:12px;background:rgba(255,215,0,0.05);border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
-                <p style="font-size:0.8rem;color:var(--gold);margin-bottom:8px;">🔮 Want destiny-based numbers?</p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:8px 16px;font-size:12px;">
-                    👑 Unlock Destiny Numbers
-                </button>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="generatePowerballDestiny()" style="flex:1;min-width:140px;padding:15px;">🔮 Destiny Numbers</button>
+                <button class="btn btn-secondary" onclick="generatePowerballQuick()" style="flex:1;min-width:140px;padding:15px;">🎲 Quick Pick</button>
             </div>
         </div>
 
         <div class="card" id="pb-result" style="display:none;">
-            <h3>🎰 Your Numbers</h3>
-            <div class="balls-container" id="pb-balls"></div>
+            <div id="pb-destiny-section" style="margin-bottom:20px;padding:15px;background:rgba(255,215,0,0.08);border-radius:10px;border:1px solid rgba(212,175,55,0.3);display:none;">
+                <h3 style="color:var(--gold);margin-bottom:10px;">🔮 Destiny Numbers</h3>
+                <p style="font-size:0.75rem;color:var(--gray);margin-bottom:10px;" id="pb-destiny-info"></p>
+                <div class="balls-container" id="pb-destiny-balls"></div>
+            </div>
             
-            <!-- Premium Upsell -->
-            <div style="text-align:center;margin-top:20px;padding:15px;background:rgba(255,215,0,0.05);border-radius:10px;">
-                <p style="color:var(--gold);margin-bottom:10px;">👑 Want AI-powered destiny analysis?</p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:10px 20px;font-size:12px;">
-                    Unlock Premium $20
-                </button>
+            <div id="pb-quick-section" style="padding:15px;background:rgba(100,100,100,0.1);border-radius:10px;border:1px solid rgba(150,150,150,0.2);display:none;">
+                <h3 style="color:var(--gray);margin-bottom:10px;">🎲 Quick Pick (Random)</h3>
+                <div class="balls-container" id="pb-quick-balls"></div>
             </div>
         </div>
 
@@ -1711,25 +1723,22 @@ footer a {
                 <div class="form-group"><label>Day</label><select id="mega-day"></select></div>
                 <div class="form-group"><label>Year</label><select id="mega-year"></select></div>
             </div>
-            <button class="btn btn-secondary" onclick="generateMega('quick')">🎲 Quick Pick (Random)</button>
-            <div style="margin-top:15px;padding:12px;background:rgba(255,215,0,0.05);border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
-                <p style="font-size:0.8rem;color:var(--gold);margin-bottom:8px;">🔮 Want destiny-based numbers?</p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:8px 16px;font-size:12px;">
-                    👑 Unlock Destiny Numbers
-                </button>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="generateMegaDestiny()" style="flex:1;min-width:140px;padding:15px;">🔮 Destiny Numbers</button>
+                <button class="btn btn-secondary" onclick="generateMegaQuick()" style="flex:1;min-width:140px;padding:15px;">🎲 Quick Pick</button>
             </div>
         </div>
 
         <div class="card" id="mega-result" style="display:none;">
-            <h3>🎰 Your Numbers</h3>
-            <div class="balls-container" id="mega-balls"></div>
+            <div id="mega-destiny-section" style="margin-bottom:20px;padding:15px;background:rgba(255,215,0,0.08);border-radius:10px;border:1px solid rgba(212,175,55,0.3);display:none;">
+                <h3 style="color:var(--gold);margin-bottom:10px;">🔮 Destiny Numbers</h3>
+                <p style="font-size:0.75rem;color:var(--gray);margin-bottom:10px;" id="mega-destiny-info"></p>
+                <div class="balls-container" id="mega-destiny-balls"></div>
+            </div>
             
-            <!-- Premium Upsell -->
-            <div style="text-align:center;margin-top:20px;padding:15px;background:rgba(255,215,0,0.05);border-radius:10px;">
-                <p style="color:var(--gold);margin-bottom:10px;">👑 Want AI-powered destiny analysis?</p>
-                <button class="premium-unlock-btn" onclick="openPremiumCheckout()" style="padding:10px 20px;font-size:12px;">
-                    Unlock Premium $20
-                </button>
+            <div id="mega-quick-section" style="padding:15px;background:rgba(100,100,100,0.1);border-radius:10px;border:1px solid rgba(150,150,150,0.2);display:none;">
+                <h3 style="color:var(--gray);margin-bottom:10px;">🎲 Quick Pick (Random)</h3>
+                <div class="balls-container" id="mega-quick-balls"></div>
             </div>
         </div>
 
@@ -3023,19 +3032,21 @@ function updateTimezoneInfo() {
     const info = document.getElementById('timezone-info');
     if (!info) return;
     
-    // 한국은 메시지 없음, 나머지는 자동 변환 안내
+    // Korea/Japan needs no conversion message
     if (loc === 'korea' || loc === 'japan') {
         info.style.display = 'none';
     } else {
-        info.textContent = '💡 현지 출생시간 → 한국 표준시로 자동 변환';
+        info.textContent = '💡 Local birth time → Auto-converted to Korean Standard Time (for solar term calculation)';
         info.style.display = 'block';
     }
 }
 
 // v4.14.7: 지역별 시차 계산 (한국시 UTC+9 기준 오프셋)
 function getTimezoneOffset(location, year, month) {
-    // 서머타임 대략 체크 (북반구 3~10월, 남반구는 반대)
-    const isDST = (month >= 3 && month <= 10);
+    // 북반구 DST (3~10월)
+    const isDST_north = (month >= 3 && month <= 10);
+    // 남반구 DST (10~3월) - 호주, 뉴질랜드
+    const isDST_south = (month >= 10 || month <= 3);
     
     // 한국시(UTC+9) 기준 오프셋 (해당 지역 현지시간에 더해서 한국시로 변환)
     const offsets = {
@@ -3043,20 +3054,20 @@ function getTimezoneOffset(location, year, month) {
         'korea': 0, 'japan': 0,
         
         // 미국
-        'us-pacific': isDST ? -16 : -17,      // CA, WA, OR (UTC-7/-8)
-        'us-mountain': isDST ? -15 : -16,     // CO, AZ, UT, NV (UTC-6/-7)
-        'us-central': isDST ? -14 : -15,      // TX, IL, MN (UTC-5/-6)
-        'us-eastern': isDST ? -13 : -14,      // NY, FL, GA (UTC-4/-5)
-        'us-alaska': isDST ? -17 : -18,       // UTC-8/-9
-        'us-hawaii': -19,                      // UTC-10 (no DST)
+        'us-pacific': isDST_north ? -16 : -17,      // CA, WA, OR (UTC-7/-8)
+        'us-mountain': isDST_north ? -15 : -16,     // CO, AZ, UT, NV (UTC-6/-7)
+        'us-central': isDST_north ? -14 : -15,      // TX, IL, MN (UTC-5/-6)
+        'us-eastern': isDST_north ? -13 : -14,      // NY, FL, GA (UTC-4/-5)
+        'us-alaska': isDST_north ? -17 : -18,       // UTC-8/-9
+        'us-hawaii': -19,                            // UTC-10 (no DST)
         
         // 캐나다
-        'canada-west': isDST ? -16 : -17,
-        'canada-east': isDST ? -13 : -14,
+        'canada-west': isDST_north ? -16 : -17,
+        'canada-east': isDST_north ? -13 : -14,
         
         // 중남미
-        'mexico': isDST ? -14 : -15,
-        'brazil': -12,                         // UTC-3
+        'mexico': isDST_north ? -14 : -15,
+        'brazil': -12,                               // UTC-3 (no DST)
         
         // 동아시아 (UTC+8)
         'china': -1, 'taiwan': -1, 'hongkong': -1,
@@ -3066,23 +3077,23 @@ function getTimezoneOffset(location, year, month) {
         'vietnam': -2, 'thailand': -2, 'indonesia': -2,
         
         // 남아시아/중동
-        'india': -3.5,                         // UTC+5:30
-        'uae': -5,                             // UTC+4
-        'israel': isDST ? -6 : -7,            // UTC+2/+3
-        'saudi': -6,                           // UTC+3
+        'india': -3.5,                               // UTC+5:30
+        'uae': -5,                                   // UTC+4
+        'israel': isDST_north ? -6 : -7,            // UTC+2/+3
+        'saudi': -6,                                 // UTC+3
         
         // 유럽 (CET = UTC+1/+2)
-        'uk': isDST ? -8 : -9,                // UTC+0/+1
-        'germany': isDST ? -7 : -8,
-        'france': isDST ? -7 : -8,
-        'spain': isDST ? -7 : -8,
-        'italy': isDST ? -7 : -8,
-        'russia': -6,                          // Moscow UTC+3
+        'uk': isDST_north ? -8 : -9,                // UTC+0/+1
+        'germany': isDST_north ? -7 : -8,
+        'france': isDST_north ? -7 : -8,
+        'spain': isDST_north ? -7 : -8,
+        'italy': isDST_north ? -7 : -8,
+        'russia': -6,                                // Moscow UTC+3
         
-        // 오세아니아 (남반구 - DST 반대)
-        'australia-east': isDST ? 1 : 2,      // UTC+10/+11
-        'australia-west': -1,                  // UTC+8
-        'newzealand': isDST ? 3 : 4           // UTC+12/+13
+        // 오세아니아 (남반구 - DST 10~3월)
+        'australia-east': isDST_south ? 2 : 1,      // DST: UTC+11, 비DST: UTC+10
+        'australia-west': -1,                        // UTC+8 (no DST)
+        'newzealand': isDST_south ? 4 : 3           // DST: UTC+13, 비DST: UTC+12
     };
     return offsets[location] || 0;
 }
@@ -10305,6 +10316,126 @@ function renderPbHistory() {
     `).join('');
 }
 
+// v4.16.0: Destiny Numbers - 같은 날 같은 사주면 고정 번호
+function generatePowerballDestiny() {
+    const y = +document.getElementById('pb-year').value;
+    const m = +document.getElementById('pb-month').value;
+    const d = +document.getElementById('pb-day').value;
+    
+    if(!y || !m || !d) {
+        toast('Please enter your birth date first');
+        return;
+    }
+    
+    let saju, yongsin;
+    if (SAJU && GODS && BIRTH_YEAR === y) {
+        saju = SAJU;
+        yongsin = GODS.yong;
+    } else {
+        saju = {
+            year: calcYearPillar(y, m, d),
+            month: calcMonthPillar(y, m, d),
+            day: calcDayPillar(y, m, d)
+        };
+        yongsin = getYongsinElement(saju);
+    }
+    
+    // 오늘 날짜 (고정 번호를 위해)
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+    
+    document.getElementById('pb-destiny-info').textContent = `Based on your ${yongsin.toUpperCase()} energy (用神) · Today's fixed numbers`;
+    
+    const luckyNums = getElementNumbers(yongsin, 69);
+    const dayElement = saju.day.s.e;
+    // seed에 Date.now() 대신 오늘 날짜만 사용 → 같은 날은 같은 번호
+    const seed = `${y}-${m}-${d}-${dayElement}-${yongsin}-PB-${todayStr}`;
+    let hash = 0;
+    for(let i = 0; i < seed.length; i++) {
+        hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+        hash = hash & hash;
+    }
+    
+    let destinyNumbers = [];
+    const used = new Set();
+    for(let i = 0; i < 2 && luckyNums.length > 0; i++) {
+        hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+        const idx = hash % luckyNums.length;
+        const n = luckyNums[idx];
+        if(!used.has(n)) { used.add(n); destinyNumbers.push(n); }
+    }
+    while(destinyNumbers.length < 5) {
+        hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+        const n = (hash % 69) + 1;
+        if(!used.has(n)) { used.add(n); destinyNumbers.push(n); }
+    }
+    destinyNumbers.sort((a,b) => a-b);
+    
+    const luckyPB = getElementNumbers(yongsin, 26);
+    hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+    const destinyPowerball = (luckyPB.length > 0 && hash % 3 !== 0) ? luckyPB[hash % luckyPB.length] : (hash % 26) + 1;
+    
+    // Display
+    const destinyContainer = document.getElementById('pb-destiny-balls');
+    destinyContainer.innerHTML = '';
+    destinyNumbers.forEach(n => {
+        const ball = document.createElement('div');
+        ball.className = 'ball';
+        ball.textContent = n;
+        destinyContainer.appendChild(ball);
+    });
+    const dpb = document.createElement('div');
+    dpb.className = 'ball powerball';
+    dpb.textContent = destinyPowerball;
+    destinyContainer.appendChild(dpb);
+    
+    document.getElementById('pb-destiny-section').style.display = 'block';
+    document.getElementById('pb-result').style.display = 'block';
+    
+    // History
+    pbHistory.unshift({ type: 'DESTINY', numbers: destinyNumbers, powerball: destinyPowerball });
+    if(pbHistory.length > 6) pbHistory.length = 6;
+    renderPbHistory();
+    
+    toast(`🔮 Destiny Numbers (${yongsin.toUpperCase()} energy)`);
+}
+
+// v4.16.0: Quick Pick - 매번 랜덤
+function generatePowerballQuick() {
+    let quickNumbers = [];
+    const quickUsed = new Set();
+    while(quickNumbers.length < 5) {
+        const n = Math.floor(Math.random() * 69) + 1;
+        if(!quickUsed.has(n)) { quickUsed.add(n); quickNumbers.push(n); }
+    }
+    quickNumbers.sort((a,b) => a-b);
+    const quickPowerball = Math.floor(Math.random() * 26) + 1;
+    
+    // Display
+    const quickContainer = document.getElementById('pb-quick-balls');
+    quickContainer.innerHTML = '';
+    quickNumbers.forEach(n => {
+        const ball = document.createElement('div');
+        ball.className = 'ball';
+        ball.textContent = n;
+        quickContainer.appendChild(ball);
+    });
+    const qpb = document.createElement('div');
+    qpb.className = 'ball powerball';
+    qpb.textContent = quickPowerball;
+    quickContainer.appendChild(qpb);
+    
+    document.getElementById('pb-quick-section').style.display = 'block';
+    document.getElementById('pb-result').style.display = 'block';
+    
+    // History
+    pbHistory.unshift({ type: 'QUICK', numbers: quickNumbers, powerball: quickPowerball });
+    if(pbHistory.length > 6) pbHistory.length = 6;
+    renderPbHistory();
+    
+    toast('🎲 Quick Pick generated!');
+}
+
 function generateMega(type) {
     // Premium check for destiny-based numbers
     if (type === 'destiny' && !isPremium) {
@@ -10437,6 +10568,126 @@ function renderMegaHistory() {
     `).join('');
 }
 
+// v4.16.0: Mega Destiny Numbers - 같은 날 같은 사주면 고정 번호
+function generateMegaDestiny() {
+    const y = +document.getElementById('mega-year').value;
+    const m = +document.getElementById('mega-month').value;
+    const d = +document.getElementById('mega-day').value;
+    
+    if(!y || !m || !d) {
+        toast('Please enter your birth date first');
+        return;
+    }
+    
+    let saju, yongsin;
+    if (SAJU && GODS && BIRTH_YEAR === y) {
+        saju = SAJU;
+        yongsin = GODS.yong;
+    } else {
+        saju = {
+            year: calcYearPillar(y, m, d),
+            month: calcMonthPillar(y, m, d),
+            day: calcDayPillar(y, m, d)
+        };
+        yongsin = getYongsinElement(saju);
+    }
+    
+    // 오늘 날짜 (고정 번호를 위해)
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+    
+    document.getElementById('mega-destiny-info').textContent = `Based on your ${yongsin.toUpperCase()} energy (用神) · Today's fixed numbers`;
+    
+    const luckyNums = getElementNumbers(yongsin, 70);
+    const dayElement = saju.day.s.e;
+    // seed에 Date.now() 대신 오늘 날짜만 사용 → 같은 날은 같은 번호
+    const seed = `${y}-${m}-${d}-${dayElement}-${yongsin}-MEGA-${todayStr}`;
+    let hash = 0;
+    for(let i = 0; i < seed.length; i++) {
+        hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+        hash = hash & hash;
+    }
+    
+    let destinyNumbers = [];
+    const used = new Set();
+    for(let i = 0; i < 2 && luckyNums.length > 0; i++) {
+        hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+        const idx = hash % luckyNums.length;
+        const n = luckyNums[idx];
+        if(!used.has(n)) { used.add(n); destinyNumbers.push(n); }
+    }
+    while(destinyNumbers.length < 5) {
+        hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+        const n = (hash % 70) + 1;
+        if(!used.has(n)) { used.add(n); destinyNumbers.push(n); }
+    }
+    destinyNumbers.sort((a,b) => a-b);
+    
+    const luckyMB = getElementNumbers(yongsin, 25);
+    hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);
+    const destinyMegaball = (luckyMB.length > 0 && hash % 3 !== 0) ? luckyMB[hash % luckyMB.length] : (hash % 25) + 1;
+    
+    // Display
+    const destinyContainer = document.getElementById('mega-destiny-balls');
+    destinyContainer.innerHTML = '';
+    destinyNumbers.forEach(n => {
+        const ball = document.createElement('div');
+        ball.className = 'ball mega';
+        ball.textContent = n;
+        destinyContainer.appendChild(ball);
+    });
+    const dmb = document.createElement('div');
+    dmb.className = 'ball megaball';
+    dmb.textContent = destinyMegaball;
+    destinyContainer.appendChild(dmb);
+    
+    document.getElementById('mega-destiny-section').style.display = 'block';
+    document.getElementById('mega-result').style.display = 'block';
+    
+    // History
+    megaHistory.unshift({ type: 'DESTINY', numbers: destinyNumbers, megaball: destinyMegaball });
+    if(megaHistory.length > 6) megaHistory.length = 6;
+    renderMegaHistory();
+    
+    toast(`🔮 Destiny Numbers (${yongsin.toUpperCase()} energy)`);
+}
+
+// v4.16.0: Mega Quick Pick - 매번 랜덤
+function generateMegaQuick() {
+    let quickNumbers = [];
+    const quickUsed = new Set();
+    while(quickNumbers.length < 5) {
+        const n = Math.floor(Math.random() * 70) + 1;
+        if(!quickUsed.has(n)) { quickUsed.add(n); quickNumbers.push(n); }
+    }
+    quickNumbers.sort((a,b) => a-b);
+    const quickMegaball = Math.floor(Math.random() * 25) + 1;
+    
+    // Display
+    const quickContainer = document.getElementById('mega-quick-balls');
+    quickContainer.innerHTML = '';
+    quickNumbers.forEach(n => {
+        const ball = document.createElement('div');
+        ball.className = 'ball mega';
+        ball.textContent = n;
+        quickContainer.appendChild(ball);
+    });
+    const qmb = document.createElement('div');
+    qmb.className = 'ball megaball';
+    qmb.textContent = quickMegaball;
+    quickContainer.appendChild(qmb);
+    
+    document.getElementById('mega-quick-section').style.display = 'block';
+    document.getElementById('mega-result').style.display = 'block';
+    
+    // History
+    megaHistory.unshift({ type: 'QUICK', numbers: quickNumbers, megaball: quickMegaball });
+    if(megaHistory.length > 6) megaHistory.length = 6;
+    renderMegaHistory();
+    
+    toast('🎲 Quick Pick generated!');
+}
+
 /* ========================================
    TAB SWITCHING
    ======================================== */
@@ -10494,17 +10745,33 @@ document.addEventListener('DOMContentLoaded', function() {
         const monthSel = document.getElementById(`${prefix}-month`);
         const daySel = document.getElementById(`${prefix}-day`);
         
+        // Year - empty placeholder first
+        const yearPlaceholder = document.createElement('option');
+        yearPlaceholder.value = ''; yearPlaceholder.textContent = 'Year';
+        yearPlaceholder.disabled = true; yearPlaceholder.selected = true;
+        yearSel.appendChild(yearPlaceholder);
         for(let y = 2026; y >= 1940; y--) {
             const opt = document.createElement('option');
             opt.value = y; opt.textContent = y;
-            if(y === 1990) opt.selected = true;
             yearSel.appendChild(opt);
         }
+        
+        // Month - empty placeholder first
+        const monthPlaceholder = document.createElement('option');
+        monthPlaceholder.value = ''; monthPlaceholder.textContent = 'Month';
+        monthPlaceholder.disabled = true; monthPlaceholder.selected = true;
+        monthSel.appendChild(monthPlaceholder);
         for(let m = 1; m <= 12; m++) {
             const opt = document.createElement('option');
             opt.value = m; opt.textContent = MONTH_ABBR[m - 1];
             monthSel.appendChild(opt);
         }
+        
+        // Day - empty placeholder first
+        const dayPlaceholder = document.createElement('option');
+        dayPlaceholder.value = ''; dayPlaceholder.textContent = 'Day';
+        dayPlaceholder.disabled = true; dayPlaceholder.selected = true;
+        daySel.appendChild(dayPlaceholder);
         for(let d = 1; d <= 31; d++) {
             const opt = document.createElement('option');
             opt.value = d; opt.textContent = d;
