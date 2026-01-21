@@ -3,16 +3,16 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.16.4 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.16.5 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
 ║  🔒 Basic Security Enabled (DevTools, Right-click disabled)                   ║
 ║                                                                                ║
-║  v4.16.4 Changes:                                                             ║
-║    - [FIX] 모바일 레이아웃 개선 - Birth Date 폼 비율 수정 (flex 방식)         ║
-║    - [FIX] 워터마크 모바일에서 좌우 전체 폭 적용                              ║
-║    - [FIX] select 폰트 사이즈 18px → 16px (오버플로우 방지)                   ║
+║  v4.16.5 Changes:                                                             ║
+║    - [NEW] AI 프롬프트에 시간 변환 정보 추가 (TIME CONVERSION 섹션)           ║
+║    - [FIX] 타임존 변환 시 원본 시간 vs 변환된 시간 명확히 구분                ║
+║    - [FIX] AI가 시주 불일치로 오해하는 문제 해결                              ║
 ║                                                                                ║
 ║  v4.16.3 Changes:                                                             ║
 ║    - [FIX] 조후용신 통관(Bridge) 전략 적용 (사주로또와 동일)                  ║
@@ -67,7 +67,7 @@
    🆓 FREE EDITION - All Features Unlocked
    No Login Required | Ko-fi Support Welcome
    ======================================== */
-console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.16.4');
+console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.16.5');
 
 /* ========================================
    🔒 Basic Security Protection
@@ -263,16 +263,6 @@ body {
     transition: opacity 0.5s ease;
 }
 
-/* 모바일: 좌우 꽉 차게 */
-@media (max-width: 600px) {
-    .oracle-watermark {
-        width: 100%;
-        max-width: 100%;
-        left: 0;
-        transform: translateY(-50%);
-    }
-}
-
 body.mega-mode .oracle-watermark {
     filter: grayscale(50%) brightness(1.3) hue-rotate(200deg);
     opacity: 0.12;
@@ -461,13 +451,13 @@ header h1 {
    Form Elements
    ======================================== */
 .form-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     margin-bottom: 15px;
-    align-items: flex-end;
 }
 
-.form-group { flex: 1; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
 
 .form-group label {
     font-size: 11px;
@@ -477,13 +467,12 @@ header h1 {
 }
 
 .form-group select, .form-group input {
-    width: 100%;
     background: #1a2332;
     border: 1px solid rgba(255,255,255,0.2);
     border-radius: 8px;
     padding: 12px 10px;
     color: #FFFFFF;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     font-family: 'Cinzel Decorative', 'Cormorant Garamond', serif;
     -webkit-appearance: none;
@@ -2338,6 +2327,8 @@ let INPUT_MONTH = null;
 let INPUT_DAY = null;
 let INPUT_IS_LUNAR = false;
 let INPUT_HOUR_INDEX = null;  // v4.16.3: 원래 선택한 시간 인덱스 (0-11)
+let CONVERTED_HOUR_INDEX = null;  // v4.16.5: 타임존 변환 후 시간 인덱스 (0-11)
+let TIMEZONE_OFFSET = 0;  // v4.16.5: 적용된 타임존 오프셋
 let currentNumbers = [];
 let history = [];
 
@@ -8345,6 +8336,8 @@ function analyzeSaju() {
         INPUT_DAY = d;
         INPUT_IS_LUNAR = (CALENDAR === 'lunar');
         INPUT_HOUR_INDEX = hourVal;  // 원래 선택한 시간 인덱스 저장
+        CONVERTED_HOUR_INDEX = hourBranchIdx;  // v4.16.5: 변환된 시간 인덱스 저장
+        TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'us-pacific', sy, sm);  // v4.16.5: 타임존 오프셋 저장
         const str = calcStrength(SAJU);
         if (!str) { toast('Strength calculation error'); return; }
         STRENGTH = str;  // 전역 저장
@@ -9659,11 +9652,29 @@ function copySajuForAI() {
             '申': '15:30-17:29', '酉': '17:30-19:29', '戌': '19:30-21:29', '亥': '21:30-23:29'
         };
         let hourText = 'Unknown';
-        // v4.16.3 FIX: 원래 선택한 시간 인덱스 사용 (adjustTime 보정 전 값)
-        if (INPUT_HOUR_INDEX !== null && INPUT_HOUR_INDEX >= 0 && INPUT_HOUR_INDEX <= 11) {
-            const hourBranch = BRANCH[INPUT_HOUR_INDEX].c;
-            const hourRange = HOUR_RANGES[hourBranch] || '';
-            hourText = `${hourBranch}時 (${hourRange}) - True Solar Time`;
+        let timeConversionText = '';  // v4.16.5: 시간 변환 설명
+        
+        // v4.16.5: 시간 변환 정보 생성
+        if (INPUT_HOUR_INDEX !== null && INPUT_HOUR_INDEX >= 0 && INPUT_HOUR_INDEX <= 11 && SAJU.hour) {
+            const inputHourBranch = BRANCH[INPUT_HOUR_INDEX].c;
+            const inputHourRange = HOUR_RANGES[inputHourBranch] || '';
+            const convertedHourBranch = SAJU.hour.b.c;
+            const convertedHourRange = HOUR_RANGES[convertedHourBranch] || '';
+            
+            // 입력 시간과 변환된 시간이 다른 경우에만 변환 정보 표시
+            if (INPUT_HOUR_INDEX !== CONVERTED_HOUR_INDEX && TIMEZONE_OFFSET !== 0) {
+                hourText = `${convertedHourBranch}時 (${convertedHourRange}) - Korean True Solar Time`;
+                timeConversionText = `
+【TIME CONVERSION (시간 변환)】
+• User Input: ${inputHourBranch}時 (${inputHourRange}) in ${locationText}
+• Timezone Offset: ${TIMEZONE_OFFSET > 0 ? '+' : ''}${TIMEZONE_OFFSET} hours
+• Converted to Korean True Solar Time: ${convertedHourBranch}時 (${convertedHourRange})
+• Hour Pillar (${SAJU.hour.s.c}${SAJU.hour.b.c}) calculated based on: ${convertedHourBranch}時
+• ⚠️ AI NOTICE: The Hour Pillar matches the CONVERTED time, not the user's local input. This is correct.
+`;
+            } else {
+                hourText = `${convertedHourBranch}時 (${convertedHourRange}) - True Solar Time`;
+            }
         } else if (SAJU.hour && SAJU.hour.b) {
             // 폴백: SAJU에서 가져오기
             const hourBranch = SAJU.hour.b.c;
@@ -9681,6 +9692,7 @@ ${criticalText}【BASIC INFO】
 • Birth Location: ${locationText}
 • Age: ${age-1} (Korean Age: ${age})
 • Day Master: ${dm.c} ${ELEMENT[dm.e].n} (${dm.c}${ELEMENT[dm.e].c})
+${timeConversionText}
 
 【FOUR PILLARS CHART (Year/Month/Day/Hour)】
 • Heavenly Stems: ${SAJU.year.s.c}(${SAJU.year.s.k}) ${SAJU.month.s.c}(${SAJU.month.s.k}) ${SAJU.day.s.c}(${SAJU.day.s.k}) ${SAJU.hour ? SAJU.hour.s.c+'('+SAJU.hour.s.k+')' : 'Unknown'}
