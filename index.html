@@ -3,49 +3,57 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.17.0 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.17.4 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
 ║  🔒 Basic Security Enabled (DevTools, Right-click disabled)                   ║
 ║                                                                                ║
-║  v4.17.0 Changes:                                                             ║
-║    - [CRITICAL FIX] 타임존 변환 로직 완전 재작성 (Intl API 기반)              ║
-║    - [FIX] 하드코딩된 오프셋 제거 → IANA Time Zone Database 사용              ║
-║    - [FIX] 부호 오류로 인한 시간 역산 버그 수정 (32시간 오차 해결)            ║
-║    - [FIX] DST(서머타임) 자동 처리 - 브라우저 내장 데이터 활용                ║
-║    - [FIX] 역사적 타임존 변경 자동 반영                                       ║
-║    - [NEW] Select 옵션 IANA 타임존 코드로 변경                                ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  📋 CODE MAP (사주로또와 공유)                                                ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  [SHARED] 공통 코드 (106개 함수) - 사주로또와 동기화 필수                     ║
+║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
+║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
+║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.17.4)                ║
+║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
+║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
+║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
+║                                                                                ║
+║  [UNIQUE] K-MUDANG 전용 코드                                                  ║
+║    • 로또: generatePowerball, generateMega, getElementNumbers                ║
+║    • 타임존: convertToKoreaTime, getTimezoneOffset, updateTimezoneInfo       ║
+║    • 세운분석: ylCheck* 함수들 (51개) - 상세 연운 분석                        ║
+║    • 프리미엄: checkPremiumStatus, lockPremiumFeatures (현재 비활성)          ║
+║                                                                                ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  📝 VERSION HISTORY                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  v4.17.4 (2026-01-21):                                                        ║
+║    - [NEW] 지지 십신 계산 기능 추가 (TEN GODS - BRANCHES 섹션)                ║
+║    - [FIX] 지지 십신 음양 계산 버그 수정 (getBranchYang 함수)                 ║
+║    - [NEW] AI 프롬프트에 TEN GOD MAPPING 테이블 추가                          ║
+║    - [NEW] SEASONAL POWER (월령 득령/실령) 섹션 추가                          ║
+║    - [NEW] TRIPLE HARMONY (三合局) 섹션 추가                                  ║
+║    - [NEW] 대운 방향(순행/역행) 정보 추가                                     ║
+║    - [NEW] CRITICAL AI INSTRUCTIONS 섹션 추가                                 ║
 ║    - Total: 81 AI Rules                                                       ║
 ║                                                                                ║
-║  v4.16.5 Changes:                                                             ║
+║  v4.17.3 (2026-01-21):                                                        ║
+║    - [NEW] 날짜 변경 감지 기능 (ORIGINAL_DATE, CONVERTED_DATE)                ║
+║    - [NEW] TIME CONVERSION 섹션에 날짜 변경 표시                              ║
+║                                                                                ║
+║  v4.17.0 (2026-01-20):                                                        ║
+║    - [CRITICAL FIX] 타임존 변환 로직 완전 재작성 (Intl API 기반)              ║
+║    - [FIX] DST(서머타임) 자동 처리 - 브라우저 내장 데이터 활용                ║
+║                                                                                ║
+║  v4.16.5 (2026-01-19):                                                        ║
 ║    - [NEW] AI 프롬프트에 시간 변환 정보 추가 (TIME CONVERSION 섹션)           ║
-║    - [FIX] 타임존 변환 시 원본 시간 vs 변환된 시간 명확히 구분                ║
-║    - [FIX] AI가 시주 불일치로 오해하는 문제 해결                              ║
-║    - [FIX] 모바일 레이아웃 개선 - Birth Date 폼 비율 수정 (flex 방식)         ║
-║    - [FIX] 워터마크 모바일에서 좌우 전체 폭 적용                              ║
-║    - [FIX] select 폰트 사이즈 18px → 16px (오버플로우 방지)                   ║
 ║                                                                                ║
-║  v4.16.3 Changes:                                                             ║
+║  v4.16.3 (2026-01-18):                                                        ║
 ║    - [FIX] 조후용신 통관(Bridge) 전략 적용 (사주로또와 동일)                  ║
-║    - [FIX] 한냉사주: 희신=木, 기신=水 (水→木→火 통관)                        ║
-║    - [FIX] 조열사주: 희신=金, 기신=火 (火→金→水 통관)                        ║
-║    - [FIX] 신강 용신: 식상(설기) 우선 (적천수 정통 이론)                      ║
 ║    - [FIX] 신강도 계산: 12운성 점수 추가 (사주로또와 동일)                    ║
-║      • 건록/제왕 = +4점, 관대/장생 = +2점                                    ║
-║      • 통근 캡 상향 (10→15), rootStrong 기준 상향 (2→4)                      ║
-║    - [NEW] 사주로또 고급 분석 룰 이식:                                        ║
-║      • 쇠신충왕(衰神沖旺) - 용신이 기신에 압도됨 경고                        ║
-║      • 편인도식(偏印倒食) - 식신격 편인충 경고                               ║
-║      • 왕신충발(旺神沖發) - 왕한 오행 세운충 경고                            ║
-║      • 삼합국(三合局) 정밀 분석                                              ║
-║    - [NEW] 띠 룰렛 애니메이션 추가 (부적 생성 전)                             ║
-║    - Total: 80 AI Rules                                                       ║
-║                                                                                ║
-║  v4.16.0 Changes:                                                             ║
-║    - [NEW] 무료 배포 버전 전환 (모든 기능 해금)                               ║
-║    - [NEW] Ko-fi 후원 연동 (ko-fi.com/kmudang)                                ║
-║    - [REMOVE] Firebase/Gumroad 결제 시스템 제거                               ║
 ║                                                                                ║
 ║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
 ║  Contact: kmudang.official@gmail.com                                          ║
@@ -73,7 +81,7 @@
    🆓 FREE EDITION - All Features Unlocked
    No Login Required | Ko-fi Support Welcome
    ======================================== */
-console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.17.0');
+console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.17.4');
 
 /* ========================================
    🔒 Basic Security Protection
@@ -1936,6 +1944,14 @@ const PAST_WINNERS = [
 ];
 const PAST_SET = new Set(PAST_WINNERS.map(arr => [...arr].sort((a,b)=>a-b).join(',')));
 
+/* ═══════════════════════════════════════════════════════════════════════════════
+   🔄 SHARED CODE SECTION - 사주로또와 동기화 필수
+   ═══════════════════════════════════════════════════════════════════════════════
+   이 섹션의 코드를 수정할 경우 사주로또 (sajulotto-index.html)에도 동일하게 적용해야 합니다.
+   공통 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES
+   공통 함수: getTenGod, getTwelveState, calcStrength, calcGods, calcFormat, calcLuck
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
 // Heavenly Stems
 const STEM = [
     {c:'甲',k:'Wood+',e:'wood',y:true},{c:'乙',k:'Wood-',e:'wood',y:false},
@@ -2346,6 +2362,8 @@ let INPUT_IS_LUNAR = false;
 let INPUT_HOUR_INDEX = null;  // v4.16.3: 원래 선택한 시간 인덱스 (0-11)
 let CONVERTED_HOUR_INDEX = null;  // v4.16.5: 타임존 변환 후 시간 인덱스 (0-11)
 let TIMEZONE_OFFSET = 0;  // v4.16.5: 적용된 타임존 오프셋
+let ORIGINAL_DATE = null;  // v4.17.3: 원래 입력 날짜 {y, m, d}
+let CONVERTED_DATE = null;  // v4.17.3: 한국 기준 변환 날짜 {y, m, d}
 let currentNumbers = [];
 let history = [];
 
@@ -3285,7 +3303,7 @@ function lunarToSolar(ly, lm, ld, isLeap = false) {
     };
 }
 
-// v4.17.0: 타임존 UI 업데이트
+// v4.17.4: 타임존 UI 업데이트
 function updateTimezoneInfo() {
     const loc = document.getElementById('birth-location')?.value || 'America/Los_Angeles';
     const info = document.getElementById('timezone-info');
@@ -3300,7 +3318,7 @@ function updateTimezoneInfo() {
     }
 }
 
-// v4.17.0: [REWRITE] Intl API 기반 타임존 변환 (IANA Time Zone Database 사용)
+// v4.17.4: [REWRITE] Intl API 기반 타임존 변환 (IANA Time Zone Database 사용)
 // 하드코딩된 오프셋 대신 브라우저 내장 IANA 데이터로 정확한 변환
 function convertToKoreaTime(year, month, day, hour, sourceTimezone) {
     // 한국/일본은 변환 불필요
@@ -3380,7 +3398,7 @@ function convertToKoreaTime(year, month, day, hour, sourceTimezone) {
     }
 }
 
-// v4.17.0: 시간 오프셋 계산 (AI 프롬프트 표시용)
+// v4.17.4: 시간 오프셋 계산 (AI 프롬프트 표시용)
 function getTimezoneOffset(sourceTimezone, year, month, day, hour) {
     if (sourceTimezone === 'Asia/Seoul' || sourceTimezone === 'Asia/Tokyo') {
         return 0;
@@ -3389,11 +3407,11 @@ function getTimezoneOffset(sourceTimezone, year, month, day, hour) {
     return result.offset;
 }
 
-// v4.17.0: [REWRITE] adjustTime - Intl API 기반
+// v4.17.4: [REWRITE] adjustTime - Intl API 기반
 function adjustTime(y, m, d, h) {
     if (h < 0) return { y, m, d, h };
     
-    // v4.17.0: Intl API 기반 타임존 변환
+    // v4.17.4: Intl API 기반 타임존 변환
     const location = document.getElementById('birth-location')?.value || 'America/Los_Angeles';
     const converted = convertToKoreaTime(y, m, d, h, location);
     
@@ -3808,6 +3826,7 @@ function analyzeTonggeunTougan(saju) {
 
 /* ----------------------------------------
    9-3. Ten Gods Detailed Analysis
+   🔄 SYNC: 사주로또와 동기화 필수
    ---------------------------------------- */
 function getTenGod(stem, dayStem) {
     const dEl = EL_ORDER.indexOf(dayStem.e);
@@ -8409,7 +8428,10 @@ function analyzeSaju() {
         INPUT_IS_LUNAR = (CALENDAR === 'lunar');
         INPUT_HOUR_INDEX = hourVal;  // 원래 선택한 시간 인덱스 저장
         CONVERTED_HOUR_INDEX = hourBranchIdx;  // v4.16.5: 변환된 시간 인덱스 저장
-        TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'America/Los_Angeles', sy, sm, sd, realHour);  // v4.17.0: Intl API 기반
+        TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'America/Los_Angeles', sy, sm, sd, realHour);  // v4.17.4: Intl API 기반
+        // v4.17.3: 날짜 변경 정보 저장 (AI 프롬프트 표시용)
+        ORIGINAL_DATE = {y: sy, m: sm, d: sd};  // 양력 변환 후 원래 날짜
+        CONVERTED_DATE = {y: adj.y, m: adj.m, d: adj.d};  // 한국 기준 변환 날짜
         const str = calcStrength(SAJU);
         if (!str) { toast('Strength calculation error'); return; }
         STRENGTH = str;  // 전역 저장
@@ -9452,9 +9474,19 @@ function showTodayFortune() {
     }
 }
 
-/* ========================================
-   AI Interpretation Copy Function
-   ======================================== */
+/* ═══════════════════════════════════════════════════════════════════════════════
+   📋 AI PROMPT GENERATION - 사주로또와 프롬프트 구조 동기화 필수
+   ═══════════════════════════════════════════════════════════════════════════════
+   프롬프트 섹션 순서:
+   1. BASIC INFO → FOUR PILLARS → TEN GODS (Stems/Branches) → TEN GOD MAPPING
+   2. TWELVE LIFE STAGES → SEASONAL POWER → FIVE ELEMENTS → DAY MASTER STRENGTH
+   3. BENEFICIAL ELEMENTS → PERSONALITY STRUCTURE → 60 PILLARS → HIDDEN STEMS
+   4. SOUND ELEMENT → LIFE PALACE → CONCEPTION ORIGIN → ROOT & STEM
+   5. SIX RELATIONS → PALACE → HARMONY & CLASH → DIRECTIONAL/HIDDEN HARMONY
+   6. TRIPLE HARMONY → EMPTY VOID → DIVINE STARS
+   7. LIFE CYCLES (Direction + Ten Gods) → CURRENT FORTUNE → NEXT 10 YEARS → MONTHLY
+   8. AI INSTRUCTIONS
+   ═══════════════════════════════════════════════════════════════════════════════ */
 function copySajuForAI() {
     if (!SAJU) { toast('Please analyze your Four Pillars first'); return; }
     
@@ -9511,6 +9543,67 @@ function copySajuForAI() {
         const yearGod = getTenGod(SAJU.year.s, dm);
         const monthGod = getTenGod(SAJU.month.s, dm);
         const hourGod = SAJU.hour ? getTenGod(SAJU.hour.s, dm) : null;
+        
+        // v4.17.4: 지지 십신 계산 - 음양 정보 올바르게 전달
+        // 지지 음양 규칙: 짝수 인덱스(子寅辰午申戌)=양, 홀수 인덱스(丑卯巳未酉亥)=음
+        const getBranchYang = (branch) => {
+            const idx = BRANCH.findIndex(b => b.c === branch.c);
+            return idx % 2 === 0;  // 짝수면 양(true), 홀수면 음(false)
+        };
+        const yearBranchYang = getBranchYang(SAJU.year.b) ? '陽' : '陰';
+        const monthBranchYang = getBranchYang(SAJU.month.b) ? '陽' : '陰';
+        const dayBranchYang = getBranchYang(SAJU.day.b) ? '陽' : '陰';
+        const hourBranchYang = SAJU.hour ? (getBranchYang(SAJU.hour.b) ? '陽' : '陰') : '';
+        const yearBranchGod = getTenGod({e: SAJU.year.b.e, y: getBranchYang(SAJU.year.b)}, dm);
+        const monthBranchGod = getTenGod({e: SAJU.month.b.e, y: getBranchYang(SAJU.month.b)}, dm);
+        const dayBranchGod = getTenGod({e: SAJU.day.b.e, y: getBranchYang(SAJU.day.b)}, dm);
+        const hourBranchGod = SAJU.hour ? getTenGod({e: SAJU.hour.b.e, y: getBranchYang(SAJU.hour.b)}, dm) : null;
+        
+        // v4.17.2: 십신 매핑 테이블 생성 (AI가 직접 계산 안해도 되게)
+        const dmEl = dm.e;
+        const elOrder = ['wood', 'fire', 'earth', 'metal', 'water'];
+        const dmIdx = elOrder.indexOf(dmEl);
+        const tenGodMap = {
+            peer: elOrder[dmIdx],           // 비겁 (같은 오행)
+            output: elOrder[(dmIdx + 1) % 5], // 식상 (내가 생하는)
+            wealth: elOrder[(dmIdx + 2) % 5], // 재성 (내가 극하는)
+            officer: elOrder[(dmIdx + 3) % 5], // 관성 (나를 극하는)
+            seal: elOrder[(dmIdx + 4) % 5]    // 인성 (나를 생하는)
+        };
+        
+        // v4.17.3: 대운 순행/역행 계산
+        const yearStemIdx = STEM.indexOf(SAJU.year.s);
+        const yearIsYang = yearStemIdx % 2 === 0;
+        const luckDirection = (yearIsYang && GENDER === 'm') || (!yearIsYang && GENDER === 'f') ? 'Forward(順行)' : 'Backward(逆行)';
+        
+        // v4.17.3: 월령 득령/실령 계산
+        const mbi = BRANCH.findIndex(b => b.c === SAJU.month.b.c);
+        const seasonMap = {0:'Winter',1:'Earth',2:'Spring',3:'Spring',4:'Earth',5:'Summer',6:'Summer',7:'Earth',8:'Autumn',9:'Autumn',10:'Earth',11:'Winter'};
+        const elSeasonMap = {'Spring':'wood', 'Summer':'fire', 'Autumn':'metal', 'Winter':'water', 'Earth':'earth'};
+        const monthSeason = seasonMap[mbi];
+        const seasonEl = elSeasonMap[monthSeason];
+        const deukRyung = (dmEl === seasonEl) || (tenGodMap.seal === seasonEl);
+        
+        // v4.17.3: 삼합국(三合局) 분석
+        let samhapText = '';
+        let samhapWarning = '';
+        try {
+            const advInt = analyzeAdvancedInteractions ? analyzeAdvancedInteractions(SAJU) : null;
+            if (advInt && advInt.samhapGuk && advInt.samhapGuk.length > 0) {
+                samhapText = advInt.samhapGuk.map(s => {
+                    const warning = (s.el === GODS.gi) ? ' ⚠️ COMPLETES 忌神 ELEMENT!' : 
+                                   (s.el === GODS.yong) ? ' ✅ COMPLETES 用神 ELEMENT!' : '';
+                    return `• ${s.branches.join('-')} → ${ELEMENT[s.el].n}局 (${s.type === 'full' ? 'Complete' : 'Partial'})${warning}`;
+                }).join('\n');
+                // 삼합국 경고
+                const giSamhap = advInt.samhapGuk.find(s => s.el === GODS.gi && s.type === 'full');
+                if (giSamhap) {
+                    samhapWarning = `\n⚠️ WARNING: Triple Harmony completes 忌神(${ELEMENT[GODS.gi].n}) - May amplify negative influences!`;
+                }
+            } else {
+                samhapText = '• No Triple Harmony';
+            }
+        } catch(e) { samhapText = '• Triple Harmony data unavailable'; }
         
         // 십신 중복 체크 - 같은 십신이면 간략화
         const monthGodDesc = (monthGod.k === yearGod.k) 
@@ -9736,13 +9829,19 @@ function copySajuForAI() {
             // 입력 시간과 변환된 시간이 다른 경우에만 변환 정보 표시
             if (INPUT_HOUR_INDEX !== CONVERTED_HOUR_INDEX && TIMEZONE_OFFSET !== 0) {
                 hourText = `${convertedHourBranch}時 (${convertedHourRange}) - Korean True Solar Time`;
+                // v4.17.3: 날짜 변경 여부 확인
+                const dateChanged = ORIGINAL_DATE && CONVERTED_DATE && 
+                    (ORIGINAL_DATE.y !== CONVERTED_DATE.y || ORIGINAL_DATE.m !== CONVERTED_DATE.m || ORIGINAL_DATE.d !== CONVERTED_DATE.d);
+                const dateChangeText = dateChanged ? `
+• ⚠️ DATE CHANGED: ${ORIGINAL_DATE.y}-${String(ORIGINAL_DATE.m).padStart(2,'0')}-${String(ORIGINAL_DATE.d).padStart(2,'0')} (Local) → ${CONVERTED_DATE.y}-${String(CONVERTED_DATE.m).padStart(2,'0')}-${String(CONVERTED_DATE.d).padStart(2,'0')} (Korea)
+• 📌 ALL PILLARS calculated based on Korean date: ${CONVERTED_DATE.y}-${String(CONVERTED_DATE.m).padStart(2,'0')}-${String(CONVERTED_DATE.d).padStart(2,'0')}` : '';
                 timeConversionText = `
 【TIME CONVERSION (시간 변환)】
 • User Input: ${inputHourBranch}時 (${inputHourRange}) in ${locationText}
 • Timezone Offset: ${TIMEZONE_OFFSET > 0 ? '+' : ''}${TIMEZONE_OFFSET} hours
-• Converted to Korean True Solar Time: ${convertedHourBranch}時 (${convertedHourRange})
+• Converted to Korean True Solar Time: ${convertedHourBranch}時 (${convertedHourRange})${dateChangeText}
 • Hour Pillar (${SAJU.hour.s.c}${SAJU.hour.b.c}) calculated based on: ${convertedHourBranch}時
-• ⚠️ AI NOTICE: The Hour Pillar matches the CONVERTED time, not the user's local input. This is correct.
+• ⚠️ AI NOTICE: The Four Pillars are calculated using KOREAN date/time, not the user's local input. This is correct.
 `;
             } else {
                 hourText = `${convertedHourBranch}時 (${convertedHourRange}) - True Solar Time`;
@@ -9776,11 +9875,30 @@ ${timeConversionText}
 • Day Stem ${SAJU.day.s.c}: Self (Day Master)
 ${hourGod ? '• Hour Stem ' + SAJU.hour.s.c + ': ' + hourGodDesc : '• Hour Stem: Unknown'}
 
+【TEN GODS - BRANCHES (지지 십신) ⚠️ IMPORTANT】
+• Year Branch ${SAJU.year.b.c} (${ELEMENT[SAJU.year.b.e].n}, ${yearBranchYang}): ${yearBranchGod.k}
+• Month Branch ${SAJU.month.b.c} (${ELEMENT[SAJU.month.b.e].n}, ${monthBranchYang}): ${monthBranchGod.k} ← 월령(月令)
+• Day Branch ${SAJU.day.b.c} (${ELEMENT[SAJU.day.b.e].n}, ${dayBranchYang}): ${dayBranchGod.k} ← 배우자궁
+${SAJU.hour ? '• Hour Branch ' + SAJU.hour.b.c + ' (' + ELEMENT[SAJU.hour.b.e].n + ', ' + hourBranchYang + '): ' + hourBranchGod.k + ' ← 자녀궁' : '• Hour Branch: Unknown'}
+
+【⚡ TEN GOD MAPPING (일간 ${dm.c} ${ELEMENT[dm.e].n} 기준) - AI MUST USE THIS】
+• Peer/Competitor (比劫): ${ELEMENT[tenGodMap.peer].n} (${ELEMENT[tenGodMap.peer].c}) - Same element as Day Master
+• Output/Expression (食傷): ${ELEMENT[tenGodMap.output].n} (${ELEMENT[tenGodMap.output].c}) - Day Master generates this
+• Wealth (財星): ${ELEMENT[tenGodMap.wealth].n} (${ELEMENT[tenGodMap.wealth].c}) - Day Master controls this
+• Officer/Power (官星): ${ELEMENT[tenGodMap.officer].n} (${ELEMENT[tenGodMap.officer].c}) - Controls Day Master
+• Seal/Resource (印星): ${ELEMENT[tenGodMap.seal].n} (${ELEMENT[tenGodMap.seal].c}) - Generates Day Master
+
 【TWELVE LIFE STAGES (Based on Day Master)】
 • Year Branch ${SAJU.year.b.c}: ${yearState.k} (Energy ${yearState.l}/12)
 • Month Branch ${SAJU.month.b.c}: ${monthState.k} (Energy ${monthState.l}/12)
 • Day Branch ${SAJU.day.b.c}: ${dayState.k} (Energy ${dayState.l}/12)
 ${hourState ? '• Hour Branch ' + SAJU.hour.b.c + ': ' + hourState.k + ' (Energy ' + hourState.l + '/12)' : '• Hour Branch: Unknown'}
+
+【SEASONAL POWER (월령 得令/失令) ⚠️ CRITICAL】
+• Birth Month: ${SAJU.month.b.k} (${monthSeason})
+• Season Element: ${ELEMENT[seasonEl].n} (${ELEMENT[seasonEl].c})
+• Day Master ${dm.c} (${ELEMENT[dm.e].n}): ${deukRyung ? '✅ IN SEASON (得令) - Strong seasonal support' : '❌ OUT OF SEASON (失令) - Needs support from other elements'}
+• Explanation: ${deukRyung ? 'Day Master receives energy from the season.' : 'Day Master does not match the season - check for other sources of strength.'}
 
 【FIVE ELEMENTS DISTRIBUTION】
 • Wood (木): ${elCount.wood}
@@ -9983,6 +10101,9 @@ ${banghapText}
 【HIDDEN HARMONY (暗合)】
 ${amhapText}
 
+【TRIPLE HARMONY (三合局) ⚠️ IMPORTANT FOR FORTUNE】
+${samhapText}${samhapWarning}
+
 【EMPTY VOID (空亡)】
 • Void Branches: ${gongmang?.names?.join(', ') || 'None'}
 ${gongmang?.affected?.length ? '• Affected Positions: ' + gongmang.affected.join(', ') : '• No void in Four Pillars'}
@@ -9991,12 +10112,26 @@ ${gongmang?.affected?.length ? '• Affected Positions: ' + gongmang.affected.jo
 ${sinsal.length ? sinsal.map(s => '• ' + s.n + ' (' + (s.t === 'good' ? 'Auspicious' : s.t === 'bad' ? 'Inauspicious' : 'Neutral') + '): ' + s.d).join('\n') : '• No significant divine stars'}
 
 【LIFE CYCLES (大運) - 10-Year Periods】
-${luck.slice(0,8).map(l => '• Ages ' + l.startAge + '-' + l.endAge + ': ' + l.s.c + l.b.c + ' (' + ELEMENT[l.s.e].n + '/' + ELEMENT[l.b.e].n + ')' + (l.isCur ? ' ◀ CURRENT' : '')).join('\n')}
+• Direction: ${luckDirection} (${yearIsYang ? 'Yang' : 'Yin'} Year ${GENDER === 'm' ? 'Male' : 'Female'})
+${luck.slice(0,8).map(l => {
+    const lStemGod = getTenGod(l.s, dm);
+    const lBranchGod = getTenGod({e: l.b.e, y: getBranchYang(l.b)}, dm);
+    return '• Ages ' + l.startAge + '-' + l.endAge + ': ' + l.s.c + l.b.c + ' [' + lStemGod.k.split('(')[0] + '/' + lBranchGod.k.split('(')[0] + ']' + (l.isCur ? ' ◀ CURRENT' : '');
+}).join('\n')}
 
 【CURRENT FORTUNE】
-• Current 大運(Life Cycle): ${curLuck ? curLuck.s.c + curLuck.b.c + ' (Ages ' + curLuck.startAge + '-' + curLuck.endAge + ')' : 'Calculating...'}
+• Current 大運(Life Cycle): ${curLuck ? (() => {
+    const curStemGod = getTenGod(curLuck.s, dm);
+    const curBranchGod = getTenGod({e: curLuck.b.e, y: getBranchYang(curLuck.b)}, dm);
+    return curLuck.s.c + curLuck.b.c + ' [' + curStemGod.k.split('(')[0] + '/' + curBranchGod.k.split('(')[0] + '] (Ages ' + curLuck.startAge + '-' + curLuck.endAge + ')';
+})() : 'Calculating...'}
 • Cycle Rating: ${curLuck ? (curLuck.rating === 'good' ? 'FAVORABLE' : curLuck.rating === 'bad' ? 'CHALLENGING' : 'NEUTRAL') : '-'}${curLuck && curLuck.climateClash ? ' ⚠️ Climate Clash!' : ''}
-• ${currentYear} 歲運(Annual Fortune): ${(() => { const yp = calcYearPillar(currentYear, 6, 1); return yp.s.c + yp.b.c + ' (' + ELEMENT[yp.s.e].n + '/' + ELEMENT[yp.b.e].n + ')'; })()}
+• ${currentYear} 歲運(Annual Fortune): ${(() => { 
+    const yp = calcYearPillar(currentYear, 6, 1); 
+    const ypStemGod = getTenGod(yp.s, dm);
+    const ypBranchGod = getTenGod({e: yp.b.e, y: getBranchYang(yp.b)}, dm);
+    return yp.s.c + yp.b.c + ' [' + ypStemGod.k.split('(')[0] + '/' + ypBranchGod.k.split('(')[0] + '] (' + ELEMENT[yp.s.e].n + '/' + ELEMENT[yp.b.e].n + ')'; 
+})()}
 ${(() => {
     const yearLuck = calcYearLuck(currentYear, SAJU, GODS);
     const ratingText = yearLuck.rating === 'breakthrough' ? '🚀 BREAKTHROUGH - Grand Opportunity Year!' :
@@ -10637,6 +10772,35 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
     - Quick check for Fire DM: 寅=Birth, 午=Peak, 戌=Grave. If 戌 shows "Birth", calculation error.
     - Quick check for Water DM: 申=Birth, 子=Peak, 辰=Grave. If 辰 shows "Birth", calculation error.
     - ALWAYS verify 12 Stages against classical tables before interpreting.
+
+===== ⚠️ CRITICAL AI INSTRUCTIONS - DO NOT IGNORE ⚠️ =====
+
+【MUST USE PROVIDED DATA - DO NOT CALCULATE】
+1. TEN GOD MAPPING is pre-calculated. USE IT. Do NOT try to figure out which element is which Ten God.
+2. BRANCH TEN GODS are provided. Each branch has a Ten God based on its element.
+3. LIFE CYCLE TEN GODS are provided in [Stem/Branch] format. USE these directly.
+4. ANNUAL FORTUNE TEN GODS are provided. Do NOT recalculate.
+
+【COMMON AI MISTAKES TO AVOID】
+1. ❌ Ignoring Branch Ten Gods - Branches are NOT just "energy". They have TEN GODS too!
+2. ❌ Confusing 得令/失令 - Check the SEASONAL POWER section. It's pre-calculated.
+3. ❌ Wrong Life Cycle interpretation - Use the [Stem/Branch] Ten God labels provided.
+4. ❌ Mixing up Yin/Yang - 甲丙戊庚壬 are YANG, 乙丁己辛癸 are YIN.
+5. ❌ Treating all "Wealth" the same - 偏財(Indirect) ≠ 正財(Direct). Check the full label.
+6. ❌ Ignoring 월령(月令) - Month Branch Ten God is the MOST IMPORTANT for strength.
+
+【BRANCH YIN/YANG REFERENCE (지지 음양 참조)】
+• 陽(Yang) Branches: 子(Rat), 寅(Tiger), 辰(Dragon), 午(Horse), 申(Monkey), 戌(Dog) - Even index
+• 陰(Yin) Branches: 丑(Ox), 卯(Rabbit), 巳(Snake), 未(Goat), 酉(Rooster), 亥(Pig) - Odd index
+• Ten God Rule: Same Yin/Yang → 偏(Indirect), Different Yin/Yang → 正(Direct)
+• Example: 己(陰土) vs 卯(陰木) = Same Yin → 偏官(Challenger), NOT 正官(Direct Officer)
+
+【INTERPRETATION PRIORITY】
+1. CRITICAL FEATURES section (if present) - Address these FIRST
+2. 득령/실령 status - Determines baseline strength
+3. Life Cycle + Annual Fortune Ten Gods - Current life theme
+4. Branch Ten Gods - Hidden influences
+5. Everything else
 `;
 
         navigator.clipboard.writeText(text).then(() => {
