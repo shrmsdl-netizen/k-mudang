@@ -3,11 +3,20 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.16.5 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.17.0 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
 ║  🔒 Basic Security Enabled (DevTools, Right-click disabled)                   ║
+║                                                                                ║
+║  v4.17.0 Changes:                                                             ║
+║    - [CRITICAL FIX] 타임존 변환 로직 완전 재작성 (Intl API 기반)              ║
+║    - [FIX] 하드코딩된 오프셋 제거 → IANA Time Zone Database 사용              ║
+║    - [FIX] 부호 오류로 인한 시간 역산 버그 수정 (32시간 오차 해결)            ║
+║    - [FIX] DST(서머타임) 자동 처리 - 브라우저 내장 데이터 활용                ║
+║    - [FIX] 역사적 타임존 변경 자동 반영                                       ║
+║    - [NEW] Select 옵션 IANA 타임존 코드로 변경                                ║
+║    - Total: 81 AI Rules                                                       ║
 ║                                                                                ║
 ║  v4.16.5 Changes:                                                             ║
 ║    - [NEW] AI 프롬프트에 시간 변환 정보 추가 (TIME CONVERSION 섹션)           ║
@@ -38,15 +47,9 @@
 ║    - [NEW] Ko-fi 후원 연동 (ko-fi.com/kmudang)                                ║
 ║    - [REMOVE] Firebase/Gumroad 결제 시스템 제거                               ║
 ║                                                                                ║
-║  v4.15.4 Changes:                                                             ║
-║    - [CRITICAL FIX] 일주 계산 오류 수정 (baseJdn 사주로또와 동일하게 변경)    ║
-║    - [FIX] 60갑자 인덱스 방식으로 일주 계산 알고리즘 통일                      ║
-║    - [KASI] 한국천문연구원 절기 데이터 100% 적용 (1940-2050)                  ║
-║    - Total: 75 AI Rules                                                       ║
-║                                                                                ║
 ║  Business: K-MUDANG (케이무당) | Registration: 487-20-02668                   ║
 ║  Contact: kmudang.official@gmail.com                                          ║
-║  Last Updated: 2026-01-19                                                     ║
+║  Last Updated: 2026-01-21                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 -->
 <meta charset="UTF-8">
@@ -70,7 +73,7 @@
    🆓 FREE EDITION - All Features Unlocked
    No Login Required | Ko-fi Support Welcome
    ======================================== */
-console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.16.5');
+console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.17.0');
 
 /* ========================================
    🔒 Basic Security Protection
@@ -1386,51 +1389,51 @@ footer a {
                     <label>🌍 Birth Location</label>
                     <select id="birth-location" onchange="updateTimezoneInfo()">
                         <optgroup label="🇺🇸 United States">
-                            <option value="us-pacific" selected>Pacific (CA, WA, OR)</option>
-                            <option value="us-mountain">Mountain (CO, AZ, UT, NV)</option>
-                            <option value="us-central">Central (TX, IL, MN)</option>
-                            <option value="us-eastern">Eastern (NY, FL, GA)</option>
-                            <option value="us-alaska">Alaska</option>
-                            <option value="us-hawaii">Hawaii</option>
+                            <option value="America/Los_Angeles" selected>Pacific (CA, WA, OR)</option>
+                            <option value="America/Denver">Mountain (CO, AZ, UT, NV)</option>
+                            <option value="America/Chicago">Central (TX, IL, MN)</option>
+                            <option value="America/New_York">Eastern (NY, FL, GA)</option>
+                            <option value="America/Anchorage">Alaska</option>
+                            <option value="Pacific/Honolulu">Hawaii</option>
                         </optgroup>
                         <optgroup label="🌏 East Asia">
-                            <option value="korea">🇰🇷 Korea</option>
-                            <option value="japan">🇯🇵 Japan</option>
-                            <option value="china">🇨🇳 China</option>
-                            <option value="taiwan">🇹🇼 Taiwan</option>
-                            <option value="hongkong">🇭🇰 Hong Kong</option>
+                            <option value="Asia/Seoul">🇰🇷 Korea</option>
+                            <option value="Asia/Tokyo">🇯🇵 Japan</option>
+                            <option value="Asia/Shanghai">🇨🇳 China</option>
+                            <option value="Asia/Taipei">🇹🇼 Taiwan</option>
+                            <option value="Asia/Hong_Kong">🇭🇰 Hong Kong</option>
                         </optgroup>
                         <optgroup label="🌏 Southeast Asia">
-                            <option value="vietnam">🇻🇳 Vietnam</option>
-                            <option value="thailand">🇹🇭 Thailand</option>
-                            <option value="singapore">🇸🇬 Singapore</option>
-                            <option value="philippines">🇵🇭 Philippines</option>
-                            <option value="indonesia">🇮🇩 Indonesia</option>
+                            <option value="Asia/Ho_Chi_Minh">🇻🇳 Vietnam</option>
+                            <option value="Asia/Bangkok">🇹🇭 Thailand</option>
+                            <option value="Asia/Singapore">🇸🇬 Singapore</option>
+                            <option value="Asia/Manila">🇵🇭 Philippines</option>
+                            <option value="Asia/Jakarta">🇮🇩 Indonesia</option>
                         </optgroup>
                         <optgroup label="🌏 South Asia / Middle East">
-                            <option value="india">🇮🇳 India</option>
-                            <option value="uae">🇦🇪 UAE / Dubai</option>
-                            <option value="israel">🇮🇱 Israel</option>
-                            <option value="saudi">🇸🇦 Saudi Arabia</option>
+                            <option value="Asia/Kolkata">🇮🇳 India</option>
+                            <option value="Asia/Dubai">🇦🇪 UAE / Dubai</option>
+                            <option value="Asia/Jerusalem">🇮🇱 Israel</option>
+                            <option value="Asia/Riyadh">🇸🇦 Saudi Arabia</option>
                         </optgroup>
                         <optgroup label="🇪🇺 Europe">
-                            <option value="uk">🇬🇧 UK</option>
-                            <option value="germany">🇩🇪 Germany</option>
-                            <option value="france">🇫🇷 France</option>
-                            <option value="spain">🇪🇸 Spain</option>
-                            <option value="italy">🇮🇹 Italy</option>
-                            <option value="russia">🇷🇺 Russia (Moscow)</option>
+                            <option value="Europe/London">🇬🇧 UK</option>
+                            <option value="Europe/Berlin">🇩🇪 Germany</option>
+                            <option value="Europe/Paris">🇫🇷 France</option>
+                            <option value="Europe/Madrid">🇪🇸 Spain</option>
+                            <option value="Europe/Rome">🇮🇹 Italy</option>
+                            <option value="Europe/Moscow">🇷🇺 Russia (Moscow)</option>
                         </optgroup>
                         <optgroup label="🌎 Americas">
-                            <option value="canada-west">🇨🇦 Canada West</option>
-                            <option value="canada-east">🇨🇦 Canada East</option>
-                            <option value="mexico">🇲🇽 Mexico</option>
-                            <option value="brazil">🇧🇷 Brazil</option>
+                            <option value="America/Vancouver">🇨🇦 Canada West</option>
+                            <option value="America/Toronto">🇨🇦 Canada East</option>
+                            <option value="America/Mexico_City">🇲🇽 Mexico</option>
+                            <option value="America/Sao_Paulo">🇧🇷 Brazil</option>
                         </optgroup>
                         <optgroup label="🌏 Oceania">
-                            <option value="australia-east">🇦🇺 Australia East</option>
-                            <option value="australia-west">🇦🇺 Australia West</option>
-                            <option value="newzealand">🇳🇿 New Zealand</option>
+                            <option value="Australia/Sydney">🇦🇺 Australia East</option>
+                            <option value="Australia/Perth">🇦🇺 Australia West</option>
+                            <option value="Pacific/Auckland">🇳🇿 New Zealand</option>
                         </optgroup>
                     </select>
                     <p id="timezone-info" style="font-size:0.7rem;color:var(--gold);margin-top:5px;display:none;"></p>
@@ -3282,14 +3285,14 @@ function lunarToSolar(ly, lm, ld, isLeap = false) {
     };
 }
 
-// v4.14.7: 타임존 UI 업데이트
+// v4.17.0: 타임존 UI 업데이트
 function updateTimezoneInfo() {
-    const loc = document.getElementById('birth-location')?.value || 'us-pacific';
+    const loc = document.getElementById('birth-location')?.value || 'America/Los_Angeles';
     const info = document.getElementById('timezone-info');
     if (!info) return;
     
-    // Korea/Japan needs no conversion message
-    if (loc === 'korea' || loc === 'japan') {
+    // Korea/Japan/Tokyo needs no conversion message
+    if (loc === 'Asia/Seoul' || loc === 'Asia/Tokyo') {
         info.style.display = 'none';
     } else {
         info.textContent = '💡 Local birth time → Auto-converted to Korean Standard Time (for solar term calculation)';
@@ -3297,86 +3300,141 @@ function updateTimezoneInfo() {
     }
 }
 
-// v4.14.7: 지역별 시차 계산 (한국시 UTC+9 기준 오프셋)
-function getTimezoneOffset(location, year, month) {
-    // 북반구 DST (3~10월)
-    const isDST_north = (month >= 3 && month <= 10);
-    // 남반구 DST (10~3월) - 호주, 뉴질랜드
-    const isDST_south = (month >= 10 || month <= 3);
+// v4.17.0: [REWRITE] Intl API 기반 타임존 변환 (IANA Time Zone Database 사용)
+// 하드코딩된 오프셋 대신 브라우저 내장 IANA 데이터로 정확한 변환
+function convertToKoreaTime(year, month, day, hour, sourceTimezone) {
+    // 한국/일본은 변환 불필요
+    if (sourceTimezone === 'Asia/Seoul' || sourceTimezone === 'Asia/Tokyo') {
+        return { y: year, m: month, d: day, h: hour, offset: 0 };
+    }
     
-    // 한국시(UTC+9) 기준 오프셋 (해당 지역 현지시간에 더해서 한국시로 변환)
-    const offsets = {
-        // 한국/일본 (UTC+9) - 오프셋 0
-        'korea': 0, 'japan': 0,
+    try {
+        // 1. 현지 시간으로 Date 객체 생성 (UTC 기준)
+        // 현지 시간을 UTC로 먼저 변환하기 위해 해당 타임존의 오프셋 계산
+        const localDateStr = `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}T${String(hour).padStart(2,'0')}:30:00`;
         
-        // 미국
-        'us-pacific': isDST_north ? -16 : -17,      // CA, WA, OR (UTC-7/-8)
-        'us-mountain': isDST_north ? -15 : -16,     // CO, AZ, UT, NV (UTC-6/-7)
-        'us-central': isDST_north ? -14 : -15,      // TX, IL, MN (UTC-5/-6)
-        'us-eastern': isDST_north ? -13 : -14,      // NY, FL, GA (UTC-4/-5)
-        'us-alaska': isDST_north ? -17 : -18,       // UTC-8/-9
-        'us-hawaii': -19,                            // UTC-10 (no DST)
+        // 2. 해당 타임존에서의 시간을 한국 시간으로 변환
+        // Intl.DateTimeFormat을 사용하여 정확한 변환
+        const formatter = new Intl.DateTimeFormat('en-CA', {
+            timeZone: sourceTimezone,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
         
-        // 캐나다
-        'canada-west': isDST_north ? -16 : -17,
-        'canada-east': isDST_north ? -13 : -14,
+        const koreaFormatter = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'Asia/Seoul',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
         
-        // 중남미
-        'mexico': isDST_north ? -14 : -15,
-        'brazil': -12,                               // UTC-3 (no DST)
+        // 임시 날짜 객체 생성 (UTC 기준으로 추정)
+        // 방법: 해당 타임존의 "같은 시각"을 찾기 위해 역계산
+        let testDate = new Date(Date.UTC(year, month - 1, day, hour, 30, 0));
         
-        // 동아시아 (UTC+8)
-        'china': -1, 'taiwan': -1, 'hongkong': -1,
-        'singapore': -1, 'philippines': -1,
+        // 해당 타임존에서 표시되는 시간 파싱
+        const localParts = formatter.formatToParts(testDate);
+        let localH = parseInt(localParts.find(p => p.type === 'hour')?.value || '0');
+        let localD = parseInt(localParts.find(p => p.type === 'day')?.value || '1');
         
-        // 동남아시아 (UTC+7)
-        'vietnam': -2, 'thailand': -2, 'indonesia': -2,
+        // 시간 차이 계산하여 보정
+        let hourDiff = hour - localH;
+        let dayDiff = day - localD;
         
-        // 남아시아/중동
-        'india': -3.5,                               // UTC+5:30
-        'uae': -5,                                   // UTC+4
-        'israel': isDST_north ? -6 : -7,            // UTC+2/+3
-        'saudi': -6,                                 // UTC+3
+        // UTC 시간 조정
+        testDate = new Date(testDate.getTime() + (hourDiff * 60 + dayDiff * 24 * 60) * 60 * 1000);
         
-        // 유럽 (CET = UTC+1/+2)
-        'uk': isDST_north ? -8 : -9,                // UTC+0/+1
-        'germany': isDST_north ? -7 : -8,
-        'france': isDST_north ? -7 : -8,
-        'spain': isDST_north ? -7 : -8,
-        'italy': isDST_north ? -7 : -8,
-        'russia': -6,                                // Moscow UTC+3
+        // 최종 한국 시간 추출
+        const koreaParts = koreaFormatter.formatToParts(testDate);
+        const koreaYear = parseInt(koreaParts.find(p => p.type === 'year')?.value || year);
+        const koreaMonth = parseInt(koreaParts.find(p => p.type === 'month')?.value || month);
+        const koreaDay = parseInt(koreaParts.find(p => p.type === 'day')?.value || day);
+        let koreaHour = parseInt(koreaParts.find(p => p.type === 'hour')?.value || hour);
         
-        // 오세아니아 (남반구 - DST 10~3월)
-        'australia-east': isDST_south ? 2 : 1,      // DST: UTC+11, 비DST: UTC+10
-        'australia-west': -1,                        // UTC+8 (no DST)
-        'newzealand': isDST_south ? 4 : 3           // DST: UTC+13, 비DST: UTC+12
-    };
-    return offsets[location] || 0;
+        // 24시 표기 보정 (자정)
+        if (koreaHour === 24) koreaHour = 0;
+        
+        // 오프셋 계산 (시간 단위)
+        const originalTotal = day * 24 + hour;
+        const koreaTotal = koreaDay * 24 + koreaHour + (koreaMonth !== month ? (koreaMonth > month ? 30*24 : -30*24) : 0);
+        const offset = koreaTotal - originalTotal;
+        
+        return { 
+            y: koreaYear, 
+            m: koreaMonth, 
+            d: koreaDay, 
+            h: koreaHour, 
+            offset: offset 
+        };
+    } catch (e) {
+        console.error('Timezone conversion error:', e);
+        // 폴백: 변환 없이 반환
+        return { y: year, m: month, d: day, h: hour, offset: 0 };
+    }
 }
 
+// v4.17.0: 시간 오프셋 계산 (AI 프롬프트 표시용)
+function getTimezoneOffset(sourceTimezone, year, month, day, hour) {
+    if (sourceTimezone === 'Asia/Seoul' || sourceTimezone === 'Asia/Tokyo') {
+        return 0;
+    }
+    const result = convertToKoreaTime(year, month, day, hour, sourceTimezone);
+    return result.offset;
+}
+
+// v4.17.0: [REWRITE] adjustTime - Intl API 기반
 function adjustTime(y, m, d, h) {
     if (h < 0) return { y, m, d, h };
-    let hour = h;
     
-    // v4.14.7: 지역별 타임존 보정
-    const location = document.getElementById('birth-location')?.value || 'us-pacific';
-    hour += getTimezoneOffset(location, y, m);
-    while (hour >= 24) { hour -= 24; d += 1; }
-    while (hour < 0) { hour += 24; d -= 1; }
-    const daysInMonth = [31, (y % 4 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    if (d < 1) { m--; if (m < 1) { m = 12; y--; } d = daysInMonth[m - 1]; }
-    if (d > daysInMonth[m - 1]) { d = 1; m++; if (m > 12) { m = 1; y++; } }
+    // v4.17.0: Intl API 기반 타임존 변환
+    const location = document.getElementById('birth-location')?.value || 'America/Los_Angeles';
+    const converted = convertToKoreaTime(y, m, d, h, location);
     
-    // Korea DST correction (한국 출생만)
-    if (location === 'korea') {
+    let year = converted.y;
+    let month = converted.m;
+    let day = converted.d;
+    let hour = converted.h;
+    
+    // Korea historical DST correction (한국 출생만, 1948-1951, 1955-1960, 1987-1988)
+    if (location === 'Asia/Seoul') {
         const isDST = ((y >= 1948 && y <= 1951) || (y >= 1955 && y <= 1960) || (y >= 1987 && y <= 1988));
-        if (isDST) hour -= 1;
+        if (isDST) {
+            hour -= 1;
+            if (hour < 0) {
+                hour += 24;
+                day -= 1;
+                if (day < 1) {
+                    month -= 1;
+                    if (month < 1) { month = 12; year -= 1; }
+                    const daysInMonth = [31, (year % 4 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                    day = daysInMonth[month - 1];
+                }
+            }
+        }
     }
-    // True solar time correction
+    
+    // True solar time correction (진태양시 보정: -30분)
+    // 시주 경계가 정시가 아닌 X시 30분이므로, 계산 편의상 -0.5시간
     hour = hour - 0.5;
-    if (hour < 0) { hour += 12; d -= 1; }
-    if (d < 1) { m -= 1; if (m < 1) { m = 12; y -= 1; } d = 28; }
-    return { y, m, d, h: Math.floor(hour) };
+    if (hour < 0) { 
+        hour += 24; 
+        day -= 1; 
+        if (day < 1) { 
+            month -= 1; 
+            if (month < 1) { month = 12; year -= 1; } 
+            const daysInMonth = [31, (year % 4 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            day = daysInMonth[month - 1];
+        }
+    }
+    
+    return { y: year, m: month, d: day, h: Math.floor(hour) };
 }
 
 /* ========================================
@@ -8351,7 +8409,7 @@ function analyzeSaju() {
         INPUT_IS_LUNAR = (CALENDAR === 'lunar');
         INPUT_HOUR_INDEX = hourVal;  // 원래 선택한 시간 인덱스 저장
         CONVERTED_HOUR_INDEX = hourBranchIdx;  // v4.16.5: 변환된 시간 인덱스 저장
-        TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'us-pacific', sy, sm);  // v4.16.5: 타임존 오프셋 저장
+        TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'America/Los_Angeles', sy, sm, sd, realHour);  // v4.17.0: Intl API 기반
         const str = calcStrength(SAJU);
         if (!str) { toast('Strength calculation error'); return; }
         STRENGTH = str;  // 전역 저장
