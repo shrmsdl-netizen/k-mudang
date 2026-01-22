@@ -3,7 +3,7 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.17.4 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.17.5 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
@@ -16,7 +16,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.17.4)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.17.5)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -30,7 +30,10 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  v4.17.4 (2026-01-21):                                                        ║
+║  v4.17.5 (2026-01-22):                                                        ║
+║    - [FIX] 삼합국(三合局) 프롬프트 출력 버그 수정                              ║
+║      • 문제: samhapGuk 반환 구조와 프롬프트 코드 불일치                       ║
+║      • 해결: s.el→s.result, s.branches→s.name, s.type→s.complete 수정        ║
 ║    - [NEW] 지지 십신 계산 기능 추가 (TEN GODS - BRANCHES 섹션)                ║
 ║    - [FIX] 지지 십신 음양 계산 버그 수정 (getBranchYang 함수)                 ║
 ║    - [NEW] AI 프롬프트에 TEN GOD MAPPING 테이블 추가                          ║
@@ -81,7 +84,7 @@
    🆓 FREE EDITION - All Features Unlocked
    No Login Required | Ko-fi Support Welcome
    ======================================== */
-console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.17.4');
+console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.17.5');
 
 /* ========================================
    🔒 Basic Security Protection
@@ -3303,7 +3306,7 @@ function lunarToSolar(ly, lm, ld, isLeap = false) {
     };
 }
 
-// v4.17.4: 타임존 UI 업데이트
+// v4.17.5: 타임존 UI 업데이트
 function updateTimezoneInfo() {
     const loc = document.getElementById('birth-location')?.value || 'America/Los_Angeles';
     const info = document.getElementById('timezone-info');
@@ -3318,7 +3321,7 @@ function updateTimezoneInfo() {
     }
 }
 
-// v4.17.4: [REWRITE] Intl API 기반 타임존 변환 (IANA Time Zone Database 사용)
+// v4.17.5: [REWRITE] Intl API 기반 타임존 변환 (IANA Time Zone Database 사용)
 // 하드코딩된 오프셋 대신 브라우저 내장 IANA 데이터로 정확한 변환
 function convertToKoreaTime(year, month, day, hour, sourceTimezone) {
     // 한국/일본은 변환 불필요
@@ -3398,7 +3401,7 @@ function convertToKoreaTime(year, month, day, hour, sourceTimezone) {
     }
 }
 
-// v4.17.4: 시간 오프셋 계산 (AI 프롬프트 표시용)
+// v4.17.5: 시간 오프셋 계산 (AI 프롬프트 표시용)
 function getTimezoneOffset(sourceTimezone, year, month, day, hour) {
     if (sourceTimezone === 'Asia/Seoul' || sourceTimezone === 'Asia/Tokyo') {
         return 0;
@@ -3407,11 +3410,11 @@ function getTimezoneOffset(sourceTimezone, year, month, day, hour) {
     return result.offset;
 }
 
-// v4.17.4: [REWRITE] adjustTime - Intl API 기반
+// v4.17.5: [REWRITE] adjustTime - Intl API 기반
 function adjustTime(y, m, d, h) {
     if (h < 0) return { y, m, d, h };
     
-    // v4.17.4: Intl API 기반 타임존 변환
+    // v4.17.5: Intl API 기반 타임존 변환
     const location = document.getElementById('birth-location')?.value || 'America/Los_Angeles';
     const converted = convertToKoreaTime(y, m, d, h, location);
     
@@ -8428,7 +8431,7 @@ function analyzeSaju() {
         INPUT_IS_LUNAR = (CALENDAR === 'lunar');
         INPUT_HOUR_INDEX = hourVal;  // 원래 선택한 시간 인덱스 저장
         CONVERTED_HOUR_INDEX = hourBranchIdx;  // v4.16.5: 변환된 시간 인덱스 저장
-        TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'America/Los_Angeles', sy, sm, sd, realHour);  // v4.17.4: Intl API 기반
+        TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'America/Los_Angeles', sy, sm, sd, realHour);  // v4.17.5: Intl API 기반
         // v4.17.3: 날짜 변경 정보 저장 (AI 프롬프트 표시용)
         ORIGINAL_DATE = {y: sy, m: sm, d: sd};  // 양력 변환 후 원래 날짜
         CONVERTED_DATE = {y: adj.y, m: adj.m, d: adj.d};  // 한국 기준 변환 날짜
@@ -9544,7 +9547,7 @@ function copySajuForAI() {
         const monthGod = getTenGod(SAJU.month.s, dm);
         const hourGod = SAJU.hour ? getTenGod(SAJU.hour.s, dm) : null;
         
-        // v4.17.4: 지지 십신 계산 - 음양 정보 올바르게 전달
+        // v4.17.5: 지지 십신 계산 - 음양 정보 올바르게 전달
         // 지지 음양 규칙: 짝수 인덱스(子寅辰午申戌)=양, 홀수 인덱스(丑卯巳未酉亥)=음
         const getBranchYang = (branch) => {
             const idx = BRANCH.findIndex(b => b.c === branch.c);
@@ -9590,13 +9593,14 @@ function copySajuForAI() {
         try {
             const advInt = analyzeAdvancedInteractions ? analyzeAdvancedInteractions(SAJU) : null;
             if (advInt && advInt.samhapGuk && advInt.samhapGuk.length > 0) {
+                // v4.17.5 FIX: 실제 반환 구조에 맞게 수정 (name, complete, result 사용)
                 samhapText = advInt.samhapGuk.map(s => {
-                    const warning = (s.el === GODS.gi) ? ' ⚠️ COMPLETES 忌神 ELEMENT!' : 
-                                   (s.el === GODS.yong) ? ' ✅ COMPLETES 用神 ELEMENT!' : '';
-                    return `• ${s.branches.join('-')} → ${ELEMENT[s.el].n}局 (${s.type === 'full' ? 'Complete' : 'Partial'})${warning}`;
+                    const warning = (s.result === ELEMENT[GODS.gi].k) ? ' ⚠️ COMPLETES 忌神 ELEMENT!' : 
+                                   (s.result === ELEMENT[GODS.yong].k) ? ' ✅ COMPLETES 用神 ELEMENT!' : '';
+                    return `• ${s.name} (${s.complete ? 'Complete' : 'Partial'})${warning}`;
                 }).join('\n');
                 // 삼합국 경고
-                const giSamhap = advInt.samhapGuk.find(s => s.el === GODS.gi && s.type === 'full');
+                const giSamhap = advInt.samhapGuk.find(s => s.result === ELEMENT[GODS.gi].k && s.complete);
                 if (giSamhap) {
                     samhapWarning = `\n⚠️ WARNING: Triple Harmony completes 忌神(${ELEMENT[GODS.gi].n}) - May amplify negative influences!`;
                 }
