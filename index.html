@@ -3,7 +3,7 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.17.5 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.17.7 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
@@ -16,7 +16,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.17.5)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.17.7)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -30,10 +30,16 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  v4.17.5 (2026-01-22):                                                        ║
+║  v4.17.7 (2026-01-22):                                                        ║
+║    - [CRITICAL FIX] 일주(Day Pillar) 계산 baseJdn 오류 수정                   ║
+║      • 문제: baseJdn=2451537 (틀린 값) → 모든 일주가 잘못 계산됨              ║
+║      • 해결: baseJdn=2445731 (1984/1/31=甲子 기준, 사주로또와 동일)           ║
+║      • 검증: 1968-05-08=戊寅, 2000-01-01=戊午 (만세력/나무위키 확인)          ║
+║    - [UX] 글로벌 버전: Calendar 선택(음력/양력) UI 제거                        ║
+║      • 이유: 서양인에게 Solar/Lunar 선택은 혼란 유발                          ║
+║      • 결과: 모든 입력은 양력(Gregorian)으로 처리                             ║
+║      • 음력 변환 코드는 유지 (향후 복구 가능)                                  ║
 ║    - [FIX] 삼합국(三合局) 프롬프트 출력 버그 수정                              ║
-║      • 문제: samhapGuk 반환 구조와 프롬프트 코드 불일치                       ║
-║      • 해결: s.el→s.result, s.branches→s.name, s.type→s.complete 수정        ║
 ║    - [NEW] 지지 십신 계산 기능 추가 (TEN GODS - BRANCHES 섹션)                ║
 ║    - [FIX] 지지 십신 음양 계산 버그 수정 (getBranchYang 함수)                 ║
 ║    - [NEW] AI 프롬프트에 TEN GOD MAPPING 테이블 추가                          ║
@@ -84,7 +90,7 @@
    🆓 FREE EDITION - All Features Unlocked
    No Login Required | Ko-fi Support Welcome
    ======================================== */
-console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.17.5');
+console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.17.7');
 
 /* ========================================
    🔒 Basic Security Protection
@@ -1458,14 +1464,7 @@ footer a {
                         <button class="toggle-btn" data-gender="f" onclick="setGender('f')">👩 F</button>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Calendar</label>
-                    <div class="toggle-btns">
-                        <button class="toggle-btn on" data-cal="solar" onclick="setCalendar('solar')">☀️ Solar</button>
-                        <button class="toggle-btn" data-cal="lunar" onclick="setCalendar('lunar')">🌙 Lunar</button>
-                    </div>
-                    <p id="lunar-notice" style="display:none;font-size:0.7rem;color:var(--gold);margin-top:5px;">💡 Solar calendar recommended for accuracy</p>
-                </div>
+                <!-- v4.17.7: Calendar selection removed for global version - Solar (Gregorian) only -->
             </div>
             <button class="btn" onclick="analyzeSaju()">🔮 Analyze Fortune</button>
         </div>
@@ -2349,7 +2348,7 @@ const MY_ACCOUNT = "케이뱅크 100150462483 김대인";
    3. 전역 상태
    ======================================== */
 let GENDER = 'm';
-let CALENDAR = 'solar';
+let CALENDAR = 'solar';  // v4.17.7: Fixed to solar - Lunar option removed for global version
 let SAJU = null;
 let GODS = null;
 let STRENGTH = null;  // 신강/신약 정보
@@ -3062,11 +3061,13 @@ function setGender(g) {
     document.querySelectorAll('[data-gender]').forEach(b => b.classList.toggle('on', b.dataset.gender === g));
 }
 
+// v4.17.7: setCalendar disabled - Solar only for global version
+// Kept for future use if lunar support needed
 function setCalendar(c) {
-    CALENDAR = c;
-    document.querySelectorAll('[data-cal]').forEach(b => b.classList.toggle('on', b.dataset.cal === c));
-    const notice = document.getElementById('lunar-notice');
-    if (notice) notice.style.display = c === 'lunar' ? 'block' : 'none';
+    // CALENDAR = c;
+    // document.querySelectorAll('[data-cal]').forEach(b => b.classList.toggle('on', b.dataset.cal === c));
+    // const notice = document.getElementById('lunar-notice');
+    // if (notice) notice.style.display = c === 'lunar' ? 'block' : 'none';
 }
 
 function switchTab(name) {
@@ -3306,7 +3307,7 @@ function lunarToSolar(ly, lm, ld, isLeap = false) {
     };
 }
 
-// v4.17.5: 타임존 UI 업데이트
+// v4.17.7: 타임존 UI 업데이트
 function updateTimezoneInfo() {
     const loc = document.getElementById('birth-location')?.value || 'America/Los_Angeles';
     const info = document.getElementById('timezone-info');
@@ -3321,7 +3322,7 @@ function updateTimezoneInfo() {
     }
 }
 
-// v4.17.5: [REWRITE] Intl API 기반 타임존 변환 (IANA Time Zone Database 사용)
+// v4.17.7: [REWRITE] Intl API 기반 타임존 변환 (IANA Time Zone Database 사용)
 // 하드코딩된 오프셋 대신 브라우저 내장 IANA 데이터로 정확한 변환
 function convertToKoreaTime(year, month, day, hour, sourceTimezone) {
     // 한국/일본은 변환 불필요
@@ -3401,7 +3402,7 @@ function convertToKoreaTime(year, month, day, hour, sourceTimezone) {
     }
 }
 
-// v4.17.5: 시간 오프셋 계산 (AI 프롬프트 표시용)
+// v4.17.7: 시간 오프셋 계산 (AI 프롬프트 표시용)
 function getTimezoneOffset(sourceTimezone, year, month, day, hour) {
     if (sourceTimezone === 'Asia/Seoul' || sourceTimezone === 'Asia/Tokyo') {
         return 0;
@@ -3410,11 +3411,11 @@ function getTimezoneOffset(sourceTimezone, year, month, day, hour) {
     return result.offset;
 }
 
-// v4.17.5: [REWRITE] adjustTime - Intl API 기반
+// v4.17.7: [REWRITE] adjustTime - Intl API 기반
 function adjustTime(y, m, d, h) {
     if (h < 0) return { y, m, d, h };
     
-    // v4.17.5: Intl API 기반 타임존 변환
+    // v4.17.7: Intl API 기반 타임존 변환
     const location = document.getElementById('birth-location')?.value || 'America/Los_Angeles';
     const converted = convertToKoreaTime(y, m, d, h, location);
     
@@ -3636,10 +3637,10 @@ function calcDayPillar(y, m, d) {
     const adjM = m + 12 * a - 3;
     const jdn = d + Math.floor((153 * adjM + 2) / 5) + 365 * adjY + Math.floor(adjY / 4) - Math.floor(adjY / 100) + Math.floor(adjY / 400) - 32045;
     
-    // v4.15.4 FIX: 사주로또 검증된 baseJdn 사용 (100개 테스트 통과)
-    // 기준: 2000/1/1 = 壬申 (idx60=8), JDN=2451545
-    // baseJdn = 2451545 - 8 = 2451537
-    const baseJdn = 2451537;
+    // v4.17.7 FIX: 만세력 검증 완료된 baseJdn 사용
+    // 기준: 1984/1/31 = 甲子 (idx60=0), JDN=2445731
+    // 검증: 1968-05-08 = 戊寅 (만세력 확인), 2000-01-01 = 戊午 (나무위키 확인)
+    const baseJdn = 2445731;
     const idx60 = ((jdn - baseJdn) % 60 + 60) % 60;
     
     const stemIdx = idx60 % 10;
@@ -8384,11 +8385,12 @@ function analyzeSaju() {
         if (d < 1 || d > 31) { toast('Day must be between 1-31'); return; }
         
         let sy = y, sm = m, sd = d;
-        if (CALENDAR === 'lunar') {
-            const conv = lunarToSolar(y, m, d);
-            if (!conv || !conv.year) { toast('Lunar conversion error. Try solar calendar'); return; }
-            sy = conv.year; sm = conv.month; sd = conv.day;
-        }
+        // v4.17.7: Lunar conversion disabled - Solar only for global version
+        // if (CALENDAR === 'lunar') {
+        //     const conv = lunarToSolar(y, m, d);
+        //     if (!conv || !conv.year) { toast('Lunar conversion error. Try solar calendar'); return; }
+        //     sy = conv.year; sm = conv.month; sd = conv.day;
+        // }
         
         // v4.16.3 FIX: 지지 인덱스(0-11)를 실제 시간(0-23)으로 변환
         // 子(0)→0시, 丑(1)→2시, 寅(2)→4시, 卯(3)→6시, 辰(4)→8시, 巳(5)→10시
@@ -8428,10 +8430,10 @@ function analyzeSaju() {
         INPUT_YEAR = y;
         INPUT_MONTH = m;
         INPUT_DAY = d;
-        INPUT_IS_LUNAR = (CALENDAR === 'lunar');
+        INPUT_IS_LUNAR = false;  // v4.17.7: Always false - Solar only
         INPUT_HOUR_INDEX = hourVal;  // 원래 선택한 시간 인덱스 저장
         CONVERTED_HOUR_INDEX = hourBranchIdx;  // v4.16.5: 변환된 시간 인덱스 저장
-        TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'America/Los_Angeles', sy, sm, sd, realHour);  // v4.17.5: Intl API 기반
+        TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'America/Los_Angeles', sy, sm, sd, realHour);  // v4.17.7: Intl API 기반
         // v4.17.3: 날짜 변경 정보 저장 (AI 프롬프트 표시용)
         ORIGINAL_DATE = {y: sy, m: sm, d: sd};  // 양력 변환 후 원래 날짜
         CONVERTED_DATE = {y: adj.y, m: adj.m, d: adj.d};  // 한국 기준 변환 날짜
@@ -9547,7 +9549,7 @@ function copySajuForAI() {
         const monthGod = getTenGod(SAJU.month.s, dm);
         const hourGod = SAJU.hour ? getTenGod(SAJU.hour.s, dm) : null;
         
-        // v4.17.5: 지지 십신 계산 - 음양 정보 올바르게 전달
+        // v4.17.7: 지지 십신 계산 - 음양 정보 올바르게 전달
         // 지지 음양 규칙: 짝수 인덱스(子寅辰午申戌)=양, 홀수 인덱스(丑卯巳未酉亥)=음
         const getBranchYang = (branch) => {
             const idx = BRANCH.findIndex(b => b.c === branch.c);
@@ -9593,7 +9595,7 @@ function copySajuForAI() {
         try {
             const advInt = analyzeAdvancedInteractions ? analyzeAdvancedInteractions(SAJU) : null;
             if (advInt && advInt.samhapGuk && advInt.samhapGuk.length > 0) {
-                // v4.17.5 FIX: 실제 반환 구조에 맞게 수정 (name, complete, result 사용)
+                // v4.17.7 FIX: 실제 반환 구조에 맞게 수정 (name, complete, result 사용)
                 samhapText = advInt.samhapGuk.map(s => {
                     const warning = (s.result === ELEMENT[GODS.gi].k) ? ' ⚠️ COMPLETES 忌神 ELEMENT!' : 
                                    (s.result === ELEMENT[GODS.yong].k) ? ' ✅ COMPLETES 用神 ELEMENT!' : '';
@@ -9812,7 +9814,7 @@ function copySajuForAI() {
         // Generate text
         const locationSelect = document.getElementById('birth-location');
         const locationText = locationSelect ? locationSelect.options[locationSelect.selectedIndex]?.text || 'Unknown' : 'Unknown';
-        const calendarText = CALENDAR === 'lunar' ? 'Lunar (음력)' : 'Solar (양력)';
+        // v4.17.7: Calendar type removed - Solar only for global version
         
         // 시(時) 정보 - v4.16.3: 사용자가 선택한 원래 시간 표시
         const HOUR_RANGES = {
@@ -9860,9 +9862,8 @@ function copySajuForAI() {
         let text = `===== FOUR PILLARS OF DESTINY (SAJU) ANALYSIS =====
 
 ${criticalText}【BASIC INFO】
-• Birth Date: ${INPUT_YEAR}-${String(INPUT_MONTH).padStart(2,'0')}-${String(INPUT_DAY).padStart(2,'0')}${INPUT_IS_LUNAR ? ' (Lunar) → Solar: ' + BIRTH_YEAR + '-' + String(BIRTH_MONTH).padStart(2,'0') + '-' + String(BIRTH_DAY).padStart(2,'0') : ''}
+• Birth Date: ${INPUT_YEAR}-${String(INPUT_MONTH).padStart(2,'0')}-${String(INPUT_DAY).padStart(2,'0')}
 • Birth Hour: ${hourText}
-• Calendar: ${calendarText}
 • Gender: ${GENDER === 'm' ? 'Male (남)' : 'Female (여)'}
 • Birth Location: ${locationText}
 • Age: ${age-1} (Korean Age: ${age})
