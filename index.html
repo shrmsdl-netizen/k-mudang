@@ -3,11 +3,11 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.17.7 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.18.0 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
-║  🔒 Basic Security Enabled (DevTools, Right-click disabled)                   ║
+║  🔒 Enhanced Security v2.0 (DevTools, Copy, Print, Drag disabled)             ║
 ║                                                                                ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📋 CODE MAP (사주로또와 공유)                                                ║
@@ -16,7 +16,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.17.7)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.18.0)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -30,6 +30,12 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
+║  v4.18.0 (2026-01-22):                                                        ║
+║    - [SYNC] 사주로또 v32.1 완전 동기화                                         ║
+║    - [FIX] 2026년 절기 데이터 KASI 기준 수정 (입춘 05:02, 소한 1/5, 망종 6/6)  ║
+║    - [NEW] calcGods: samhapResult 파라미터 추가                                ║
+║    - [NEW] 관살태왕 통관용신 로직 (殺印相生)                                   ║
+║    - [NEW] 삼합국 영향 반영 (식신제살/설기용신)                                ║
 ║  v4.17.7 (2026-01-22):                                                        ║
 ║    - [CRITICAL FIX] 일주(Day Pillar) 계산 baseJdn 오류 수정                   ║
 ║      • 문제: baseJdn=2451537 (틀린 값) → 모든 일주가 잘못 계산됨              ║
@@ -90,64 +96,192 @@
    🆓 FREE EDITION - All Features Unlocked
    No Login Required | Ko-fi Support Welcome
    ======================================== */
-console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.17.7');
+console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.18.0');
 
 /* ========================================
-   🔒 Basic Security Protection
+   🔒 Enhanced Security Protection v2.0
    ======================================== */
-// Disable right-click context menu
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    return false;
-});
-
-// Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-document.addEventListener('keydown', function(e) {
-    // F12
-    if (e.key === 'F12' || e.keyCode === 123) {
+(function() {
+    'use strict';
+    
+    // ═══════════════════════════════════════════════════════════════
+    // 1. 우클릭 방지
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('contextmenu', function(e) { 
+        e.preventDefault(); 
+        e.stopPropagation();
+        return false; 
+    });
+    
+    // ═══════════════════════════════════════════════════════════════
+    // 2. 키보드 단축키 차단 (개발자도구, 소스보기, 인쇄, 저장)
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('keydown', function(e) {
+        // F12 - DevTools
+        if (e.key === 'F12' || e.keyCode === 123) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+Shift+I - DevTools
+        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+Shift+J - Console
+        if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+Shift+C - Element Inspector
+        if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+U - View Source
+        if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+S - Save Page
+        if (e.ctrlKey && (e.key === 'S' || e.key === 's' || e.keyCode === 83)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+P - Print
+        if (e.ctrlKey && (e.key === 'P' || e.key === 'p' || e.keyCode === 80)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+A - Select All
+        if (e.ctrlKey && (e.key === 'A' || e.key === 'a' || e.keyCode === 65)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+C - Copy (except input fields)
+        if (e.ctrlKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67) && !e.shiftKey) {
+            const activeEl = document.activeElement;
+            const isInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
+            if (!isInput) {
+                e.preventDefault();
+                return false;
+            }
+        }
+    });
+    
+    // ═══════════════════════════════════════════════════════════════
+    // 3. 텍스트 선택 방지 (입력 필드 제외)
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('selectstart', function(e) {
+        const target = e.target;
+        const isInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA');
+        if (!isInput) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // ═══════════════════════════════════════════════════════════════
+    // 4. 드래그 방지
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('dragstart', function(e) {
         e.preventDefault();
         return false;
+    });
+    
+    // ═══════════════════════════════════════════════════════════════
+    // 5. 복사 방지 (입력 필드 제외)
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('copy', function(e) {
+        const activeEl = document.activeElement;
+        const isInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
+        if (!isInput) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // ═══════════════════════════════════════════════════════════════
+    // 6. DevTools 열림 감지 (창 크기 기반)
+    // ═══════════════════════════════════════════════════════════════
+    const devToolsCheck = {
+        isOpen: false,
+        orientation: undefined
+    };
+    
+    const threshold = 160;
+    
+    const checkDevTools = function() {
+        const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+        const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+        const orientation = widthThreshold ? 'vertical' : 'horizontal';
+        
+        if (!(heightThreshold && widthThreshold) && 
+            ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) || 
+             widthThreshold || heightThreshold)) {
+            if (!devToolsCheck.isOpen || devToolsCheck.orientation !== orientation) {
+                devToolsCheck.isOpen = true;
+                devToolsCheck.orientation = orientation;
+            }
+        } else {
+            devToolsCheck.isOpen = false;
+            devToolsCheck.orientation = undefined;
+        }
+    };
+    
+    setInterval(checkDevTools, 1000);
+    
+    // ═══════════════════════════════════════════════════════════════
+    // 7. debugger 탐지 트랩
+    // ═══════════════════════════════════════════════════════════════
+    (function detectDebugger() {
+        const start = new Date();
+        debugger;
+        const end = new Date();
+        if (end - start > 100) {
+            // debugger active
+        }
+        setTimeout(detectDebugger, 3000);
+    })();
+    
+    // ═══════════════════════════════════════════════════════════════
+    // 8. 콘솔 함수 제한
+    // ═══════════════════════════════════════════════════════════════
+    const noop = function() {};
+    const consoleProtect = function() {
+        try {
+            const methods = ['log', 'debug', 'info', 'warn', 'error', 'table', 'trace', 'dir', 'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'assert', 'profile'];
+            if (window.console) {
+                console.log('%c🔒 K-MUDANG Pro v4.18.0 [PUBLIC EDITION]', 'color: #4CAF50; font-size: 14px; font-weight: bold;');
+                console.log('%c© 2025 K-MUDANG. All Rights Reserved.', 'color: #666; font-size: 12px;');
+                console.log('%c⚠️ This browser feature is for developers only.', 'color: #ff6b6b; font-size: 12px;');
+                
+                setTimeout(function() {
+                    methods.forEach(function(method) {
+                        window.console[method] = noop;
+                    });
+                }, 100);
+            }
+        } catch(e) {}
+    };
+    consoleProtect();
+    
+    // ═══════════════════════════════════════════════════════════════
+    // 9. 인쇄 방지 CSS 주입
+    // ═══════════════════════════════════════════════════════════════
+    const printStyle = document.createElement('style');
+    printStyle.textContent = '@media print { body { display: none !important; } }';
+    document.head.appendChild(printStyle);
+    
+    // ═══════════════════════════════════════════════════════════════
+    // 10. iframe 삽입 방지
+    // ═══════════════════════════════════════════════════════════════
+    if (window.top !== window.self) {
+        try {
+            window.top.location = window.self.location;
+        } catch(e) {}
     }
-    // Ctrl+Shift+I (DevTools)
-    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {
-        e.preventDefault();
-        return false;
-    }
-    // Ctrl+Shift+J (Console)
-    if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {
-        e.preventDefault();
-        return false;
-    }
-    // Ctrl+Shift+C (Element picker)
-    if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) {
-        e.preventDefault();
-        return false;
-    }
-    // Ctrl+U (View source)
-    if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) {
-        e.preventDefault();
-        return false;
-    }
-    // Ctrl+S (Save page)
-    if (e.ctrlKey && (e.key === 'S' || e.key === 's' || e.keyCode === 83)) {
-        e.preventDefault();
-        return false;
-    }
-});
-
-// Disable text selection (optional - for content protection)
-document.addEventListener('selectstart', function(e) {
-    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-        e.preventDefault();
-        return false;
-    }
-});
-
-// Disable drag
-document.addEventListener('dragstart', function(e) {
-    e.preventDefault();
-    return false;
-});
+    
+})();
 
 // FREE EDITION: No authentication needed - All features unlocked
 let isPremium = true;
@@ -2226,7 +2360,7 @@ const SOLAR_TERMS = {
 2023:[[2,4,9,42],[3,6,2,59],[4,5,7,38],[5,5,20,5],[6,6,0,55],[7,7,11,49],[8,7,22,11],[9,8,2,13],[10,8,18,6],[11,7,21,9],[12,7,13,57],[1,6,19,9]],
 2024:[[2,4,15,27],[3,5,8,43],[4,4,13,23],[5,5,1,51],[6,5,6,42],[7,6,17,38],[8,7,4,1],[9,7,8,6],[10,7,23,59],[11,7,2,59],[12,6,19,46],[1,6,0,56]],
 2025:[[2,3,21,10],[3,5,14,26],[4,4,19,6],[5,5,7,36],[6,5,12,28],[7,6,23,23],[8,7,9,46],[9,7,13,51],[10,8,5,44],[11,7,8,46],[12,7,1,33],[1,6,6,44]],
-2026:[[2,4,3,2],[3,5,20,19],[4,5,0,58],[5,5,13,24],[6,5,18,14],[7,7,5,7],[8,7,15,29],[9,7,19,35],[10,8,11,28],[11,7,14,31],[12,7,7,19],[1,6,12,31]],
+2026:[[2,4,5,2],[3,5,22,59],[4,5,3,40],[5,5,20,49],[6,6,0,48],[7,7,10,57],[8,7,20,43],[9,7,23,41],[10,8,15,29],[11,7,18,52],[12,7,11,53],[1,5,17,23]],
 2027:[[2,4,8,46],[3,6,2,2],[4,5,6,42],[5,5,19,10],[6,6,0,0],[7,7,10,54],[8,7,21,18],[9,8,1,26],[10,8,17,19],[11,7,20,22],[12,7,13,10],[1,6,18,22]],
 2028:[[2,4,14,31],[3,5,7,47],[4,4,12,27],[5,5,0,55],[6,5,5,46],[7,6,16,41],[8,7,3,5],[9,7,7,14],[10,7,23,8],[11,7,2,12],[12,6,19,0],[1,6,0,12]],
 2029:[[2,3,20,20],[3,5,13,37],[4,4,18,17],[5,5,6,45],[6,5,11,36],[7,6,22,31],[8,7,8,56],[9,7,13,5],[10,8,4,58],[11,7,8,1],[12,7,0,48],[1,6,6,0]],
@@ -4248,7 +4382,7 @@ function calcStrength(saju) {
         3: [{s:0, w:0.33}, {s:1, w:0.67}],                   // 卯: 甲(여기), 乙(정기)
         4: [{s:1, w:0.3}, {s:9, w:0.1}, {s:4, w:0.6}],      // 辰: 乙, 癸(水根!), 戊
         5: [{s:4, w:0.23}, {s:6, w:0.23}, {s:2, w:0.54}],   // 巳: 戊, 庚, 丙
-        6: [{s:2, w:0.33}, {s:5, w:0.3}, {s:3, w:0.37}],    // 午: 丙(여기), 己, 丁
+        6: [{s:2, w:0.3}, {s:5, w:0.33}, {s:3, w:0.37}],    // 午: 丙9日(여기), 己10日, 丁11日 (v4.18.0 사주로또 동기화)
         7: [{s:3, w:0.3}, {s:1, w:0.1}, {s:5, w:0.6}],      // 未: 丁, 乙, 己
         8: [{s:4, w:0.23}, {s:8, w:0.23}, {s:6, w:0.54}],   // 申: 戊, 壬(水根!), 庚
         9: [{s:6, w:0.33}, {s:7, w:0.67}],                   // 酉: 庚(여기), 辛(정기)
@@ -4785,7 +4919,8 @@ function findByungYak(saju, strength) {
     return { byung, yak, desc: byung ? `${ELEMENT[byung].k} is excessive - ${ELEMENT[yak].k} controls it` : null };
 }
 
-function calcGods(saju, str) {
+function calcGods(saju, str, samhapResult = null) {
+    // v4.18.0: 사주로또 v32.1 동기화 - samhapResult 파라미터 추가
     const dm = saju.day.s;
     const dmi = STEM.indexOf(dm);
     const mbi = BRANCH.indexOf(saju.month.b);
@@ -4883,6 +5018,48 @@ function calcGods(saju, str) {
             yong = exprEl;
             hee = wealthEl;
             gi = officerEl;
+        }
+        
+        // ====== 2.5 ★ 관살태왕 통관용신 체크 (v4.18.0 사주로또 동기화) ★ ======
+        // 신약한데 관살이 강하면 인성이 생명줄! 기신으로 잡으면 안 됨
+        const officerCount = elCount[officerEl] || 0;
+        const isOfficerStrong = officerCount >= 2 || (samhapResult && samhapResult.element === officerEl);
+        
+        if (str.type === 'weak' && isOfficerStrong && elCount[sealEl] < 3) {
+            // 관살태왕 + 신약 → 인성이 통관용신 (살인상생)
+            // 단, 편인태왕이 아닐 때만
+            yong = sealEl;   // 인성이 용신 (관의 살기를 빼서 일간을 생함)
+            hee = dm.e;      // 비겁이 희신
+            gi = wealthEl;   // 재성이 기신 (재생살 방지)
+            johuDesc = 'Officer Dominant + Weak DM → Seal as Bridge (殺印相生)';
+        }
+        
+        // ====== 2.6 ★ 삼합국 영향 반영 (v4.18.0 사주로또 동기화) ★ ======
+        if (samhapResult && samhapResult.complete) {
+            const samhapEl = samhapResult.element;
+            const dmEl = dm.e;
+            
+            // 삼합국이 일간을 극하면 식신제살(용신=식상)
+            if ((samhapEl === 'metal' && dmEl === 'wood') ||
+                (samhapEl === 'fire' && dmEl === 'metal') ||
+                (samhapEl === 'water' && dmEl === 'fire') ||
+                (samhapEl === 'wood' && dmEl === 'earth') ||
+                (samhapEl === 'earth' && dmEl === 'water')) {
+                // 관살태왕 → 식신제살
+                yong = exprEl;  // 식상으로 살을 제어
+                johuDesc = (johuDesc || '') + ` (${samhapResult.name} → Output Controls Officer)`;
+            }
+            
+            // 삼합국이 일간을 생하면 설기용신
+            if ((samhapEl === 'water' && dmEl === 'wood') ||
+                (samhapEl === 'wood' && dmEl === 'fire') ||
+                (samhapEl === 'fire' && dmEl === 'earth') ||
+                (samhapEl === 'earth' && dmEl === 'metal') ||
+                (samhapEl === 'metal' && dmEl === 'water')) {
+                // 인성태왕 → 설기
+                yong = exprEl;  // 식상으로 설기
+                johuDesc = (johuDesc || '') + ` (${samhapResult.name} → Output Drains Excess)`;
+            }
         }
     }
     
