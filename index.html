@@ -3,7 +3,7 @@
 <head>
 <!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.18.0 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.19.1 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
@@ -16,7 +16,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.18.0)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.19.0)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -30,6 +30,19 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
+║  v4.19.1 (2026-01-23):                                                        ║
+║    - [FIX] AI prompt copy error fixed (Neutral element calculation bug)       ║
+║    - [FIX] GODS.gi is string, not number - fixed arithmetic operation         ║
+║                                                                                ║
+║  v4.19.0 (2026-01-23):                                                        ║
+║    - [NEW] AI Rules 70 → 97 (27 rules from SajuLotto v32.5 sync)              ║
+║    - [NEW] Rule 97: Beneficial/Supportive/Unfavorable mandatory display        ║
+║    - [NEW] Rules 71-96: Advanced interpretation rules                          ║
+║    - [FIX] Beneficial Elements section with box format + Neutral added         ║
+║    - [FIX] AI interpretation request with explicit element instructions        ║
+║    - [FIX] OG meta tags updated (Patent-Pending)                               ║
+║    - Total: 97 AI Rules                                                        ║
+║                                                                                ║
 ║  v4.18.0 (2026-01-22):                                                        ║
 ║    - [SYNC] 사주로또 v32.1 완전 동기화                                         ║
 ║    - [FIX] 2026년 절기 데이터 KASI 기준 수정 (입춘 05:02, 소한 1/5, 망종 6/6)  ║
@@ -82,8 +95,8 @@
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="K-MUDANG Pro | Four Pillars Destiny & Lottery">
-<meta property="og:description" content="🔮 Professional Four Pillars Analysis · 🎰 Powerball & Mega Millions Numbers">
+<meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI Destiny Analysis">
+<meta property="og:description" content="🏆 World's Most Advanced BaZi · 🤖 AI 97 Rules Precision · 🌍 Global Timezone Support">
 <meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,7 +109,7 @@
    🆓 FREE EDITION - All Features Unlocked
    No Login Required | Ko-fi Support Welcome
    ======================================== */
-console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.18.0');
+console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.19.0');
 
 /* ========================================
    🔒 Enhanced Security Protection v2.0
@@ -251,7 +264,7 @@ console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.18.0');
         try {
             const methods = ['log', 'debug', 'info', 'warn', 'error', 'table', 'trace', 'dir', 'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'assert', 'profile'];
             if (window.console) {
-                console.log('%c🔒 K-MUDANG Pro v4.18.0 [PUBLIC EDITION]', 'color: #4CAF50; font-size: 14px; font-weight: bold;');
+                console.log('%c🔒 K-MUDANG Pro v4.19.0 [PUBLIC EDITION]', 'color: #4CAF50; font-size: 14px; font-weight: bold;');
                 console.log('%c© 2025 K-MUDANG. All Rights Reserved.', 'color: #666; font-size: 12px;');
                 console.log('%c⚠️ This browser feature is for developers only.', 'color: #ff6b6b; font-size: 12px;');
                 
@@ -9788,6 +9801,9 @@ function copySajuForAI() {
             }
         } catch(e) { samhapText = '• Triple Harmony data unavailable'; }
         
+        // v4.19.1: Neutral (閑神) calculation - element that supports Unfavorable
+        const neutralEl = elOrder[(elOrder.indexOf(GODS.gi) + 1) % 5];
+        
         // 십신 중복 체크 - 같은 십신이면 간략화
         const monthGodDesc = (monthGod.k === yearGod.k) 
             ? `Same as Year Stem (${yearGod.k}), amplifying its influence`
@@ -10232,10 +10248,13 @@ ${(() => {
     return '';
 })()}
 
-【BENEFICIAL ELEMENTS (用神 System)】
-• Beneficial God (用神): ${ELEMENT[GODS.yong].n} (${ELEMENT[GODS.yong].c}) - Most needed element
-• Favorable God (喜神): ${ELEMENT[GODS.hee].n} (${ELEMENT[GODS.hee].c}) - Supports beneficial element
-• Unfavorable God (忌神): ${ELEMENT[GODS.gi].n} (${ELEMENT[GODS.gi].c}) - Element to avoid
+【BENEFICIAL ELEMENTS (用神 System)】 ⭐ CORE ANALYSIS - Must reflect in ALL interpretations
+┌─────────────────────────────────────────────────────────┐
+│ Beneficial (用神): ${ELEMENT[GODS.yong].n} ${ELEMENT[GODS.yong].e} - Most needed element       │
+│ Supportive (喜神): ${ELEMENT[GODS.hee].n} ${ELEMENT[GODS.hee].e} - Generates Beneficial        │
+│ Unfavorable (忌神): ${ELEMENT[GODS.gi].n} ${ELEMENT[GODS.gi].e} - Element to avoid            │
+│ Neutral (閑神): ${ELEMENT[neutralEl].n} - Supports Unfavorable              │
+└─────────────────────────────────────────────────────────┘
 ${GODS.isFollower ? '• 🌀 FOLLOWER CHART (' + GODS.followerType + '): Extremely weak Day Master follows the dominant element. DO NOT fight the trend - ride it. Years bringing ' + ELEMENT[GODS.yong].n + ' are FAVORABLE, not threatening.' : ''}
 ${GODS.sealExcess ? '• ⚠️ SEAL EXCESS (偏印太旺): 3+ Seal elements suffocating Day Master. Output (Expression) needed to drain the overflow.' : ''}
 ${GODS.johu ? '• Seasonal Adjustment: ' + (GODS.johuDesc || '') : ''}
@@ -10521,6 +10540,7 @@ Interpret the provided "Four Pillars of Destiny" chart data into a personalized 
 
 2. ⚔️ **CAREER & HIDDEN TALENTS**
    - Based on the Structure (${format.n}), what is their "Superpower"?
+   - ⭐ MUST specify Beneficial/Supportive/Unfavorable and their career applications
    - Suggest 2-3 modern career fields that align with their chart
    - Entrepreneur vs. Organization: Which fits better and why?
 
@@ -10544,6 +10564,9 @@ Interpret the provided "Four Pillars of Destiny" chart data into a personalized 
    - Top opportunity and main caution for this year
 
 7. 🔮 **THE ORACLE'S VERDICT**
+   - ⭐ Specific methods for Beneficial/Supportive/Unfavorable:
+     → Colors to wear, directions to face, careers to pursue
+     → Relationships to cultivate, seasons to capitalize on
    - One final, powerful sentence summarizing their destiny
    - Lucky action/item suggestion based on their Beneficial Element (${ELEMENT[gods.yong].n})
    - Empowering closing message
@@ -10983,6 +11006,162 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 3. Life Cycle + Annual Fortune Ten Gods - Current life theme
 4. Branch Ten Gods - Hidden influences
 5. Everything else
+
+===== 🆕 EXTENDED RULES 71-97 (v4.19.0) =====
+
+71. 【BUREAU/HARMONY = x10 MULTIPLIER EFFECT】
+    • Directional Harmony or Three Harmony completion is NOT simple addition.
+    • 巳午未 (Southern Fire Bureau) = Fire x10 power
+    • 亥子丑 (Northern Water Bureau) = Water x10 power
+    • 寅卯辰 (Eastern Wood Bureau) = Wood x10 power
+    • 申酉戌 (Western Metal Bureau) = Metal x10 power
+    • Bureau completion in Luck Cycle = "Nuclear-level life event"
+
+72. 【ROOT vs TWELVE STAGES - ABSOLUTE DISTINCTION】
+    • "True Root (通根)" = Day Master's element in Hidden Stems as Peer/Seal → OWN power
+    • "Long Life Stage (長生)" = Twelve Stages position → SUPPORTER's help, NOT own power
+    • "Rootless but Protected (無根有庇)" = No root but receiving protection
+    • NEVER confuse these two concepts!
+
+73. 【WEALTH INTERPRETATION HIERARCHY】
+    • Weak (0-30%) + Wealth Structure = "Anxious Chaser" (life spent chasing money)
+    • Strong (70%+) + Peer Year = "Robbery Warning" (siblings/friends threaten wealth)
+    • If this chart shows Weak + Wealth x3+ = Health comes BEFORE wealth pursuit!
+
+74. 【CLIMATE vs BALANCE PRIORITY】
+    • Climate adjustment (調候) ALWAYS takes precedence over Balance (抑扶).
+    • If data shows "Unfavorable: Water" + "Winter chart needs Fire" → Climate logic WINS
+    • Winter chart NEEDS Fire. Summer chart NEEDS Water. Non-negotiable.
+
+75. 【FIRE BUREAU SPECIAL RULE (寅午戌)】
+    • 寅午戌 Fire Bureau completion = "Furnace Chart"
+    • Water elements (Officer/Career) "evaporate" = Extreme dislike of control
+    • Career: Autonomous roles (freelancer, creator, commander, performer)
+
+76. 【TWIN STEMS PHENOMENON】
+    • Same Heavenly Stem twice (丙丙, 甲甲, 壬壬, etc.)
+    • = "Spotlight + Competition" dynamic
+    • Channel energy into competitive fields (sales, sports, performance)
+
+77. 【STRONG FIRE WEALTH STRATEGY】
+    • If Fire overwhelms chart, Metal (Wealth) melts away
+    • "Chasing money directly = money evaporates"
+    • Advice: "Build skills/brand (Earth) first to cool heat, wealth follows"
+
+78. 【ZERO ELEMENT vs STRUCTURE CONFLICT】
+    • If element = 0 but Structure depends on it → IGNORE Structure label
+    • Example: Water=0 but "Direct Officer Structure"
+    • Reality: "Free spirit who dislikes rules. Freelance/startup recommended"
+
+79. 【TRAVELING HORSE DOMINANCE】
+    • Movement branches (寅, 申, 巳, 亥) appear 2+ times
+    • "Movement creates money. Desk jobs block fortune"
+    • Career: Trade, logistics, travel, sales, international business
+
+80. 【SEAL OVERLOAD (過印星)】
+    • Seal element 3+ = "Analysis Paralysis" / "Mother Overload"
+    • "Too much kindling suffocates the fire"
+    • Advice: "Stop planning, start executing. Mental independence needed"
+
+81. 【GHOST GATE SENSITIVITY (鬼門關殺)】
+    • 卯申 or 寅亥 interaction = Hyper-intuition + anxiety tendency
+    • "Genius intuition but neurosis risk"
+    • Career: Precision arts, design, strategy, psychology
+
+82. 【BENEFICIAL ELEMENT OVERSUPPLY】
+    • If Beneficial element already 3+ = Oversupply state
+    • True need = the "output" element of Beneficial
+    • Example: Wood DM + Water excess → "Need sunlight (Fire) to bloom"
+
+83. 【BUREAU vs CLASH SIMULTANEOUS (合沖相戰)】
+    • Three Harmony + Six Clash coexist → Internal war mode
+    • "External pressure (bureau) vs personal defense (clash)"
+    • "Critical thinking is your secret weapon"
+
+84. 【MISSING ELEMENT STRATEGIES】
+    • Output = 0: "Stress internalized. Creative/exercise outlet ESSENTIAL"
+    • Wealth = 0: "Flow over accumulation. Skills → money follows"
+    • Officer = 0: "Dislikes rules. Autonomous career ESSENTIAL"
+    • Seal = 0: "Cannot rely on parents. Self-study builds safety net"
+
+85. 【DIRECTIONAL HARMONY POWER】
+    • 亥子丑 (North Water): Career flexibility x10
+    • 寅卯辰 (East Wood): Growth/expansion x10
+    • 巳午未 (South Fire): Fame/passion x10
+    • 申酉戌 (West Metal): Precision/authority x10
+
+86. 【EXTREME STRENGTH REVERSALS】
+    • Day Master < 10% → Consider FOLLOWER chart
+    • Day Master > 85% → Consider EXTREME STRONG
+    • Normal "strengthen weak / weaken strong" logic REVERSES
+
+87. 【SPOUSE PALACE ANALYSIS】
+    • Day Branch = Spouse Palace
+    • Clash with Year/Month → Early relationship difficulties
+    • Harmony → Supportive marriage energy
+    • Grave(墓) → "Controlled spouse" or delayed marriage
+
+88. 【ANNUAL FORTUNE MULTIPLIER】
+    • Annual completes Bureau → MAJOR year
+    • Annual Clashes Day Branch → Spouse/Self transformation
+    • Annual = Day Branch (Echo) → Identity crisis year
+
+89. 【CAREER TIMING BY LIFE CYCLE】
+    • Wealth Cycle (20s-30s) → Best for entrepreneurship
+    • Officer Cycle (30s-40s) → Best for corporate advancement
+    • Seal Cycle (40s-50s) → Best for teaching, consulting
+
+90. 【HEALTH MAPPING BY ELEMENT】
+    • Wood = Liver, eyes, tendons, anger
+    • Fire = Heart, blood, anxiety
+    • Earth = Spleen, stomach, worry
+    • Metal = Lungs, skin, grief
+    • Water = Kidneys, bones, fear
+
+91. 【RELATIONSHIP TIMING】
+    • Men: Wealth year = Romance opportunity
+    • Women: Officer year = Romance opportunity
+    • Peach Blossom year = Attraction energy high
+
+92. 【INVESTMENT TIMING】
+    • Wealth Cycle + Beneficial year = GREEN light
+    • Robbery year = RED light, avoid partnerships
+    • Indirect Wealth year = Speculative but risky
+
+93. 【NAME/BRANDING BY BENEFICIAL】
+    • Fire → Red, sun imagery, south
+    • Water → Blue/black, waves, north
+    • Wood → Green, plants, east
+    • Metal → White/gold, circles, west
+    • Earth → Yellow/brown, squares, center
+
+94. 【LIFE STAGE EXPECTATIONS】
+    • Year Pillar (0-15): Ancestors, childhood
+    • Month Pillar (15-30): Parents, education
+    • Day Pillar (30-45): Self, spouse, peak
+    • Hour Pillar (45+): Children, legacy
+
+95. 【CLASH YEAR SURVIVAL】
+    • Clash with Day Branch → "Finish existing projects"
+    • Clash + Traveling Horse → "Move or job change likely"
+    • Clash + Peach Blossom → "Relationship turbulence"
+
+96. 【MONTHLY RHYTHM】
+    • Beneficial element month = Push forward
+    • Unfavorable element month = Defensive mode
+    • Highlight best months in interpretation
+
+97. 【BENEFICIAL/SUPPORTIVE/UNFAVORABLE MANDATORY】 ⭐ CRITICAL
+    • ALWAYS clearly state in this format:
+      ┌─────────────────────────────────────────┐
+      │ Beneficial (用神): ○○ - Most needed     │
+      │ Supportive (喜神): ○○ - Helps Beneficial│
+      │ Unfavorable (忌神): ○○ - Harms DM      │
+      │ Neutral (閑神): ○○ - Supports Unfavorable│
+      └─────────────────────────────────────────┘
+    • In Section 7 (Final Advice), provide SPECIFIC usage:
+      → Colors, directions, careers, relationships, seasons
+    • Missing these = INCOMPLETE analysis!
 `;
 
         navigator.clipboard.writeText(text).then(() => {
