@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.19.19 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.19.21 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
@@ -13,7 +13,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.19.19)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.19.21)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -27,15 +27,20 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  v4.19.19 (2026-01-25):                                                        ║
+║  v4.19.21 (2026-01-25):
+║    - [FIX] 용신=희신 동일 오류 수정 (yong===hee → hee=비겁 교정)        ║
+║  v4.19.20 (2026-01-25):                                                        ║
 ║    - [CRITICAL FIX] 天干合 결과 오행 추출 버그 수정 (丁壬合→Wood, not Fire)    ║
+║    - [FIX] 天沖 오류: 戊戊/己己 제거 (비견이지 충이 아님)                      ║
+║    - [FIX] 閑神 계산 오류: 용신/희신/기신과 겹치지 않도록 수정                 ║
+║    - [FIX] 喜神 설명 수정: "Generates Beneficial" → "Helps Beneficial"         ║
 ║    - [NEW] DEV TEST: 콘솔에서 runTests() 실행하여 BUREAU 로직 검증 가능        ║
 ║    - [FIX] 암합 정의 수정: 辰酉/巳申/午丑 암합 제거 (잘못된 천간합)            ║
 ║    - [NEW] 기신 2배 경고: 천간+지지 모두 기신이면 특별 경고                    ║
 ║    - [NEW] 조열 사주 병오년 경고: 여름생+火기신+丙午년 건강 경고              ║
 ║    - [NEW] AI 복사에 오늘 일진 추가: 날짜/일진/십신/12운성/용신기신 여부      ║
 ║    - [NEW] AI 6번 섹션 확장: 연간 운세 + 오늘 운세 해석 지시                   ║
-║  v4.19.19 (2026-01-25):                                                        ║
+║  v4.19.18 (2026-01-24):                                                        ║
 ║    - [NEW] Talisman Rarity System (3-tier: Rare/Epic/Legendary)               ║
 ║           ★★★ Rare: Standard Edition (~60%)                                  ║
 ║           ★★★★ Epic: 삼합국/방합/천을귀인/용신세운 (~30%)                   ║
@@ -100,7 +105,7 @@
 ║  Contact: kmudang.official@gmail.com                                          ║
 ║  Last Updated: 2026-01-21                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
---><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI Destiny Analysis"><meta property="og:description" content="🏆 World's Most Advanced BaZi · 🤖 AI 97 Rules Precision · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.19.19');(function() {'use strict';document.addEventListener('contextmenu', function(e) {e.preventDefault();e.stopPropagation();return false;});document.addEventListener('keydown', function(e) {if (e.key === 'F12' || e.keyCode === 123) {e.preventDefault();return false;}
+--><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI Destiny Analysis"><meta property="og:description" content="🏆 World's Most Advanced BaZi · 🤖 AI 97 Rules Precision · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.19.21');(function() {'use strict';document.addEventListener('contextmenu', function(e) {e.preventDefault();e.stopPropagation();return false;});document.addEventListener('keydown', function(e) {if (e.key === 'F12' || e.keyCode === 123) {e.preventDefault();return false;}
 if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {e.preventDefault();return false;}
 if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {e.preventDefault();return false;}
 if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) {e.preventDefault();return false;}
@@ -112,7 +117,7 @@ if (e.ctrlKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67) && !e.shif
 orientation: undefined};const threshold = 160;const checkDevTools = function() {const widthThreshold = window.outerWidth - window.innerWidth > threshold;const heightThreshold = window.outerHeight - window.innerHeight > threshold;const orientation = widthThreshold ? 'vertical' : 'horizontal';if (!(heightThreshold && widthThreshold) &&
 ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) ||
 widthThreshold || heightThreshold)) {if (!devToolsCheck.isOpen || devToolsCheck.orientation !== orientation) {devToolsCheck.isOpen = true;devToolsCheck.orientation = orientation;}} else {devToolsCheck.isOpen = false;devToolsCheck.orientation = undefined;}};setInterval(checkDevTools, 1000);(function detectDebugger() {const start = new Date();debugger;const end = new Date();if (end - start > 100) {}
-setTimeout(detectDebugger, 3000);})();const noop = function() {};const consoleProtect = function() {try {const methods = ['log', 'debug', 'info', 'warn', 'error', 'table', 'trace', 'dir', 'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'assert', 'profile'];if (window.console) {console.log('%c🔒 K-MUDANG Pro v4.19.19 [PUBLIC EDITION]', 'color: #4CAF50; font-size: 14px; font-weight: bold;');console.log('%c© 2025 K-MUDANG. All Rights Reserved.', 'color: #666; font-size: 12px;');console.log('%c⚠️ This browser feature is for developers only.', 'color: #ff6b6b; font-size: 12px;');setTimeout(function() {methods.forEach(function(method) {window.console[method] = noop;});}, 100);}} catch(e) {}};consoleProtect();const printStyle = document.createElement('style');printStyle.textContent = '@media print { body { display: none !important; } }';document.head.appendChild(printStyle);if (window.top !== window.self) {try {window.top.location = window.self.location;} catch(e) {}}})();let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
+setTimeout(detectDebugger, 3000);})();const noop = function() {};const consoleProtect = function() {try {const methods = ['log', 'debug', 'info', 'warn', 'error', 'table', 'trace', 'dir', 'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'assert', 'profile'];if (window.console) {console.log('%c🔒 K-MUDANG Pro v4.19.21 [PUBLIC EDITION]', 'color: #4CAF50; font-size: 14px; font-weight: bold;');console.log('%c© 2025 K-MUDANG. All Rights Reserved.', 'color: #666; font-size: 12px;');console.log('%c⚠️ This browser feature is for developers only.', 'color: #ff6b6b; font-size: 12px;');setTimeout(function() {methods.forEach(function(method) {window.console[method] = noop;});}, 100);}} catch(e) {}};consoleProtect();const printStyle = document.createElement('style');printStyle.textContent = '@media print { body { display: none !important; } }';document.head.appendChild(printStyle);if (window.top !== window.self) {try {window.top.location = window.self.location;} catch(e) {}}})();let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
 function googleSignIn() { toast('🔓 PERSONAL Edition - Already unlocked!'); }
 function signOut() { toast('🔓 PERSONAL Edition - No login required'); }
 function checkPremiumStatus() { return true; }
@@ -550,7 +555,7 @@ for(let i=0;i<W*H*0.15;i++){const x=Math.random()*W;const y=Math.random()*H;cons
 ctx.globalAlpha=0.15;for(let i=0;i<800;i++){const x=Math.random()*W;const y=Math.random()*H;const len=Math.random()*60+20;const isH=Math.random()>0.5;ctx.strokeStyle='rgba(120,80,40,0.3)';ctx.lineWidth=Math.random()*1.5+0.3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(isH?x+len:x+Math.random()*5,isH?y+Math.random()*3:y+len);ctx.stroke();}ctx.globalAlpha=1.0;
 // 3. 가장자리 빈티지 효과 (vignette) 강화
 const vignette=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8);vignette.addColorStop(0,'rgba(139,90,43,0)');vignette.addColorStop(0.7,'rgba(120,80,40,0.05)');vignette.addColorStop(1,'rgba(101,67,33,0.15)');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
-// === RARITY SYSTEM v4.19.19 ===
+// === RARITY SYSTEM v4.19.21 ===
 const rarity = getTalismanRarity();
 // Legendary: 추가 배경 글로우 효과
 if (rarity.grade === 'legendary') {
@@ -1171,6 +1176,7 @@ const johuData = JOHU_TABLE[dmi] && JOHU_TABLE[dmi][mbi];if (johuData && !isFoll
 p && ((p.s && p.s.e === 'water') || (p.b && p.b.e === 'water'))
 ).length;const isGeumsooSanggwan = isMetalDM && isWinterMonth && waterCount >= 2;if (isTooCold && johu === 'fire') {yong = 'fire';hee = 'wood';gi = 'water';johuDesc += ' (Climate Priority: Bridge Strategy 水→木→火)';} else if ((isTooHot || isTooDamp) && johu === 'water') {yong = 'water';hee = 'metal';gi = 'fire';johuDesc += ' (Climate Priority: Bridge Strategy 火→金→水)';} else if (isTooCold || isTooHot || isTooDamp) {if (johu !== gi) {const prevYong = yong;yong = johu;hee = prevYong;johuDesc += ' (Climate Priority Override)';}} else if (johu !== gi || isGeumsooSanggwan) {if (isGeumsooSanggwan && johu === 'fire') {gi = 'earth';johuDesc = '金水傷官喜見官 - Winter Metal needs Fire. Fire is beneficial.';}
 hee = yong;yong = johu;}}}
+if (yong === hee) { hee = dm.e; }
 const byungYak = findByungYak(saju, str);return {yong, hee, gi,
 type: str.type,
 johu, johuDesc,
@@ -1621,9 +1627,7 @@ const stClash = [
 [0,6,'甲庚 (Wood vs Metal) clash','Strong decisiveness but many conflicts. Leadership vs authority!'],
 [1,7,'乙辛 (Wood vs Metal) clash','Inner conflict. Flexibility vs rigidity collide.'],
 [2,8,'丙壬 (Fire vs Water) clash','Passion vs wisdom clash. Watch impulsiveness!'],
-[3,9,'丁癸 (Fire vs Water) clash','Emotion and reason clash. Mood swings possible.'],
-[4,4,'戊戊 (Earth+Earth) Peer','Stubborn with strong self-assertion.'],
-[5,5,'己己 (Earth+Earth) Peer','Pure but may be indecisive.']
+[3,9,'丁癸 (Fire vs Water) clash','Emotion and reason clash. Mood swings possible.']
 ];for (let [a,b,n,desc] of stClash) {for (let i = 0; i < stems.length; i++) {for (let j = i+1; j < stems.length; j++) {if ((stems[i]===a && stems[j]===b) || (stems[i]===b && stems[j]===a)) {res.push({t:'天沖',c:`${STEM[a].c}↔${STEM[b].c}`,m:n,d:desc});}}}}
 const hap = [[0,1,'子丑(Rat-Ox) combine to Earth'],[2,11,'寅亥(Tiger-Pig) combine to Wood'],[3,10,'卯戌(Rabbit-Dog) combine to Fire'],[4,9,'辰酉(Dragon-Rooster) combine to Metal'],[5,8,'巳申(Snake-Monkey) combine to Water'],[6,7,'午未(Horse-Goat) combine to Fire']];for (let [a,b,n] of hap) {if (brs.includes(a) && brs.includes(b)) res.push({t:'六合',c:`${BRANCH[a].c}+${BRANCH[b].c}`,m:n,d:'💕 Six Harmony brings natural affinity and attraction. People find you likeable and trustworthy. Great for partnerships and relationships!'});}
 const samhap = [[2,6,10,'寅午戌(Tiger-Horse-Dog) Fire combination'],[5,9,1,'巳酉丑(Snake-Rooster-Ox) Metal combination'],[8,0,4,'申子辰(Monkey-Rat-Dragon) Water combination'],[11,3,7,'亥卯未(Pig-Rabbit-Goat) Wood combination']];for (let [a,b,c,n] of samhap) {const has = [brs.includes(a), brs.includes(b), brs.includes(c)];if (has.filter(x=>x).length === 3) res.push({t:'三合',c:`${BRANCH[a].c}${BRANCH[b].c}${BRANCH[c].c}`,m:n,d:'🌟 Complete Trinity! Three branches unite to form a powerful elemental force. This brings strong support, teamwork, and the ability to achieve big goals.'});else if (has.filter(x=>x).length === 2 && has[1]) res.push({t:'半合',c:has[0]?`${BRANCH[a].c}${BRANCH[b].c}`:has[2]?`${BRANCH[b].c}${BRANCH[c].c}`:'',m:n.split(' ')[0]+' half-combination',d:'⭐ Partial Trinity forming. The energy is building but not yet complete. When the missing branch appears in luck cycles, expect major positive changes!'});}
@@ -2294,7 +2298,9 @@ wealth: elOrder[(dmIdx + 2) % 5],
 officer: elOrder[(dmIdx + 3) % 5],
 seal: elOrder[(dmIdx + 4) % 5]};const yearStemIdx = STEM.indexOf(SAJU.year.s);const yearIsYang = yearStemIdx % 2 === 0;const luckDirection = (yearIsYang && GENDER === 'm') || (!yearIsYang && GENDER === 'f') ? 'Forward' : 'Backward';const mbi = BRANCH.findIndex(b => b.c === SAJU.month.b.c);const seasonMap = {0:'Winter',1:'Earth',2:'Spring',3:'Spring',4:'Earth',5:'Summer',6:'Summer',7:'Earth',8:'Autumn',9:'Autumn',10:'Earth',11:'Winter'};const elSeasonMap = {'Spring':'wood', 'Summer':'fire', 'Autumn':'metal', 'Winter':'water', 'Earth':'earth'};const monthSeason = seasonMap[mbi];const seasonEl = elSeasonMap[monthSeason];const deukRyung = (dmEl === seasonEl) || (tenGodMap.seal === seasonEl);let samhapText = '';let samhapWarning = '';try {const advInt = analyzeAdvancedInteractions ? analyzeAdvancedInteractions(SAJU) : null;if (advInt && advInt.samhapGuk && advInt.samhapGuk.length > 0) {samhapText = advInt.samhapGuk.map(s => {const warning = (s.result === ELEMENT[GODS.gi].k) ? ' ⚠️ COMPLETES 忌神 ELEMENT!' :
 (s.result === ELEMENT[GODS.yong].k) ? ' ✅ COMPLETES 用神 ELEMENT!' : '';return `• ${s.name} (${s.complete ? 'Complete' : 'Partial'})${warning}`;}).join('\n');const giSamhap = advInt.samhapGuk.find(s => s.result === ELEMENT[GODS.gi].k && s.complete);if (giSamhap) {samhapWarning = `\n⚠️ WARNING: Triple Harmony completes 忌神(${ELEMENT[GODS.gi].n}) - May amplify negative influences!`;}} else {samhapText = '• No Triple Harmony';}} catch(e) { samhapText = '• Triple Harmony data unavailable'; }
-const neutralEl = elOrder[(elOrder.indexOf(GODS.gi) + 4) % 5];const monthGodDesc = (monthGod.k === yearGod.k)
+const chouEl = elOrder[(elOrder.indexOf(GODS.gi) + 4) % 5];
+const usedEls = [GODS.yong, GODS.hee, GODS.gi];
+const neutralEl = usedEls.includes(chouEl) ? elOrder.find(el => !usedEls.includes(el) && el !== chouEl) || chouEl : chouEl;const monthGodDesc = (monthGod.k === yearGod.k)
 ? `Same as Year Stem (${yearGod.k}), amplifying its influence`
 : `${monthGod.k} - ${monthGod.d}`;const hourGodDesc = hourGod
 ? (hourGod.k === yearGod.k || hourGod.k === monthGod.k)
@@ -2440,9 +2446,9 @@ return '';})()}
 【BENEFICIAL ELEMENTS (用神 System)】 ⭐ CORE ANALYSIS - Must reflect in ALL interpretations
 ┌─────────────────────────────────────────────────────────┐
 │ Beneficial (用神): ${ELEMENT[GODS.yong].n} ${ELEMENT[GODS.yong].e} - Most needed element │
-│ Supportive (喜神): ${ELEMENT[GODS.hee].n} ${ELEMENT[GODS.hee].e} - Generates Beneficial │
+│ Supportive (喜神): ${ELEMENT[GODS.hee].n} ${ELEMENT[GODS.hee].e} - Helps Beneficial │
 │ Unfavorable (忌神): ${ELEMENT[GODS.gi].n} ${ELEMENT[GODS.gi].e} - Element to avoid │
-│ Neutral (閑神): ${ELEMENT[neutralEl].n} - Supports Unfavorable │
+│ Neutral (閑神): ${ELEMENT[neutralEl].n} - Neither helps nor harms │
 └─────────────────────────────────────────────────────────┘
 ${GODS.isFollower ? '• 🌀 FOLLOWER CHART (' + GODS.followerType + '): Extremely weak Day Master follows the dominant element. DO NOT fight the trend - ride it. Years bringing ' + ELEMENT[GODS.yong].n + ' are FAVORABLE, not threatening.' : ''}
 ${GODS.sealExcess ? '• ⚠️ SEAL EXCESS (偏印太旺): 3+ Seal elements suffocating Day Master. Output (Expression) needed to drain the overflow.' : ''}
@@ -3008,7 +3014,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 3. Life Cycle + Annual Fortune Ten Gods - Current life theme
 4. Branch Ten Gods - Hidden influences
 5. Everything else
-===== 🆕 EXTENDED RULES 71-97 (v4.19.19) =====
+===== 🆕 EXTENDED RULES 71-97 (v4.19.21) =====
 71. 【BUREAU/HARMONY = x10 MULTIPLIER EFFECT】
 • Directional Harmony or Three Harmony completion is NOT simple addition.
 • 巳午未 (Southern Fire Bureau) = Fire x10 power
@@ -3131,7 +3137,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 │ Beneficial (用神): ○○ - Most needed │
 │ Supportive (喜神): ○○ - Helps Beneficial│
 │ Unfavorable (忌神): ○○ - Harms DM │
-│ Neutral (閑神): ○○ - Supports Unfavorable│
+│ Neutral (閑神): ○○ - Neither helps nor harms│
 └─────────────────────────────────────────┘
 • In Section 7 (Final Advice), provide SPECIFIC usage:
 → Colors, directions, careers, relationships, seasons
