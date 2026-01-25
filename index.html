@@ -64,7 +64,7 @@
 ║    - [NEW] AI 프롬프트에 TEN GOD MAPPING 테이블 추가                          ║
 ║    - [NEW] SEASONAL POWER (월령 득령/실령) 섹션 추가                          ║
 ║    - [NEW] TRIPLE HARMONY (三合局) 섹션 추가                                  ║
-║    - [NEW] 대운 방향(순행/역행) 정보 추가                                     ║
+║    - [NEW] Life Cycle direction(Forward/Backward) 정보 추가                                     ║
 ║    - [NEW] CRITICAL AI INSTRUCTIONS 섹션 추가                                 ║
 ║    - Total: 81 AI Rules                                                       ║
 ║                                                                                ║
@@ -809,7 +809,7 @@ factors.push({ l: '🔗 天干合', v: `${pair.s1.c}${pair.s2.c}合 (${pair.pos1
 10: {earth:2, metal:1, fire:-1, wood:-2, water:-1},
 11: {water:3, wood:1, fire:-2, earth:-2, metal:0},
 0: {water:3, wood:2, fire:-2, earth:-2, metal:0},
-1: {earth:2, water:0, metal:-1, wood:-1, fire:-2}};const ms = monthScore[mbi][dme];const deukRyung = ms >= 2;score += ms * 6;const monthNames = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];factors.push({ l: '月令 (Seasonal Power)', v: `${monthNames[mbi]}월 ${deukRyung ? '✓ In Season' : '✗ Out of Season'} (${ms >= 0 ? '+' : ''}${ms*6})`, p: deukRyung });let realRootScore = 0;let hasRealRoot = { day: false, hour: false };const TWELVE_STARTS = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];const TWELVE_NAMES = ['장생','목욕','관대','건록','제왕','쇠','병','사','묘','절','태','양'];const dmIdx = STEM.findIndex(s => s.c === dm.c);const isYangGan = dmIdx % 2 === 0;allBranches.forEach((b, idx) => {const bi = BRANCH.indexOf(b);const position = ['year', 'month', 'day', 'hour'][idx];const posWeight = position === 'day' ? 1.5 : position === 'hour' ? 1.3 : position === 'month' ? 1.2 : 1.0;let twIdx = bi - TWELVE_STARTS[dmIdx];if (!isYangGan) twIdx = -twIdx;twIdx = ((twIdx % 12) + 12) % 12;const twName = TWELVE_NAMES[twIdx];let twelveBonus = 0;if (twName === '건록' || twName === '제왕') {twelveBonus = 4 * posWeight;if (position === 'day' || position === 'hour') hasRealRoot[position] = true;} else if (twName === '관대' || twName === '장생') {twelveBonus = 2 * posWeight;if (position === 'day' || position === 'hour') hasRealRoot[position] = true;}
+1: {earth:2, water:0, metal:-1, wood:-1, fire:-2}};const ms = monthScore[mbi][dme];const deukRyung = ms >= 2;score += ms * 6;const monthNames = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];factors.push({ l: '月令 (Seasonal Power)', v: `${monthNames[mbi]}월 ${deukRyung ? '✓ In Season' : '✗ Out of Season'} (${ms >= 0 ? '+' : ''}${ms*6})`, p: deukRyung });let realRootScore = 0;let hasRealRoot = { day: false, hour: false };const TWELVE_STARTS = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];const TWELVE_NAMES = ['Birth','Bath','Crown','Fortune','Peak','Decline','Illness','Death','Tomb','End','Conception','Nurture'];const dmIdx = STEM.findIndex(s => s.c === dm.c);const isYangGan = dmIdx % 2 === 0;allBranches.forEach((b, idx) => {const bi = BRANCH.indexOf(b);const position = ['year', 'month', 'day', 'hour'][idx];const posWeight = position === 'day' ? 1.5 : position === 'hour' ? 1.3 : position === 'month' ? 1.2 : 1.0;let twIdx = bi - TWELVE_STARTS[dmIdx];if (!isYangGan) twIdx = -twIdx;twIdx = ((twIdx % 12) + 12) % 12;const twName = TWELVE_NAMES[twIdx];let twelveBonus = 0;if (twName === '건록' || twName === '제왕') {twelveBonus = 4 * posWeight;if (position === 'day' || position === 'hour') hasRealRoot[position] = true;} else if (twName === '관대' || twName === '장생') {twelveBonus = 2 * posWeight;if (position === 'day' || position === 'hour') hasRealRoot[position] = true;}
 realRootScore += twelveBonus;const hidden = JIJANGGAN[bi] || [];hidden.forEach(h => {const hStem = STEM[h.s];if (hStem.e === peerEl || hStem.e === sealEl) {realRootScore += h.w * posWeight * 2;if (position === 'day') hasRealRoot.day = true;if (position === 'hour') hasRealRoot.hour = true;}});});score += Math.min(realRootScore, 15);const rootStrong = realRootScore >= 4;factors.push({ l: '通根 (Root Strength)', v: rootStrong ? `✓ ${realRootScore.toFixed(1)}pts` : `✗ Weak Root (${realRootScore.toFixed(1)})`, p: rootStrong });let helpCount = 0;let attackCount = 0;let exprStemCount = 0;allStems.forEach((st, idx) => {const si = STEM.indexOf(st);if (disabledSeals.includes(si) || disabledPeers.includes(si)) {factors.push({ l: '⚠️ Merged Away', v: `${st.c} Neutralized`, p: false });return;}
 if (st.e === peerEl) { helpCount++; score += 2.5; }
 if (st.e === sealEl) { helpCount++; score += 2; }
@@ -1193,7 +1193,7 @@ startYear: birthYear + 3,
 startMonth: birthMonth,
 startDay: birthDay,
 daysToTerm: 9,
-direction: forward ? '순행(順行)' : '역행(逆行)',
+direction: forward ? 'Forward' : 'Backward',
 directionEn: forward ? 'Forward' : 'Backward',
 targetTerm: null,
 calculationMethod: 'default'};if (!birthMonth || !birthDay) return result;let birthHourNum = 12, birthMinNum = 0;if (typeof birthHour === 'number') {if (birthHour >= 0 && birthHour <= 11) {const hourMap = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22];birthHourNum = hourMap[birthHour] || 12;} else if (birthHour >= 0 && birthHour <= 23) {birthHourNum = birthHour;}}
@@ -1207,13 +1207,13 @@ startYear: startYear,
 startMonth: startDate.getMonth() + 1,
 startDay: startDate.getDate(),
 daysToTerm: Math.round(daysDiff * 10) / 10,
-direction: forward ? '순행(順行)' : '역행(逆行)',
+direction: forward ? 'Forward' : 'Backward',
 directionEn: forward ? 'Forward' : 'Backward',
 targetTerm: TERM_NAMES[targetTermIdx],
 targetTermYear: searchYear,
 calculationMethod: 'precise'};} catch (e) {console.warn('Daeun calculation error:', e);}
 return result;}
-function analyzeGyoungiPrecise(periods, birthYear, currentYear) {const gyoungiList = [];const currentAge = currentYear - birthYear;for (let i = 0; i < periods.length; i++) {const period = periods[i];const transitionAge = period.startAge;const transitionYear = birthYear + transitionAge;const isNearTransition = Math.abs(currentAge - transitionAge) <= 1;const yearsToTransition = transitionAge - currentAge;if (isNearTransition || (yearsToTransition > 0 && yearsToTransition <= 3)) {const nextPeriod = periods[i];const prevPeriod = i > 0 ? periods[i - 1] : null;let warning = '';let severity = 'info';if (yearsToTransition === 0) {warning = `🔄 올해 교운기! ${nextPeriod.s.c}${nextPeriod.b.c} 대운 시작`;severity = 'major';} else if (yearsToTransition === 1) {warning = `⏳ 내년 교운기 진입 (${nextPeriod.s.c}${nextPeriod.b.c} 대운)`;severity = 'warning';} else if (yearsToTransition === -1) {warning = `🌟 작년 새 대운 시작 - 적응기`;severity = 'info';}
+function analyzeGyoungiPrecise(periods, birthYear, currentYear) {const gyoungiList = [];const currentAge = currentYear - birthYear;for (let i = 0; i < periods.length; i++) {const period = periods[i];const transitionAge = period.startAge;const transitionYear = birthYear + transitionAge;const isNearTransition = Math.abs(currentAge - transitionAge) <= 1;const yearsToTransition = transitionAge - currentAge;if (isNearTransition || (yearsToTransition > 0 && yearsToTransition <= 3)) {const nextPeriod = periods[i];const prevPeriod = i > 0 ? periods[i - 1] : null;let warning = '';let severity = 'info';if (yearsToTransition === 0) {warning = `🔄 🔄 Luck Cycle Transition Year! ${nextPeriod.s.c}${nextPeriod.b.c} Luck Cycle begins`;severity = 'major';} else if (yearsToTransition === 1) {warning = `⏳ Entering transition next year (${nextPeriod.s.c}${nextPeriod.b.c} Luck Cycle)`;severity = 'warning';} else if (yearsToTransition === -1) {warning = `🌟 New Luck Cycle begins - Adjustment period`;severity = 'info';}
 if (prevPeriod && nextPeriod) {const scoreDiff = nextPeriod.score - prevPeriod.score;if (scoreDiff >= 3) {warning += ' | 吉運 진입! 발복 시작';} else if (scoreDiff <= -3) {warning += ' | 주의 필요 - 안정 추구';}}
 gyoungiList.push({year: transitionYear,
 age: transitionAge,
@@ -1237,7 +1237,7 @@ rating: score >= 2 ? 'good' : score <= -1 ? 'bad' : 'neutral',
 score,
 daeunInfo: i === 0 ? daeunStart : null});}
 periods.meta = {direction: forward ? 'forward' : 'backward',
-directionK: forward ? '순행' : '역행',
+directionK: forward ? 'Forward' : 'Backward',
 firstAgeExact: daeunStart.firstAgeExact,
 daysToTerm: daeunStart.daysToTerm,
 targetTerm: daeunStart.targetTerm,
@@ -1342,7 +1342,7 @@ wangShinChungBal: ylCheckWangShinChungBal(yp, saju)};if (r.bureau.active) r.mont
 score: 0,
 desc: '',
 overridden: true,
-overrideReason: `🔥 ${r.bureau.desc} Beneficial Element (${ELEMENT[gods.yong].n}) AMPLIFIED! 쇠신충왕 무효화 → BREAKTHROUGH!`};}
+overrideReason: `🔥 ${r.bureau.desc} Beneficial Element (${ELEMENT[gods.yong].n}) AMPLIFIED! Weak-Strong Clash Nullified → BREAKTHROUGH!`};}
 r.missingYong = ylCheckMissingYong(saju, gods, r.yongAttack.active);const score = Object.values(r).reduce((s, x) => s + (x.score || 0), 0);const rating = ylDetermineRating(r, score);let voidBreak = false, voidBreakDesc = '';try {const gm = calcGongmang(saju);const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (gm && gm.indices) {gm.indices.forEach(vi => {if (Math.abs(ypBi - vi) === 6) {voidBreak = true;voidBreakDesc = `🔓 ${yp.b.c} breaks Void (${BRANCH[vi].c})! Liberation year.`;}});}} catch(e) {}
 return {year, pillar: yp, god, state, score, rating,
 climateClash: r.climateClash.active, climateClashDesc: r.climateClash.desc,
@@ -1707,23 +1707,23 @@ function genYearFortune(saju, gods, year) {const yp = calcYearPillar(year, 2, 5)
 else if ([yp.s.e, yp.b.e].includes(gods.hee)) { rating = 4; desc = 'Good year with Supporting Element! Things go smoothly.'; }
 else if ([yp.s.e, yp.b.e].includes(gods.gi)) { rating = 2; desc = 'Challenging Element year. Be cautious and avoid overexertion.'; }
 else { desc = 'A steady year. Keep working consistently.'; }
-if (state.l >= 9) { rating = Math.min(5, rating + 1); desc += ' 12운성이 강해서 Energy가 넘쳐요!'; }
-else if (state.l <= 3) { rating = Math.max(1, rating - 1); desc += ' 12운성이 약해서 체력 관리가 is essential.'; }
-const months = [];const monthlyData = getYearlyMonthLuck(year, saju, gods);for (let m = 1; m <= 12; m++) {const mData = monthlyData.months[m - 1];let tip = '', bg = 'rgba(255,255,255,0.05)';if (mData.climateClash) { tip = '🔴 위험'; bg = 'rgba(244,67,54,0.2)'; }
-else if (mData.score >= 2) { tip = '🟢 길'; bg = 'rgba(76,175,80,0.2)'; }
-else if (mData.score <= -2) { tip = '🔴 흉'; bg = 'rgba(244,67,54,0.15)'; }
-else { tip = '🟡 평'; }
+if (state.l >= 9) { rating = Math.min(5, rating + 1); desc += ' Strong 12 Stages! Energy overflowing!'; }
+else if (state.l <= 3) { rating = Math.max(1, rating - 1); desc += ' Weak 12 Stages. Energy management is essential.'; }
+const months = [];const monthlyData = getYearlyMonthLuck(year, saju, gods);for (let m = 1; m <= 12; m++) {const mData = monthlyData.months[m - 1];let tip = '', bg = 'rgba(255,255,255,0.05)';if (mData.climateClash) { tip = '🔴 Risk'; bg = 'rgba(244,67,54,0.2)'; }
+else if (mData.score >= 2) { tip = '🟢 Good'; bg = 'rgba(76,175,80,0.2)'; }
+else if (mData.score <= -2) { tip = '🔴 Bad'; bg = 'rgba(244,67,54,0.15)'; }
+else { tip = '🟡 Neutral'; }
 months.push(`<span style="display:inline-block;margin:3px;padding:5px 8px;background:${bg};border-radius:5px;font-size:0.75rem;">${m}월 ${tip}</span>`);}
 return `
 <div class="info-box gold"><p><strong>📆 ${year}Year Fortune</strong></p><p style="font-size:0.85rem;color:var(--gray);margin-top:5px;">${yp.s.c}${yp.b.c}년 (${yp.b.m} ${yp.b.a}의 해)</p></div><div style="text-align:center;margin:15px 0;"><span style="font-size:2rem;">${'⭐'.repeat(rating)}${'☆'.repeat(5-rating)}</span></div><div class="info-box"><p><strong>This Year's God: ${god.k}</strong></p><p style="margin-top:10px;line-height:1.8;">${desc}</p></div><div class="info-box" style="margin-top:12px;"><p><strong>📌 Annual Energy: ${state.k}</strong><br>${state.d}</p></div><div class="info-box" style="margin-top:12px;"><p><strong>🗓️ Monthly Highlights</strong></p><div style="margin-top:10px;">${months.join('')}</div></div>`;}
-function genCareerFortune(saju, str, gods) {const dm = saju.day.s;const ec = countElements(saju);const jaeEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5];const gwanEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];const sikEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];let rating = 3, style = '', advice = '';if (str.type === 'strong' && ec[jaeEl] >= 2) {rating = 5; style = 'CEO Type';advice = 'Strong chart with many Wealth stars - natural entrepreneur! Excellent money management. Starting your own business leads to great success.';} else if (str.type === 'strong' && ec[gwanEl] >= 2) {rating = 4; style = 'Executive Type';advice = 'Strong chart with many Officer stars - you rise in organizations! Can reach high positions in government, corporations, or politics.';} else if (str.type === 'weak') {rating = 3; style = 'Specialist Type';advice = 'Weak chart suits teamwork over solo. Diving deep into a specialty can make you a recognized expert.';} else {rating = 4; style = '뭐든 잘하는 스타일';advice = 'Well balanced! You can adapt and succeed in any field.';}
+function genCareerFortune(saju, str, gods) {const dm = saju.day.s;const ec = countElements(saju);const jaeEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5];const gwanEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];const sikEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];let rating = 3, style = '', advice = '';if (str.type === 'strong' && ec[jaeEl] >= 2) {rating = 5; style = 'CEO Type';advice = 'Strong chart with many Wealth stars - natural entrepreneur! Excellent money management. Starting your own business leads to great success.';} else if (str.type === 'strong' && ec[gwanEl] >= 2) {rating = 4; style = 'Executive Type';advice = 'Strong chart with many Officer stars - you rise in organizations! Can reach high positions in government, corporations, or politics.';} else if (str.type === 'weak') {rating = 3; style = 'Specialist Type';advice = 'Weak chart suits teamwork over solo. Diving deep into a specialty can make you a recognized expert.';} else {rating = 4; style = 'Versatile Type';advice = 'Well balanced! You can adapt and succeed in any field.';}
 if (ec[sikEl] >= 2) {advice += '<br><br>✨ <strong>With many Eating Gods, you make money through talent!</strong> You shine in art, technology, and creative fields.';}
-const careerByElement = {wood: '교육, 출판, 의류, 가구, 조경, 농업, 한의학',
-fire: '연예, 방송, 예술, IT, 전energy, 조명, 음식',
-earth: '부동산, 건축, 농업, 중개, 유통, 창고업',
-metal: '금융, 제조, 자동차, 기계, 의료기energy, 법조',
-water: '무역, 유통, 관광, 어업, 음료, Water류, 청소'};return `
-<div class="info-box gold"><p><strong>💼 Career Fortune Analysis</strong></p></div><div style="text-align:center;margin:15px 0;"><span style="font-size:2rem;">${'⭐'.repeat(rating)}${'☆'.repeat(5-rating)}</span><p style="margin-top:10px;font-size:1.1rem;color:var(--gold);">${style}</p></div><div class="info-box"><p style="line-height:1.8;">${advice}</p></div><div class="info-box good" style="margin-top:12px;"><p><strong>🎯 용신(${ELEMENT[gods.yong].k}) 관련 직업</strong></p><p style="margin-top:8px;">${careerByElement[gods.yong]}</p></div>`;}
+const careerByElement = {wood: 'Education, Publishing, Clothing, Furniture, Landscaping, Agriculture, Traditional Medicine',
+fire: 'Entertainment, Broadcasting, Art, IT, Electronics, Lighting, Food',
+earth: 'Real Estate, Construction, Agriculture, Brokerage, Distribution, Warehousing',
+metal: 'Finance, Manufacturing, Automotive, Machinery, Medical Equipment, Legal',
+water: 'Trade, Distribution, Tourism, Fishery, Beverages, Aquatic, Cleaning'};return `
+<div class="info-box gold"><p><strong>💼 Career Fortune Analysis</strong></p></div><div style="text-align:center;margin:15px 0;"><span style="font-size:2rem;">${'⭐'.repeat(rating)}${'☆'.repeat(5-rating)}</span><p style="margin-top:10px;font-size:1.1rem;color:var(--gold);">${style}</p></div><div class="info-box"><p style="line-height:1.8;">${advice}</p></div><div class="info-box good" style="margin-top:12px;"><p><strong>🎯 Beneficial (${ELEMENT[gods.yong].n}) Related Careers</strong></p><p style="margin-top:8px;">${careerByElement[gods.yong]}</p></div>`;}
 function genLoveFortune(saju, str, gods) {const dm = saju.day.s;const dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);const ec = countElements(saju);const spouseEl = GENDER === 'm' ?
 EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5] :
 EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];const spouseCount = ec[spouseEl];let rating = 3, desc = '';if (spouseCount === 0) {rating = 2;desc = 'Weak energy in spouse position. Connection may come late or not last long. Do not be too hasty!';} else if (spouseCount === 1) {rating = 4;desc = 'One true spouse connection! Cherish this person — they are your destiny.';} else if (spouseCount === 2) {rating = 3;desc = 'Two spouse connections... Possible remarriage or choosing between two people.';} else {rating = 2;desc = 'Strong spouse connections. Be mindful of temptation! Focus on one person.';}
@@ -1752,15 +1752,15 @@ water: {o:'Kidneys, Bladder, Ears', s:'Swelling, back pain, reproductive issues,
 <div class="info-box gold"><p><strong>🏥 Health Fortune Analysis</strong></p></div><div style="text-align:center;margin:15px 0;"><span style="font-size:2rem;">${'⭐'.repeat(rating)}${'☆'.repeat(5-rating)}</span></div><div class="info-box"><p><strong>Vulnerable Organs:</strong> ${healthData[dm.e].o}</p><p style="margin-top:10px;"><strong>Watch for symptoms:</strong><br>${healthData[dm.e].s}</p><p style="margin-top:10px;"><strong>Health Tips:</strong><br>${healthData[dm.e].a}</p></div>
 ${weakest[1] === 0 ? `<div class="info-box warn" style="margin-top:12px;"><p><strong>⚠️ ${ELEMENT[weakest[0]].k} energy is missing!</strong><br>${healthData[weakest[0]].o} related health needs attention!<br><br>${healthData[weakest[0]].a}</p></div>` : ''}
 ${strongest[1] >= 4 ? `<div class="info-box" style="margin-top:12px;"><p><strong>📌 ${ELEMENT[strongest[0]].k} energy is excessive</strong><br>${healthData[strongest[0]].o} organs may be strained. Balance is key!</p></div>` : ''}
-<div class="info-box good" style="margin-top:12px;"><p><strong>🗓️ 계절별 건강 관리</strong></p><p style="margin-top:8px;line-height:1.8;">
-• 봄: 간, 눈 관리 / 스트레칭<br>
-• 여름: 심장, 혈관 / Drink plenty of water<br>
-• 환절기: 소Fire기 / 규칙적인 식사<br>
-• 가을: 폐, 호흡기 / 등산, 심호흡<br>
-• 겨울: 신장, 뼈 / 보온, 반신욕
+<div class="info-box good" style="margin-top:12px;"><p><strong>🗓️ Seasonal Health Care</strong></p><p style="margin-top:8px;line-height:1.8;">
+• Spring: Liver, Eyes / Stretching<br>
+• Summer: Heart, Blood vessels / Drink plenty of water<br>
+• Seasonal changes: Stay warm / Regular meals<br>
+• Autumn: Lungs, Respiratory / Hiking, Deep breathing<br>
+• Winter: Kidneys, Bones / Keep warm, Half-body bath
 </p></div>`;}
 function runMatch() {if (!SAJU) { toast('Please analyze your chart first!'); return; }
-const py = +document.getElementById('partner-year').value;const pm = +document.getElementById('partner-month').value;const pd = +document.getElementById('partner-day').value;if (!py || !pm || !pd) { toast('상대방 Please enter your birth date'); return; }
+const py = +document.getElementById('partner-year').value;const pm = +document.getElementById('partner-month').value;const pd = +document.getElementById('partner-day').value;if (!py || !pm || !pd) { toast('Please enter partner birth date'); return; }
 const pSaju = {year: calcYearPillar(py, pm, pd),
 month: calcMonthPillar(py, pm, pd),
 day: calcDayPillar(py, pm, pd)};let score = 50, details = [];const myDm = STEM.indexOf(SAJU.day.s), pDm = STEM.indexOf(pSaju.day.s);const ganHap = [[0,5],[1,6],[2,7],[3,8],[4,9]];let ganMatch = false;for (let [a,b] of ganHap) if ((myDm===a && pDm===b) || (myDm===b && pDm===a)) { ganMatch = true; break; }
@@ -1906,18 +1906,18 @@ ${ts.lifeFlow.map(lf => `
 `).join('')}
 </div></div>
 `;const luck = calcLuck(SAJU, BIRTH_YEAR, GENDER, GODS, BIRTH_MONTH, BIRTH_DAY, BIRTH_HOUR);let luckMetaHtml = '';if (luck.meta) {const meta = luck.meta;luckMetaHtml = `
-<div class="info-box" style="margin-bottom:15px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);"><p style="font-size:0.9rem;"><strong>📊 大運 Calculation Info</strong></p><div style="margin-top:8px;font-size:0.85rem;display:grid;grid-template-columns:repeat(2,1fr);gap:8px;"><div>🔄 Direction: <strong>${meta.directionK}</strong> (${meta.direction === 'forward' ? '順行' : '逆行'})</div><div>📅 First Age: <strong>${meta.firstAgeExact}세</strong> (${meta.daysToTerm}일÷3)</div>
-${meta.targetTerm ? `<div>🗓️ Target Term: <strong>${meta.targetTerm.k}</strong> (${meta.targetTerm.e})</div>` : ''}
+<div class="info-box" style="margin-bottom:15px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);"><p style="font-size:0.9rem;"><strong>📊 大運 Calculation Info</strong></p><div style="margin-top:8px;font-size:0.85rem;display:grid;grid-template-columns:repeat(2,1fr);gap:8px;"><div>🔄 Direction: <strong>${meta.directionK}</strong> (${meta.direction === 'forward' ? 'Forward' : 'Backward'})</div><div>📅 First Age: <strong>${meta.firstAgeExact} years old</strong> (${meta.daysToTerm} days÷3)</div>
+${meta.targetTerm ? `<div>🗓️ Target Term: <strong>${meta.targetTerm.e}</strong></div>` : ''}
 <div>⚙️ Method: <strong>${meta.calculationMethod === 'precise' ? 'Precision' : 'Default'}</strong></div></div></div>
 `;}
 document.getElementById('luck-timeline').innerHTML = luckMetaHtml + luck.map((l, idx) => `
-<div class="luck-item ${l.isCur ? 'current' : ''} ${l.rating}" title="${l.startYear}-${l.endYear}년"><div class="luck-age">Ages ${l.startAge}-${l.endAge}</div><div style="font-size:0.65rem;color:var(--gray);">${l.startYear}-${l.endYear}</div><div class="luck-pillar el-${l.s.e}">${l.s.c}${l.b.c}</div><div class="luck-rating">${l.rating === 'good' ? '😊' : l.rating === 'bad' ? '😰' : '😐'}</div>
-${l.climateClash ? '<div style="font-size:0.6rem;color:#ff6b6b;">🌡️역운</div>' : ''}
+<div class="luck-item ${l.isCur ? 'current' : ''} ${l.rating}" title="${l.startYear}-${l.endYear}"><div class="luck-age">Ages ${l.startAge}-${l.endAge}</div><div style="font-size:0.65rem;color:var(--gray);">${l.startYear}-${l.endYear}</div><div class="luck-pillar el-${l.s.e}">${l.s.c}${l.b.c}</div><div class="luck-rating">${l.rating === 'good' ? '😊' : l.rating === 'bad' ? '😰' : '😐'}</div>
+${l.climateClash ? '<div style="font-size:0.6rem;color:#ff6b6b;">🌡️Adverse</div>' : ''}
 </div>
 `).join('');const curLuck = luck.find(l => l.isCur);if (curLuck) {const curYear = new Date().getFullYear();const yearsInCycle = curYear - curLuck.startYear;const yearsRemaining = curLuck.endYear - curYear;document.getElementById('luck-detail').innerHTML = `
 <div class="info-box ${curLuck.rating === 'good' ? 'good' : curLuck.rating === 'bad' ? 'warn' : ''}"><p><strong>Current Life Cycle (Ages ${curLuck.startAge}-${curLuck.endAge}): ${curLuck.s.c}${curLuck.b.c}</strong></p><p style="margin-top:8px;font-size:0.9rem;">
-📅 Period: ${curLuck.startYear} ~ ${curLuck.endYear}년<br>
-⏳ Progress: ${yearsInCycle + 1}년차 (${yearsRemaining}년 남음)
+📅 Period: ${curLuck.startYear} ~ ${curLuck.endYear}<br>
+⏳ Progress: Year ${yearsInCycle + 1} (${yearsRemaining} years remaining)
 </p><p style="margin-top:8px;">
 ${curLuck.rating === 'good' ? '🌟 Great fortune period! Take bold action.' :
 curLuck.rating === 'bad' ? '⚠️ Caution period. Avoid overexertion.' :
@@ -1992,12 +1992,12 @@ ${advInt.warnings.map(w => `
 ` : ''}
 ${!advInt.hapHwa.length && !advInt.samhapGuk.length && !advInt.chungHaeso.length && !advInt.warnings.length ?
 '<p style="color:var(--gray);">No special transformations or clashes. A peaceful chart!</p>' : ''}
-`;const gm = calcGongmang(SAJU);document.getElementById('gongmang').innerHTML = `<div class="info-box"><p><strong>공망:</strong> ${gm.names.join(', ')}<br>${gm.affected.length ? `⚠️ ${gm.affected.join(', ')} has Empty Void (空亡). This area energy is weak.` : 'No Empty Void (空亡) in chart!'}</p></div>`;const gmHaeso = analyzeGongmangHaeso(SAJU, gm);document.getElementById('gongmang-haeso').innerHTML = gmHaeso.hasGongmang ? `
+`;const gm = calcGongmang(SAJU);document.getElementById('gongmang').innerHTML = `<div class="info-box"><p><strong>Empty Void:</strong> ${gm.names.join(', ')}<br>${gm.affected.length ? `⚠️ ${gm.affected.join(', ')} has Empty Void (空亡). This area energy is weak.` : 'No Empty Void (空亡) in chart!'}</p></div>`;const gmHaeso = analyzeGongmangHaeso(SAJU, gm);document.getElementById('gongmang-haeso').innerHTML = gmHaeso.hasGongmang ? `
 ${gmHaeso.results.map(r => `
-<div class="info-box ${r.resolved ? 'good' : 'warn'}" style="margin-bottom:10px;"><p><strong>${r.position} 공망 (${r.branch})</strong></p><p style="margin-top:8px;font-size:0.9rem;">
+<div class="info-box ${r.resolved ? 'good' : 'warn'}" style="margin-bottom:10px;"><p><strong>${r.position} Empty Void (${r.branch})</strong></p><p style="margin-top:8px;font-size:0.9rem;">
 ${r.resolved ?
-`✅ 해소됨: ${r.method}` :
-`❌ 해소되지 않음`}
+`✅ Resolved: ${r.method}` :
+`❌ Not Resolved`}
 </p><p style="margin-top:5px;font-size:0.85rem;color:var(--gray);">${r.effect}</p></div>
 `).join('')}
 <div class="info-box" style="margin-top:10px;"><p><strong>💡 Empty Void (空亡) Resolution Conditions</strong></p><p style="margin-top:8px;font-size:0.85rem;line-height:1.6;">
@@ -2022,11 +2022,11 @@ if (type === 'career') {el.innerHTML = genCareerFortune(SAJU, str, GODS);return;
 if (type === 'love') {el.innerHTML = genLoveFortune(SAJU, str, GODS);return;}
 if (type === 'wealth') {el.innerHTML = genWealthFortune(SAJU, str, GODS);return;}
 if (type === 'health') {el.innerHTML = genHealthFortune(SAJU, str, GODS);return;}
-const dm = SAJU.day.s;const yongEl = ELEMENT[GODS.yong];const colorAdvice = {wood: { color: '초록색, 청록색', dir: '동쪽', num: '3, 8', item: 'Wood 소품, 식Water, 책' },
-fire: { color: '빨간색, 보라색', dir: '남쪽', num: '2, 7', item: '조명, 캔들, 전자기기' },
+const dm = SAJU.day.s;const yongEl = ELEMENT[GODS.yong];const colorAdvice = {wood: { color: 'Green, Teal', dir: 'East', num: '3, 8', item: 'Wooden items, Plants, Books' },
+fire: { color: 'Red, Purple', dir: 'South', num: '2, 7', item: 'Lighting, Candles, Electronics' },
 earth: { color: '노란색, 갈색', dir: '중앙', num: '5, 10', item: '도자energy, 크리스탈, 부동산' },
-metal: { color: '흰색, Metal색, 은색', dir: '서쪽', num: '4, 9', item: '금속 액세서리, 시계, 자동차' },
-water: { color: '검은색, 파란색', dir: '북쪽', num: '1, 6', item: 'Water족관, 분Water, 그림' }};const yongAdvice = colorAdvice[GODS.yong];const typeDesc = {strong: `<strong>🔥 Strong Chart!</strong><br><br>You have a strong will and don't get swayed by others.<br><br><strong>Strengths:</strong> Leadership, Quick decisions, Independence, Drive<br><strong>Watch out:</strong> Too strong can seem stubborn. Listen to others sometimes!`,
+metal: { color: 'White, Silver, Gold', dir: 'West', num: '4, 9', item: 'Metal accessories, Watch, Car' },
+water: { color: 'Black, Blue', dir: 'North', num: '1, 6', item: 'Aquarium, Fountain, Paintings' }};const yongAdvice = colorAdvice[GODS.yong];const typeDesc = {strong: `<strong>🔥 Strong Chart!</strong><br><br>You have a strong will and don't get swayed by others.<br><br><strong>Strengths:</strong> Leadership, Quick decisions, Independence, Drive<br><strong>Watch out:</strong> Too strong can seem stubborn. Listen to others sometimes!`,
 weak: `<strong>💧 Gentle Chart!</strong><br><br>You cooperate well and live harmoniously with others.<br><br><strong>Strengths:</strong> Perceptive, Adaptable, Considerate, Noble helpers<br><strong>Watch out:</strong> Don't be too cautious. Be confident!`,
 balanced: `<strong>⚖️ Balanced Chart!</strong><br><br>Strong when needed, gentle when appropriate — the versatile type! This is the best state in Saju!<br><br><strong>Strengths:</strong> Quick situational judgment, Best adaptability, Thrives anywhere`};el.innerHTML = `
 <div class="info-box gold"><p><strong>📊 Overall Fortune Analysis</strong></p></div><div class="info-box" style="margin-top:12px;"><p style="line-height:1.8;">${typeDesc[GODS.type]}</p></div>
@@ -2103,7 +2103,7 @@ try {const str = calcStrength(SAJU);const dm = SAJU.day.s;const dmName = `${dm.c
 output: elOrder[(dmIdx + 1) % 5],
 wealth: elOrder[(dmIdx + 2) % 5],
 officer: elOrder[(dmIdx + 3) % 5],
-seal: elOrder[(dmIdx + 4) % 5]};const yearStemIdx = STEM.indexOf(SAJU.year.s);const yearIsYang = yearStemIdx % 2 === 0;const luckDirection = (yearIsYang && GENDER === 'm') || (!yearIsYang && GENDER === 'f') ? 'Forward(順行)' : 'Backward(逆行)';const mbi = BRANCH.findIndex(b => b.c === SAJU.month.b.c);const seasonMap = {0:'Winter',1:'Earth',2:'Spring',3:'Spring',4:'Earth',5:'Summer',6:'Summer',7:'Earth',8:'Autumn',9:'Autumn',10:'Earth',11:'Winter'};const elSeasonMap = {'Spring':'wood', 'Summer':'fire', 'Autumn':'metal', 'Winter':'water', 'Earth':'earth'};const monthSeason = seasonMap[mbi];const seasonEl = elSeasonMap[monthSeason];const deukRyung = (dmEl === seasonEl) || (tenGodMap.seal === seasonEl);let samhapText = '';let samhapWarning = '';try {const advInt = analyzeAdvancedInteractions ? analyzeAdvancedInteractions(SAJU) : null;if (advInt && advInt.samhapGuk && advInt.samhapGuk.length > 0) {samhapText = advInt.samhapGuk.map(s => {const warning = (s.result === ELEMENT[GODS.gi].k) ? ' ⚠️ COMPLETES 忌神 ELEMENT!' :
+seal: elOrder[(dmIdx + 4) % 5]};const yearStemIdx = STEM.indexOf(SAJU.year.s);const yearIsYang = yearStemIdx % 2 === 0;const luckDirection = (yearIsYang && GENDER === 'm') || (!yearIsYang && GENDER === 'f') ? 'Forward' : 'Backward';const mbi = BRANCH.findIndex(b => b.c === SAJU.month.b.c);const seasonMap = {0:'Winter',1:'Earth',2:'Spring',3:'Spring',4:'Earth',5:'Summer',6:'Summer',7:'Earth',8:'Autumn',9:'Autumn',10:'Earth',11:'Winter'};const elSeasonMap = {'Spring':'wood', 'Summer':'fire', 'Autumn':'metal', 'Winter':'water', 'Earth':'earth'};const monthSeason = seasonMap[mbi];const seasonEl = elSeasonMap[monthSeason];const deukRyung = (dmEl === seasonEl) || (tenGodMap.seal === seasonEl);let samhapText = '';let samhapWarning = '';try {const advInt = analyzeAdvancedInteractions ? analyzeAdvancedInteractions(SAJU) : null;if (advInt && advInt.samhapGuk && advInt.samhapGuk.length > 0) {samhapText = advInt.samhapGuk.map(s => {const warning = (s.result === ELEMENT[GODS.gi].k) ? ' ⚠️ COMPLETES 忌神 ELEMENT!' :
 (s.result === ELEMENT[GODS.yong].k) ? ' ✅ COMPLETES 用神 ELEMENT!' : '';return `• ${s.name} (${s.complete ? 'Complete' : 'Partial'})${warning}`;}).join('\n');const giSamhap = advInt.samhapGuk.find(s => s.result === ELEMENT[GODS.gi].k && s.complete);if (giSamhap) {samhapWarning = `\n⚠️ WARNING: Triple Harmony completes 忌神(${ELEMENT[GODS.gi].n}) - May amplify negative influences!`;}} else {samhapText = '• No Triple Harmony';}} catch(e) { samhapText = '• Triple Harmony data unavailable'; }
 const neutralEl = elOrder[(elOrder.indexOf(GODS.gi) + 4) % 5];const monthGodDesc = (monthGod.k === yearGod.k)
 ? `Same as Year Stem (${yearGod.k}), amplifying its influence`
@@ -2179,12 +2179,12 @@ ${timeConversionText}
 • Month Stem ${SAJU.month.s.c}: ${monthGodDesc}
 • Day Stem ${SAJU.day.s.c}: Self (Day Master)
 ${hourGod ? '• Hour Stem ' + SAJU.hour.s.c + ': ' + hourGodDesc : '• Hour Stem: Unknown'}
-【TEN GODS - BRANCHES (지지 십신) ⚠️ IMPORTANT】
+【TEN GODS - BRANCHES (Branch Ten Gods) ⚠️ IMPORTANT】
 • Year Branch ${SAJU.year.b.c} (${ELEMENT[SAJU.year.b.e].n}, ${yearBranchYang}): ${yearBranchGod.k}
-• Month Branch ${SAJU.month.b.c} (${ELEMENT[SAJU.month.b.e].n}, ${monthBranchYang}): ${monthBranchGod.k} ← 월령(月令)
-• Day Branch ${SAJU.day.b.c} (${ELEMENT[SAJU.day.b.e].n}, ${dayBranchYang}): ${dayBranchGod.k} ← 배우자궁
-${SAJU.hour ? '• Hour Branch ' + SAJU.hour.b.c + ' (' + ELEMENT[SAJU.hour.b.e].n + ', ' + hourBranchYang + '): ' + hourBranchGod.k + ' ← 자녀궁' : '• Hour Branch: Unknown'}
-【⚡ TEN GOD MAPPING (일간 ${dm.c} ${ELEMENT[dm.e].n} 기준) - AI MUST USE THIS】
+• Month Branch ${SAJU.month.b.c} (${ELEMENT[SAJU.month.b.e].n}, ${monthBranchYang}): ${monthBranchGod.k} ← Month Lord (Most Important!)
+• Day Branch ${SAJU.day.b.c} (${ELEMENT[SAJU.day.b.e].n}, ${dayBranchYang}): ${dayBranchGod.k} ← Spouse Palace
+${SAJU.hour ? '• Hour Branch ' + SAJU.hour.b.c + ' (' + ELEMENT[SAJU.hour.b.e].n + ', ' + hourBranchYang + '): ' + hourBranchGod.k + ' ← Children Palace' : '• Hour Branch: Unknown'}
+【⚡ TEN GOD MAPPING (Day Master ${dm.c} ${ELEMENT[dm.e].n} based) - AI MUST USE THIS】
 • Peer/Competitor (比劫): ${ELEMENT[tenGodMap.peer].n} (${ELEMENT[tenGodMap.peer].c}) - Same element as Day Master
 • Output/Expression (食傷): ${ELEMENT[tenGodMap.output].n} (${ELEMENT[tenGodMap.output].c}) - Day Master generates this
 • Wealth (財星): ${ELEMENT[tenGodMap.wealth].n} (${ELEMENT[tenGodMap.wealth].c}) - Day Master controls this
@@ -2195,7 +2195,7 @@ ${SAJU.hour ? '• Hour Branch ' + SAJU.hour.b.c + ' (' + ELEMENT[SAJU.hour.b.e]
 • Month Branch ${SAJU.month.b.c}: ${monthState.k} (Energy ${monthState.l}/12)
 • Day Branch ${SAJU.day.b.c}: ${dayState.k} (Energy ${dayState.l}/12)
 ${hourState ? '• Hour Branch ' + SAJU.hour.b.c + ': ' + hourState.k + ' (Energy ' + hourState.l + '/12)' : '• Hour Branch: Unknown'}
-【SEASONAL POWER (월령 得令/失令) ⚠️ CRITICAL】
+【SEASONAL POWER (In/Out of Season) ⚠️ CRITICAL】
 • Birth Month: ${SAJU.month.b.k} (${monthSeason})
 • Season Element: ${ELEMENT[seasonEl].n} (${ELEMENT[seasonEl].c})
 • Day Master ${dm.c} (${ELEMENT[dm.e].n}): ${deukRyung ? '✅ IN SEASON (得令) - Strong seasonal support' : '❌ OUT OF SEASON (失令) - Needs support from other elements'}
@@ -2211,7 +2211,7 @@ return ELEMENT[el].c + '(' + ELEMENT[el].k + ')';}).join(', ');})()}
 【DAY MASTER STRENGTH】
 • Strength: ${str.pct}% (${str.type === 'strong' ? 'STRONG Body' : str.type === 'weak' ? 'WEAK Body' : 'BALANCED'})
 ${str.extreme ? '• Special Note: ' + (str.extreme === 'Extreme Strong' ? 'Extremely Strong' : 'Extremely Weak') + ' chart (Possible Special Format)' : ''}
-${(() => {let rootInfo = '';if (str.dayRoot || str.hourRoot) {rootInfo = '• ⚡ REAL ROOTS (지장간 기준): ';if (str.dayRoot) rootInfo += 'Day Branch has Peer/Seal in hidden stems. ';if (str.hourRoot) rootInfo += 'Hour Branch has Peer/Seal in hidden stems. ';rootInfo += 'Hidden resilience - not helpless despite low percentage.';} else if (str.type === 'weak') {rootInfo = '• ⚠️ NO REAL ROOTS: Day Master lacks Peer/Seal in branch hidden stems. Flexible but needs external support.';}
+${(() => {let rootInfo = '';if (str.dayRoot || str.hourRoot) {rootInfo = '• ⚡ REAL ROOTS (Hidden Stems based): ';if (str.dayRoot) rootInfo += 'Day Branch has Peer/Seal in hidden stems. ';if (str.hourRoot) rootInfo += 'Hour Branch has Peer/Seal in hidden stems. ';rootInfo += 'Hidden resilience - not helpless despite low percentage.';} else if (str.type === 'weak') {rootInfo = '• ⚠️ NO REAL ROOTS: Day Master lacks Peer/Seal in branch hidden stems. Flexible but needs external support.';}
 return rootInfo;})()}
 ${(() => {if (str.disabledSeals?.length || str.disabledPeers?.length) {const disabled = [];if (str.disabledSeals?.length) {str.disabledSeals.forEach(si => disabled.push(STEM[si].c + '(Seal)'));}
 if (str.disabledPeers?.length) {str.disabledPeers.forEach(si => disabled.push(STEM[si].c + '(Peer)'));}
@@ -2303,9 +2303,9 @@ yearLuck.rating === 'yong_attacked' ? '🚨 DANGER - Beneficial Element Under At
 yearLuck.rating === 'rob_wealth' ? '⚔️ DANGER - Wealth Robbery Year (群劫爭財)! Avoid partnerships!' :
 yearLuck.rating === 'surgery_risk' ? '⚔️ HIGH RISK HIGH RETURN - Wealth OR Surgery Year (沖羊刃)' :
 yearLuck.rating === 'volatile_wealth' ? '💰⚠️ VOLATILE WEALTH - Big money but health/spouse risk' :
-yearLuck.rating === 'wang_shin_chung_bal' ? '🚨 왕신충발(旺神沖發) - 대격변/사고/파재 극도 주의!' :
-yearLuck.rating === 'yong_overwhelmed' ? '⚠️ 쇠신충왕(衰神沖旺) - 용신이 와도 기신에 압도됨!' :
-yearLuck.rating === 'pyunin_doshik' ? '⚠️ 편인도식(偏印倒食) - 밥그릇 깨짐 주의!' :
+yearLuck.rating === 'wang_shin_chung_bal' ? '🚨 STRONG CLASH EXPLOSION - Extreme caution for upheaval/accident/loss!' :
+yearLuck.rating === 'yong_overwhelmed' ? '⚠️ WEAK VS STRONG CLASH - Beneficial overwhelmed by Unfavorable!' :
+yearLuck.rating === 'pyunin_doshik' ? '⚠️ SEAL OVERPOWERS OUTPUT - Career/income disruption risk!' :
 yearLuck.rating === 'great' ? 'EXCELLENT' :
 yearLuck.rating === 'good' ? 'FAVORABLE' :
 yearLuck.rating === 'volatile' ? '⚡ VOLATILE - Beneficial but UNSTABLE (gains come with losses)' :
@@ -2402,8 +2402,8 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - When 巳+午+未 (Southern Fire) forms: Treat as Fire x10 power, not Fire x3.
 - When 亥+子+丑 (Northern Water) forms: Treat as Water x10 power.
 - **Bureau completion in Annual Fortune = NUCLEAR EVENT. Describe with maximum urgency.**
-**RULE 3. ROOT vs STAGE DISTINCTION (통근 vs 12운성)**
-- "Real Root (通根)" = Day Master's element exists in branch hidden stems (Peer/Seal in 지장간).
+**RULE 3. ROOT vs STAGE DISTINCTION (Root vs 12 Stages)**
+- "Real Root (通根)" = Day Master's element exists in branch hidden stems (Peer/Seal in Hidden Stems).
 - "Birth Stage (長生)" = 12 Life Stage position, NOT a root. It means "patron support" not "self-power."
 - NEVER confuse these two. A chart can be "Rootless but Sheltered" (無根有庇).
 **RULE 4. DATA OVERRIDE AUTHORITY**
@@ -2556,7 +2556,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - Metaphor for Wood DM with roots: "A bamboo bending in typhoon - flexible yet unbreakable."
 - Career advice: "You thrive under pressure that would crush others. Choose roles requiring endurance over raw power."
 - Do NOT interpret as helpless or dependent. This type succeeds through strategic patience, not brute force.
-36. **VOLATILE Rating Interpretation (용신운인데 월지충):**
+36. **VOLATILE Rating Interpretation (Beneficial Year + Month Clash):**
 - If '2026 Annual Rating' shows 'VOLATILE', this means Beneficial Element arrived BUT clashes with Month Branch.
 - Metaphor: "The sun appeared, but storm clouds block it." Or "Gift with a poisoned ribbon."
 - In Section 6 (2026 FORTUNE FORECAST), state: "Opportunities arrive but come with equal challenges. Gains are not free."
@@ -2575,7 +2575,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - Override: Ignore "Steward/Builder" interpretations. Use "Survivor" or "Manager of the Flood" instead.
 - Strategy: "Delegate. Invest in Real Estate, not liquid assets. Spouse manages finances. Take profits early."
 - Health: "Excess Wealth (Water for Earth DM) directly attacks the body (spleen, digestion, immune system)."
-39. **BREAKTHROUGH Rating - Bureau + Beneficial Element (탐합망충 - 삼합이 충을 해소):**
+39. **BREAKTHROUGH Rating - Bureau + Beneficial Element (Bureau Absorbs Clash):**
 - If '2026 Annual Rating' shows 'BREAKTHROUGH', this is the BEST POSSIBLE rating.
 - The Three Harmony Bureau has NEUTRALIZED any clash. Do NOT mention clash warnings.
 - Interpretation: "The stars have aligned. A major life breakthrough is imminent."
@@ -2602,7 +2602,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - Health: "Blood-related events likely. Deflection: Donate blood, get tattoo, dental work, or minor cosmetic procedure to 'pre-pay' the blood debt."
 - Wealth: "If you take risks, they WILL pay off massively - but prepare for physical cost."
 - Theme Word: "GAMBIT" or "HIGH STAKES" - acknowledge both extremes.
-43. **VOLATILE_WEALTH Rating (용신+일지충):**
+43. **VOLATILE_WEALTH Rating (Beneficial + Day Branch Clash):**
 - If '2026 Annual Rating' shows 'VOLATILE_WEALTH', the Beneficial Element arrived BUT clashes with Spouse Palace (Day Branch).
 - Metaphor: "Fortune knocks but kicks down your front door."
 - Meaning: Wealth opportunities come with relationship/health sacrifices.
@@ -2640,7 +2640,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - Health Prevention: "Proactive blood-letting deflects misfortune: blood donation, dental surgery, tattoo, minor cosmetic procedure. Let the 'blood debt' be paid voluntarily."
 - For females (especially 40s): "Gynecological checkup mandatory. Uterus/ovary issues commonly manifest under this clash."
 - Financial advice: "If money comes, immediately lock it in illiquid assets (real estate). Do not hold cash - it attracts trouble."
-49. **VOLATILE WEALTH Rating (일지충 + 용신운):**
+49. **VOLATILE WEALTH Rating (Day Branch Clash + Beneficial Year):**
 - If '2026 Annual Rating' shows 'VOLATILE WEALTH', this means beneficial element arrived BUT clashes with Day Branch (Spouse Palace/Self).
 - Metaphor: "Gold mine in earthquake zone." Money flows, but foundation shakes.
 - In Section 6 (2026 FORTUNE FORECAST), state: "Wealth comes but at personal cost. Health and relationships pay the price for financial gains."
@@ -2691,7 +2691,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - The Hour Pillar = ages 46+ and final legacy.
 - Advice: "Others underestimate you. Your true power awakens in later years."
 - Psychology: "Stubborn despite soft appearance. The bamboo bends but never breaks."
-56. **BENEFICIAL ELEMENT UNDER ATTACK (용신피공격 - Friend vs Foe):**
+56. **BENEFICIAL ELEMENT UNDER ATTACK (Friend vs Foe):**
 - CRITICAL: If Annual element CONQUERS Beneficial Element (e.g., Fire year + Metal Beneficial = Fire melts Metal).
 - Five Elements conquest: 木克土, 土克水, 水克火, 火克金, 金克木
 - Rating: DANGER - regardless of other positive factors.
@@ -2716,13 +2716,13 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - CRITICAL WARNING: "This is NOT romance, it's a TRAP. Scandal destroys family and career."
 - If Self-Punishment (午午) added: "DOUBLE DANGER. Gambling addiction or affair leads to ruin."
 - Advice: "Stay home at night. Reject temptation. Every 'opportunity' is poisoned bait."
-60. **NO SHIELD - Missing Beneficial Element (용신 부재):**
+60. **NO SHIELD - Missing Beneficial Element:**
 - If Beneficial Element is completely ABSENT from natal chart (zero in all 8 characters).
 - Meaning: "No natural defense when crisis hits. Like a soldier without armor."
 - Psychology: "Cannot self-regulate desires. Excess becomes addiction."
 - If yong_attacked: "DOUBLE DANGER - attacked element doesn't even exist to defend."
 - Remedy: "Artificially CREATE beneficial element through: Metal = discipline, weights, strict schedule; Water = meditation, swimming; Fire = passion projects, socializing; Wood = learning, plants, nature; Earth = stability, documentation, grounding."
-61. **HARM BETRAYAL (六害 - 배신 경고):**
+61. **HARM BETRAYAL (Six Harms - Betrayal Warning):**
 - Six Harm pairs: 子未, 丑午, 寅巳, 卯辰, 申亥, 酉戌.
 - If Month Branch and Day Branch form Harm: "Closest people damage your foundation."
 - 卯辰害 Special: "Your WORDS (Rabbit/Expressor) destroy your FOUNDATION (Dragon/Storage). Verbal mistakes or a colleague's betrayal."
@@ -2753,7 +2753,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - If fake Follower: Fire year is DEADLY because weak Water evaporates.
 - Advice: "Extreme volatility. If you fully surrender to the trend, you win. If you resist, you break."
 - Safe interpretation: "Do NOT make major decisions this year. Observe which way the wind truly blows."
-66. **LIFE CYCLE DIRECTION VERIFICATION (대운 순역 확인):**
+66. **LIFE CYCLE DIRECTION VERIFICATION (Life Cycle direction check):**
 - Life Cycle direction rule: Yang Year Male = Forward, Yang Year Female = Reverse, Yin Year Male = Reverse, Yin Year Female = Forward.
 - Yang Year = Year Stem is 甲丙戊庚壬 (Yang stems).
 - If data shows Life Cycle that doesn't match this rule, flag as potential calculation error.
@@ -2779,7 +2779,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - Wealth: "Collects but rarely spends. May appear stingy. Assets hidden or locked away."
 - Spouse: "Day Branch = Spouse Palace. Grave energy means 'controlled spouse' or 'late marriage'."
 - Psychology: "Outwardly bright (especially 丙戌 Sun), but inner melancholy exists. Religious/spiritual inclination."
-70. **TWELVE STAGES OVERRIDE (12운성 재검증):**
+70. **TWELVE STAGES OVERRIDE (12 Stages Revalidation):**
 - If Day Branch shows "Birth(長生)" but Day Master actually sits in Grave position, data is WRONG.
 - Quick check for Fire DM: 寅=Birth, 午=Peak, 戌=Grave. If 戌 shows "Birth", calculation error.
 - Quick check for Water DM: 申=Birth, 子=Peak, 辰=Grave. If 辰 shows "Birth", calculation error.
@@ -2792,12 +2792,12 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 4. ANNUAL FORTUNE TEN GODS are provided. Do NOT recalculate.
 【COMMON AI MISTAKES TO AVOID】
 1. ❌ Ignoring Branch Ten Gods - Branches are NOT just "energy". They have TEN GODS too!
-2. ❌ Confusing 得令/失令 - Check the SEASONAL POWER section. It's pre-calculated.
+2. ❌ Confusing In Season/Out of Season - Check the SEASONAL POWER section. It's pre-calculated.
 3. ❌ Wrong Life Cycle interpretation - Use the [Stem/Branch] Ten God labels provided.
 4. ❌ Mixing up Yin/Yang - 甲丙戊庚壬 are YANG, 乙丁己辛癸 are YIN.
 5. ❌ Treating all "Wealth" the same - 偏財(Indirect) ≠ 正財(Direct). Check the full label.
-6. ❌ Ignoring 월령(月令) - Month Branch Ten God is the MOST IMPORTANT for strength.
-【BRANCH YIN/YANG REFERENCE (지지 음양 참조)】
+6. ❌ Ignoring Month Lord - Month Branch Ten God is the MOST IMPORTANT for strength.
+【BRANCH YIN/YANG REFERENCE】
 • 陽(Yang) Branches: 子(Rat), 寅(Tiger), 辰(Dragon), 午(Horse), 申(Monkey), 戌(Dog) - Even index
 • 陰(Yin) Branches: 丑(Ox), 卯(Rabbit), 巳(Snake), 未(Goat), 酉(Rooster), 亥(Pig) - Odd index
 • Ten God Rule: Same Yin/Yang → 偏(Indirect), Different Yin/Yang → 正(Direct)
