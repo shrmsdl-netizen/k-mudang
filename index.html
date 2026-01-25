@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.19.8 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.19.9 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
@@ -13,7 +13,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.19.8)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.19.9)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -27,11 +27,16 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  v4.19.8 (2026-01-25):                                                        ║
+║  v4.19.9 (2026-01-25):                                                        ║
+║    - [NEW] Talisman Rarity System (3-tier: Rare/Epic/Legendary)               ║
+║           ★★★ Rare: Standard Edition (~60%)                                  ║
+║           ★★★★ Epic: 삼합국/방합/천을귀인/용신세운 (~30%)                   ║
+║           ★★★★★ Legendary: (삼합국/방합) AND 용신세운 (~10%)               ║
+║    - [NEW] Visual differentiation by grade (borders, corners, serial)         ║
+║    - [NEW] Auto Year System: 부적 연도/간지/띠 자동 계산 (업데이트 불필요)    ║
 ║    - [FIX] Neutral (閑神) calculation error: +1 → +4 (generates Unfavorable)  ║
-║           Before: element Unfavorable generates / After: element that         ║
-║           generates Unfavorable (e.g., Water→Metal not Water→Wood)            ║
 ║    - [FIX] PILLARS tab mobile overflow fixed (flex-wrap)                      ║
+║    - [FIX] Talisman text overlap (energyDesc vs 일주 한자)                    ║
 ║    - Total: 97 AI Rules                                                       ║
 ║                                                                                ║
 ║  v4.19.4 (2026-01-23):                                                        ║
@@ -87,7 +92,7 @@
 ║  Contact: kmudang.official@gmail.com                                          ║
 ║  Last Updated: 2026-01-21                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
---><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI Destiny Analysis"><meta property="og:description" content="🏆 World's Most Advanced BaZi · 🤖 AI 97 Rules Precision · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.19.8');(function() {'use strict';document.addEventListener('contextmenu', function(e) {e.preventDefault();e.stopPropagation();return false;});document.addEventListener('keydown', function(e) {if (e.key === 'F12' || e.keyCode === 123) {e.preventDefault();return false;}
+--><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI Destiny Analysis"><meta property="og:description" content="🏆 World's Most Advanced BaZi · 🤖 AI 97 Rules Precision · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.19.9');(function() {'use strict';document.addEventListener('contextmenu', function(e) {e.preventDefault();e.stopPropagation();return false;});document.addEventListener('keydown', function(e) {if (e.key === 'F12' || e.keyCode === 123) {e.preventDefault();return false;}
 if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {e.preventDefault();return false;}
 if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {e.preventDefault();return false;}
 if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) {e.preventDefault();return false;}
@@ -99,7 +104,7 @@ if (e.ctrlKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67) && !e.shif
 orientation: undefined};const threshold = 160;const checkDevTools = function() {const widthThreshold = window.outerWidth - window.innerWidth > threshold;const heightThreshold = window.outerHeight - window.innerHeight > threshold;const orientation = widthThreshold ? 'vertical' : 'horizontal';if (!(heightThreshold && widthThreshold) &&
 ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) ||
 widthThreshold || heightThreshold)) {if (!devToolsCheck.isOpen || devToolsCheck.orientation !== orientation) {devToolsCheck.isOpen = true;devToolsCheck.orientation = orientation;}} else {devToolsCheck.isOpen = false;devToolsCheck.orientation = undefined;}};setInterval(checkDevTools, 1000);(function detectDebugger() {const start = new Date();debugger;const end = new Date();if (end - start > 100) {}
-setTimeout(detectDebugger, 3000);})();const noop = function() {};const consoleProtect = function() {try {const methods = ['log', 'debug', 'info', 'warn', 'error', 'table', 'trace', 'dir', 'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'assert', 'profile'];if (window.console) {console.log('%c🔒 K-MUDANG Pro v4.19.8 [PUBLIC EDITION]', 'color: #4CAF50; font-size: 14px; font-weight: bold;');console.log('%c© 2025 K-MUDANG. All Rights Reserved.', 'color: #666; font-size: 12px;');console.log('%c⚠️ This browser feature is for developers only.', 'color: #ff6b6b; font-size: 12px;');setTimeout(function() {methods.forEach(function(method) {window.console[method] = noop;});}, 100);}} catch(e) {}};consoleProtect();const printStyle = document.createElement('style');printStyle.textContent = '@media print { body { display: none !important; } }';document.head.appendChild(printStyle);if (window.top !== window.self) {try {window.top.location = window.self.location;} catch(e) {}}})();let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
+setTimeout(detectDebugger, 3000);})();const noop = function() {};const consoleProtect = function() {try {const methods = ['log', 'debug', 'info', 'warn', 'error', 'table', 'trace', 'dir', 'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'assert', 'profile'];if (window.console) {console.log('%c🔒 K-MUDANG Pro v4.19.9 [PUBLIC EDITION]', 'color: #4CAF50; font-size: 14px; font-weight: bold;');console.log('%c© 2025 K-MUDANG. All Rights Reserved.', 'color: #666; font-size: 12px;');console.log('%c⚠️ This browser feature is for developers only.', 'color: #ff6b6b; font-size: 12px;');setTimeout(function() {methods.forEach(function(method) {window.console[method] = noop;});}, 100);}} catch(e) {}};consoleProtect();const printStyle = document.createElement('style');printStyle.textContent = '@media print { body { display: none !important; } }';document.head.appendChild(printStyle);if (window.top !== window.self) {try {window.top.location = window.self.location;} catch(e) {}}})();let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
 function googleSignIn() { toast('🔓 PERSONAL Edition - Already unlocked!'); }
 function signOut() { toast('🔓 PERSONAL Edition - No login required'); }
 function checkPremiumStatus() { return true; }
@@ -517,23 +522,137 @@ water: { main: '#1E3A5F', accent: '#87CEEB' },
 wood: { main: '#228B22', accent: '#90EE90' },
 metal: { main: '#B8860B', accent: '#FFD700' },
 earth: { main: '#8B4513', accent: '#DEB887' }};const color = colors[yongEl] || colors.fire;let opacity = 0;const interval = setInterval(() => {ctx.fillStyle = '#0a0505';ctx.fillRect(0, 0, W, H);ctx.strokeStyle = color.main;ctx.lineWidth = 3;ctx.strokeRect(20, 20, W-40, H-40);opacity = Math.min(1, opacity + 0.08);ctx.fillStyle = `rgba(255, 215, 0, ${opacity})`;ctx.font = 'bold 180px "Noto Serif KR", serif';ctx.textAlign = 'center';ctx.textBaseline = 'middle';ctx.fillText('符', W/2, H/2 - 30);ctx.fillStyle = `rgba(139, 115, 85, ${opacity})`;ctx.font = '24px "Noto Sans KR", sans-serif';ctx.fillText('Fortune Talisman', W/2, H - 60);if (opacity >= 1) {clearInterval(interval);setTimeout(callback, 500);}}, 80);}
-function createHighResTalisman() {const canvas = document.getElementById('talisman-canvas');const ctx = canvas.getContext('2d');const W = 2160, H = 3840;canvas.width = W;canvas.height = H;const yongEl = GODS && GODS.yong ? GODS.yong : 'fire';const themes = {fire: { bg1: '#FFF0F0', bg2: '#FFE0E0', bg3: '#FFF5F5', main: '#B20000', accent: '#8B0000', border: '#4D0000', text: '#1A0A08', symbol: '鳳', symbolName: 'Phoenix', emoji: '🔥', elColor: '#CC0000' },
-water: { bg1: '#E8F0FF', bg2: '#D0E0F8', bg3: '#F0F5FF', main: '#0000AA', accent: '#000080', border: '#000055', text: '#0A0A1E', symbol: '龜', symbolName: 'Turtle', emoji: '💧', elColor: '#0000CC' },
-wood: { bg1: '#E8FFE8', bg2: '#D0F0D0', bg3: '#F0FFF0', main: '#003300', accent: '#002200', border: '#001100', text: '#050A05', symbol: '龍', symbolName: 'Dragon', emoji: '🌳', elColor: '#004D00' },
-metal: { bg1: '#FFFBF0', bg2: '#FFF5E0', bg3: '#FFFEF8', main: '#D4A017', accent: '#C9A227', border: '#8B7500', text: '#3D2B00', symbol: '虎', symbolName: 'Tiger', emoji: '⚔️', elColor: '#FFD700' },
-earth: { bg1: '#F0EBE0', bg2: '#E0D8C8', bg3: '#F5F0E8', main: '#4A3728', accent: '#3D2B1F', border: '#2D1F15', text: '#100D08', symbol: '麟', symbolName: 'Qilin', emoji: '🌍', elColor: '#6B5344' }};const theme = themes[yongEl] || themes.fire;const bgGrad = ctx.createLinearGradient(0, 0, 0, H);bgGrad.addColorStop(0, theme.bg1);bgGrad.addColorStop(0.5, theme.bg2);bgGrad.addColorStop(1, theme.bg3);ctx.fillStyle = bgGrad;ctx.fillRect(0, 0, W, H);
+function createHighResTalisman() {const canvas = document.getElementById('talisman-canvas');const ctx = canvas.getContext('2d');const W = 2160, H = 3840;canvas.width = W;canvas.height = H;const yongEl = GODS && GODS.yong ? GODS.yong : 'fire';const themes = {fire: { bg1: '#FFF0F0', bg2: '#FFE0E0', bg3: '#FFF5F5', main: '#B20000', accent: '#8B0000', border: '#4D0000', text: '#1A0A08', symbol: '鳳', symbolName: 'Phoenix', energyTitle: 'Phoenix Energy', energyDesc: 'Leadership & Achievement', emoji: '🔥', elColor: '#CC0000' },
+water: { bg1: '#E8F0FF', bg2: '#D0E0F8', bg3: '#F0F5FF', main: '#0000AA', accent: '#000080', border: '#000055', text: '#0A0A1E', symbol: '龜', symbolName: 'Turtle', energyTitle: 'Dragon Energy', energyDesc: 'Wisdom & Strategy', emoji: '💧', elColor: '#0000CC' },
+wood: { bg1: '#E8FFE8', bg2: '#D0F0D0', bg3: '#F0FFF0', main: '#003300', accent: '#002200', border: '#001100', text: '#050A05', symbol: '龍', symbolName: 'Dragon', energyTitle: 'Creator Energy', energyDesc: 'Growth & Innovation', emoji: '🌳', elColor: '#004D00' },
+metal: { bg1: '#FFFBF0', bg2: '#FFF5E0', bg3: '#FFFEF8', main: '#D4A017', accent: '#C9A227', border: '#8B7500', text: '#3D2B00', symbol: '虎', symbolName: 'Tiger', energyTitle: 'Warrior Energy', energyDesc: 'Precision & Authority', emoji: '⚔️', elColor: '#FFD700' },
+earth: { bg1: '#F0EBE0', bg2: '#E0D8C8', bg3: '#F5F0E8', main: '#4A3728', accent: '#3D2B1F', border: '#2D1F15', text: '#100D08', symbol: '麟', symbolName: 'Qilin', energyTitle: 'Tycoon Energy', energyDesc: 'Wealth & Stability', emoji: '🌍', elColor: '#6B5344' }};const theme = themes[yongEl] || themes.fire;const bgGrad = ctx.createLinearGradient(0, 0, 0, H);bgGrad.addColorStop(0, theme.bg1);bgGrad.addColorStop(0.5, theme.bg2);bgGrad.addColorStop(1, theme.bg3);ctx.fillStyle = bgGrad;ctx.fillRect(0, 0, W, H);
 // === 한지(Hanji) 질감 효과 60% ===
 // 1. 기본 노이즈 (점)
 for(let i=0;i<W*H*0.15;i++){const x=Math.random()*W;const y=Math.random()*H;const size=Math.random()*2.5+0.5;const colors=['rgba(139,90,43,','rgba(101,67,33,','rgba(180,140,100,','rgba(120,80,40,','rgba(160,120,80,'];const c=colors[Math.floor(Math.random()*colors.length)];const alpha=Math.random()*0.35+0.1;ctx.fillStyle=c+alpha+')';ctx.fillRect(x,y,size,size);}
 // 2. 한지 섬유 효과 (가로/세로 선)
 ctx.globalAlpha=0.15;for(let i=0;i<800;i++){const x=Math.random()*W;const y=Math.random()*H;const len=Math.random()*60+20;const isH=Math.random()>0.5;ctx.strokeStyle='rgba(120,80,40,0.3)';ctx.lineWidth=Math.random()*1.5+0.3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(isH?x+len:x+Math.random()*5,isH?y+Math.random()*3:y+len);ctx.stroke();}ctx.globalAlpha=1.0;
 // 3. 가장자리 빈티지 효과 (vignette) 강화
-const vignette=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8);vignette.addColorStop(0,'rgba(139,90,43,0)');vignette.addColorStop(0.7,'rgba(120,80,40,0.05)');vignette.addColorStop(1,'rgba(101,67,33,0.15)');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);ctx.strokeStyle = theme.border;ctx.lineWidth = 12;ctx.strokeRect(80, 80, W-160, H-160);ctx.strokeStyle = theme.main;ctx.lineWidth = 4;ctx.strokeRect(110, 110, W-220, H-220);drawCornerOrnamentsHD(ctx, W, H, theme);drawTaegeukHD(ctx, W/2, 300, 120, theme);ctx.fillStyle = theme.main;ctx.font = 'bold 128px "Noto Serif KR", serif';ctx.textAlign = 'center';ctx.fillText('二〇二六 開運符', W/2, 560);ctx.fillStyle = theme.text;ctx.font = '64px "Noto Sans KR", sans-serif';ctx.fillText('2026 Fortune Talisman', W/2, 660);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 740);ctx.lineTo(W-300, 740);ctx.stroke();const mantras = {wood: { hanja: '木德生發 萬事亨通', meaning: 'Wood virtue blooms, all things prosper' },
+const vignette=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8);vignette.addColorStop(0,'rgba(139,90,43,0)');vignette.addColorStop(0.7,'rgba(120,80,40,0.05)');vignette.addColorStop(1,'rgba(101,67,33,0.15)');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
+// === RARITY SYSTEM v4.19.9 ===
+const rarity = getTalismanRarity();
+// Legendary: 추가 배경 글로우 효과
+if (rarity.grade === 'legendary') {
+const glow = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, H*0.6);
+glow.addColorStop(0, 'rgba(255,215,0,0.08)');
+glow.addColorStop(0.5, 'rgba(255,180,0,0.04)');
+glow.addColorStop(1, 'rgba(255,150,0,0)');
+ctx.fillStyle = glow;
+ctx.fillRect(0, 0, W, H);
+}
+// 등급별 테두리 스타일
+if (rarity.grade === 'legendary') {
+// Triple gold border with glow
+ctx.shadowColor = '#FFD700';
+ctx.shadowBlur = 30;
+ctx.strokeStyle = '#FFD700';
+ctx.lineWidth = 16;
+ctx.strokeRect(60, 60, W-120, H-120);
+ctx.shadowBlur = 0;
+ctx.strokeStyle = theme.border;
+ctx.lineWidth = 10;
+ctx.strokeRect(85, 85, W-170, H-170);
+ctx.strokeStyle = '#FFD700';
+ctx.lineWidth = 4;
+ctx.strokeRect(115, 115, W-230, H-230);
+} else if (rarity.grade === 'epic') {
+// Double gold accent border
+ctx.strokeStyle = theme.border;
+ctx.lineWidth = 12;
+ctx.strokeRect(80, 80, W-160, H-160);
+ctx.strokeStyle = '#D4AF37';
+ctx.lineWidth = 6;
+ctx.strokeRect(100, 100, W-200, H-200);
+ctx.strokeStyle = theme.main;
+ctx.lineWidth = 3;
+ctx.strokeRect(115, 115, W-230, H-230);
+} else {
+// Rare: 기본 스타일
+ctx.strokeStyle = theme.border;
+ctx.lineWidth = 12;
+ctx.strokeRect(80, 80, W-160, H-160);
+ctx.strokeStyle = theme.main;
+ctx.lineWidth = 4;
+ctx.strokeRect(110, 110, W-220, H-220);
+}
+drawCornerOrnamentsHD(ctx, W, H, theme, rarity.grade);drawTaegeukHD(ctx, W/2, 300, 120, theme);
+// === 연도 자동 계산 ===
+const currentYear = new Date().getFullYear();
+const yearStemIdx = (currentYear - 4) % 10;
+const yearBranchIdx = (currentYear - 4) % 12;
+const yearStem = STEM[yearStemIdx];
+const yearBranch = BRANCH[yearBranchIdx];
+const yearElement = ELEMENT[yearStem.e];
+const animals = ['Rat','Ox','Tiger','Rabbit','Dragon','Snake','Horse','Goat','Monkey','Rooster','Dog','Pig'];
+const yearAnimal = animals[yearBranchIdx];
+const chineseNums = ['〇','一','二','三','四','五','六','七','八','九'];
+const yearChinese = String(currentYear).split('').map(d => chineseNums[parseInt(d)]).join('');
+ctx.fillStyle = theme.main;ctx.font = 'bold 128px "Noto Serif KR", serif';ctx.textAlign = 'center';ctx.fillText(`${yearChinese} 開運符`, W/2, 560);ctx.fillStyle = theme.text;ctx.font = '64px "Noto Sans KR", sans-serif';ctx.fillText(`${currentYear} Fortune Talisman`, W/2, 660);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 740);ctx.lineTo(W-300, 740);ctx.stroke();const mantras = {wood: { hanja: '木德生發 萬事亨通', meaning: 'Wood virtue blooms, all things prosper' },
 fire: { hanja: '火德昌盛 光明大吉', meaning: 'Fire virtue blazes, great fortune shines' },
 earth: { hanja: '土德厚載 財祿豊盈', meaning: 'Earth virtue endures, wealth overflows' },
 metal: { hanja: '金德堅固 百事成就', meaning: 'Metal virtue strengthens, all goals achieved' },
-water: { hanja: '水德潤澤 智慧通達', meaning: 'Water virtue nourishes, wisdom flows freely' }};const mantra = mantras[yongEl] || mantras.fire;ctx.fillStyle = theme.main;ctx.font = 'bold 104px "Noto Serif KR", serif';ctx.fillText(mantra.hanja, W/2, 900);ctx.fillStyle = theme.text;ctx.font = '56px "Noto Sans KR", sans-serif';ctx.fillText(mantra.meaning, W/2, 1000);ctx.fillStyle = theme.main;ctx.font = 'bold 560px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText('符', W/2, 1500);ctx.fillStyle = theme.elColor;ctx.font = 'bold 160px "Noto Serif KR", serif';ctx.fillText(theme.symbol, W/2, 1700);ctx.fillStyle = theme.text;ctx.font = '56px "Noto Sans KR", sans-serif';ctx.fillText(`${theme.symbolName} · ${ELEMENT[yongEl].n}`, W/2, 1780);const dayStem = SAJU.day.s.c;const dayBranch = SAJU.day.b.c;ctx.fillStyle = theme.main;ctx.font = 'bold 180px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText(dayStem + dayBranch, W/2, 1960);const iljuKey = dayStem + dayBranch;const dayDesc = (typeof ILJU_60 !== 'undefined' && ILJU_60[iljuKey]) ? ILJU_60[iljuKey].name : '';ctx.fillStyle = theme.text;ctx.font = '56px "Noto Sans KR", sans-serif';ctx.fillText(dayDesc + ' Day Master', W/2, 2050);ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';roundRectHD(ctx, 200, 2120, W-400, 560, 40);ctx.fill();ctx.strokeStyle = theme.border;ctx.lineWidth = 4;roundRectHD(ctx, 200, 2120, W-400, 560, 40);ctx.stroke();ctx.textAlign = 'left';ctx.font = '64px "Noto Sans KR", sans-serif';const yongsinEl = ELEMENT[GODS.yong];const huisinEl = ELEMENT[GODS.hee];const gisinEl = ELEMENT[GODS.gi];ctx.fillStyle = '#E63946';ctx.fillText('用神 (Beneficial)', 300, 2260);ctx.fillStyle = theme.main;ctx.fillText(`${yongsinEl.n} ${theme.emoji}`, 900, 2260);ctx.fillStyle = '#2A9D8F';ctx.fillText('喜神 (Favorable)', 300, 2380);ctx.fillStyle = theme.main;ctx.fillText(`${huisinEl.n}`, 900, 2380);ctx.fillStyle = '#6C757D';ctx.fillText('忌神 (Avoid)', 300, 2500);ctx.fillStyle = '#666';ctx.fillText(`${gisinEl.n}`, 900, 2500);ctx.fillStyle = theme.text;ctx.fillText('Body Strength', 300, 2620);ctx.fillStyle = theme.main;const strType = STRENGTH ? (STRENGTH.type === 'strong' ? 'Strong' : STRENGTH.type === 'weak' ? 'Weak' : 'Balanced') : '?';const strPct = STRENGTH ? STRENGTH.pct + '%' : '';ctx.fillText(`${strType} ${strPct}`, 900, 2620);ctx.textAlign = 'center';ctx.fillStyle = theme.text;ctx.font = '56px "Noto Sans KR", sans-serif';ctx.fillText('─── 2026 丙午年 Fire Horse Year ───', W/2, 2800);let bestMonth = '?', worstMonth = '?';try {const monthlyLuck = getYearlyMonthLuck(2026, SAJU, GODS);if (monthlyLuck && monthlyLuck.best) bestMonth = monthlyLuck.best.month;if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;} catch(e) {}
-ctx.font = '64px "Noto Sans KR", sans-serif';ctx.fillStyle = '#2A9D8F';ctx.fillText(`✨ Best Month: ${bestMonth}`, W/2 - 360, 2920);ctx.fillStyle = '#E63946';ctx.fillText(`⚠️ Caution: ${worstMonth}`, W/2 + 360, 2920);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 3040);ctx.lineTo(W-300, 3040);ctx.stroke();ctx.fillStyle = theme.main;ctx.font = 'bold 88px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText('厄退福來 百事大吉', W/2, 3180);ctx.fillStyle = theme.text;ctx.font = '52px "Noto Sans KR", sans-serif';ctx.fillText('Misfortune retreats, blessings arrive', W/2, 3280);ctx.fillStyle = theme.text;ctx.font = '44px "Noto Sans KR", sans-serif';ctx.fillText('K-MUDANG Pro ☯ kmudang.com', W/2, 3480);const serialNo = generateSerialNumber();ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';ctx.font = '32px monospace';ctx.fillText(`No. ${serialNo}`, W/2, 3560);ctx.fillStyle = theme.text;ctx.font = '40px "Noto Sans KR", sans-serif';ctx.fillText('📱 Set as your phone wallpaper for daily fortune', W/2, 3680);talismanGenerated = true;talismanDataUrl = canvas.toDataURL('image/png', 1.0);}
+water: { hanja: '水德潤澤 智慧通達', meaning: 'Water virtue nourishes, wisdom flows freely' }};const mantra = mantras[yongEl] || mantras.fire;ctx.fillStyle = theme.main;ctx.font = 'bold 104px "Noto Serif KR", serif';ctx.fillText(mantra.hanja, W/2, 900);ctx.fillStyle = theme.text;ctx.font = '56px "Noto Sans KR", sans-serif';ctx.fillText(mantra.meaning, W/2, 1000);ctx.fillStyle = theme.main;ctx.font = 'bold 560px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText('符', W/2, 1500);ctx.fillStyle = theme.elColor;ctx.font = 'bold 160px "Noto Serif KR", serif';ctx.fillText(theme.symbol, W/2, 1700);ctx.fillStyle = theme.text;ctx.font = '56px "Noto Sans KR", sans-serif';ctx.fillText(`${theme.energyTitle}`, W/2, 1770);ctx.font = '44px "Noto Sans KR", sans-serif';ctx.fillStyle = theme.elColor;ctx.fillText(`${theme.energyDesc}`, W/2, 1825);const dayStem = SAJU.day.s.c;const dayBranch = SAJU.day.b.c;ctx.fillStyle = theme.main;ctx.font = 'bold 160px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText(dayStem + dayBranch, W/2, 1980);const iljuKey = dayStem + dayBranch;const dayDesc = (typeof ILJU_60 !== 'undefined' && ILJU_60[iljuKey]) ? ILJU_60[iljuKey].name : '';ctx.fillStyle = theme.text;ctx.font = '56px "Noto Sans KR", sans-serif';ctx.fillText(dayDesc + ' Day Master', W/2, 2060);ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';roundRectHD(ctx, 200, 2120, W-400, 560, 40);ctx.fill();ctx.strokeStyle = theme.border;ctx.lineWidth = 4;roundRectHD(ctx, 200, 2120, W-400, 560, 40);ctx.stroke();ctx.textAlign = 'left';ctx.font = '64px "Noto Sans KR", sans-serif';const yongsinEl = ELEMENT[GODS.yong];const huisinEl = ELEMENT[GODS.hee];const gisinEl = ELEMENT[GODS.gi];ctx.fillStyle = '#E63946';ctx.fillText('用神 (Beneficial)', 300, 2260);ctx.fillStyle = theme.main;ctx.fillText(`${yongsinEl.n} ${theme.emoji}`, 900, 2260);ctx.fillStyle = '#2A9D8F';ctx.fillText('喜神 (Favorable)', 300, 2380);ctx.fillStyle = theme.main;ctx.fillText(`${huisinEl.n}`, 900, 2380);ctx.fillStyle = '#6C757D';ctx.fillText('忌神 (Avoid)', 300, 2500);ctx.fillStyle = '#666';ctx.fillText(`${gisinEl.n}`, 900, 2500);ctx.fillStyle = theme.text;ctx.fillText('Body Strength', 300, 2620);ctx.fillStyle = theme.main;const strType = STRENGTH ? (STRENGTH.type === 'strong' ? 'Strong' : STRENGTH.type === 'weak' ? 'Weak' : 'Balanced') : '?';const strPct = STRENGTH ? STRENGTH.pct + '%' : '';ctx.fillText(`${strType} ${strPct}`, 900, 2620);ctx.textAlign = 'center';ctx.fillStyle = theme.text;ctx.font = '56px "Noto Sans KR", sans-serif';ctx.fillText(`─── ${currentYear} ${yearStem.c}${yearBranch.c}年 ${yearElement.n} ${yearAnimal} Year ───`, W/2, 2800);let bestMonth = '?', worstMonth = '?';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU, GODS);if (monthlyLuck && monthlyLuck.best) bestMonth = monthlyLuck.best.month;if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;} catch(e) {}
+ctx.font = '64px "Noto Sans KR", sans-serif';ctx.fillStyle = '#2A9D8F';ctx.fillText(`✨ Best Month: ${bestMonth}`, W/2 - 360, 2920);ctx.fillStyle = '#E63946';ctx.fillText(`⚠️ Caution: ${worstMonth}`, W/2 + 360, 2920);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 3040);ctx.lineTo(W-300, 3040);ctx.stroke();ctx.fillStyle = theme.main;ctx.font = 'bold 88px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText('厄退福來 百事大吉', W/2, 3180);ctx.fillStyle = theme.text;ctx.font = '52px "Noto Sans KR", sans-serif';ctx.fillText('Misfortune retreats, blessings arrive', W/2, 3280);ctx.fillStyle = theme.text;ctx.font = '44px "Noto Sans KR", sans-serif';ctx.fillText('K-MUDANG Pro ☯ kmudang.com', W/2, 3480);const serialNo = generateSerialNumber();
+// === 등급 라벨 (시리얼 위) ===
+if (rarity.grade === 'legendary') {
+const labelGrad = ctx.createLinearGradient(W/2-150, 3520, W/2+150, 3520);
+labelGrad.addColorStop(0, '#FFD700');
+labelGrad.addColorStop(0.5, '#FFF8DC');
+labelGrad.addColorStop(1, '#FFD700');
+ctx.fillStyle = labelGrad;
+ctx.font = 'bold 40px "Noto Sans KR", sans-serif';
+ctx.fillText('「 LEGENDARY 」', W/2, 3520);
+} else if (rarity.grade === 'epic') {
+ctx.fillStyle = '#D4AF37';
+ctx.font = 'bold 36px "Noto Sans KR", sans-serif';
+ctx.fillText('「 EPIC 」', W/2, 3520);
+}
+// === 등급별 시리얼 넘버 스타일 ===
+if (rarity.grade === 'legendary') {
+// Holographic rainbow effect
+const grad = ctx.createLinearGradient(W/2-200, 3560, W/2+200, 3560);
+grad.addColorStop(0, '#FF6B6B');
+grad.addColorStop(0.2, '#FFD93D');
+grad.addColorStop(0.4, '#6BCB77');
+grad.addColorStop(0.6, '#4D96FF');
+grad.addColorStop(0.8, '#9B59B6');
+grad.addColorStop(1, '#FF6B6B');
+ctx.fillStyle = grad;
+ctx.font = 'bold 36px monospace';
+ctx.fillText(`★★★★★ ${serialNo} ★★★★★`, W/2, 3560);
+} else if (rarity.grade === 'epic') {
+// Gold serial
+ctx.fillStyle = '#D4AF37';
+ctx.font = 'bold 34px monospace';
+ctx.fillText(`★★★★ ${serialNo} ★★★★`, W/2, 3560);
+} else {
+// Standard gray
+ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+ctx.font = '32px monospace';
+ctx.fillText(`No. ${serialNo}`, W/2, 3560);
+}ctx.fillStyle = theme.text;ctx.font = '40px "Noto Sans KR", sans-serif';ctx.fillText('📥 Save this Talisman · Keep it 7 days to seal your fortune', W/2, 3680);talismanGenerated = true;talismanDataUrl = canvas.toDataURL('image/png', 1.0);}
+function getTalismanRarity() {
+let hasSamhap = false, hasBanghap = false, hasNoble = false, hasYearMatch = false;
+try { const advInt = analyzeAdvancedInteractions(SAJU); if (advInt && advInt.samhapGuk) hasSamhap = advInt.samhapGuk.some(s => s.complete); } catch(e) {}
+try { const banghap = analyzeBanghap(SAJU); hasBanghap = banghap.some(b => b.type === 'complete'); } catch(e) {}
+try { const sinsal = calcSinsal(SAJU); hasNoble = sinsal.some(s => s.n.includes('天乙貴人')); } catch(e) {}
+const currentYear = new Date().getFullYear();
+const yearStemIdx = (currentYear - 4) % 10;
+const yearEl = STEM[yearStemIdx].e;
+hasYearMatch = (yearEl === GODS.yong);
+const hasBureau = hasSamhap || hasBanghap;
+if (hasBureau && hasYearMatch) return { grade: 'legendary', label: 'LEGENDARY', reason: hasSamhap ? 'Triple Harmony + Fortune Year' : 'Directional Harmony + Fortune Year' };
+if (hasSamhap || hasBanghap || hasNoble || hasYearMatch) {
+let reason = hasSamhap ? 'Triple Harmony' : hasBanghap ? 'Directional Harmony' : hasNoble ? 'Heavenly Noble' : 'Fortune Year';
+return { grade: 'epic', label: 'EPIC', reason };
+}
+return { grade: 'rare', label: 'RARE', reason: 'Standard Edition' };
+}
 function generateSerialNumber() {const now = new Date();const year = now.getFullYear();const random = Math.floor(Math.random() * 9999).toString().padStart(4, '0');const dayPillar = SAJU.day.s.c + SAJU.day.b.c;return `${year}-KMUDANG-${dayPillar}-${random}`;}
 function drawTaegeukHD(ctx, x, y, r, theme) {
 // 외곽 테두리 - 오행 색상으로 연결감 유지
@@ -549,7 +668,60 @@ ctx.beginPath();ctx.arc(x, y, r * 0.85, Math.PI, Math.PI * 2, false);ctx.fillSty
 ctx.beginPath();ctx.arc(x - r * 0.35, y, r * 0.28, 0, Math.PI * 2);ctx.fillStyle = TAEGEUK_RED;ctx.fill();
 // 우측 소원 (파랑)
 ctx.beginPath();ctx.arc(x + r * 0.35, y, r * 0.28, 0, Math.PI * 2);ctx.fillStyle = TAEGEUK_BLUE;ctx.fill();}
-function drawCornerOrnamentsHD(ctx, W, H, theme) {const size = 100;const offset = 140;ctx.strokeStyle = theme.main;ctx.lineWidth = 6;ctx.beginPath();ctx.moveTo(offset, offset + size);ctx.lineTo(offset, offset);ctx.lineTo(offset + size, offset);ctx.stroke();ctx.beginPath();ctx.moveTo(W - offset - size, offset);ctx.lineTo(W - offset, offset);ctx.lineTo(W - offset, offset + size);ctx.stroke();ctx.beginPath();ctx.moveTo(offset, H - offset - size);ctx.lineTo(offset, H - offset);ctx.lineTo(offset + size, H - offset);ctx.stroke();ctx.beginPath();ctx.moveTo(W - offset - size, H - offset);ctx.lineTo(W - offset, H - offset);ctx.lineTo(W - offset, H - offset - size);ctx.stroke();}
+function drawCornerOrnamentsHD(ctx, W, H, theme, grade = 'rare') {
+const size = grade === 'legendary' ? 140 : grade === 'epic' ? 120 : 100;
+const offset = 140;
+const lw = grade === 'legendary' ? 10 : grade === 'epic' ? 8 : 6;
+const color = grade === 'legendary' ? '#FFD700' : grade === 'epic' ? '#D4AF37' : theme.main;
+ctx.strokeStyle = color;
+ctx.lineWidth = lw;
+// 좌상단
+ctx.beginPath();
+ctx.moveTo(offset, offset + size);
+ctx.lineTo(offset, offset);
+ctx.lineTo(offset + size, offset);
+ctx.stroke();
+// 우상단
+ctx.beginPath();
+ctx.moveTo(W - offset - size, offset);
+ctx.lineTo(W - offset, offset);
+ctx.lineTo(W - offset, offset + size);
+ctx.stroke();
+// 좌하단
+ctx.beginPath();
+ctx.moveTo(offset, H - offset - size);
+ctx.lineTo(offset, H - offset);
+ctx.lineTo(offset + size, H - offset);
+ctx.stroke();
+// 우하단
+ctx.beginPath();
+ctx.moveTo(W - offset - size, H - offset);
+ctx.lineTo(W - offset, H - offset);
+ctx.lineTo(W - offset, H - offset - size);
+ctx.stroke();
+// Epic/Legendary: 추가 내부 장식
+if (grade === 'epic' || grade === 'legendary') {
+const innerSize = size * 0.5;
+const innerOffset = offset + 25;
+ctx.lineWidth = 3;
+ctx.strokeStyle = grade === 'legendary' ? '#FFD700' : theme.main;
+// 내부 코너 (작은 L자)
+ctx.beginPath();ctx.moveTo(innerOffset, innerOffset + innerSize);ctx.lineTo(innerOffset, innerOffset);ctx.lineTo(innerOffset + innerSize, innerOffset);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W - innerOffset - innerSize, innerOffset);ctx.lineTo(W - innerOffset, innerOffset);ctx.lineTo(W - innerOffset, innerOffset + innerSize);ctx.stroke();
+ctx.beginPath();ctx.moveTo(innerOffset, H - innerOffset - innerSize);ctx.lineTo(innerOffset, H - innerOffset);ctx.lineTo(innerOffset + innerSize, H - innerOffset);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W - innerOffset - innerSize, H - innerOffset);ctx.lineTo(W - innerOffset, H - innerOffset);ctx.lineTo(W - innerOffset, H - innerOffset - innerSize);ctx.stroke();
+}
+// Legendary: 코너 다이아몬드 장식
+if (grade === 'legendary') {
+ctx.fillStyle = '#FFD700';
+const dSize = 12;
+const dOffset = offset - 20;
+[[dOffset + size/2, dOffset], [W - dOffset - size/2, dOffset], [dOffset + size/2, H - dOffset], [W - dOffset - size/2, H - dOffset],
+ [dOffset, dOffset + size/2], [dOffset, H - dOffset - size/2], [W - dOffset, dOffset + size/2], [W - dOffset, H - dOffset - size/2]].forEach(([x, y]) => {
+ctx.beginPath();ctx.moveTo(x, y - dSize);ctx.lineTo(x + dSize, y);ctx.lineTo(x, y + dSize);ctx.lineTo(x - dSize, y);ctx.closePath();ctx.fill();
+});
+}
+}
 function roundRectHD(ctx, x, y, w, h, r) {ctx.beginPath();ctx.moveTo(x + r, y);ctx.lineTo(x + w - r, y);ctx.quadraticCurveTo(x + w, y, x + w, y + r);ctx.lineTo(x + w, y + h - r);ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);ctx.lineTo(x + r, y + h);ctx.quadraticCurveTo(x, y + h, x, y + h - r);ctx.lineTo(x, y + r);ctx.quadraticCurveTo(x, y, x + r, y);ctx.closePath();}
 function drawTaegeuk(ctx, x, y, r) {ctx.beginPath();ctx.arc(x, y, r, 0, Math.PI * 2);ctx.strokeStyle = '#D4AF37';ctx.lineWidth = 2;ctx.stroke();ctx.beginPath();ctx.arc(x, y, r * 0.8, 0, Math.PI, false);ctx.fillStyle = '#C41E3A';ctx.fill();ctx.beginPath();ctx.arc(x, y, r * 0.8, Math.PI, Math.PI * 2, false);ctx.fillStyle = '#1E3A5F';ctx.fill();ctx.beginPath();ctx.arc(x - r * 0.35, y, r * 0.25, 0, Math.PI * 2);ctx.fillStyle = '#1E3A5F';ctx.fill();ctx.beginPath();ctx.arc(x + r * 0.35, y, r * 0.25, 0, Math.PI * 2);ctx.fillStyle = '#C41E3A';ctx.fill();}
 function drawCornerOrnaments(ctx, W, H) {ctx.fillStyle = '#D4AF37';ctx.font = '14px serif';ctx.textAlign = 'center';ctx.fillText('福', 35, 40);ctx.fillText('祿', W-35, 40);ctx.fillText('壽', 35, H-25);ctx.fillText('喜', W-35, H-25);}
@@ -2808,7 +2980,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 3. Life Cycle + Annual Fortune Ten Gods - Current life theme
 4. Branch Ten Gods - Hidden influences
 5. Everything else
-===== 🆕 EXTENDED RULES 71-97 (v4.19.8) =====
+===== 🆕 EXTENDED RULES 71-97 (v4.19.9) =====
 71. 【BUREAU/HARMONY = x10 MULTIPLIER EFFECT】
 • Directional Harmony or Three Harmony completion is NOT simple addition.
 • 巳午未 (Southern Fire Bureau) = Fire x10 power
