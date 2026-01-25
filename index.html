@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.19.18 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.19.19 [PUBLIC] - 무료 배포 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
@@ -13,7 +13,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.19.18)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.19.19)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -27,13 +27,15 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  v4.19.18 (2026-01-25):                                                        ║
+║  v4.19.19 (2026-01-25):                                                        ║
+║    - [CRITICAL FIX] 天干合 결과 오행 추출 버그 수정 (丁壬合→Wood, not Fire)    ║
+║    - [NEW] DEV TEST: 콘솔에서 runTests() 실행하여 BUREAU 로직 검증 가능        ║
 ║    - [FIX] 암합 정의 수정: 辰酉/巳申/午丑 암합 제거 (잘못된 천간합)            ║
 ║    - [NEW] 기신 2배 경고: 천간+지지 모두 기신이면 특별 경고                    ║
 ║    - [NEW] 조열 사주 병오년 경고: 여름생+火기신+丙午년 건강 경고              ║
 ║    - [NEW] AI 복사에 오늘 일진 추가: 날짜/일진/십신/12운성/용신기신 여부      ║
 ║    - [NEW] AI 6번 섹션 확장: 연간 운세 + 오늘 운세 해석 지시                   ║
-║  v4.19.18 (2026-01-25):                                                        ║
+║  v4.19.19 (2026-01-25):                                                        ║
 ║    - [NEW] Talisman Rarity System (3-tier: Rare/Epic/Legendary)               ║
 ║           ★★★ Rare: Standard Edition (~60%)                                  ║
 ║           ★★★★ Epic: 삼합국/방합/천을귀인/용신세운 (~30%)                   ║
@@ -98,7 +100,7 @@
 ║  Contact: kmudang.official@gmail.com                                          ║
 ║  Last Updated: 2026-01-21                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
---><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI Destiny Analysis"><meta property="og:description" content="🏆 World's Most Advanced BaZi · 🤖 AI 97 Rules Precision · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.19.18');(function() {'use strict';document.addEventListener('contextmenu', function(e) {e.preventDefault();e.stopPropagation();return false;});document.addEventListener('keydown', function(e) {if (e.key === 'F12' || e.keyCode === 123) {e.preventDefault();return false;}
+--><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI Destiny Analysis"><meta property="og:description" content="🏆 World's Most Advanced BaZi · 🤖 AI 97 Rules Precision · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.19.19');(function() {'use strict';document.addEventListener('contextmenu', function(e) {e.preventDefault();e.stopPropagation();return false;});document.addEventListener('keydown', function(e) {if (e.key === 'F12' || e.keyCode === 123) {e.preventDefault();return false;}
 if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {e.preventDefault();return false;}
 if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {e.preventDefault();return false;}
 if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) {e.preventDefault();return false;}
@@ -110,7 +112,7 @@ if (e.ctrlKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67) && !e.shif
 orientation: undefined};const threshold = 160;const checkDevTools = function() {const widthThreshold = window.outerWidth - window.innerWidth > threshold;const heightThreshold = window.outerHeight - window.innerHeight > threshold;const orientation = widthThreshold ? 'vertical' : 'horizontal';if (!(heightThreshold && widthThreshold) &&
 ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) ||
 widthThreshold || heightThreshold)) {if (!devToolsCheck.isOpen || devToolsCheck.orientation !== orientation) {devToolsCheck.isOpen = true;devToolsCheck.orientation = orientation;}} else {devToolsCheck.isOpen = false;devToolsCheck.orientation = undefined;}};setInterval(checkDevTools, 1000);(function detectDebugger() {const start = new Date();debugger;const end = new Date();if (end - start > 100) {}
-setTimeout(detectDebugger, 3000);})();const noop = function() {};const consoleProtect = function() {try {const methods = ['log', 'debug', 'info', 'warn', 'error', 'table', 'trace', 'dir', 'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'assert', 'profile'];if (window.console) {console.log('%c🔒 K-MUDANG Pro v4.19.18 [PUBLIC EDITION]', 'color: #4CAF50; font-size: 14px; font-weight: bold;');console.log('%c© 2025 K-MUDANG. All Rights Reserved.', 'color: #666; font-size: 12px;');console.log('%c⚠️ This browser feature is for developers only.', 'color: #ff6b6b; font-size: 12px;');setTimeout(function() {methods.forEach(function(method) {window.console[method] = noop;});}, 100);}} catch(e) {}};consoleProtect();const printStyle = document.createElement('style');printStyle.textContent = '@media print { body { display: none !important; } }';document.head.appendChild(printStyle);if (window.top !== window.self) {try {window.top.location = window.self.location;} catch(e) {}}})();let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
+setTimeout(detectDebugger, 3000);})();const noop = function() {};const consoleProtect = function() {try {const methods = ['log', 'debug', 'info', 'warn', 'error', 'table', 'trace', 'dir', 'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'assert', 'profile'];if (window.console) {console.log('%c🔒 K-MUDANG Pro v4.19.19 [PUBLIC EDITION]', 'color: #4CAF50; font-size: 14px; font-weight: bold;');console.log('%c© 2025 K-MUDANG. All Rights Reserved.', 'color: #666; font-size: 12px;');console.log('%c⚠️ This browser feature is for developers only.', 'color: #ff6b6b; font-size: 12px;');setTimeout(function() {methods.forEach(function(method) {window.console[method] = noop;});}, 100);}} catch(e) {}};consoleProtect();const printStyle = document.createElement('style');printStyle.textContent = '@media print { body { display: none !important; } }';document.head.appendChild(printStyle);if (window.top !== window.self) {try {window.top.location = window.self.location;} catch(e) {}}})();let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
 function googleSignIn() { toast('🔓 PERSONAL Edition - Already unlocked!'); }
 function signOut() { toast('🔓 PERSONAL Edition - No login required'); }
 function checkPremiumStatus() { return true; }
@@ -548,7 +550,7 @@ for(let i=0;i<W*H*0.15;i++){const x=Math.random()*W;const y=Math.random()*H;cons
 ctx.globalAlpha=0.15;for(let i=0;i<800;i++){const x=Math.random()*W;const y=Math.random()*H;const len=Math.random()*60+20;const isH=Math.random()>0.5;ctx.strokeStyle='rgba(120,80,40,0.3)';ctx.lineWidth=Math.random()*1.5+0.3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(isH?x+len:x+Math.random()*5,isH?y+Math.random()*3:y+len);ctx.stroke();}ctx.globalAlpha=1.0;
 // 3. 가장자리 빈티지 효과 (vignette) 강화
 const vignette=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8);vignette.addColorStop(0,'rgba(139,90,43,0)');vignette.addColorStop(0.7,'rgba(120,80,40,0.05)');vignette.addColorStop(1,'rgba(101,67,33,0.15)');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
-// === RARITY SYSTEM v4.19.18 ===
+// === RARITY SYSTEM v4.19.19 ===
 const rarity = getTalismanRarity();
 // Legendary: 추가 배경 글로우 효과
 if (rarity.grade === 'legendary') {
@@ -2338,7 +2340,7 @@ let amhapText = '';try {const amhap = analyzeAmhap(SAJU);amhapText = amhap.lengt
 let criticalText = '';try {const criticalFeatures = [];if (dm && dm.e) {const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5];if (GODS && GODS.climate && GODS.climate.type) {if (GODS.climate.type.includes('Cold') || GODS.climate.type.includes('Extreme Cold')) {criticalFeatures.push('🔥 CLIMATE EMERGENCY: ' + GODS.climate.type + ' - Fire (火) is ESSENTIAL');}
 if (GODS.climate.type.includes('Hot') || GODS.climate.type.includes('Dry')) {criticalFeatures.push('💧 CLIMATE EMERGENCY: ' + GODS.climate.type + ' - Water (水) is ESSENTIAL');}}
 if (str && str.type === 'weak' && wealthEl && elCount[wealthEl] >= 3) {criticalFeatures.push('⚠️ WEALTH OVERLOAD (財多身弱): ' + elCount[wealthEl] + ' Wealth vs weak (' + str.pct + '%) Day Master');}
-const bureaus = (interactions || []).filter(i => i.t && i.t.includes('合'));if (bureaus.length > 0) {const bureauDesc = bureaus.map(b => {let el = '';if (b.m && b.m.includes('Fire')) el = 'Fire';else if (b.m && b.m.includes('Water')) el = 'Water';else if (b.m && b.m.includes('Metal')) el = 'Metal';else if (b.m && b.m.includes('Wood')) el = 'Wood';return b.c + ' ' + b.t + (el ? ' (' + el + ' x10)' : '');}).join(', ');criticalFeatures.push('🌲 BUREAU: ' + bureauDesc);}
+const bureaus = (interactions || []).filter(i => i.t && i.t.includes('合'));if (bureaus.length > 0) {const bureauDesc = bureaus.map(b => {let el = '';if (b.m) {const match = b.m.match(/combine to (\w+)|(\w+) combination/i);if (match) el = (match[1] || match[2]);}return b.c + ' ' + b.t + (el ? ' (' + el + ' x10)' : '');}).join(', ');criticalFeatures.push('🌲 BUREAU: ' + bureauDesc);}
 if (GODS && GODS.yong && elCount[GODS.yong] === 0) {criticalFeatures.push('🛡️ NO SHIELD: Beneficial Element (' + GODS.yong + ') MISSING from chart');}}
 const top3 = criticalFeatures.slice(0, 3);criticalText = top3.length > 0 ? '【⚡ CRITICAL FEATURES - AI MUST ADDRESS FIRST ⚡】\n' + top3.map((f, i) => (i+1) + '. ' + f).join('\n') + '\n\n' : '';} catch(e) { criticalText = ''; }
 const locationSelect = document.getElementById('birth-location');const locationText = locationSelect ? locationSelect.options[locationSelect.selectedIndex]?.text || 'Unknown' : 'Unknown';const HOUR_RANGES = {'子': '23:30-01:29', '丑': '01:30-03:29', '寅': '03:30-05:29', '卯': '05:30-07:29',
@@ -3006,7 +3008,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 3. Life Cycle + Annual Fortune Ten Gods - Current life theme
 4. Branch Ten Gods - Hidden influences
 5. Everything else
-===== 🆕 EXTENDED RULES 71-97 (v4.19.18) =====
+===== 🆕 EXTENDED RULES 71-97 (v4.19.19) =====
 71. 【BUREAU/HARMONY = x10 MULTIPLIER EFFECT】
 • Directional Harmony or Three Harmony completion is NOT simple addition.
 • 巳午未 (Southern Fire Bureau) = Fire x10 power
@@ -3204,7 +3206,42 @@ const monthPlaceholder = document.createElement('option');monthPlaceholder.value
 const dayPlaceholder = document.createElement('option');dayPlaceholder.value = ''; dayPlaceholder.textContent = 'Day';dayPlaceholder.disabled = true; dayPlaceholder.selected = true;daySel.appendChild(dayPlaceholder);for(let d = 1; d <= 31; d++) {const opt = document.createElement('option');opt.value = d; opt.textContent = d;daySel.appendChild(opt);}});});function showLegalPage(page) {document.querySelectorAll('.legal-page').forEach(p => p.style.display = 'none');document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');document.getElementById('legal-' + page).style.display = 'block';window.scrollTo(0, 0);history.pushState(null, null, '#' + page);}
 function closeLegalPage() {document.querySelectorAll('.legal-page').forEach(p => p.style.display = 'none');document.querySelector('.tab-content.active').style.display = 'block';history.pushState(null, null, window.location.pathname);}
 function handleUrlHash() {const hash = window.location.hash.replace('#', '');if (hash === 'terms' || hash === 'privacy' || hash === 'refund') {showLegalPage(hash);}}
-window.addEventListener('load', handleUrlHash);window.addEventListener('hashchange', handleUrlHash);</script><!-- ========================================
+window.addEventListener('load', handleUrlHash);window.addEventListener('hashchange', handleUrlHash);
+/* ========== DEV TEST FUNCTIONS ========== */
+window.runTests = function() {
+  console.log('%c🔬 K-MUDANG BUREAU TEST SUITE', 'color:#D4AF37;font-size:16px;font-weight:bold');
+  const tests = [
+    {m:"甲己 (Wood+Earth) combine to Earth", exp:"Earth"},
+    {m:"乙庚 (Wood+Metal) combine to Metal", exp:"Metal"},
+    {m:"丙辛 (Fire+Metal) combine to Water", exp:"Water"},
+    {m:"丁壬 (Fire+Water) combine to Wood", exp:"Wood"},
+    {m:"戊癸 (Earth+Water) combine to Fire", exp:"Fire"},
+    {m:"子丑(Rat-Ox) combine to Earth", exp:"Earth"},
+    {m:"寅亥(Tiger-Pig) combine to Wood", exp:"Wood"},
+    {m:"卯戌(Rabbit-Dog) combine to Fire", exp:"Fire"},
+    {m:"辰酉(Dragon-Rooster) combine to Metal", exp:"Metal"},
+    {m:"巳申(Snake-Monkey) combine to Water", exp:"Water"},
+    {m:"午未(Horse-Goat) combine to Fire", exp:"Fire"},
+    {m:"寅午戌(Tiger-Horse-Dog) Fire combination", exp:"Fire"},
+    {m:"巳酉丑(Snake-Rooster-Ox) Metal combination", exp:"Metal"},
+    {m:"申子辰(Monkey-Rat-Dragon) Water combination", exp:"Water"},
+    {m:"亥卯未(Pig-Rabbit-Goat) Wood combination", exp:"Wood"}
+  ];
+  let pass=0, fail=0;
+  tests.forEach((t,i) => {
+    const match = t.m.match(/combine to (\w+)|(\w+) combination/i);
+    const result = match ? (match[1] || match[2]) : '';
+    const ok = result === t.exp;
+    if(ok) pass++; else fail++;
+    console.log(`${ok?'✅':'❌'} ${i+1}. ${t.m.substring(0,25)}... → ${result} (expected: ${t.exp})`);
+  });
+  console.log('%c' + (fail===0 ? `✅ ALL ${pass} TESTS PASSED - SAFE TO DEPLOY` : `❌ ${fail} TESTS FAILED - DO NOT DEPLOY`), 
+    `color:${fail===0?'#4CAF50':'#F44336'};font-size:14px;font-weight:bold`);
+  return {pass, fail, total: tests.length};
+};
+console.log('%c💡 Type runTests() to verify BUREAU logic', 'color:#888;font-style:italic');
+/* ========== END TEST FUNCTIONS ========== */
+</script><!-- ========================================
      LEGAL PAGES
      ======================================== --><!-- TERMS OF SERVICE --><div id="legal-terms" class="legal-page" style="display:none;"><div class="legal-container"><button class="legal-close" onclick="closeLegalPage()">✕ Close</button><h1>📜 Terms of Service</h1><p class="legal-updated">Last Updated: January 2025</p><h2>1. ACCEPTANCE OF TERMS</h2><p>By accessing K-MUDANG ("Service"), you agree to these Terms of Service.</p><h2>2. SERVICE DESCRIPTION</h2><p>K-MUDANG provides:</p><ul><li>Four Pillars of Destiny (Saju) analysis</li><li>AI-powered fortune interpretation</li><li>Lottery number generation based on metaphysical algorithms</li></ul><h2>3. ENTERTAINMENT PURPOSE</h2><p>This Service is for <strong>ENTERTAINMENT PURPOSES ONLY</strong>.</p><ul><li>We do NOT guarantee lottery winnings</li><li>We do NOT predict actual future events</li><li>Saju analysis is based on traditional Korean metaphysics, not science</li></ul><h2>4. PAYMENT & REFUNDS</h2><ul><li>Premium access is granted for 24 hours after payment</li><li>All sales are final. No refunds (see Refund Policy for exceptions)</li><li>Payment processed securely via Paddle</li></ul><h2>5. USER RESPONSIBILITIES</h2><ul><li>You must be 18+ to use this Service</li><li>You are responsible for your gambling decisions</li><li>Do not spend more than you can afford to lose</li></ul><h2>6. INTELLECTUAL PROPERTY</h2><ul><li>All content, algorithms, and AI prompts are owned by K-MUDANG</li><li>Unauthorized copying or redistribution is prohibited</li></ul><h2>7. LIMITATION OF LIABILITY</h2><p>K-MUDANG is not liable for:</p><ul><li>Financial losses from lottery play</li><li>Decisions made based on Saju readings</li><li>Any damages arising from use of this Service</li></ul><h2>8. GOVERNING LAW</h2><p>These Terms are governed by the laws of the Republic of Korea.</p><h2>9. CONTACT</h2><p>For questions: <a href="https://mail.google.com/mail/?view=cm&to=kmudang.official@gmail.com" target="_blank"><span class="__cf_email__" data-cfemail="22494f5746434c450c4d44444b414b434e62454f434b4e0c414d4f">[email&#160;protected]</span></a></p></div></div><!-- PRIVACY POLICY --><div id="legal-privacy" class="legal-page" style="display:none;"><div class="legal-container"><button class="legal-close" onclick="closeLegalPage()">✕ Close</button><h1>🔒 Privacy Policy</h1><p class="legal-updated">Last Updated: January 2025</p><h2>1. INFORMATION WE COLLECT</h2><h3>a) Account Information:</h3><ul><li>Email address (via Google Sign-In)</li><li>Name (from Google profile)</li></ul><h3>b) Birth Information (User Provided):</h3><ul><li>Birth date, time, and gender</li><li>Used solely for Saju calculation</li></ul><h3>c) Payment Information:</h3><ul><li>Processed by Paddle</li><li>We do NOT store credit card numbers</li></ul><h2>2. HOW WE USE YOUR INFORMATION</h2><ul><li>To provide Saju analysis</li><li>To improve our Service</li></ul><h2>3. DATA STORAGE</h2><ul><li>All calculations are performed locally in your browser</li><li>No personal data is sent to external servers</li><li>Birth data is NOT stored or transmitted</li></ul><h2>4. DATA SHARING</h2><p>We do NOT collect, store, or sell your data.</p><ul><li>No server-side data storage</li><li>No authentication required</li><li>100% client-side application</li></ul><h2>5. YOUR RIGHTS</h2><p>You may:</p><ul><li>Access your data</li><li>Delete your account</li><li>Request data export</li></ul><h2>6. COOKIES</h2><p>We use essential cookies for:</p><ul><li>Authentication</li><li>Session management</li></ul><h2>7. CHILDREN'S PRIVACY</h2><p>This Service is not for users under 18.</p><h2>8. CHANGES TO POLICY</h2><p>We may update this Policy. Continued use means acceptance.</p><h2>9. CONTACT</h2><p>Privacy questions: <a href="https://mail.google.com/mail/?view=cm&to=kmudang.official@gmail.com" target="_blank"><span class="__cf_email__" data-cfemail="d3b8bea6b7b2bdb4fdbcb5b5bab0bab2bf93b4beb2babffdb0bcbe">[email&#160;protected]</span></a></p></div></div><!-- REFUND POLICY --><div id="legal-refund" class="legal-page" style="display:none;"><div class="legal-container"><button class="legal-close" onclick="closeLegalPage()">✕ Close</button><h1>💰 Refund Policy</h1><p class="legal-updated">Last Updated: January 2025</p><h2>1. DIGITAL PRODUCTS - NO REFUNDS</h2><p>K-MUDANG provides digital fortune-telling services and AI-generated content.</p><p>Due to the nature of digital products, <strong>ALL SALES ARE FINAL</strong>.</p><p>Once you receive your Saju analysis or lottery numbers, the service has been fully delivered and cannot be "returned."</p><h2>2. EXCEPTIONS</h2><p>We may offer refunds ONLY in these cases:</p><ul><li>Technical error prevented access to paid content</li><li>Duplicate charge (charged twice for same purchase)</li><li>Service was completely unavailable for 24+ hours</li></ul><h2>3. HOW TO REQUEST</h2><p>If you believe you qualify for an exception:</p><ul><li>Email: <a href="https://mail.google.com/mail/?view=cm&to=kmudang.official@gmail.com" target="_blank"><span class="__cf_email__" data-cfemail="91fafce4f5f0fff6bffef7f7f8f2f8f0fdd1f6fcf0f8fdbff2fefc">[email&#160;protected]</span></a></li><li>Include: Your email, purchase date, reason</li><li>Response time: Within 48 hours</li></ul><h2>4. PROCESSING</h2><p>Approved refunds will be processed within 5-7 business days to the original payment method.</p><h2>5. CONTACT</h2><p>Questions about refunds: <a href="https://mail.google.com/mail/?view=cm&to=kmudang.official@gmail.com" target="_blank"><span class="__cf_email__" data-cfemail="9bf0f6eefffaf5fcb5f4fdfdf2f8f2faf7dbfcf6faf2f7b5f8f4f6">[email&#160;protected]</span></a></p></div></div><!-- ========================================
      FOOTER
