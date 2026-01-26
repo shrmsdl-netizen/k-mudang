@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.22.1 [PERSONAL] - 개인 개발용 버전                               ║
+║  K-MUDANG Pro v4.22.3 [PERSONAL] - 개인 개발용 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
@@ -13,7 +13,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.22.1)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.22.3)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -27,7 +27,7 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  v4.22.1 (2026-01-25):
+║  v4.22.3 (2026-01-25):
 ║    - [FIX] BUREAU x10 표기: 天合/六合 제외, 三合/方合/半合에만 적용        ║
 ║  v4.19.21 (2026-01-25):
 ║    - [FIX] 용신=희신 동일 오류 수정 (yong===hee → hee=비겁 교정)        ║
@@ -107,7 +107,7 @@
 ║  Contact: kmudang.official@gmail.com                                          ║
 ║  Last Updated: 2026-01-21                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
---><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG | Ancient Wisdom for Modern Leaders"><meta property="og:description" content="✨ Find clarity in chaos · 🏛️ Where exhausted achievers find balance · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🔧 K-MUDANG Pro [PUBLIC EDITION] v4.22.1 - DEV MODE');let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
+--><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG | Ancient Wisdom for Modern Leaders"><meta property="og:description" content="✨ Find clarity in chaos · 🏛️ Where exhausted achievers find balance · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🔧 K-MUDANG Pro [PUBLIC EDITION] v4.22.3 - DEV MODE');let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
 function googleSignIn() { toast('🔓 PERSONAL Edition - Already unlocked!'); }
 function signOut() { toast('🔓 PERSONAL Edition - No login required'); }
 function checkPremiumStatus() { return true; }
@@ -365,10 +365,11 @@ function analyzeMatchAdvanced(mySaju, myGods, myStrength, partnerSaju, partnerGo
   const allPBranches = [BRANCH.findIndex(b=>b.c===partnerSaju.year.b.c), BRANCH.findIndex(b=>b.c===partnerSaju.month.b.c), pBrIdx, partnerSaju.hour?.b ? BRANCH.findIndex(b=>b.c===partnerSaju.hour.b.c) : -1].filter(i=>i>=0);
   let samhapFound = false;
   for (const [element, trio] of Object.entries(MATCH_TRIPLE_HARMONY/*三合*/)) {
-    const myHas = trio.filter(t => allMyBranches.includes(t)).length;
-    const pHas = trio.filter(t => allPBranches.includes(t)).length;
-    // 일지가 삼합에 포함되고, 두 사람 합쳐서 삼합 완성
-    if ((trio.includes(myBrIdx) || trio.includes(pBrIdx)) && myHas + pHas >= 3) {
+    // 두 사람 지지 합쳐서 유니크하게 카운트
+    const allBranches = new Set([...allMyBranches, ...allPBranches]);
+    const uniqueTrioCount = trio.filter(t => allBranches.has(t)).length;
+    // 일지가 삼합에 포함되고, 유니크 지지 3개 모두 있어야 삼합
+    if ((trio.includes(myBrIdx) || trio.includes(pBrIdx)) && uniqueTrioCount >= 3) {
       const bonus = (trio.includes(myBrIdx) && trio.includes(pBrIdx)) ? 12 : 8;
       result.score += bonus;
       result.categories.samhap = { score: bonus, title: '三合/Samhap '+element.toUpperCase()+'局 (Triple Harmony)', desc: 'Together you form a powerful '+element+' trinity!', advice: 'Strong karmic bond.' };
@@ -383,6 +384,20 @@ function analyzeMatchAdvanced(mySaju, myGods, myStrength, partnerSaju, partnerGo
     const penalty = mode === 'romance' ? -12 : -8;
     result.score += penalty; 
     result.categories.wonjin = { score: penalty, title: '怨嗔/Wonjin (Karmic Friction)', desc: 'Near-clash energy (充 adjacent). Lingering tension, not clean break.', advice: 'Extra patience and communication needed.' }; 
+  }
+  // ===== 귀문(鬼門) 체크 =====
+  const guiMunPairs = [[2,7],[3,8],[4,9],[5,10],[6,11],[1,6]];
+  result.hasGuiMun = guiMunPairs.some(([a,b]) => (myBrIdx === a && pBrIdx === b) || (myBrIdx === b && pBrIdx === a));
+  if (result.hasGuiMun) { 
+    result.score -= 8; 
+    result.categories.guimun = { score: -8, title: '鬼門/Guimun (Ghost Gate)', desc: 'Psychic friction. Arguments may feel irrational.', advice: 'Ground yourself. Avoid late-night conflicts.' }; 
+  }
+  // ===== 형(刑) 체크 =====
+  const hyungPairs = [[2,5],[5,8],[2,8],[1,10],[10,7],[1,7],[0,3]];
+  result.hasHyung = hyungPairs.some(([a,b]) => (myBrIdx === a && pBrIdx === b) || (myBrIdx === b && pBrIdx === a));
+  if (result.hasHyung) { 
+    result.score -= 6; 
+    result.categories.hyung = { score: -6, title: '刑/Hyung (Mutual Punishment)', desc: 'Self-destructive patterns may emerge together.', advice: 'Be mindful of enabling bad habits.' }; 
   }
   if (myGods && partnerGods) {
     const pStemElements = [STEM.find(s=>s.c===partnerSaju.year.s.c)?.e,STEM.find(s=>s.c===partnerSaju.month.s.c)?.e,STEM.find(s=>s.c===partnerSaju.day.s.c)?.e,STEM.find(s=>s.c===partnerSaju.hour?.s?.c)?.e].filter(Boolean);
@@ -593,8 +608,16 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
   if (result.categories.wonjin) {
     criticals.push('⚠️ RESENTMENT RISK (怨嗔): ' + result.categories.wonjin.desc);
   }
+  // 귀문 표시
+  if (result.categories.guimun) {
+    criticals.push('👻 GHOST GATE (鬼門): ' + result.categories.guimun.desc);
+  }
+  // 형 표시
+  if (result.categories.hyung) {
+    criticals.push('⚠️ MUTUAL PUNISHMENT (刑): ' + result.categories.hyung.desc);
+  }
   if (criticals.length === 0) criticals.push('No major critical factors detected.');
-  let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.1) =====
+  let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.3) =====
 ⚠️ AI: This is professional K-Fortune compatibility analysis. Interpret ALL data.
 
 【⚡ CRITICAL FACTORS - ADDRESS FIRST ⚡】
@@ -1075,7 +1098,7 @@ for(let i=0;i<W*H*0.15;i++){const x=Math.random()*W;const y=Math.random()*H;cons
 ctx.globalAlpha=0.15;for(let i=0;i<800;i++){const x=Math.random()*W;const y=Math.random()*H;const len=Math.random()*60+20;const isH=Math.random()>0.5;ctx.strokeStyle='rgba(120,80,40,0.3)';ctx.lineWidth=Math.random()*1.5+0.3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(isH?x+len:x+Math.random()*5,isH?y+Math.random()*3:y+len);ctx.stroke();}ctx.globalAlpha=1.0;
 // 3. 가장자리 빈티지 효과 (vignette) 강화
 const vignette=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8);vignette.addColorStop(0,'rgba(139,90,43,0)');vignette.addColorStop(0.7,'rgba(120,80,40,0.05)');vignette.addColorStop(1,'rgba(101,67,33,0.15)');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
-// === RARITY SYSTEM v4.22.1 ===
+// === RARITY SYSTEM v4.22.3 ===
 const rarity = getTalismanRarity();
 // Legendary: 추가 배경 글로우 효과
 if (rarity.grade === 'legendary') {
@@ -2151,6 +2174,7 @@ const safeBest = months.filter(m => !m.climateClash && !m.wangClash);const best 
 ? safeBest.reduce((a, b) => a.score > b.score ? a : b)
 : months.reduce((a, b) => a.score > b.score ? a : b);const worst = months.reduce((a, b) => a.score < b.score ? a : b);const wangClashMonths = months.filter(m => m.wangClash).map(m => m.month);return { months, best, worst, wangClashMonths };}
 function calcSinsal(saju) {const ss = [];const dmi = STEM.indexOf(saju.day.s);const ybi = BRANCH.findIndex(br => br.c === saju.year.b.c);const dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);const hbi = saju.hour ? BRANCH.findIndex(br => br.c === saju.hour.b.c) : -1;const brs = [ybi, mbi, dbi];if (hbi >= 0) brs.push(hbi);const ysi = STEM.indexOf(saju.year.s);const msi = STEM.indexOf(saju.month.s);const hsi = saju.hour ? STEM.indexOf(saju.hour.s) : -1;const guiren = {0:[1,7],1:[0,8],2:[11,9],3:[11,9],4:[1,7],5:[0,8],6:[7,1],7:[6,2],8:[5,3],9:[5,3]};if (guiren[dmi] && brs.some(b => guiren[dmi].includes(b))) ss.push({n:'天乙貴人(Heavenly Noble)',t:'good',d:'Supreme blessing! A guardian angel appears in every crisis. Official fortune and protection surround you.',i:'👼',lv:'최상'});const tiande = [9,8,7,6,5,4,3,2,1,0,9,8];if (mbi < 12 && (dmi === tiande[mbi] || brs.some(b => b === tiande[mbi]))) ss.push({n:'天德貴人(Heavens Virtue Noble)',t:'good',d:'Heavens virtue shines upon you! Living righteously multiplies your blessings tenfold.',i:'🌟',lv:'상'});const yuede = [2,6,2,6,4,8,4,8,0,6,0,6];if (mbi < 12 && dmi === yuede[mbi]) ss.push({n:'月德貴人(Moons Virtue Noble)',t:'good',d:'Moons blessing graces your path! Natural charisma draws trust and admiration. Official positions favor you.',i:'🌙',lv:'상'});const munchang = {0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};if (brs.includes(munchang[dmi])) ss.push({n:'文昌貴人(Scholar Star)',t:'good',d:'Brilliant scholarly mind! Exams, certifications, and academic pursuits bend to your will. Writing flows naturally.',i:'📚',lv:'상'});const xuetang = {0:11,1:6,2:2,3:9,4:2,5:9,6:5,7:0,8:8,9:3};if (brs.includes(xuetang[dmi])) ss.push({n:'學堂貴人(Academy Noble)',t:'good',d:'Scholars destiny! Research and education lead to greatness. Professorship and expertise await.',i:'🎓',lv:'상'});const jiangx = {0:0,1:9,2:6,3:3,4:0,5:9,6:6,7:3,8:0,9:9,10:6,11:3};if (brs.includes(jiangx[ybi])) ss.push({n:'將星(General Star)',t:'good',d:'Commanders spirit! Natural leadership draws followers. You are destined to lead.',i:'🎖️',lv:'상'});const jinyu = {0:4,1:5,2:7,3:8,4:7,5:8,6:10,7:11,8:1,9:2};if (brs.includes(jinyu[dmi])) ss.push({n:'金輿(Golden Carriage)',t:'good',d:'Supreme spouse fortune! Marriage unlocks your destiny. An ideal partner awaits.',i:'💍',lv:'상'});const fuxing = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};if (brs.includes(fuxing[dmi])) ss.push({n:'福星貴人(Fortune Noble)',t:'good',d:'Blessed chart! No worries about necessities. Lifetime abundance.',i:'🍀',lv:'상'});const anlu = {0:11,1:10,2:1,3:0,4:1,5:0,6:3,7:2,8:5,9:4};if (brs.includes(anlu[dmi])) ss.push({n:'暗祿(Hidden Fortune)',t:'good',d:'Hidden blessings flow! Invisible support guides you when you least expect it.',i:'🎁',lv:'Medium'});const jianlu = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};if (brs.includes(jianlu[dmi])) ss.push({n:'建祿(Prime)',t:'good',d:'Self-made type! Success through own efforts. Stable career.',i:'🏠',lv:'상'});const tianyi = [11,0,1,2,3,4,5,6,7,8,9,10];if (mbi < 12 && brs.includes(tianyi[mbi])) ss.push({n:'天醫星(Heavenly Doctor)',t:'good',d:'Medical calling! Doctors, nurses, pharmacists — healing professions bring great fortune.',i:'💊',lv:'Medium'});const yima = {0:2,1:11,2:8,3:5,4:2,5:11,6:8,7:5,8:2,9:11,10:8,11:5};if (brs.includes(yima[ybi])) ss.push({n:'驛馬(Traveling Horse)',t:'neutral',d:'Movement awakens fortune! Travel, relocation, overseas ventures — motion is your medicine.',i:'🐎',lv:'Medium'});const taohua = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};if (brs.includes(taohua[ybi])) ss.push({n:'桃花(Peach Blossom)',t:'neutral',d:'Irresistible charm! Magnetic attraction to opposite sex. Star quality — guard against wandering heart.',i:'🌸',lv:'Medium'});const huagai = {0:4,1:1,2:10,3:7,4:4,5:1,6:10,7:7,8:4,9:1,10:10,11:7};if (brs.includes(huagai[ybi])) ss.push({n:'華蓋(Canopy Star)',t:'neutral',d:'Artists soul! Music, art, and writing flow naturally. Spiritual and philosophical depths call to you.',i:'🎨',lv:'Medium'});const hongyan = {0:6,1:5,2:8,3:7,4:8,5:7,6:9,7:8,8:11,9:10};if (brs.includes(hongyan[dmi])) ss.push({n:'紅艶(Red Romance)',t:'neutral',d:'Sexy charm! Attractive to opposite sex. Entertainment aptitude, watch infidelity!',i:'💋',lv:'Medium'});const kuigang = [[6,4],[],[6,4],[],[6,10],[],[6,10],[],[],[]];if (kuigang[dmi] && kuigang[dmi].includes(dbi)) ss.push({n:'魁罡(Fierce Star)',t:'bad',d:'Fierce fire spirit! Charismatic leader potential — temper your autocratic tendencies.',i:'⚡',lv:'상'});const yangren = {0:3,1:2,2:6,3:5,4:6,5:5,6:9,7:8,8:0,9:11};if (dbi === yangren[dmi]) ss.push({n:'Sheep Blade (羊刃)',t:'bad',d:'Sharp blade energy! Decisive but sharp. Suits military, surgeons, lawyers.',i:'🗡️',lv:'상'});const baihu = [6,7,8,9,10,11,0,1,2,3,4,5];if (mbi < 12 && brs.includes(baihu[mbi])) ss.push({n:'白虎(White Tiger)',t:'bad',d:'Accident alert! However, professions involving blood (medicine, culinary) transform this into blessing.',i:'🐯',lv:'Medium'});const dayPillarStr = saju.day.s.c + saju.day.b.c;const whiteTigerDays = ['甲辰', '乙巳', '丙戌', '丁丑', '戊辰', '己未', '庚戌', '辛丑', '壬辰', '癸丑'];if (whiteTigerDays.includes(dayPillarStr)) {ss.push({n:'Day Pillar White Tiger (日柱白虎)',t:'bad',d:'White Tiger in your core pillar! Gentle normally, fierce when provoked. Blood-related events possible for self/spouse/children. Medical, religious, or healing professions transform this into blessing. For women: watch for difficult childbirth.',i:'🐅',lv:'High'});}
+if ([0,7].includes(dmi)) ss.push({n:'懸針殺(Hanging Needle)',t:'neutral',d:'Needle-sharp energy! Critical and perfectionist. Talent in acupuncture, sewing, precision work.',i:'📍',lv:'Low'});
 const jiesha = {0:5,1:2,2:11,3:8,4:5,5:2,6:11,7:8,8:5,9:2,10:11,11:8};if (brs.includes(jiesha[ybi])) ss.push({n:'劫殺(Robbery Star)',t:'bad',d:'Financial vulnerability! Guard against theft, fraud, bad investments. Never co-sign loans!',i:'💸',lv:'Medium'});const wangshen = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};if (brs.includes(wangshen[ybi]) && wangshen[ybi] !== taohua[ybi]) ss.push({n:'亡神(Disgrace Star)',t:'bad',d:'Reputation vulnerability! Guard social media, drinking occasions carefully.',i:'😰',lv:'Medium'});const yuanchen = [[7],[6],[5],[4],[3],[2],[1],[0],[11],[10],[9],[8]];if (yuanchen[ybi] && brs.some(b => yuanchen[ybi].includes(b))) ss.push({n:'怨嗔(Resentment Star)',t:'bad',d:'Love-hate bonds entangle you. Navigate close relationships with care.',i:'💔',lv:'Medium'});const guimen = [[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,0],[0,1],[1,2],[2,3],[3,4],[4,5]];if (guimen[ybi] && brs.some(b => guimen[ybi].includes(b))) ss.push({n:'鬼門關(Spirit Gate)',t:'neutral',d:'Highly intuitive and spiritually sensitive. You have a sixth sense for art and people. Meditation is your power source.',i:'🔮',lv:'Medium'});if ([0,7].includes(dmi)) ss.push({n:'懸針(Needle Star)',t:'bad',d:'Needle-sharp energy! Critical perfectionist. Talent for acupuncture, precision crafts.',i:'📍',lv:'하'});const liuhai = [[7],[6],[5],[4],[3],[2],[1],[0],[11],[10],[9],[8]];if (liuhai[dbi] && brs.some(b => liuhai[dbi].includes(b) && b !== dbi)) ss.push({n:'六害(Six Harms)',t:'bad',d:'Vulnerability through close ones. Navigate spouse and sibling relationships carefully.',i:'⚠️',lv:'Medium'});const tianluodiwang = (dbi === 10 && [5,6].includes(mbi)) || (dbi === 11 && [9,10].includes(mbi));if (tianluodiwang) ss.push({n:'天羅地網(Heavens Net)',t:'bad',d:'Caught in heavens net. Guard against gossip, lawsuits. Feelings of entrapment may arise.',i:'🕸️',lv:'Medium'});const guluanM = [[0,2],[1,3],[2,5],[3,6],[4,5],[5,6],[6,8],[7,9],[8,11],[9,0]];const guluanF = [[1,3],[0,2],[3,6],[2,5],[3,6],[2,5],[7,9],[6,8],[9,0],[8,11]];const guluanCheck = GENDER === 'm' ? guluanM : guluanF;if (guluanCheck[dmi] && guluanCheck[dmi][1] === dbi) ss.push({n:'孤鸞(Lonely Swan)',t:'bad',d:'Solitary spirit dwells within. Late marriage or single tendencies. Solitude becomes your companion.',i:'🦢',lv:'하'});const sanzai = {5:[2,3,4], 9:[2,3,4], 1:[2,3,4],
 2:[8,9,10], 6:[8,9,10], 10:[8,9,10],
 8:[5,6,7], 0:[5,6,7], 4:[5,6,7],
@@ -3548,7 +3572,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 3. Life Cycle + Annual Fortune Ten Gods - Current life theme
 4. Branch Ten Gods - Hidden influences
 5. Everything else
-===== 🆕 EXTENDED RULES 71-97 (v4.22.1) =====
+===== 🆕 EXTENDED RULES 71-97 (v4.22.3) =====
 71. 【BUREAU/HARMONY = x10 MULTIPLIER EFFECT】
 • Directional Harmony or Three Harmony completion is NOT simple addition.
 • 巳午未 (Southern Fire Bureau) = Fire x10 power
@@ -3749,7 +3773,7 @@ function handleUrlHash() {const hash = window.location.hash.replace('#', '');if 
 window.addEventListener('load', handleUrlHash);window.addEventListener('hashchange', handleUrlHash);
 /* ========== DEV TEST FUNCTIONS ========== */
 window.runTests = function() {
-  console.log('%c🔬 K-MUDANG REGRESSION TEST SUITE v4.22.1', 'color:#D4AF37;font-size:16px;font-weight:bold');
+  console.log('%c🔬 K-MUDANG REGRESSION TEST SUITE v4.22.3', 'color:#D4AF37;font-size:16px;font-weight:bold');
   let pass=0, fail=0;
   
   // === PART 1: BUREAU 텍스트 파싱 테스트 ===
