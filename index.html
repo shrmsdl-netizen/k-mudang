@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.19.22 [PUBLIC] - 무료 배포 버전                               ║
+║  K-MUDANG Pro v4.22.0 [PUBLIC] - 개인 개발용 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
@@ -13,7 +13,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.19.22)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.22.0)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -27,7 +27,7 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  v4.19.22 (2026-01-25):
+║  v4.22.0 (2026-01-25):
 ║    - [FIX] BUREAU x10 표기: 天合/六合 제외, 三合/方合/半合에만 적용        ║
 ║  v4.19.21 (2026-01-25):
 ║    - [FIX] 용신=희신 동일 오류 수정 (yong===hee → hee=비겁 교정)        ║
@@ -107,29 +107,24 @@
 ║  Contact: kmudang.official@gmail.com                                          ║
 ║  Last Updated: 2026-01-21                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
---><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI Destiny Analysis"><meta property="og:description" content="🏆 World's Most Advanced BaZi · 🤖 AI 97 Rules Precision · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🆓 K-MUDANG Pro [PUBLIC EDITION] v4.19.22');(function() {'use strict';document.addEventListener('contextmenu', function(e) {e.preventDefault();e.stopPropagation();return false;});document.addEventListener('keydown', function(e) {if (e.key === 'F12' || e.keyCode === 123) {e.preventDefault();return false;}
-if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {e.preventDefault();return false;}
-if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {e.preventDefault();return false;}
-if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) {e.preventDefault();return false;}
-if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) {e.preventDefault();return false;}
-if (e.ctrlKey && (e.key === 'S' || e.key === 's' || e.keyCode === 83)) {e.preventDefault();return false;}
-if (e.ctrlKey && (e.key === 'P' || e.key === 'p' || e.keyCode === 80)) {e.preventDefault();return false;}
-if (e.ctrlKey && (e.key === 'A' || e.key === 'a' || e.keyCode === 65)) {e.preventDefault();return false;}
-if (e.ctrlKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67) && !e.shiftKey) {const activeEl = document.activeElement;const isInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');if (!isInput) {e.preventDefault();return false;}}});document.addEventListener('selectstart', function(e) {const target = e.target;const isInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA');if (!isInput) {e.preventDefault();return false;}});document.addEventListener('dragstart', function(e) {e.preventDefault();return false;});document.addEventListener('copy', function(e) {const activeEl = document.activeElement;const isInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');if (!isInput) {e.preventDefault();return false;}});const devToolsCheck = {isOpen: false,
-orientation: undefined};const threshold = 160;const checkDevTools = function() {const widthThreshold = window.outerWidth - window.innerWidth > threshold;const heightThreshold = window.outerHeight - window.innerHeight > threshold;const orientation = widthThreshold ? 'vertical' : 'horizontal';if (!(heightThreshold && widthThreshold) &&
-((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) ||
-widthThreshold || heightThreshold)) {if (!devToolsCheck.isOpen || devToolsCheck.orientation !== orientation) {devToolsCheck.isOpen = true;devToolsCheck.orientation = orientation;}} else {devToolsCheck.isOpen = false;devToolsCheck.orientation = undefined;}};setInterval(checkDevTools, 1000);(function detectDebugger() {const start = new Date();debugger;const end = new Date();if (end - start > 100) {}
-setTimeout(detectDebugger, 3000);})();const noop = function() {};const consoleProtect = function() {try {const methods = ['log', 'debug', 'info', 'warn', 'error', 'table', 'trace', 'dir', 'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'assert', 'profile'];if (window.console) {console.log('%c🔒 K-MUDANG Pro v4.19.22 [PUBLIC EDITION]', 'color: #4CAF50; font-size: 14px; font-weight: bold;');console.log('%c© 2025 K-MUDANG. All Rights Reserved.', 'color: #666; font-size: 12px;');console.log('%c⚠️ This browser feature is for developers only.', 'color: #ff6b6b; font-size: 12px;');setTimeout(function() {methods.forEach(function(method) {window.console[method] = noop;});}, 100);}} catch(e) {}};consoleProtect();const printStyle = document.createElement('style');printStyle.textContent = '@media print { body { display: none !important; } }';document.head.appendChild(printStyle);if (window.top !== window.self) {try {window.top.location = window.self.location;} catch(e) {}}})();let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
-function googleSignIn() { toast('🔓 PERSONAL Edition - Already unlocked!'); }
-function signOut() { toast('🔓 PERSONAL Edition - No login required'); }
+--><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI Destiny Analysis"><meta property="og:description" content="🏆 World's Most Advanced BaZi · 🤖 AI 97 Rules Precision · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>let isPremium = true;let currentUser = { displayName: 'PUBLIC', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {}}
+function googleSignIn() { toast('🔓 PUBLIC Edition - Already unlocked!'); }
+function signOut() { toast('🔓 PUBLIC Edition - No login required'); }
 function checkPremiumStatus() { return true; }
 function updateAuthUI() {}
 function lockPremiumFeatures() {}
 function requirePremium() { return true; }
 function openPremiumCheckout() { window.open('https://ko-fi.com/kmudang', '_blank'); }
-function unlockAllPremium() {document.querySelectorAll('.premium-section').forEach(el => el.classList.add('unlocked'));document.querySelectorAll('.premium-lock').forEach(el => el.style.display = 'none');document.querySelectorAll('.premium-overlay').forEach(el => el.style.display = 'none');const loginBtn = document.getElementById('login-btn');if (loginBtn) loginBtn.style.display = 'none';console.log('🔓 All features unlocked - FREE Edition');}
-document.addEventListener('DOMContentLoaded', unlockAllPremium);console.log('FREE Edition initialized - All features unlocked');</script><style>@keyframes shimmer{0%{background-position:-200% center;}100%{background-position:200% center;}}@keyframes breathe{0%,100%{opacity:0.04;transform:scale(1);}50%{opacity:0.07;transform:scale(1.02);}}@keyframes dragonPulse{0%,100%{filter:drop-shadow(0 0 15px var(--theme-accent-glow));}50%{filter:drop-shadow(0 0 30px var(--theme-accent-glow));}}@keyframes ballDrop{0%{transform:translateY(-30px) scale(0.5);opacity:0;}60%{transform:translateY(5px) scale(1.1);}100%{transform:translateY(0) scale(1);opacity:1;}}@keyframes glowPulse{0%,100%{box-shadow:inset -3px -3px 10px rgba(0,0,0,0.4),inset 3px 3px 8px rgba(255,255,255,0.3),0 0 25px var(--theme-glow),0 8px 20px rgba(0,0,0,0.3);}50%{box-shadow:inset -3px -3px 10px rgba(0,0,0,0.4),inset 3px 3px 8px rgba(255,255,255,0.3),0 0 40px var(--theme-glow),0 8px 20px rgba(0,0,0,0.3);}}@keyframes buttonPulse{0%{box-shadow:0 4px 25px var(--theme-glow),0 0 0 0 rgba(212,175,55,0.7);}70%{box-shadow:0 4px 25px var(--theme-glow),0 0 0 15px rgba(212,175,55,0);}100%{box-shadow:0 4px 25px var(--theme-glow),0 0 0 0 rgba(212,175,55,0);}}@keyframes kofiPulse{0%,100%{transform:scale(1);box-shadow:0 0 20px rgba(255,215,0,0.5);}50%{transform:scale(1.02);box-shadow:0 0 35px rgba(255,215,0,0.8);}}*{margin:0;padding:0;box-sizing:border-box;}html,body{overflow-x:hidden;max-width:100vw;}:root{--navy:#1a2332;--navy-light:#243447;--gold:#D4AF37;--gold-light:#F4D58D;--pearl:#F5F5F5;--gray:#9CA3AF;--theme-primary:#DC3545;--theme-secondary:#8B0000;--theme-accent:#FFD700;--theme-accent-glow:rgba(255,215,0,0.4);--theme-glow:rgba(220,53,69,0.4);--theme-bg-1:#1a1a2e;--theme-bg-2:#2d1f3d;--wood:#4CAF50;--fire:#F44336;--earth:#FF9800;--metal:#9E9E9E;--water:#2196F3;}body.powerball-mode{--theme-primary:#DC3545;--theme-secondary:#8B0000;--theme-accent:#FFD700;--theme-accent-glow:rgba(255,215,0,0.4);--theme-glow:rgba(220,53,69,0.4);--theme-bg-1:#1a1a2e;--theme-bg-2:#2d1f3d;}body.mega-mode{--theme-primary:#2E86DE;--theme-secondary:#003478;--theme-accent:#FFD700;--theme-accent-glow:rgba(255,215,0,0.4);--theme-glow:rgba(46,134,222,0.4);--theme-bg-1:#141E30;--theme-bg-2:#243B55;}body.saju-mode{--theme-primary:#D4AF37;--theme-secondary:#8B7020;--theme-accent:#FFD700;--theme-accent-glow:rgba(255,215,0,0.4);--theme-glow:rgba(212,175,55,0.4);--theme-bg-1:#1a1a2e;--theme-bg-2:#16213e;}body{overflow-x:hidden;font-family:'Cormorant Garamond','Noto Serif KR',Georgia,serif;background:var(--navy);color:var(--pearl);min-height:100vh;padding-bottom:20px;line-height:1.7;transition:all 0.5s ease;}.oracle-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:100%;max-width:500px;height:auto;max-height:90vh;object-fit:contain;opacity:0.15;filter:grayscale(30%) brightness(1.2);z-index:-1;pointer-events:none;transition:opacity 0.5s ease;}@media (max-width:600px){.oracle-watermark{width:100%;max-width:100%;left:0;transform:translateY(-50%);}}body.mega-mode .oracle-watermark{filter:grayscale(50%) brightness(1.3) hue-rotate(200deg);opacity:0.12;}body.saju-mode .oracle-watermark{filter:grayscale(20%) brightness(1.1) sepia(20%);opacity:0.18;}.bagua{position:fixed;font-size:2.5rem;opacity:0.4;pointer-events:none;z-index:2;font-family:serif;line-height:1;text-shadow:0 0 20px currentColor,0 0 40px currentColor;text-align:center;transition:all 0.5s ease;}.bagua-sub{font-size:0.4em;display:block;margin-top:5px;opacity:0.8;font-family:'Noto Serif KR',serif;}.bagua.tl{top:180px;left:15px;color:#FFD700;}.bagua.tr{top:180px;right:15px;color:#FF6B6B;}.bagua.bl{bottom:100px;left:15px;color:#4ECDC4;}.bagua.br{bottom:100px;right:15px;color:#A29BFE;}body.mega-mode .bagua.tl{color:#87CEEB;}body.mega-mode .bagua.tr{color:#E8E8E8;}body.mega-mode .bagua.bl{color:#98D8C8;}body.mega-mode .bagua.br{color:#B8B8FF;}body.saju-mode .bagua.tl{color:#FFD700;}body.saju-mode .bagua.tr{color:#FF7675;}body.saju-mode .bagua.bl{color:#55EFC4;}body.saju-mode .bagua.br{color:#A29BFE;}.game-switcher{display:flex;justify-content:center;gap:8px;padding:12px 15px;background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,0.1);}.game-btn{background:transparent;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);padding:10px 12px;font-family:'Noto Serif KR','Cinzel Decorative',serif;font-weight:600;font-size:14px;letter-spacing:1px;cursor:pointer;border-radius:25px;transition:all 0.4s ease;flex:1;max-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;}.tab-main{font-size:14px;font-weight:700;}.tab-sub{font-size:10px;opacity:0.7;}.game-btn:hover{border-color:var(--theme-accent);color:var(--pearl);transform:translateY(-2px);}.game-btn:active{transform:scale(0.95);transition:transform 0.1s ease;}.game-btn.active{background:linear-gradient(135deg,var(--theme-primary),var(--theme-secondary));border-color:var(--theme-accent);color:white;box-shadow:0 4px 20px var(--theme-glow);}.container{max-width:500px;margin:0 auto;padding:15px;position:relative;z-index:10;overflow-x:hidden;}.tab-content{display:none;}.tab-content.active{display:block;}header{text-align:center;padding:25px 15px;position:relative;}.dragon-seal{width:70px;height:70px;margin:0 auto 15px;animation:dragonPulse 3s ease-in-out infinite;}.dragon-seal svg{width:100%;height:100%;}header h1{font-family:'Cinzel Decorative',serif;font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold-light),var(--gold));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s linear infinite;letter-spacing:3px;}.game-title{display:inline-block;font-size:1rem;font-weight:700;color:var(--theme-accent);margin-top:8px;padding:5px 15px;border:1px solid var(--theme-accent);border-radius:20px;letter-spacing:2px;}.subtitle{font-size:0.85rem;color:var(--gray);margin-top:10px;letter-spacing:1px;}.card{background:linear-gradient(145deg,rgba(36,52,71,0.9),rgba(26,35,50,0.95));border-radius:16px;padding:20px;margin-bottom:15px;border:1px solid rgba(255,255,255,0.08);box-shadow:0 8px 32px rgba(0,0,0,0.3);overflow:hidden;max-width:100%;}.card.gold{border-color:rgba(212,175,55,0.3);background:linear-gradient(145deg,rgba(212,175,55,0.15),rgba(26,35,50,0.95));}.card h3{font-size:1rem;font-weight:700;color:var(--theme-accent);margin-bottom:15px;display:flex;align-items:center;gap:8px;}.form-row{display:flex;gap:8px;margin-bottom:15px;align-items:flex-end;}.form-group{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0;}.form-group label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;}.form-group select,.form-group input{width:100%;background:#1a2332;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:12px 10px;color:#FFFFFF;font-size:16px;font-weight:600;font-family:'Cinzel Decorative','Cormorant Garamond',serif;-webkit-appearance:none;-moz-appearance:none;appearance:none;}.form-group select{background:#1a2332 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23D4AF37' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E") no-repeat right 10px center;padding-right:30px;cursor:pointer;}.form-group select option{background:#1a2332;color:#FFFFFF;font-size:18px;font-family:'Cinzel Decorative','Cormorant Garamond',serif;padding:14px;}.form-group select:focus,.form-group input:focus{outline:none;border-color:var(--theme-accent);box-shadow:0 0 10px rgba(212,175,55,0.3);}.toggle-btns{display:flex;gap:5px;}.toggle-btn{flex:1;padding:8px;border:1px solid rgba(255,255,255,0.15);border-radius:8px;background:transparent;color:var(--gray);font-size:12px;cursor:pointer;transition:all 0.3s;}.toggle-btn.on{background:var(--theme-primary);border-color:var(--theme-accent);color:white;}.btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--theme-primary),var(--theme-secondary));border:none;border-radius:12px;color:white;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 20px var(--theme-glow);letter-spacing:1px;}.btn:hover{transform:translateY(-2px);box-shadow:0 6px 30px var(--theme-glow);}.btn:active{transform:scale(0.95);transition:transform 0.1s ease;}.btn-secondary{background:transparent;border:1px solid var(--theme-accent);color:var(--theme-accent);box-shadow:none;}.kofi-container{margin-top:25px;padding:20px;background:transparent;border:none;text-align:center;}.kofi-container p{color:var(--gold-light);font-size:13px;margin-bottom:15px;opacity:0.85;}.kofi-btn{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:#000000;border:2px solid #D4AF37;border-radius:12px;color:#D4AF37;font-family:'Cinzel Decorative',serif;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);box-shadow:0 0 20px rgba(212,175,55,0.2),inset 0 0 0 0 rgba(212,175,55,0);letter-spacing:1px;}.kofi-btn:hover{background:linear-gradient(135deg,rgba(212,175,55,0.25) 0%,rgba(212,175,55,0.15) 100%);border-color:#FFD700;color:#FFD700;transform:translateY(-2px);box-shadow:0 0 35px rgba(212,175,55,0.4),0 8px 25px rgba(0,0,0,0.3);text-shadow:0 0 10px rgba(255,215,0,0.5);}.kofi-btn:active{transform:translateY(0);}.kofi-btn img{width:24px;height:24px;}.auth-bar{display:flex;justify-content:center;align-items:center;gap:12px;padding:10px 15px;background:linear-gradient(135deg,rgba(0,0,0,0.5) 0%,rgba(26,35,50,0.8) 100%);border-bottom:1px solid rgba(212,175,55,0.2);}.login-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:#fff;border:none;border-radius:20px;color:#333;font-family:'Noto Serif KR',serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s ease;box-shadow:0 2px 8px rgba(0,0,0,0.2);}.login-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.3);}.login-btn img{width:18px;height:18px;}.user-info{display:flex;align-items:center;gap:10px;}.user-name{color:var(--pearl);font-size:13px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.premium-badge{background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;animation:kofiPulse 2s infinite;}.logout-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--gray);padding:6px 12px;border-radius:15px;font-size:11px;cursor:pointer;transition:all 0.3s;}.logout-btn:hover{background:rgba(255,255,255,0.2);color:var(--pearl);}.premium-unlock-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:linear-gradient(135deg,#FFD700 0%,#FFA500 50%,#FFD700 100%);background-size:200% 200%;animation:shimmer 3s ease infinite;border:none;border-radius:25px;color:#000;font-family:'Cinzel Decorative',serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.3s ease;box-shadow:0 4px 20px rgba(255,215,0,0.4);}.premium-unlock-btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 6px 30px rgba(255,215,0,0.6);}.premium-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;background:linear-gradient(135deg,rgba(0,0,0,0.4) 0%,rgba(26,35,50,0.6) 100%);border:1px dashed rgba(212,175,55,0.3);border-radius:12px;text-align:center;min-height:150px;}.premium-lock p{color:var(--gold);margin-bottom:15px;font-size:1.1rem;}.premium-lock .price{color:var(--gold-light);font-size:1.5rem;font-weight:700;margin-bottom:10px;}.premium-lock .duration{color:var(--gray);font-size:0.85rem;margin-bottom:20px;}.premium-section{position:relative;}.premium-tag{font-size:0.7rem;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;padding:2px 8px;border-radius:10px;margin-left:8px;font-weight:700;}.premium-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(26,35,50,0.95);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:10;border-radius:15px;}.premium-overlay-content{text-align:center;padding:20px;}.premium-overlay-content p{color:var(--gold);margin-bottom:10px;font-size:1.1rem;}.premium-overlay-content .premium-price{color:var(--gold-light);font-size:0.9rem;margin-bottom:15px;}.premium-section.unlocked .premium-overlay{display:none;}.premium-section.unlocked .premium-tag{display:none;}.balls-container{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:20px 0;min-height:80px;}.ball{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cinzel Decorative',serif;font-weight:900;font-size:18px;color:white;text-shadow:1px 1px 2px rgba(0,0,0,0.5);background:linear-gradient(135deg,#DC3545,#8B0000);box-shadow:inset -3px -3px 10px rgba(0,0,0,0.4),inset 3px 3px 8px rgba(255,255,255,0.3),0 0 25px var(--theme-glow),0 8px 20px rgba(0,0,0,0.3);opacity:0;animation:ballDrop 0.5s cubic-bezier(0.68,-0.55,0.265,1.55) forwards;}.ball.powerball{background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a2e;box-shadow:inset -3px -3px 10px rgba(0,0,0,0.3),inset 3px 3px 8px rgba(255,255,255,0.5),0 0 30px rgba(255,215,0,0.5),0 8px 20px rgba(0,0,0,0.3);}.ball.mega{background:linear-gradient(135deg,#2E86DE,#003478);}.ball.megaball{background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a2e;}.pillars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:15px;max-width:100%;box-sizing:border-box;}.pillar{overflow:hidden;word-break:break-word;background:rgba(0,0,0,0.3);border-radius:12px;padding:12px 8px;text-align:center;border:1px solid rgba(255,255,255,0.1);min-width:0;}.pillar.dm{border-color:var(--gold);background:rgba(212,175,55,0.15);}.pillar-label{font-size:9px;line-height:1.2;color:var(--gray);margin-bottom:8px;text-transform:uppercase;}.pillar-stem{font-size:28px;font-weight:900;margin-bottom:4px;}.pillar-branch{font-size:24px;font-weight:700;}.pillar-sub{font-size:11px;color:var(--gray);margin-top:5px;}.pillar-god{font-size:10px;color:var(--theme-accent);margin-top:5px;padding:3px 6px;background:rgba(212,175,55,0.2);border-radius:4px;}.el-wood{color:var(--wood);}.el-fire{color:var(--fire);}.el-earth{color:var(--earth);}.el-metal{color:var(--metal);}.el-water{color:var(--water);}.strength-box{background:rgba(0,0,0,0.2);border-radius:12px;padding:15px;margin-top:15px;}.strength-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}.strength-title{font-size:13px;color:var(--gray);}.strength-badge{padding:4px 12px;border-radius:15px;font-size:12px;font-weight:700;}.strength-badge.strong{background:var(--fire);color:white;}.strength-badge.weak{background:var(--water);color:white;}.strength-badge.balanced{background:var(--wood);color:white;}.strength-bar{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;}.strength-fill{height:100%;border-radius:4px;transition:width 0.8s ease;}.strength-fill.strong{background:linear-gradient(90deg,var(--fire),#ff6b6b);}.strength-fill.weak{background:linear-gradient(90deg,var(--water),#74b9ff);}.strength-fill.balanced{background:linear-gradient(90deg,var(--wood),#81c784);}.factors{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;}.factor{display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(255,255,255,0.05);border-radius:6px;}.factor-label{color:var(--gray);}.factor-value.pos{color:var(--fire);}.factor-value.neg{color:var(--water);}.element-bar{display:flex;height:30px;border-radius:8px;overflow:hidden;margin-bottom:10px;}.element-bar > div{transition:width 0.5s ease;}.element-legend{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;font-size:11px;}.element-legend span{display:flex;align-items:center;gap:4px;}.info-box{background:rgba(255,255,255,0.05);border-radius:10px;padding:15px;margin-bottom:10px;}.info-box p{font-size:13px;line-height:1.7;}.luck-timeline{display:flex;gap:8px;overflow-x:auto;padding:10px 0;scrollbar-width:thin;}.luck-item{flex:0 0 70px;text-align:center;padding:12px 8px;background:rgba(0,0,0,0.3);border-radius:10px;border:1px solid transparent;}.luck-item.current{border-color:var(--gold);background:rgba(212,175,55,0.2);}.luck-age{font-size:11px;color:var(--gray);margin-bottom:5px;}.luck-pillar{font-size:18px;font-weight:700;}.luck-element{font-size:10px;color:var(--theme-accent);margin-top:5px;}.sinsal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}.sinsal-item{padding:12px;background:rgba(0,0,0,0.2);border-radius:10px;border-left:3px solid var(--gray);}.sinsal-item.good{border-color:var(--wood);}.sinsal-item.bad{border-color:var(--fire);}.sinsal-name{font-size:13px;font-weight:700;margin-bottom:5px;}.sinsal-desc{font-size:11px;color:var(--gray);}.history-section{margin-top:15px;}.history-item{display:flex;align-items:center;gap:10px;padding:12px;background:rgba(0,0,0,0.2);border-radius:10px;margin-bottom:8px;}.history-type{font-size:10px;padding:3px 8px;border-radius:10px;background:var(--theme-primary);color:white;}.history-balls{display:flex;gap:4px;flex-wrap:wrap;}.history-balls .ball{width:28px;height:28px;font-size:11px;animation:none;opacity:1;}.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,0.9);color:white;padding:12px 24px;border-radius:25px;font-size:14px;z-index:9999;opacity:0;transition:all 0.3s;border:1px solid var(--theme-accent);}.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}footer{text-align:center;padding:30px 15px;color:var(--gray);font-size:12px;}footer a{color:var(--theme-accent);text-decoration:none;}@media (max-width:400px){.game-switcher{gap:4px;padding:10px 8px;}.game-btn{padding:8px 10px;font-size:11px;max-width:120px;}.tab-main{font-size:12px;}.tab-sub{font-size:9px;}header h1{font-size:1.6rem;}.ball{width:40px;height:40px;font-size:15px;}.pillar-stem{font-size:22px;}.pillar-branch{font-size:18px;}.bagua{font-size:1.8rem;}.pillars{gap:4px;}.pillar{padding:8px 4px;}}#talisman-canvas{max-width:100%;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.5);}#talisman-preview{text-align:center;padding:20px;}#talisman-ritual-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);display:none;justify-content:center;align-items:center;flex-direction:column;z-index:9999;}#talisman-ritual-overlay.active{display:flex;}.ritual-text{color:#D4AF37;font-size:1.5rem;margin-bottom:30px;font-family:"Noto Serif KR",serif;animation:ritualPulse 1.5s ease-in-out infinite;}@keyframes ritualPulse{0%,100%{opacity:0.5;}50%{opacity:1;}}.zodiac-wheel-container{display:none;text-align:center;margin:20px auto;padding:20px;}.wheel-wrapper{position:relative;width:280px;height:280px;margin:0 auto 15px;border-radius:50%;box-shadow:0 8px 25px rgba(0,0,0,0.3),0 0 0 3px var(--gold),0 0 20px rgba(212,175,55,0.3);}.wheel-wrapper::after{content:'▼';position:absolute;top:-25px;left:50%;transform:translateX(-50%);font-size:24px;color:#C41E3A;z-index:10;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));}.wheel-glow{position:absolute;top:-8px;left:-8px;right:-8px;bottom:-8px;border-radius:50%;background:conic-gradient( from 0deg,transparent,rgba(212,175,55,0.5),transparent,rgba(212,175,55,0.5),transparent );opacity:0;transition:opacity 0.3s ease;z-index:-1;}.wheel-glow.active{opacity:1;animation:wheelGlowRotate 0.8s linear infinite;}@keyframes wheelGlowRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}#zodiacWheel{width:100%;height:100%;border-radius:50%;transition:transform 1.5s cubic-bezier(0.15,0.6,0.2,1);}.sparkle-overlay{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;pointer-events:none;opacity:0;transition:opacity 0.3s ease;background:radial-gradient(circle at 25% 25%,rgba(255,255,255,0.5) 0%,transparent 20%),radial-gradient(circle at 75% 30%,rgba(255,255,255,0.3) 0%,transparent 15%);}.sparkle-overlay.active{opacity:1;animation:wheelSparkle 0.15s ease-in-out infinite alternate;}@keyframes wheelSparkle{0%{background:radial-gradient(circle at 25% 25%,rgba(255,255,255,0.5) 0%,transparent 20%),radial-gradient(circle at 75% 30%,rgba(255,255,255,0.3) 0%,transparent 15%);}100%{background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.6) 0%,transparent 25%),radial-gradient(circle at 70% 25%,rgba(255,255,255,0.4) 0%,transparent 20%);}}.zodiac-result-text{font-size:1.3rem;font-weight:bold;color:var(--gold);min-height:1.5em;opacity:0;transition:opacity 0.5s ease;}.zodiac-loading{display:none;color:#C41E3A;font-weight:500;}</style><script>(function(){try{if(window.self!==window.top){document.body.innerHTML='<h1>Please access directly</h1>';return;}}catch(e){}
-document.addEventListener('contextmenu',function(e){e.preventDefault();return false;});document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))||(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='s'||e.key==='S'))){e.preventDefault();return false;}});document.addEventListener('selectstart',function(e){if(e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){e.preventDefault();}});document.addEventListener('dragstart',function(e){e.preventDefault();});document.addEventListener('copy',function(e){if(e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){e.preventDefault();}});var d={o:false};setInterval(function(){var s=performance.now();debugger;if(performance.now()-s>100){if(!d.o){d.o=true;console.clear();}}},1000);window.addEventListener('beforeprint',function(){document.body.style.display='none';});window.addEventListener('afterprint',function(){document.body.style.display='';});})();</script>
+function unlockAllPremium() {document.querySelectorAll('.premium-section').forEach(el => el.classList.add('unlocked'));document.querySelectorAll('.premium-lock').forEach(el => el.style.display = 'none');document.querySelectorAll('.premium-overlay').forEach(el => el.style.display = 'none');const loginBtn = document.getElementById('login-btn');if (loginBtn) loginBtn.style.display = 'none';const authBar = document.getElementById('auth-bar');if (authBar) authBar.style.display = 'none';}
+document.addEventListener('DOMContentLoaded', unlockAllPremium);</script><style>@keyframes shimmer{0%{background-position:-200% center;}100%{background-position:200% center;}}@keyframes breathe{0%,100%{opacity:0.04;transform:scale(1);}50%{opacity:0.07;transform:scale(1.02);}}@keyframes dragonPulse{0%,100%{filter:drop-shadow(0 0 15px var(--theme-accent-glow));}50%{filter:drop-shadow(0 0 30px var(--theme-accent-glow));}}@keyframes ballDrop{0%{transform:translateY(-30px) scale(0.5);opacity:0;}60%{transform:translateY(5px) scale(1.1);}100%{transform:translateY(0) scale(1);opacity:1;}}@keyframes glowPulse{0%,100%{box-shadow:inset -3px -3px 10px rgba(0,0,0,0.4),inset 3px 3px 8px rgba(255,255,255,0.3),0 0 25px var(--theme-glow),0 8px 20px rgba(0,0,0,0.3);}50%{box-shadow:inset -3px -3px 10px rgba(0,0,0,0.4),inset 3px 3px 8px rgba(255,255,255,0.3),0 0 40px var(--theme-glow),0 8px 20px rgba(0,0,0,0.3);}}@keyframes buttonPulse{0%{box-shadow:0 4px 25px var(--theme-glow),0 0 0 0 rgba(212,175,55,0.7);}70%{box-shadow:0 4px 25px var(--theme-glow),0 0 0 15px rgba(212,175,55,0);}100%{box-shadow:0 4px 25px var(--theme-glow),0 0 0 0 rgba(212,175,55,0);}}@keyframes kofiPulse{0%,100%{transform:scale(1);box-shadow:0 0 20px rgba(255,215,0,0.5);}50%{transform:scale(1.02);box-shadow:0 0 35px rgba(255,215,0,0.8);}}*{margin:0;padding:0;box-sizing:border-box;}html,body{overflow-x:hidden;max-width:100vw;}:root{--navy:#1a2332;--navy-light:#243447;--gold:#D4AF37;--gold-light:#F4D58D;--pearl:#F5F5F5;--gray:#9CA3AF;--theme-primary:#DC3545;--theme-secondary:#8B0000;--theme-accent:#FFD700;--theme-accent-glow:rgba(255,215,0,0.4);--theme-glow:rgba(220,53,69,0.4);--theme-bg-1:#1a1a2e;--theme-bg-2:#2d1f3d;--wood:#4CAF50;--fire:#F44336;--earth:#FF9800;--metal:#9E9E9E;--water:#2196F3;}body.powerball-mode{--theme-primary:#DC3545;--theme-secondary:#8B0000;--theme-accent:#FFD700;--theme-accent-glow:rgba(255,215,0,0.4);--theme-glow:rgba(220,53,69,0.4);--theme-bg-1:#1a1a2e;--theme-bg-2:#2d1f3d;}body.mega-mode{--theme-primary:#2E86DE;--theme-secondary:#003478;--theme-accent:#FFD700;--theme-accent-glow:rgba(255,215,0,0.4);--theme-glow:rgba(46,134,222,0.4);--theme-bg-1:#141E30;--theme-bg-2:#243B55;}body.saju-mode{--theme-primary:#D4AF37;--theme-secondary:#8B7020;--theme-accent:#FFD700;--theme-accent-glow:rgba(255,215,0,0.4);--theme-glow:rgba(212,175,55,0.4);--theme-bg-1:#1a1a2e;--theme-bg-2:#16213e;}body{overflow-x:hidden;font-family:'Cormorant Garamond','Noto Serif KR',Georgia,serif;background:var(--navy);color:var(--pearl);min-height:100vh;padding-bottom:20px;line-height:1.7;transition:all 0.5s ease;}.oracle-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:100%;max-width:500px;height:auto;max-height:90vh;object-fit:contain;opacity:0.15;filter:grayscale(30%) brightness(1.2);z-index:-1;pointer-events:none;transition:opacity 0.5s ease;}@media (max-width:600px){.oracle-watermark{width:100%;max-width:100%;left:0;transform:translateY(-50%);}}body.mega-mode .oracle-watermark{filter:grayscale(50%) brightness(1.3) hue-rotate(200deg);opacity:0.12;}body.saju-mode .oracle-watermark{filter:grayscale(20%) brightness(1.1) sepia(20%);opacity:0.18;}.bagua{position:fixed;font-size:2.5rem;opacity:0.4;pointer-events:none;z-index:2;font-family:serif;line-height:1;text-shadow:0 0 20px currentColor,0 0 40px currentColor;text-align:center;transition:all 0.5s ease;}.bagua-sub{font-size:0.4em;display:block;margin-top:5px;opacity:0.8;font-family:'Noto Serif KR',serif;}.bagua.tl{top:180px;left:15px;color:#FFD700;}.bagua.tr{top:180px;right:15px;color:#FF6B6B;}.bagua.bl{bottom:100px;left:15px;color:#4ECDC4;}.bagua.br{bottom:100px;right:15px;color:#A29BFE;}body.mega-mode .bagua.tl{color:#87CEEB;}body.mega-mode .bagua.tr{color:#E8E8E8;}body.mega-mode .bagua.bl{color:#98D8C8;}body.mega-mode .bagua.br{color:#B8B8FF;}body.saju-mode .bagua.tl{color:#FFD700;}body.saju-mode .bagua.tr{color:#FF7675;}body.saju-mode .bagua.bl{color:#55EFC4;}body.saju-mode .bagua.br{color:#A29BFE;}.game-switcher{display:flex;justify-content:center;gap:8px;padding:12px 15px;background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,0.1);}.game-btn{background:transparent;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);padding:10px 12px;font-family:'Noto Serif KR','Cinzel Decorative',serif;font-weight:600;font-size:14px;letter-spacing:1px;cursor:pointer;border-radius:25px;transition:all 0.4s ease;flex:1;max-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;}.tab-main{font-size:14px;font-weight:700;}.tab-sub{font-size:10px;opacity:0.7;}.game-btn:hover{border-color:var(--theme-accent);color:var(--pearl);transform:translateY(-2px);}.game-btn:active{transform:scale(0.95);transition:transform 0.1s ease;}.game-btn.active{background:linear-gradient(135deg,var(--theme-primary),var(--theme-secondary));border-color:var(--theme-accent);color:white;box-shadow:0 4px 20px var(--theme-glow);}.container{max-width:500px;margin:0 auto;padding:15px;position:relative;z-index:10;overflow-x:hidden;}.tab-content{display:none;}.tab-content.active{display:block;}header{text-align:center;padding:25px 15px;position:relative;}.dragon-seal{width:70px;height:70px;margin:0 auto 15px;animation:dragonPulse 3s ease-in-out infinite;}.dragon-seal svg{width:100%;height:100%;}header h1{font-family:'Cinzel Decorative',serif;font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold-light),var(--gold));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s linear infinite;letter-spacing:3px;}.game-title{display:inline-block;font-size:1rem;font-weight:700;color:var(--theme-accent);margin-top:8px;padding:5px 15px;border:1px solid var(--theme-accent);border-radius:20px;letter-spacing:2px;}.subtitle{font-size:0.85rem;color:var(--gray);margin-top:10px;letter-spacing:1px;}.card{background:linear-gradient(145deg,rgba(36,52,71,0.9),rgba(26,35,50,0.95));border-radius:16px;padding:20px;margin-bottom:15px;border:1px solid rgba(255,255,255,0.08);box-shadow:0 8px 32px rgba(0,0,0,0.3);overflow:hidden;max-width:100%;}.card.gold{border-color:rgba(212,175,55,0.3);background:linear-gradient(145deg,rgba(212,175,55,0.15),rgba(26,35,50,0.95));}.card h3{font-size:1rem;font-weight:700;color:var(--theme-accent);margin-bottom:15px;display:flex;align-items:center;gap:8px;}.form-row{display:flex;gap:8px;margin-bottom:15px;align-items:flex-end;}.form-group{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0;}.form-group label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;}.form-group select,.form-group input{width:100%;background:#1a2332;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:12px 10px;color:#FFFFFF;font-size:16px;font-weight:600;font-family:'Cinzel Decorative','Cormorant Garamond',serif;-webkit-appearance:none;-moz-appearance:none;appearance:none;}.form-group select{background:#1a2332 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23D4AF37' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E") no-repeat right 10px center;padding-right:30px;cursor:pointer;}.form-group select option{background:#1a2332;color:#FFFFFF;font-size:18px;font-family:'Cinzel Decorative','Cormorant Garamond',serif;padding:14px;}.form-group select:focus,.form-group input:focus{outline:none;border-color:var(--theme-accent);box-shadow:0 0 10px rgba(212,175,55,0.3);}.toggle-btns{display:flex;gap:5px;}.toggle-btn{flex:1;padding:8px;border:1px solid rgba(255,255,255,0.15);border-radius:8px;background:transparent;color:var(--gray);font-size:12px;cursor:pointer;transition:all 0.3s;}.toggle-btn.on{background:var(--theme-primary);border-color:var(--theme-accent);color:white;}.btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--theme-primary),var(--theme-secondary));border:none;border-radius:12px;color:white;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 20px var(--theme-glow);letter-spacing:1px;}.btn:hover{transform:translateY(-2px);box-shadow:0 6px 30px var(--theme-glow);}.btn:active{transform:scale(0.95);transition:transform 0.1s ease;}.btn-secondary{background:transparent;border:1px solid var(--theme-accent);color:var(--theme-accent);box-shadow:none;}.kofi-container{margin-top:25px;padding:20px;background:transparent;border:none;text-align:center;}.kofi-container p{color:var(--gold-light);font-size:13px;margin-bottom:15px;opacity:0.85;}.kofi-btn{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:#000000;border:2px solid #D4AF37;border-radius:12px;color:#D4AF37;font-family:'Cinzel Decorative',serif;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);box-shadow:0 0 20px rgba(212,175,55,0.2),inset 0 0 0 0 rgba(212,175,55,0);letter-spacing:1px;}.kofi-btn:hover{background:linear-gradient(135deg,rgba(212,175,55,0.25) 0%,rgba(212,175,55,0.15) 100%);border-color:#FFD700;color:#FFD700;transform:translateY(-2px);box-shadow:0 0 35px rgba(212,175,55,0.4),0 8px 25px rgba(0,0,0,0.3);text-shadow:0 0 10px rgba(255,215,0,0.5);}.kofi-btn:active{transform:translateY(0);}.kofi-btn img{width:24px;height:24px;}.auth-bar{display:flex;justify-content:center;align-items:center;gap:12px;padding:10px 15px;background:linear-gradient(135deg,rgba(0,0,0,0.5) 0%,rgba(26,35,50,0.8) 100%);border-bottom:1px solid rgba(212,175,55,0.2);}.login-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:#fff;border:none;border-radius:20px;color:#333;font-family:'Noto Serif KR',serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s ease;box-shadow:0 2px 8px rgba(0,0,0,0.2);}.login-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.3);}.login-btn img{width:18px;height:18px;}.user-info{display:flex;align-items:center;gap:10px;}.user-name{color:var(--pearl);font-size:13px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.premium-badge{background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;animation:kofiPulse 2s infinite;}.logout-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--gray);padding:6px 12px;border-radius:15px;font-size:11px;cursor:pointer;transition:all 0.3s;}.logout-btn:hover{background:rgba(255,255,255,0.2);color:var(--pearl);}.premium-unlock-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:linear-gradient(135deg,#FFD700 0%,#FFA500 50%,#FFD700 100%);background-size:200% 200%;animation:shimmer 3s ease infinite;border:none;border-radius:25px;color:#000;font-family:'Cinzel Decorative',serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.3s ease;box-shadow:0 4px 20px rgba(255,215,0,0.4);}.premium-unlock-btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 6px 30px rgba(255,215,0,0.6);}.premium-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;background:linear-gradient(135deg,rgba(0,0,0,0.4) 0%,rgba(26,35,50,0.6) 100%);border:1px dashed rgba(212,175,55,0.3);border-radius:12px;text-align:center;min-height:150px;}.premium-lock p{color:var(--gold);margin-bottom:15px;font-size:1.1rem;}.premium-lock .price{color:var(--gold-light);font-size:1.5rem;font-weight:700;margin-bottom:10px;}.premium-lock .duration{color:var(--gray);font-size:0.85rem;margin-bottom:20px;}.premium-section{position:relative;}.premium-tag{font-size:0.7rem;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;padding:2px 8px;border-radius:10px;margin-left:8px;font-weight:700;}.premium-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(26,35,50,0.95);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:10;border-radius:15px;}.premium-overlay-content{text-align:center;padding:20px;}.premium-overlay-content p{color:var(--gold);margin-bottom:10px;font-size:1.1rem;}.premium-overlay-content .premium-price{color:var(--gold-light);font-size:0.9rem;margin-bottom:15px;}.premium-section.unlocked .premium-overlay{display:none;}.premium-section.unlocked .premium-tag{display:none;}.balls-container{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:20px 0;min-height:80px;}.ball{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cinzel Decorative',serif;font-weight:900;font-size:18px;color:white;text-shadow:1px 1px 2px rgba(0,0,0,0.5);background:linear-gradient(135deg,#DC3545,#8B0000);box-shadow:inset -3px -3px 10px rgba(0,0,0,0.4),inset 3px 3px 8px rgba(255,255,255,0.3),0 0 25px var(--theme-glow),0 8px 20px rgba(0,0,0,0.3);opacity:0;animation:ballDrop 0.5s cubic-bezier(0.68,-0.55,0.265,1.55) forwards;}.ball.powerball{background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a2e;box-shadow:inset -3px -3px 10px rgba(0,0,0,0.3),inset 3px 3px 8px rgba(255,255,255,0.5),0 0 30px rgba(255,215,0,0.5),0 8px 20px rgba(0,0,0,0.3);}.ball.mega{background:linear-gradient(135deg,#2E86DE,#003478);}.ball.megaball{background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a2e;}.pillars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:15px;max-width:100%;box-sizing:border-box;}.pillar{overflow:hidden;word-break:break-word;background:rgba(0,0,0,0.3);border-radius:12px;padding:12px 8px;text-align:center;border:1px solid rgba(255,255,255,0.1);min-width:0;}.pillar.dm{border-color:var(--gold);background:rgba(212,175,55,0.15);}.pillar-label{font-size:9px;line-height:1.2;color:var(--gray);margin-bottom:8px;text-transform:uppercase;}.pillar-stem{font-size:28px;font-weight:900;margin-bottom:4px;}.pillar-branch{font-size:24px;font-weight:700;}.pillar-sub{font-size:11px;color:var(--gray);margin-top:5px;}.pillar-god{font-size:10px;color:var(--theme-accent);margin-top:5px;padding:3px 6px;background:rgba(212,175,55,0.2);border-radius:4px;}.el-wood{color:var(--wood);}.el-fire{color:var(--fire);}.el-earth{color:var(--earth);}.el-metal{color:var(--metal);}.el-water{color:var(--water);}.strength-box{background:rgba(0,0,0,0.2);border-radius:12px;padding:15px;margin-top:15px;}.strength-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}.strength-title{font-size:13px;color:var(--gray);}.strength-badge{padding:4px 12px;border-radius:15px;font-size:12px;font-weight:700;}.strength-badge.strong{background:var(--fire);color:white;}.strength-badge.weak{background:var(--water);color:white;}.strength-badge.balanced{background:var(--wood);color:white;}.strength-bar{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;}.strength-fill{height:100%;border-radius:4px;transition:width 0.8s ease;}.strength-fill.strong{background:linear-gradient(90deg,var(--fire),#ff6b6b);}.strength-fill.weak{background:linear-gradient(90deg,var(--water),#74b9ff);}.strength-fill.balanced{background:linear-gradient(90deg,var(--wood),#81c784);}.factors{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;}.factor{display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(255,255,255,0.05);border-radius:6px;}.factor-label{color:var(--gray);}.factor-value.pos{color:var(--fire);}.factor-value.neg{color:var(--water);}.element-bar{display:flex;height:30px;border-radius:8px;overflow:hidden;margin-bottom:10px;}.element-bar > div{transition:width 0.5s ease;}.element-legend{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;font-size:11px;}.element-legend span{display:flex;align-items:center;gap:4px;}.info-box{background:rgba(255,255,255,0.05);border-radius:10px;padding:15px;margin-bottom:10px;}.info-box p{font-size:13px;line-height:1.7;}.luck-timeline{display:flex;gap:8px;overflow-x:auto;padding:10px 0;scrollbar-width:thin;}.luck-item{flex:0 0 70px;text-align:center;padding:12px 8px;background:rgba(0,0,0,0.3);border-radius:10px;border:1px solid transparent;}.luck-item.current{border-color:var(--gold);background:rgba(212,175,55,0.2);}.luck-age{font-size:11px;color:var(--gray);margin-bottom:5px;}.luck-pillar{font-size:18px;font-weight:700;}.luck-element{font-size:10px;color:var(--theme-accent);margin-top:5px;}.sinsal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}.sinsal-item{padding:12px;background:rgba(0,0,0,0.2);border-radius:10px;border-left:3px solid var(--gray);}.sinsal-item.good{border-color:var(--wood);}.sinsal-item.bad{border-color:var(--fire);}.sinsal-name{font-size:13px;font-weight:700;margin-bottom:5px;}.sinsal-desc{font-size:11px;color:var(--gray);}.history-section{margin-top:15px;}.history-item{display:flex;align-items:center;gap:10px;padding:12px;background:rgba(0,0,0,0.2);border-radius:10px;margin-bottom:8px;}.history-type{font-size:10px;padding:3px 8px;border-radius:10px;background:var(--theme-primary);color:white;}.history-balls{display:flex;gap:4px;flex-wrap:wrap;}.history-balls .ball{width:28px;height:28px;font-size:11px;animation:none;opacity:1;}.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,0.9);color:white;padding:12px 24px;border-radius:25px;font-size:14px;z-index:9999;opacity:0;transition:all 0.3s;border:1px solid var(--theme-accent);}.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}footer{text-align:center;padding:30px 15px;color:var(--gray);font-size:12px;}footer a{color:var(--theme-accent);text-decoration:none;}@media (max-width:400px){.game-switcher{gap:4px;padding:10px 8px;}.game-btn{padding:8px 10px;font-size:11px;max-width:120px;}.tab-main{font-size:12px;}.tab-sub{font-size:9px;}header h1{font-size:1.6rem;}.ball{width:40px;height:40px;font-size:15px;}.pillar-stem{font-size:22px;}.pillar-branch{font-size:18px;}.bagua{font-size:1.8rem;}.pillars{gap:4px;}.pillar{padding:8px 4px;}}#talisman-canvas{max-width:100%;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.5);}#talisman-preview{text-align:center;padding:20px;}#talisman-ritual-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);display:none;justify-content:center;align-items:center;flex-direction:column;z-index:9999;}#talisman-ritual-overlay.active{display:flex;}.ritual-text{color:#D4AF37;font-size:1.5rem;margin-bottom:30px;font-family:"Noto Serif KR",serif;animation:ritualPulse 1.5s ease-in-out infinite;}@keyframes ritualPulse{0%,100%{opacity:0.5;}50%{opacity:1;}}.zodiac-wheel-container{display:none;text-align:center;margin:20px auto;padding:20px;}.wheel-wrapper{position:relative;width:280px;height:280px;margin:0 auto 15px;border-radius:50%;box-shadow:0 8px 25px rgba(0,0,0,0.3),0 0 0 3px var(--gold),0 0 20px rgba(212,175,55,0.3);}.wheel-wrapper::after{content:'▼';position:absolute;top:-25px;left:50%;transform:translateX(-50%);font-size:24px;color:#C41E3A;z-index:10;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));}.wheel-glow{position:absolute;top:-8px;left:-8px;right:-8px;bottom:-8px;border-radius:50%;background:conic-gradient( from 0deg,transparent,rgba(212,175,55,0.5),transparent,rgba(212,175,55,0.5),transparent );opacity:0;transition:opacity 0.3s ease;z-index:-1;}.wheel-glow.active{opacity:1;animation:wheelGlowRotate 0.8s linear infinite;}@keyframes wheelGlowRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}#zodiacWheel{width:100%;height:100%;border-radius:50%;transition:transform 1.5s cubic-bezier(0.15,0.6,0.2,1);}.sparkle-overlay{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;pointer-events:none;opacity:0;transition:opacity 0.3s ease;background:radial-gradient(circle at 25% 25%,rgba(255,255,255,0.5) 0%,transparent 20%),radial-gradient(circle at 75% 30%,rgba(255,255,255,0.3) 0%,transparent 15%);}.sparkle-overlay.active{opacity:1;animation:wheelSparkle 0.15s ease-in-out infinite alternate;}@keyframes wheelSparkle{0%{background:radial-gradient(circle at 25% 25%,rgba(255,255,255,0.5) 0%,transparent 20%),radial-gradient(circle at 75% 30%,rgba(255,255,255,0.3) 0%,transparent 15%);}100%{background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.6) 0%,transparent 25%),radial-gradient(circle at 70% 25%,rgba(255,255,255,0.4) 0%,transparent 20%);}}.zodiac-result-text{font-size:1.3rem;font-weight:bold;color:var(--gold);min-height:1.5em;opacity:0;transition:opacity 0.5s ease;}.zodiac-loading{display:none;color:#C41E3A;font-weight:500;}
+/* Match Tab Styles */
+body.match-mode{--theme-primary:#FF69B4;--theme-secondary:#C71585;--theme-accent:#FFD700;--theme-accent-glow:rgba(255,215,0,0.4);--theme-glow:rgba(255,105,180,0.4);--theme-bg-1:#1a1a2e;--theme-bg-2:#2d1f3d;}
+.match-category-item{padding:12px;background:rgba(255,255,255,0.03);border-radius:10px;margin-bottom:10px;border-left:3px solid var(--gray);}
+.match-category-item.positive{border-left-color:var(--wood);}
+.match-category-item.negative{border-left-color:var(--fire);}
+.match-year-risk{padding:12px;background:rgba(244,67,54,0.1);border-radius:10px;margin-bottom:10px;border-left:3px solid var(--fire);}
+.match-year-risk.medium{background:rgba(255,152,0,0.1);border-left-color:var(--earth);}
+</style>
 <!-- ★ Force preload Ma Shan Zheng for Canvas ★ -->
 <link rel="preload" href="https://fonts.gstatic.com/s/mashanzheng/v10/NaPecZTRCLxvwo41b4gvzkXaRME.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -149,11 +144,11 @@ document.addEventListener('contextmenu',function(e){e.preventDefault();return fa
     visibility: hidden;
 }
 </style>
-</head><body class="saju-mode"><!-- Bagua decoration --><div class="bagua tl">☰<span class="bagua-sub">乾</span></div><div class="bagua tr">☷<span class="bagua-sub">坤</span></div><div class="bagua bl">☵<span class="bagua-sub">坎</span></div><div class="bagua br">☲<span class="bagua-sub">離</span></div><img class="oracle-watermark" src="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png" alt="" /><!-- 3-Tab Navigation --><div class="game-switcher"><button class="game-btn active" onclick="switchGame('saju')"><span class="tab-main">🔮 Four Pillars</span><span class="tab-sub">四柱</span></button><button class="game-btn" onclick="switchGame('powerball')"><span class="tab-main">🔴 Powerball</span></button><button class="game-btn" onclick="switchGame('mega')"><span class="tab-main">🔵 Mega Millions</span></button></div><!-- Auth Bar --><!-- Auth bar hidden for Personal Edition --><div class="auth-bar" id="auth-bar"><button class="login-btn" id="login-btn" onclick="googleSignIn()"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+</head><body class="saju-mode"><!-- Bagua decoration --><div class="bagua tl">☰<span class="bagua-sub">乾</span></div><div class="bagua tr">☷<span class="bagua-sub">坤</span></div><div class="bagua bl">☵<span class="bagua-sub">坎</span></div><div class="bagua br">☲<span class="bagua-sub">離</span></div><img class="oracle-watermark" src="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png" alt="" /><!-- 3-Tab Navigation --><div class="game-switcher"><button class="game-btn active" onclick="switchGame('saju')"><span class="tab-main">🔮 K-Fortune</span><span class="tab-sub">四柱</span></button><button class="game-btn" onclick="switchGame('match')"><span class="tab-main">💕 Match</span></button><button class="game-btn" onclick="switchGame('powerball')"><span class="tab-main">🔴 Powerball</span></button><button class="game-btn" onclick="switchGame('mega')"><span class="tab-main">🔵 Mega</span></button></div><!-- Auth Bar --><!-- Auth bar hidden for Personal Edition --><div class="auth-bar" id="auth-bar"><button class="login-btn" id="login-btn" onclick="googleSignIn()"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         Sign in with Google
     </button><div class="user-info" id="user-info" style="display:none;"><span class="user-name" id="user-name"></span><span class="premium-badge" id="premium-badge" style="display:none;">👑 Premium</span><button class="logout-btn" onclick="signOut()">Logout</button></div></div><div class="container"><!-- ========================================
          Tab 1: SAJU (四柱) Fortune
-         ======================================== --><div id="tab-saju" class="tab-content active"><header><div class="dragon-seal"><svg viewBox="0 0 100 100"><defs><linearGradient id="dragonGold1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="50%" style="stop-color:#FFA500"/><stop offset="100%" style="stop-color:#FFD700"/></linearGradient></defs><circle cx="50" cy="50" r="45" fill="none" stroke="url(#dragonGold1)" stroke-width="2"/><text x="50" y="58" text-anchor="middle" fill="url(#dragonGold1)" font-size="32" font-family="serif">龍</text></svg></div><h1>K-MUDANG</h1><span class="game-title">DESTINY ORACLE</span><p class="subtitle">Extensive Metaphysical Data · Flawless Precision · Deep AI Insight</p></header><div class="card"><h3>📅 Birth Date & Time</h3><div class="form-row"><div class="form-group"><label>Month</label><select id="saju-month"></select></div><div class="form-group"><label>Day</label><select id="saju-day"></select></div><div class="form-group"><label>Year</label><select id="saju-year"></select></div><div class="form-group"><label>Hour</label><select id="saju-hour"></select></div></div><div class="form-row" style="grid-template-columns: 1fr;"><div class="form-group"><label>🌍 Birth Location</label><select id="birth-location" onchange="updateTimezoneInfo()"><optgroup label="🇺🇸 United States"><option value="America/Los_Angeles" selected>Pacific (CA, WA, OR)</option><option value="America/Denver">Mountain (CO, AZ, UT, NV)</option><option value="America/Chicago">Central (TX, IL, MN)</option><option value="America/New_York">Eastern (NY, FL, GA)</option><option value="America/Anchorage">Alaska</option><option value="Pacific/Honolulu">Hawaii</option></optgroup><optgroup label="🌏 East Asia"><option value="Asia/Seoul">🇰🇷 Korea</option><option value="Asia/Tokyo">🇯🇵 Japan</option><option value="Asia/Shanghai">🇨🇳 China</option><option value="Asia/Taipei">🇹🇼 Taiwan</option><option value="Asia/Hong_Kong">🇭🇰 Hong Kong</option></optgroup><optgroup label="🌏 Southeast Asia"><option value="Asia/Ho_Chi_Minh">🇻🇳 Vietnam</option><option value="Asia/Bangkok">🇹🇭 Thailand</option><option value="Asia/Singapore">🇸🇬 Singapore</option><option value="Asia/Manila">🇵🇭 Philippines</option><option value="Asia/Jakarta">🇮🇩 Indonesia</option></optgroup><optgroup label="🌏 South Asia / Middle East"><option value="Asia/Kolkata">🇮🇳 India</option><option value="Asia/Dubai">🇦🇪 UAE / Dubai</option><option value="Asia/Jerusalem">🇮🇱 Israel</option><option value="Asia/Riyadh">🇸🇦 Saudi Arabia</option></optgroup><optgroup label="🇪🇺 Europe"><option value="Europe/London">🇬🇧 UK</option><option value="Europe/Berlin">🇩🇪 Germany</option><option value="Europe/Paris">🇫🇷 France</option><option value="Europe/Madrid">🇪🇸 Spain</option><option value="Europe/Rome">🇮🇹 Italy</option><option value="Europe/Moscow">🇷🇺 Russia (Moscow)</option></optgroup><optgroup label="🌎 Americas"><option value="America/Vancouver">🇨🇦 Canada West</option><option value="America/Toronto">🇨🇦 Canada East</option><option value="America/Mexico_City">🇲🇽 Mexico</option><option value="America/Sao_Paulo">🇧🇷 Brazil</option></optgroup><optgroup label="🌏 Oceania"><option value="Australia/Sydney">🇦🇺 Australia East</option><option value="Australia/Perth">🇦🇺 Australia West</option><option value="Pacific/Auckland">🇳🇿 New Zealand</option></optgroup></select><p id="timezone-info" style="font-size:0.7rem;color:var(--gold);margin-top:5px;display:none;"></p></div></div><div class="form-row" style="grid-template-columns: repeat(2, 1fr);"><div class="form-group"><label>Gender</label><div class="toggle-btns"><button class="toggle-btn on" data-gender="m" onclick="setGender('m')">👨 M</button><button class="toggle-btn" data-gender="f" onclick="setGender('f')">👩 F</button></div></div><!-- v4.17.7: Calendar selection removed for global version - Solar (Gregorian) only --></div><button class="btn" onclick="analyzeSaju()">🔮 Analyze Fortune</button><div style="font-size:1.2rem;color:#ddd;margin-top:20px;text-align:center;line-height:2;padding:20px;background:rgba(212,175,55,0.1);border-radius:12px;border:1px solid rgba(212,175,55,0.3);">
+         ======================================== --><div id="tab-saju" class="tab-content active"><header><div class="dragon-seal"><svg viewBox="0 0 100 100"><defs><linearGradient id="dragonGold1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="50%" style="stop-color:#FFA500"/><stop offset="100%" style="stop-color:#FFD700"/></linearGradient></defs><circle cx="50" cy="50" r="45" fill="none" stroke="url(#dragonGold1)" stroke-width="2"/><text x="50" y="58" text-anchor="middle" fill="url(#dragonGold1)" font-size="32" font-family="serif">龍</text></svg></div><h1>K-MUDANG</h1><span class="game-title">DESTINY ORACLE</span><p class="subtitle">Extensive Metaphysical Data · Flawless Precision · Deep AI Insight</p></header><div class="card"><h3>📅 Birth Date & Time</h3><div class="form-row"><div class="form-group"><label>Month</label><select id="saju-month"></select></div><div class="form-group"><label>Day</label><select id="saju-day"></select></div><div class="form-group"><label>Year</label><select id="saju-year"></select></div><div class="form-group"><label>Hour</label><select id="saju-hour"></select></div></div><div class="form-row" style="grid-template-columns: 1fr;"><div class="form-group"><label>🌍 Birth Location</label><select id="birth-location" onchange="updateTimezoneInfo()"><optgroup label="🇺🇸 United States"><option value="America/Los_Angeles" selected>Pacific (CA, WA, OR)</option><option value="America/Denver">Mountain (CO, AZ, UT, NV)</option><option value="America/Chicago">Central (TX, IL, MN)</option><option value="America/New_York">Eastern (NY, FL, GA)</option><option value="America/Anchorage">Alaska</option><option value="Pacific/Honolulu">Hawaii</option></optgroup><optgroup label="🌏 East Asia"><option value="Asia/Seoul">🇰🇷 Korea</option><option value="Asia/Tokyo">🇯🇵 Japan</option><option value="Asia/Shanghai">🇨🇳 China</option><option value="Asia/Taipei">🇹🇼 Taiwan</option><option value="Asia/Hong_Kong">🇭🇰 Hong Kong</option></optgroup><optgroup label="🌏 Southeast Asia"><option value="Asia/Ho_Chi_Minh">🇻🇳 Vietnam</option><option value="Asia/Bangkok">🇹🇭 Thailand</option><option value="Asia/Singapore">🇸🇬 Singapore</option><option value="Asia/Manila">🇵🇭 Philippines</option><option value="Asia/Jakarta">🇮🇩 Indonesia</option></optgroup><optgroup label="🌏 South Asia / Middle East"><option value="Asia/Kolkata">🇮🇳 India</option><option value="Asia/Dubai">🇦🇪 UAE / Dubai</option><option value="Asia/Jerusalem">🇮🇱 Israel</option><option value="Asia/Riyadh">🇸🇦 Saudi Arabia</option></optgroup><optgroup label="🇪🇺 Europe"><option value="Europe/London">🇬🇧 UK</option><option value="Europe/Berlin">🇩🇪 Germany</option><option value="Europe/Paris">🇫🇷 France</option><option value="Europe/Madrid">🇪🇸 Spain</option><option value="Europe/Rome">🇮🇹 Italy</option><option value="Europe/Moscow">🇷🇺 Russia (Moscow)</option></optgroup><optgroup label="🌎 Americas"><option value="America/Vancouver">🇨🇦 Canada West</option><option value="America/Toronto">🇨🇦 Canada East</option><option value="America/Mexico_City">🇲🇽 Mexico</option><option value="America/Sao_Paulo">🇧🇷 Brazil</option></optgroup><optgroup label="🌏 Oceania"><option value="Australia/Sydney">🇦🇺 Australia East</option><option value="Australia/Perth">🇦🇺 Australia West</option><option value="Pacific/Auckland">🇳🇿 New Zealand</option></optgroup></select><p id="timezone-info" style="font-size:0.7rem;color:var(--gold);margin-top:5px;display:none;"></p></div></div><div class="form-row" style="grid-template-columns: repeat(2, 1fr);"><div class="form-group"><label>Gender</label><div class="toggle-btns"><button class="toggle-btn on" data-gender="m" onclick="setGender('m')">👨 M</button><button class="toggle-btn" data-gender="f" onclick="setGender('f')">👩 F</button></div></div><!-- v4.17.7: Calendar selection removed for global version - Solar (Gregorian) only --></div><button class="btn" onclick="analyzeSaju()">🔮 Lucky Analysis</button><div style="font-size:1.2rem;color:#ddd;margin-top:20px;text-align:center;line-height:2;padding:20px;background:rgba(212,175,55,0.1);border-radius:12px;border:1px solid rgba(212,175,55,0.3);">
                 💡 After analysis, scroll down and click<br><strong style="color:#FFD700;font-size:1.4rem;">📋 AI Prompt Copy</strong><br><br>
                 Paste into <strong style="color:#4285F4;">Gemini</strong>, <strong style="color:#10A37F;">ChatGPT</strong>, or any AI<br>
                 to receive <strong style="color:#FFD700;font-size:1.3rem;">expert-level BaZi readings</strong><br><span style="font-size:1.1rem;">based on precise astronomical data ✨</span></div></div><div id="saju-result" style="display:none;"><!-- Four Pillars Chart - FREE --><div class="card"><h3>📜 Four Pillars (Four Pillars Chart)</h3><div class="pillars" id="pillars"></div><!-- 12운성/강약은 Premium으로 이동 --></div><!-- Strength & 12 States - PREMIUM --><div class="card" id="card-strength"><h3>💪 Day Master Strength</h3><div id="twelve-states"></div><div class="strength-box" id="strength-box"></div></div><!-- 納音(Sound Element)/命宮(Life Palace)/Conception - PREMIUM --><div class="card" id="card-napeum"><h3>🎵 納音 & 命宮</h3><div id="napeum-myunggung"></div></div><!-- Hidden Stems Analysis - PREMIUM --><div class="card" id="card-jijanggan"><h3>🌿 支藏干 Hidden Stems</h3><div id="jijanggan-analysis"></div></div><!-- Root & Stem Analysis - PREMIUM --><div class="card" id="card-tonggeun"><h3>🌳 通根透干 Root & Stem</h3><div id="tonggeun-analysis"></div></div><!-- Five Elements (五行) - PREMIUM --><div class="card" id="card-elements"><h3>🌟 Five Elements (五行)</h3><div class="element-bar" id="element-bar"></div><div class="element-legend" id="element-legend"></div><div id="element-analysis"></div></div><!-- Beneficial Elements (用神) - PREMIUM --><div class="card gold" id="card-gods"><h3>⚖️ Beneficial Elements (用神)</h3><div id="gods" class="gods-grid"></div><div id="gods-detail"></div><div id="gods-analysis"></div></div><!-- Six Relations (六親) Analysis - PREMIUM --><div class="card" id="card-yukcheon"><h3>👨‍👩‍👧‍👦 Six Relations (六親)</h3><div id="yukcheon-analysis"></div></div><!-- Structure - PREMIUM --><div class="card" id="card-format"><h3>🏛️ 格局 Structure</h3><div id="format"></div><div id="format-analysis"></div></div><!-- Day Pillar Analysis - PREMIUM --><div class="card" id="card-ilju"><h3>📅 日柱 Day Pillar Analysis</h3><div id="ilju"></div></div><!-- Position & Life Stages - PREMIUM --><div class="card" id="card-gungwi"><h3>🏠 Palace & Twelve States</h3><div id="gungwi-analysis"></div><div id="twelve-states-full"></div></div><!-- 大運(Life Cycle) - PREMIUM --><div class="card premium-section" id="card-luck"><h3>🔄 Life Cycles (大運) <span class="premium-tag">👑 Premium</span></h3><div class="premium-overlay" id="overlay-luck"><div class="premium-overlay-content"><p>🙏 福債 (Karma Offering)</p><p class="premium-price">$20 · 24-hour access</p><button class="premium-unlock-btn" onclick="openPremiumCheckout()">☕ Support on Ko-fi</button></div></div><div class="luck-timeline" id="luck-timeline"></div><div id="luck-detail"></div><div id="gyoungi-analysis"></div></div><!-- 향후 10년 운 - PREMIUM --><div class="card premium-section" id="card-tenyears"><h3>📈 Next 10 Years Fortune <span class="premium-tag">👑 Premium</span></h3><div class="premium-overlay" id="overlay-tenyears"><div class="premium-overlay-content"><p>🙏 福債 (Karma Offering)</p><p class="premium-price">$20 · 24-hour access</p><button class="premium-unlock-btn" onclick="openPremiumCheckout()">☕ Support on Ko-fi</button></div></div><div id="ten-years-luck"></div></div><!-- Monthly Fortune - PREMIUM --><div class="card premium-section" id="card-monthly"><h3>📆 Monthly Fortune <span class="premium-tag">👑 Premium</span></h3><div class="premium-overlay" id="overlay-monthly"><div class="premium-overlay-content"><p>🙏 福債 (Karma Offering)</p><p class="premium-price">$20 · 24-hour access</p><button class="premium-unlock-btn" onclick="openPremiumCheckout()">☕ Support on Ko-fi</button></div></div><div id="monthly-luck"></div></div><!-- Harmony/Clash Analysis - PREMIUM --><div class="card" id="card-interactions"><h3>🔗 Harmony & Clash</h3><div id="interactions"></div><div id="banghap-amhap"></div><div id="advanced-interactions"></div></div><!-- 공망 - PREMIUM --><div class="card" id="card-gongmang"><h3>⭕ Empty Void (空亡)</h3><div id="gongmang"></div><div id="gongmang-haeso"></div></div><!-- 신살 - PREMIUM --><div class="card" id="card-sinsal"><h3>✨ Divine Stars (神殺)</h3><div id="sinsal"></div><div id="sinsal-position"></div><div class="sinsal-grid" id="sinsal-grid"></div></div><!-- Today's Fortune - PREMIUM --><div class="card gold premium-section" id="card-today"><h3>🌅 Today's Fortune <span class="premium-tag">👑 Premium</span></h3><div class="premium-overlay"><div class="premium-overlay-content"><p>🙏 福債 (Karma Offering)</p><p class="premium-price">$20 · 24-hour access</p><button class="premium-unlock-btn" onclick="openPremiumCheckout()">☕ Support on Ko-fi</button></div></div><div id="today-fortune"></div></div><!-- AI Comprehensive Interpretation - PREMIUM --><div class="card gold" id="card-ai"><h3>🤖 AI Interpretation</h3><div id="ai-interpretation"></div><div style="margin-top:25px; text-align:center; padding:30px 20px; background:linear-gradient(135deg, rgba(20,20,35,0.9), rgba(30,30,50,0.95)); border:1px solid rgba(212,175,55,0.3); border-radius:12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);"><p style="font-size:1.2rem; background:linear-gradient(to right, #D4AF37, #FFE5B4, #D4AF37); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:15px; font-weight:700; letter-spacing:1.5px;">
@@ -186,7 +181,520 @@ document.addEventListener('contextmenu',function(e){e.preventDefault();return fa
          Tab 2: POWERBALL
          ======================================== --><div id="tab-powerball" class="tab-content"><header><div class="dragon-seal"><svg viewBox="0 0 100 100"><defs><linearGradient id="dragonGold2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="50%" style="stop-color:#FFA500"/><stop offset="100%" style="stop-color:#FFD700"/></linearGradient></defs><circle cx="50" cy="50" r="45" fill="none" stroke="url(#dragonGold2)" stroke-width="2"/><text x="50" y="58" text-anchor="middle" fill="url(#dragonGold2)" font-size="32" font-family="serif">龍</text></svg></div><h1>K-MUDANG</h1><span class="game-title">POWERBALL</span><p class="subtitle">Extensive Metaphysical Data · Flawless Precision · Deep AI Insight</p></header><div class="card"><h3>📅 Your Birth Date</h3><div class="form-row" style="grid-template-columns: repeat(3, 1fr);"><div class="form-group"><label>Month</label><select id="pb-month"></select></div><div class="form-group"><label>Day</label><select id="pb-day"></select></div><div class="form-group"><label>Year</label><select id="pb-year"></select></div></div><div style="display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-primary" onclick="generatePowerballDestiny()" style="flex:1;min-width:140px;padding:15px;">🔮 Destiny Numbers</button><button class="btn btn-secondary" onclick="generatePowerballQuick()" style="flex:1;min-width:140px;padding:15px;">🎲 Quick Pick</button></div></div><div class="card" id="pb-result" style="display:none;"><div id="pb-destiny-section" style="margin-bottom:20px;padding:15px;background:rgba(255,215,0,0.08);border-radius:10px;border:1px solid rgba(212,175,55,0.3);display:none;"><h3 style="color:var(--gold);margin-bottom:10px;">🔮 Destiny Numbers</h3><p style="font-size:0.75rem;color:var(--gray);margin-bottom:10px;" id="pb-destiny-info"></p><div class="balls-container" id="pb-destiny-balls"></div></div><div id="pb-quick-section" style="padding:15px;background:rgba(100,100,100,0.1);border-radius:10px;border:1px solid rgba(150,150,150,0.2);display:none;"><h3 style="color:var(--gray);margin-bottom:10px;">🎲 Quick Pick (Random)</h3><div class="balls-container" id="pb-quick-balls"></div></div></div><div class="card history-section" id="pb-history" style="display:none;"><h3>📋 History</h3><div id="pb-history-list"></div></div></div><!-- ========================================
          Tab 3: MEGA MILLIONS
-         ======================================== --><div id="tab-mega" class="tab-content"><header><div class="dragon-seal"><svg viewBox="0 0 100 100"><defs><linearGradient id="dragonGold3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="50%" style="stop-color:#FFA500"/><stop offset="100%" style="stop-color:#FFD700"/></linearGradient></defs><circle cx="50" cy="50" r="45" fill="none" stroke="url(#dragonGold3)" stroke-width="2"/><text x="50" y="58" text-anchor="middle" fill="url(#dragonGold3)" font-size="32" font-family="serif">龍</text></svg></div><h1>K-MUDANG</h1><span class="game-title">MEGA MILLIONS</span><p class="subtitle">Extensive Metaphysical Data · Flawless Precision · Deep AI Insight</p></header><div class="card"><h3>📅 Your Birth Date</h3><div class="form-row" style="grid-template-columns: repeat(3, 1fr);"><div class="form-group"><label>Month</label><select id="mega-month"></select></div><div class="form-group"><label>Day</label><select id="mega-day"></select></div><div class="form-group"><label>Year</label><select id="mega-year"></select></div></div><div style="display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-primary" onclick="generateMegaDestiny()" style="flex:1;min-width:140px;padding:15px;">🔮 Destiny Numbers</button><button class="btn btn-secondary" onclick="generateMegaQuick()" style="flex:1;min-width:140px;padding:15px;">🎲 Quick Pick</button></div></div><div class="card" id="mega-result" style="display:none;"><div id="mega-destiny-section" style="margin-bottom:20px;padding:15px;background:rgba(255,215,0,0.08);border-radius:10px;border:1px solid rgba(212,175,55,0.3);display:none;"><h3 style="color:var(--gold);margin-bottom:10px;">🔮 Destiny Numbers</h3><p style="font-size:0.75rem;color:var(--gray);margin-bottom:10px;" id="mega-destiny-info"></p><div class="balls-container" id="mega-destiny-balls"></div></div><div id="mega-quick-section" style="padding:15px;background:rgba(100,100,100,0.1);border-radius:10px;border:1px solid rgba(150,150,150,0.2);display:none;"><h3 style="color:var(--gray);margin-bottom:10px;">🎲 Quick Pick (Random)</h3><div class="balls-container" id="mega-quick-balls"></div></div></div><div class="card history-section" id="mega-history" style="display:none;"><h3>📋 History</h3><div id="mega-history-list"></div></div></div></div><footer><p style="color:var(--gold);margin-bottom:8px;">🆓 FREE · All Features Unlocked · No Ads</p><p style="font-size:0.85rem;color:var(--gray);margin-bottom:10px;">Ancient Korean Zodiac Algorithm · Four Pillars of Destiny</p><p style="margin-bottom:10px;"><a href="https://ko-fi.com/kmudang" target="_blank" style="color:var(--gold-light);text-decoration:none;">☕ Support on Ko-fi</a></p><p style="opacity:0.5;font-size:0.8rem;">© K-MUDANG Pro · Institute of Destiny Studies (命理硏究所)</p></footer><div class="toast" id="toast"></div><script>const PAST_WINNERS = [
+         ======================================== --><div id="tab-mega" class="tab-content"><header><div class="dragon-seal"><svg viewBox="0 0 100 100"><defs><linearGradient id="dragonGold3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="50%" style="stop-color:#FFA500"/><stop offset="100%" style="stop-color:#FFD700"/></linearGradient></defs><circle cx="50" cy="50" r="45" fill="none" stroke="url(#dragonGold3)" stroke-width="2"/><text x="50" y="58" text-anchor="middle" fill="url(#dragonGold3)" font-size="32" font-family="serif">龍</text></svg></div><h1>K-MUDANG</h1><span class="game-title">MEGA MILLIONS</span><p class="subtitle">Extensive Metaphysical Data · Flawless Precision · Deep AI Insight</p></header><div class="card"><h3>📅 Your Birth Date</h3><div class="form-row" style="grid-template-columns: repeat(3, 1fr);"><div class="form-group"><label>Month</label><select id="mega-month"></select></div><div class="form-group"><label>Day</label><select id="mega-day"></select></div><div class="form-group"><label>Year</label><select id="mega-year"></select></div></div><div style="display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-primary" onclick="generateMegaDestiny()" style="flex:1;min-width:140px;padding:15px;">🔮 Destiny Numbers</button><button class="btn btn-secondary" onclick="generateMegaQuick()" style="flex:1;min-width:140px;padding:15px;">🎲 Quick Pick</button></div></div><div class="card" id="mega-result" style="display:none;"><div id="mega-destiny-section" style="margin-bottom:20px;padding:15px;background:rgba(255,215,0,0.08);border-radius:10px;border:1px solid rgba(212,175,55,0.3);display:none;"><h3 style="color:var(--gold);margin-bottom:10px;">🔮 Destiny Numbers</h3><p style="font-size:0.75rem;color:var(--gray);margin-bottom:10px;" id="mega-destiny-info"></p><div class="balls-container" id="mega-destiny-balls"></div></div><div id="mega-quick-section" style="padding:15px;background:rgba(100,100,100,0.1);border-radius:10px;border:1px solid rgba(150,150,150,0.2);display:none;"><h3 style="color:var(--gray);margin-bottom:10px;">🎲 Quick Pick (Random)</h3><div class="balls-container" id="mega-quick-balls"></div></div></div><div class="card history-section" id="mega-history" style="display:none;"><h3>📋 History</h3><div id="mega-history-list"></div></div></div><!-- ========================================
+         Tab 4: MATCH (궁합)
+         ======================================== --><div id="tab-match" class="tab-content"><header><div class="dragon-seal"><svg viewBox="0 0 100 100"><defs><linearGradient id="dragonGold4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF69B4"/><stop offset="50%" style="stop-color:#FFD700"/><stop offset="100%" style="stop-color:#FF69B4"/></linearGradient></defs><circle cx="50" cy="50" r="45" fill="none" stroke="url(#dragonGold4)" stroke-width="2"/><text x="50" y="58" text-anchor="middle" fill="url(#dragonGold4)" font-size="28" font-family="serif">緣</text></svg></div><h1>K-MUDANG</h1><span class="game-title" style="background:linear-gradient(135deg,#FF69B4,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">COMPATIBILITY</span><p class="subtitle">60 Archetypes · Elemental Dynamics · Destiny Forecast</p></header><div class="card" id="match-my-info"><h3>👤 My Profile</h3><div id="match-my-display"><p style="color:var(--gold);text-align:center;padding:20px;">First analyze your birth chart in [K-Fortune] tab</p></div></div><div class="card"><h3>💕 Partner's Birth Info</h3><div class="form-row"><div class="form-group"><label>Month</label><select id="match-month"></select></div><div class="form-group"><label>Day</label><select id="match-day"></select></div><div class="form-group"><label>Year</label><select id="match-year"></select></div><div class="form-group"><label>Hour</label><select id="match-hour"><option value="">Unknown</option></select></div></div><div class="form-row" style="grid-template-columns: 1fr;"><div class="form-group"><label>🌍 Partner's Birth Location</label><select id="partner-location"><optgroup label="🇺🇸 United States"><option value="America/Los_Angeles" selected>Pacific (CA, WA, OR)</option><option value="America/Denver">Mountain (CO, AZ, UT, NV)</option><option value="America/Chicago">Central (TX, IL, MN)</option><option value="America/New_York">Eastern (NY, FL, GA)</option><option value="America/Anchorage">Alaska</option><option value="Pacific/Honolulu">Hawaii</option></optgroup><optgroup label="🌏 East Asia"><option value="Asia/Seoul">🇰🇷 Korea</option><option value="Asia/Tokyo">🇯🇵 Japan</option><option value="Asia/Shanghai">🇨🇳 China</option><option value="Asia/Taipei">🇹🇼 Taiwan</option><option value="Asia/Hong_Kong">🇭🇰 Hong Kong</option></optgroup><optgroup label="🌏 Southeast Asia"><option value="Asia/Ho_Chi_Minh">🇻🇳 Vietnam</option><option value="Asia/Bangkok">🇹🇭 Thailand</option><option value="Asia/Singapore">🇸🇬 Singapore</option><option value="Asia/Manila">🇵🇭 Philippines</option><option value="Asia/Jakarta">🇮🇩 Indonesia</option></optgroup><optgroup label="🌏 South Asia / Middle East"><option value="Asia/Kolkata">🇮🇳 India</option><option value="Asia/Dubai">🇦🇪 UAE / Dubai</option><option value="Asia/Jerusalem">🇮🇱 Israel</option><option value="Asia/Riyadh">🇸🇦 Saudi Arabia</option></optgroup><optgroup label="🇪🇺 Europe"><option value="Europe/London">🇬🇧 UK</option><option value="Europe/Berlin">🇩🇪 Germany</option><option value="Europe/Paris">🇫🇷 France</option><option value="Europe/Madrid">🇪🇸 Spain</option><option value="Europe/Rome">🇮🇹 Italy</option><option value="Europe/Moscow">🇷🇺 Russia (Moscow)</option></optgroup><optgroup label="🌎 Americas"><option value="America/Vancouver">🇨🇦 Canada West</option><option value="America/Toronto">🇨🇦 Canada East</option><option value="America/Mexico_City">🇲🇽 Mexico</option><option value="America/Sao_Paulo">🇧🇷 Brazil</option></optgroup><optgroup label="🌏 Oceania"><option value="Australia/Sydney">🇦🇺 Australia East</option><option value="Australia/Perth">🇦🇺 Australia West</option><option value="Pacific/Auckland">🇳🇿 New Zealand</option></optgroup></select></div></div><div class="form-row" style="grid-template-columns: repeat(2, 1fr);"><div class="form-group"><label>Gender</label><div class="toggle-btns"><button class="toggle-btn" data-pgender="m" onclick="setPartnerGender('m')">👨 M</button><button class="toggle-btn on" data-pgender="f" onclick="setPartnerGender('f')">👩 F</button></div></div><div class="form-group"><label>Relationship</label><select id="match-mode"><option value="romance">💕 Romance</option><option value="business">💼 Business</option><option value="family">👨‍👩‍👧 Family</option></select></div></div><button class="btn" onclick="analyzeMatch()" style="background:linear-gradient(135deg,#FF69B4,#C71585);">💕 Analyze Compatibility</button></div><div id="match-result" style="display:none;"><div class="card" id="match-score-card" style="text-align:center;background:linear-gradient(145deg,rgba(255,105,180,0.15),rgba(26,35,50,0.95));"><p style="font-size:0.9rem;color:var(--gray);margin-bottom:10px;">Compatibility Score</p><p id="match-grade" style="font-size:2.5rem;margin-bottom:5px;">💕</p><p id="match-score" style="font-size:2rem;font-weight:bold;margin-bottom:10px;">0</p><div style="background:#333;border-radius:10px;height:20px;margin:15px 0;"><div id="match-score-bar" style="background:linear-gradient(90deg,#FF69B4,#FFD700);height:100%;border-radius:10px;width:0%;transition:width 1s;"></div></div><p id="match-summary" style="font-size:0.95rem;color:var(--gray);"></p></div><div class="card"><h3>⚔️ Two Souls</h3><div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;"><div style="text-align:center;padding:15px;background:rgba(253,216,53,0.1);border-radius:10px;"><p style="font-size:0.8rem;color:var(--gray);margin-bottom:5px;">Me</p><p id="match-my-ilju" style="font-size:1.5rem;font-weight:bold;color:var(--gold);"></p><p id="match-my-emoji" style="font-size:2rem;margin:10px 0;"></p><p id="match-my-name" style="font-size:0.85rem;color:var(--pearl);"></p></div><div style="text-align:center;"><p id="match-interaction-emoji" style="font-size:2rem;"></p><p id="match-interaction-name" style="font-size:0.75rem;color:var(--gold);margin-top:5px;"></p></div><div style="text-align:center;padding:15px;background:rgba(255,105,180,0.1);border-radius:10px;"><p style="font-size:0.8rem;color:var(--gray);margin-bottom:5px;">Partner</p><p id="match-partner-ilju" style="font-size:1.5rem;font-weight:bold;color:#FF69B4;"></p><p id="match-partner-emoji" style="font-size:2rem;margin:10px 0;"></p><p id="match-partner-name" style="font-size:0.85rem;color:var(--pearl);"></p></div></div></div><div class="card"><h3>🎭 Character Archetypes</h3><div class="info-box" style="border-left-color:var(--gold);margin-bottom:10px;"><p style="font-weight:bold;color:var(--gold);margin-bottom:5px;">Your Archetype</p><p id="match-my-desc" style="font-size:0.9rem;"></p></div><div class="info-box" style="border-left-color:#FF69B4;"><p style="font-weight:bold;color:#FF69B4;margin-bottom:5px;">Partner's Archetype</p><p id="match-partner-desc" style="font-size:0.9rem;"></p></div></div><div class="card"><h3>🔄 Elemental Dynamics</h3><div id="match-dynamics"></div></div><div class="card"><h3>📊 Detailed Analysis</h3><div id="match-categories"></div></div><div class="card" id="match-yearly-card" style="display:none;"><h3>📅 Yearly Forecast</h3><div id="match-yearly"></div></div><div class="card gold"><h3>🤖 AI Deep Analysis</h3><div style="text-align:center;padding:20px;"><p style="font-size:1rem;color:var(--gold-light);margin-bottom:15px;">Get expert-level relationship analysis from AI</p><p style="font-size:0.85rem;color:var(--gray);margin-bottom:20px;">Copy the detailed compatibility data and paste into<br><strong style="color:#4285F4;">Gemini</strong>, <strong style="color:#10A37F;">ChatGPT</strong>, or any AI</p><button class="btn" onclick="copyMatchForAI()" style="background:linear-gradient(135deg,#9C27B0,#E91E63);padding:16px 32px;font-size:16px;border-radius:50px;">✨ Copy Compatibility Analysis</button></div></div><div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(255,105,180,0.1),transparent);"><p style="font-size:1rem;margin-bottom:15px;">💕 Share your compatibility results</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;"><button class="btn" onclick="shareMatchResult()" style="background:linear-gradient(135deg,#25D366,#128C7E);padding:12px 24px;">📤 Share</button></div></div></div></div></div><footer><p style="color:var(--gold);margin-bottom:8px;">🆓 FREE · All Features Unlocked · No Ads</p><p style="font-size:0.85rem;color:var(--gray);margin-bottom:10px;">Ancient Korean Zodiac Algorithm · Four Pillars of Destiny</p><p style="margin-bottom:10px;"><a href="https://ko-fi.com/kmudang" target="_blank" style="color:var(--gold-light);text-decoration:none;">☕ Support on Ko-fi</a></p><p style="opacity:0.5;font-size:0.8rem;">© K-MUDANG Pro · Institute of Destiny Studies (命理硏究所)</p></footer><div class="toast" id="toast"></div><script>
+// ========================================
+// 60갑자 일주 캐릭터 이미지
+// ========================================
+const ILJU_IMAGE = {
+'甲子': { name: 'Tree by the Ocean', nameK: '바다 옆 큰 나무', emoji: '🌳🌊', desc: 'Ambition rooted in abundance. Deep foundations ensure stability.' },
+'甲寅': { name: 'Tiger in the Forest', nameK: '숲 속의 호랑이', emoji: '🐅🌲', desc: 'Natural authority and fearless leadership.' },
+'甲辰': { name: 'Dragon-Riding Tree', nameK: '용을 탄 나무', emoji: '🐉🌳', desc: 'Lofty ambitions with mythical luck. Born for greatness.' },
+'甲午': { name: 'Tree Ablaze', nameK: '불타는 나무', emoji: '🌳🔥', desc: 'Passionate drive meets rigid principles.' },
+'甲申': { name: 'Axe and Tree', nameK: '도끼와 나무', emoji: '🪓🌲', desc: 'Constant self-improvement through challenges.' },
+'甲戌': { name: 'Autumn Forest', nameK: '가을 숲', emoji: '🍂🌳', desc: 'Mature wisdom and protective nature.' },
+'乙丑': { name: 'Winter Garden Flower', nameK: '겨울 정원의 화초', emoji: '🌱❄️', desc: 'Patient endurance yields late bloom.' },
+'乙卯': { name: 'Spring Vine', nameK: '봄의 덩굴', emoji: '🌿🌸', desc: 'Graceful flexibility and quiet charm.' },
+'乙巳': { name: 'Flower by Fire', nameK: '불 옆의 꽃', emoji: '🌺🔥', desc: 'Delicate beauty with inner fire.' },
+'乙未': { name: 'Garden Grass', nameK: '정원의 풀', emoji: '🌾🏡', desc: 'Humble adaptability and nurturing spirit.' },
+'乙酉': { name: 'Flower in Metal Vase', nameK: '금속 화병의 꽃', emoji: '💐⚙️', desc: 'Beauty refined by discipline.' },
+'乙亥': { name: 'Floating Lotus', nameK: '떠다니는 연꽃', emoji: '🪷💧', desc: 'Purity rising from murky depths.' },
+'丙子': { name: 'Sun Over Lake', nameK: '호수 위의 태양', emoji: '☀️🏞️', desc: 'Brilliance reflected and amplified.' },
+'丙寅': { name: 'Mountain Sunrise', nameK: '산 위의 일출', emoji: '🌅🏔️', desc: 'Commanding radiance from heights.' },
+'丙辰': { name: 'Dragon Fire', nameK: '용의 불꽃', emoji: '🐉🔥', desc: 'Mythical power and transformative energy.' },
+'丙午': { name: 'Noon Sun', nameK: '정오의 태양', emoji: '☀️🔥', desc: 'Peak intensity and maximum visibility.' },
+'丙申': { name: 'Sunset Gold', nameK: '황금빛 석양', emoji: '🌅⚙️', desc: 'Warm wisdom of experience.' },
+'丙戌': { name: 'Bonfire', nameK: '모닥불', emoji: '🔥🏕️', desc: 'Gathering warmth for community.' },
+'丁丑': { name: 'Candle in Snow', nameK: '눈 속의 촛불', emoji: '🕯️❄️', desc: 'Persistent light in darkness.' },
+'丁卯': { name: 'Lantern in Garden', nameK: '정원의 등불', emoji: '🏮🌿', desc: 'Gentle illumination nurturing growth.' },
+'丁巳': { name: 'Torch Bearer', nameK: '횃불 든 자', emoji: '🔦🐍', desc: 'Wisdom illuminating hidden paths.' },
+'丁未': { name: 'Hearth Fire', nameK: '난로 불', emoji: '🔥🏠', desc: 'Domestic warmth and comfort.' },
+'丁酉': { name: 'Forge Flame', nameK: '대장간 불꽃', emoji: '🔥⚒️', desc: 'Precision heat that transforms.' },
+'丁亥': { name: 'Starlight on Water', nameK: '물 위의 별빛', emoji: '✨💧', desc: 'Ethereal beauty and dreamy wisdom.' },
+'戊子': { name: 'Mountain Spring', nameK: '산의 샘물', emoji: '⛰️💧', desc: 'Solid foundation with hidden depths.' },
+'戊寅': { name: 'Tiger Mountain', nameK: '호랑이 산', emoji: '🐅⛰️', desc: 'Majestic presence and fierce protection.' },
+'戊辰': { name: 'Dragon Peak', nameK: '용봉우리', emoji: '🐉⛰️', desc: 'Legendary grandeur and cosmic authority.' },
+'戊午': { name: 'Volcanic Mountain', nameK: '화산', emoji: '🌋🔥', desc: 'Dormant power awaiting eruption.' },
+'戊申': { name: 'Quarry Stone', nameK: '채석장 바위', emoji: '🪨⚙️', desc: 'Raw potential being refined.' },
+'戊戌': { name: 'Ancient Mountain', nameK: '고대 산', emoji: '🏔️🌙', desc: 'Timeless wisdom and stability.' },
+'己丑': { name: 'Winter Ox Field', nameK: '겨울 들판의 소', emoji: '🐂❄️', desc: 'Patient cultivation through hardship.' },
+'己卯': { name: 'Spring Garden', nameK: '봄 정원', emoji: '🌷🏡', desc: 'Fertile ground nurturing growth.' },
+'己巳': { name: 'Warm Earth', nameK: '따뜻한 흙', emoji: '🌍🔥', desc: 'Nourishing warmth for all roots.' },
+'己未': { name: 'Sheep Pasture', nameK: '양 목장', emoji: '🐑🌾', desc: 'Gentle abundance and pastoral peace.' },
+'己酉': { name: 'Orchard Soil', nameK: '과수원 흙', emoji: '🍎🌍', desc: 'Cultivated earth bearing fruit.' },
+'己亥': { name: 'Riverbank', nameK: '강둑', emoji: '🏞️💧', desc: 'Boundary between elements.' },
+'庚子': { name: 'Sword in Rain', nameK: '빗속의 검', emoji: '⚔️🌧️', desc: 'Sharp resolve amid challenges.' },
+'庚寅': { name: 'Axe in Forest', nameK: '숲 속의 도끼', emoji: '🪓🌲', desc: 'Powerful tool for transformation.' },
+'庚辰': { name: 'Dragon Scale Armor', nameK: '용린 갑옷', emoji: '🐉⚙️', desc: 'Legendary protection and strength.' },
+'庚午': { name: 'Blade in Flame', nameK: '불꽃 속의 칼날', emoji: '⚔️🔥', desc: 'Tempered through intense pressure.' },
+'庚申': { name: 'Twin Blades', nameK: '쌍검', emoji: '⚔️⚔️', desc: 'Doubled power and precision.' },
+'庚戌': { name: 'Ancient Weapon', nameK: '고대 무기', emoji: '🗡️⌛', desc: 'Proven edge through ages.' },
+'辛丑': { name: 'Gold in Ore', nameK: '광석 속의 금', emoji: '💎⛰️', desc: 'Hidden treasure awaiting discovery.' },
+'辛卯': { name: 'Jewelry in Garden', nameK: '정원의 보석', emoji: '💍🌿', desc: 'Delicate beauty in natural setting.' },
+'辛巳': { name: 'Molten Silver', nameK: '녹은 은', emoji: '🪙🔥', desc: 'Transformation through heat.' },
+'辛未': { name: 'Gem in Earth', nameK: '땅 속의 보석', emoji: '💎🌍', desc: 'Underground treasure growing slowly.' },
+'辛酉': { name: 'Mirror', nameK: '거울', emoji: '🪞✨', desc: 'Perfect reflection and clarity.' },
+'辛亥': { name: 'Pearl', nameK: '진주', emoji: '🦪💧', desc: 'Beauty born from irritation.' },
+'壬子': { name: 'Ocean Depths', nameK: '바다 심연', emoji: '🌊🌑', desc: 'Unfathomable depths and power.' },
+'壬寅': { name: 'Waterfall', nameK: '폭포', emoji: '💧🏔️', desc: 'Unstoppable force of nature.' },
+'壬辰': { name: 'Rain Dragon', nameK: '비룡', emoji: '🐉🌧️', desc: 'Mythical bringer of life.' },
+'壬午': { name: 'Steam', nameK: '증기', emoji: '💨☀️', desc: 'Water meeting fire becomes force.' },
+'壬申': { name: 'River Current', nameK: '강물 흐름', emoji: '🏞️💨', desc: 'Relentless forward momentum.' },
+'壬戌': { name: 'Autumn Rain', nameK: '가을비', emoji: '🍂🌧️', desc: 'Melancholy depth and reflection.' },
+'癸丑': { name: 'Frost on Field', nameK: '들판의 서리', emoji: '❄️🌾', desc: 'Delicate but transformative.' },
+'癸卯': { name: 'Morning Dew', nameK: '아침 이슬', emoji: '💧🌅', desc: 'Fresh beginnings each day.' },
+'癸巳': { name: 'Mist', nameK: '안개', emoji: '🌫️🐍', desc: 'Mysterious veil over reality.' },
+'癸未': { name: 'Gentle Rain', nameK: '단비', emoji: '🌧️🌱', desc: 'Life-giving moisture.' },
+'癸酉': { name: 'Dewdrop on Blade', nameK: '칼날 위의 이슬', emoji: '💧🗡️', desc: 'Extreme sensitivity and precision.' },
+'癸亥': { name: 'Deep Spring', nameK: '깊은 샘', emoji: '💧🕳️', desc: 'Endless source from darkness.' }
+};
+
+// 오행 상호작용 비유
+const INTERACTION_METAPHOR = {
+'wood_fire': { name: 'Firewood', nameK: '장작과 불', emoji: '🪵→🔥', type: 'generate', desc: 'You fuel their passion.', advice: 'Be careful not to burn yourself out.' },
+'fire_earth': { name: 'Ash to Soil', nameK: '재가 되어 기름진 땅', emoji: '🔥→🌍', type: 'generate', desc: 'Your passion enriches their stability.', advice: 'Find balance between giving and preserving yourself.' },
+'earth_metal': { name: 'Mining Treasure', nameK: '광맥의 발견', emoji: '⛰️→⚙️', type: 'generate', desc: 'Your support reveals their value.', advice: 'Patient investment will yield precious returns.' },
+'metal_water': { name: 'Condensation', nameK: '차가운 금속의 이슬', emoji: '🪙→💧', type: 'generate', desc: 'Your structure channels their flow.', advice: 'Guide without restricting their movement.' },
+'water_wood': { name: 'Rain on Forest', nameK: '비 내리는 숲', emoji: '🌧️→🌲', type: 'generate', desc: 'You nourish their growth.', advice: 'Consistent support creates success.' },
+'wood_earth': { name: 'Roots Breaking Ground', nameK: '뿌리가 땅을 갈라', emoji: '🌳⚡🌍', type: 'control', desc: 'You challenge their foundations.', advice: 'Use influence to help them evolve, not dominate.' },
+'earth_water': { name: 'Sponge', nameK: '스펀지', emoji: '🧽💧', type: 'control', desc: 'You absorb their emotional energy.', advice: 'Be their harbor, but remember to wring yourself out.' },
+'water_fire': { name: 'Extinguisher', nameK: '불 끄는 물', emoji: '💧🚫🔥', type: 'control', desc: 'You cool their intensity.', advice: 'Balance cooling with space for their passion.' },
+'fire_metal': { name: 'The Forge', nameK: '용광로', emoji: '🔥🔨⚙️', type: 'control', desc: 'Your heat transforms them.', advice: 'Know when transformation becomes destruction.' },
+'metal_wood': { name: 'Axe and Tree', nameK: '도끼와 나무', emoji: '🪓🌳', type: 'control', desc: 'Your precision cuts their growth.', advice: 'Prune with purpose, never cut without reason.' },
+'wood_wood': { name: 'Forest Alliance', nameK: '숲의 동맹', emoji: '🌲🌲', type: 'same', desc: 'Kindred spirits growing together.', advice: 'Support growth without blocking light.' },
+'fire_fire': { name: 'Wildfire', nameK: '들불', emoji: '🔥🔥', type: 'same', desc: 'Passion multiplied exponentially.', advice: 'Create together before consuming each other.' },
+'earth_earth': { name: 'Mountain Range', nameK: '산맥', emoji: '⛰️⛰️', type: 'same', desc: 'Solid foundation doubled.', advice: 'Introduce change to prevent stagnation.' },
+'metal_metal': { name: 'Blade Meets Blade', nameK: '칼과 칼', emoji: '⚔️⚔️', type: 'same', desc: 'Sharp minds clashing or aligning.', advice: 'Point edges outward together.' },
+'water_water': { name: 'Ocean Merger', nameK: '바다의 합류', emoji: '🌊🌊', type: 'same', desc: 'Depths merge into vastness.', advice: 'Stay grounded or drown in shared feelings.' }
+};
+
+// 충/형 데이터
+const BRANCH_CLASH = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
+// ===== 궁합 분석용 테이블 (MATCH_ prefix) =====
+const MATCH_SIX_HARMONY/*六合*/ = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]]; // 육합: 子丑,寅亥,卯戌,辰酉,巳申,午未
+const MATCH_TRIPLE_HARMONY/*三合*/ = {
+  wood: [11,3,7],   // 해묘미 木局
+  fire: [2,6,10],   // 인오술 火局
+  metal: [5,9,1],   // 사유축 金局
+  water: [8,0,4]    // 신자진 水局
+};
+const MATCH_RESENTMENT/*怨嗔*/ = [[0,7],[2,9],[1,6],[4,11],[5,10],[3,8]]; // 원진: 子未,寅酉,丑午,辰亥,巳戌,卯申
+const SELF_PUNISHMENT = [[6,6],[9,9],[4,4],[11,11]];
+
+// 궁합 전역 변수
+let PARTNER_GENDER = 'f';
+let PARTNER_SAJU = null;
+let PARTNER_GODS = null;
+let PARTNER_STRENGTH = null;
+let MATCH_RESULT = null;
+
+function setPartnerGender(g) {
+  PARTNER_GENDER = g;
+  document.querySelectorAll('[data-pgender]').forEach(btn => {
+    btn.classList.toggle('on', btn.dataset.pgender === g);
+  });
+}
+
+function initMatchSelects() {
+  const monthSel = document.getElementById('match-month');
+  const daySel = document.getElementById('match-day');
+  const yearSel = document.getElementById('match-year');
+  const hourSel = document.getElementById('match-hour');
+  if (!monthSel || !daySel || !yearSel) return;
+  monthSel.innerHTML = '<option value="" disabled selected>Month</option>';
+  for (let m = 1; m <= 12; m++) { const opt = document.createElement('option'); opt.value = m; opt.textContent = MONTH_ABBR[m - 1]; monthSel.appendChild(opt); }
+  daySel.innerHTML = '<option value="" disabled selected>Day</option>';
+  for (let d = 1; d <= 31; d++) { const opt = document.createElement('option'); opt.value = d; opt.textContent = d; daySel.appendChild(opt); }
+  yearSel.innerHTML = '<option value="" disabled selected>Year</option>';
+  const currentYear = new Date().getFullYear();
+  for (let y = currentYear; y >= 1920; y--) { const opt = document.createElement('option'); opt.value = y; opt.textContent = y; yearSel.appendChild(opt); }
+  const hourLabels = ['子 (23-01)','丑 (01-03)','寅 (03-05)','卯 (05-07)','辰 (07-09)','巳 (09-11)','午 (11-13)','未 (13-15)','申 (15-17)','酉 (17-19)','戌 (19-21)','亥 (21-23)'];
+  hourLabels.forEach((label, idx) => { const opt = document.createElement('option'); opt.value = idx; opt.textContent = label; hourSel.appendChild(opt); });
+}
+
+function updateMatchMyInfo() {
+  const display = document.getElementById('match-my-info');
+  if (!SAJU || !SAJU.day || !SAJU.day.s) { 
+    if(display) display.innerHTML = '<p style="color:var(--gray);text-align:center;padding:20px;">📋 Please analyze your Saju first in the K-Fortune tab</p>'; 
+    return; 
+  }
+  if (!display) return;
+  const ilju = SAJU.day.s.c + SAJU.day.b.c;
+  const char = ILJU_IMAGE[ilju];
+  const dmIdx = STEM.findIndex(s => s.c === SAJU.day.s);
+  const dm = STEM[dmIdx];
+  display.innerHTML = '<div style="display:grid;grid-template-columns:auto 1fr;gap:15px;align-items:center;"><div style="text-align:center;"><p style="font-size:2rem;">'+(char?.emoji||'🔮')+'</p><p style="font-size:1.3rem;font-weight:bold;color:var(--gold);">'+ilju+'</p></div><div><p style="font-size:1rem;font-weight:bold;color:var(--pearl);">"'+(char?.name||'Unknown')+'"</p><p style="font-size:0.8rem;color:var(--gray);margin-top:5px;">'+dm.k+' · '+(STRENGTH?.type==='strong'?'Strong':STRENGTH?.type==='weak'?'Weak':'Balanced')+'</p><p style="font-size:0.75rem;color:var(--gold);margin-top:5px;">Beneficial: '+(GODS?.yong?ELEMENT[GODS.yong].k:'?')+' · Unfavorable: '+(GODS?.gi?ELEMENT[GODS.gi].k:'?')+'</p></div></div>';
+}
+
+function analyzeMatchAdvanced(mySaju, myGods, myStrength, partnerSaju, partnerGods, partnerStrength, mode) {
+  const result = { score: 50, categories: {}, yearlyRisks: [] };
+  const myDmIdx = STEM.findIndex(s => s.c === mySaju.day.s.c);
+  const pDmIdx = STEM.findIndex(s => s.c === partnerSaju.day.s.c);
+  const myDm = STEM[myDmIdx];
+  const pDm = STEM[pDmIdx];
+  const myIlju = mySaju.day.s.c + mySaju.day.b.c;
+  const pIlju = partnerSaju.day.s.c + partnerSaju.day.b.c;
+  result.myCharacter = ILJU_IMAGE[myIlju] || { name: 'Unknown', emoji: '❓', desc: '' };
+  result.partnerCharacter = ILJU_IMAGE[pIlju] || { name: 'Unknown', emoji: '❓', desc: '' };
+  const interactionKey = myDm.e + '_' + pDm.e;
+  const reverseKey = pDm.e + '_' + myDm.e;
+  if (INTERACTION_METAPHOR[interactionKey]) result.myToPartner = INTERACTION_METAPHOR[interactionKey];
+  if (INTERACTION_METAPHOR[reverseKey]) result.partnerToMe = INTERACTION_METAPHOR[reverseKey];
+  const ganHap = [[0,5],[1,6],[2,7],[3,8],[4,9]];
+  result.hasStemCombine = ganHap.some(([a,b]) => (myDmIdx === a && pDmIdx === b) || (myDmIdx === b && pDmIdx === a));
+  if (result.hasStemCombine) { result.score += 20; result.categories.stemCombine = { score: 20, title: '天干合/Chungan-Hap (Stem Harmony)', desc: 'Your Day Masters form a divine union! Sign of soulmates.' }; }
+  const myBrIdx = BRANCH.findIndex(b => b.c === mySaju.day.b.c);
+  const pBrIdx = BRANCH.findIndex(b => b.c === partnerSaju.day.b.c);
+  const yukHap = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
+  result.hasBranchCombine = yukHap.some(([a,b]) => (myBrIdx === a && pBrIdx === b) || (myBrIdx === b && pBrIdx === a));
+  if (result.hasBranchCombine) { result.score += 15; result.categories.branchCombine = { score: 15, title: '六合/Yukhap (Six Harmony - Spouse Bond)', desc: 'Your spouse palaces harmonize beautifully.' }; }
+  result.hasBranchClash = BRANCH_CLASH.some(([a,b]) => (myBrIdx === a && pBrIdx === b) || (myBrIdx === b && pBrIdx === a));
+  if (result.hasBranchClash) { result.score -= 15; result.categories.branchClash = { score: -15, title: '日支沖/Ilji-Chung (Spouse Palace Clash)', desc: 'Creates tension but also passionate energy.', advice: 'Channel conflict into productive debate.' }; }
+  
+  // ===== 삼합 체크 (일지 기준) =====
+  const allMyBranches = [BRANCH.findIndex(b=>b.c===mySaju.year.b.c), BRANCH.findIndex(b=>b.c===mySaju.month.b.c), myBrIdx, mySaju.hour?.b ? BRANCH.findIndex(b=>b.c===mySaju.hour.b.c) : -1].filter(i=>i>=0);
+  const allPBranches = [BRANCH.findIndex(b=>b.c===partnerSaju.year.b.c), BRANCH.findIndex(b=>b.c===partnerSaju.month.b.c), pBrIdx, partnerSaju.hour?.b ? BRANCH.findIndex(b=>b.c===partnerSaju.hour.b.c) : -1].filter(i=>i>=0);
+  let samhapFound = false;
+  for (const [element, trio] of Object.entries(MATCH_TRIPLE_HARMONY/*三合*/)) {
+    const myHas = trio.filter(t => allMyBranches.includes(t)).length;
+    const pHas = trio.filter(t => allPBranches.includes(t)).length;
+    // 일지가 삼합에 포함되고, 두 사람 합쳐서 삼합 완성
+    if ((trio.includes(myBrIdx) || trio.includes(pBrIdx)) && myHas + pHas >= 3) {
+      const bonus = (trio.includes(myBrIdx) && trio.includes(pBrIdx)) ? 12 : 8;
+      result.score += bonus;
+      result.categories.samhap = { score: bonus, title: '三合/Samhap '+element.toUpperCase()+'局 (Triple Harmony)', desc: 'Together you form a powerful '+element+' trinity!', advice: 'Strong karmic bond.' };
+      samhapFound = true;
+      break;
+    }
+  }
+  
+  // ===== 원진 체크 =====
+  result.hasWonjin = MATCH_RESENTMENT/*怨嗔*/.some(([a,b]) => (myBrIdx === a && pBrIdx === b) || (myBrIdx === b && pBrIdx === a));
+  if (result.hasWonjin) { 
+    const penalty = mode === 'romance' ? -12 : -8;
+    result.score += penalty; 
+    result.categories.wonjin = { score: penalty, title: '怨嗔/Wonjin (Karmic Friction)', desc: 'Near-clash energy (充 adjacent). Lingering tension, not clean break.', advice: 'Extra patience and communication needed.' }; 
+  }
+  if (myGods && partnerGods) {
+    const pStemElements = [STEM.find(s=>s.c===partnerSaju.year.s.c)?.e,STEM.find(s=>s.c===partnerSaju.month.s.c)?.e,STEM.find(s=>s.c===partnerSaju.day.s.c)?.e,STEM.find(s=>s.c===partnerSaju.hour?.s?.c)?.e].filter(Boolean);
+    const pBranchElements = [partnerSaju.year.b?.e, partnerSaju.month.b?.e, partnerSaju.day.b?.e, partnerSaju.hour?.b?.e].filter(Boolean);
+    const pElements = [...pStemElements, ...pBranchElements];
+    const myYongElement = myGods.yong;
+    const yongCount = pElements.filter(e => e === myYongElement).length;
+    if (yongCount >= 2) { result.score += 15; result.categories.yongsinMatch = { score: 15, title: '用神/Yongsin Match', desc: 'Partner brings your Beneficial Element in abundance!' }; }
+    else if (yongCount >= 1) { result.score += 8; result.categories.yongsinMatch = { score: 8, title: '用神/Yongsin Present', desc: 'Partner has your Beneficial Element.' }; }
+    // ===== 양방향 용신: 내가 상대의 용신을 가져다주는 경우 =====
+    if (partnerGods?.yong) {
+      const myElements = [];
+      [mySaju.year, mySaju.month, mySaju.day, mySaju.hour].forEach(p => {
+        if (p?.s) myElements.push(p.s.e);
+        if (p?.b) myElements.push(p.b.e);
+      });
+      const pYongInMe = myElements.filter(e => e === partnerGods.yong).length;
+      if (pYongInMe >= 2) { result.score += 10; result.categories.iAmYongsin = { score: 10, title: '用神/I Bring Partner\'s Yongsin', desc: 'I bring partner\'s Beneficial Element abundantly! I am their fortune!' }; }
+      else if (pYongInMe >= 1) { result.score += 5; result.categories.iAmYongsin = { score: 5, title: '用神/I Have Partner\'s Yongsin', desc: 'I have what partner needs.' }; }
+    }
+    const myGiElement = myGods.gi;
+    const giCount = pElements.filter(e => e === myGiElement).length;
+    
+    // ===== 조후론(調候論) - 忌神과 무관하게 체크 =====
+    const mbi = BRANCH.findIndex(b => b.c === mySaju.month.b.c);
+    const myDmEl = mySaju.day.s.e;
+    const pHasFire = pElements.includes('fire');
+    const pHasWater = pElements.includes('water');
+    const pHasWood = pElements.includes('wood');
+    
+    // 직접 조후용신 케이스 (+15)
+    const isDongToFire = myDmEl === 'earth' && [0, 1, 11].includes(mbi) && pHasFire;
+    const isHaToWater = myDmEl === 'earth' && [5, 6, 7].includes(mbi) && pHasWater;
+    const isHanGeumFire = myDmEl === 'metal' && [0, 1, 11].includes(mbi) && pHasFire;
+    const isHanSuFire = myDmEl === 'water' && [0, 1, 11].includes(mbi) && pHasFire;
+    
+    // 통관 케이스 (+8)
+    const isDongToWood = myDmEl === 'earth' && [0, 1, 11].includes(mbi) && pHasWood;
+    
+    // 조후론 적용 (忌神 여부와 무관!)
+    let johuApplied = false;
+    if (isDongToFire || isHaToWater || isHanGeumFire || isHanSuFire) {
+      const caseName = isDongToFire ? '冬土得陽' : isHaToWater ? '夏土得雨' : isHanGeumFire ? '寒金鍛造' : '寒水調暖';
+      const caseDesc = isDongToFire ? 'Winter Earth meets Sun!' : 
+                       isHaToWater ? 'Summer Earth gets Rain!' :
+                       isHanGeumFire ? 'Cold Metal meets Fire!' : 'Cold Water meets Sun!';
+      result.score += 15;
+      result.categories.johuMatch = { score: 15, title: caseName + '/Johu (Climate Match)', desc: caseDesc + ' Perfect climate synergy!', advice: 'Blessed union by traditional theory!' };
+      johuApplied = true;
+    }
+    else if (isDongToWood) {
+      result.score += 8;
+      result.categories.tongguanMatch = { score: 8, title: '冬土通關/Tongguan (Climate Bridge)', desc: 'Wood bridges Water to Fire. Indirect warmth.', advice: 'Wood energy helps circulation!' };
+      johuApplied = true;
+    }
+    
+    // 忌神 로직 (조후론 미적용 시에만)
+    if (!johuApplied && giCount >= 2) {
+      if (mode === 'business') {
+        result.score += 5;
+        result.categories.businessTension = { score: 5, title: '生意相剋 (Productive Friction)', desc: 'In business, tension drives innovation.', advice: 'Channel friction into success.' };
+      } else {
+        result.score -= 5;
+        result.categories.gisinConflict = { score: -5, title: '忌神/Gisin Present', desc: 'Partner brings challenging energy.', advice: 'Awareness transforms friction into growth.' };
+      }
+    }
+  }
+  if (myStrength && partnerStrength) {
+    const myType = myStrength.type;
+    const pType = partnerStrength.type;
+    if ((myType==='strong'&&pType==='weak')||(myType==='weak'&&pType==='strong')) { result.score += 10; result.categories.strengthBalance = { score: 10, title: '陰陽 Balance', desc: 'Perfect yin-yang complement.' }; }
+    else if (myType==='strong'&&pType==='strong') { result.score -= 5; result.categories.strengthBalance = { score: -5, title: 'Double Strong', desc: 'Two strong wills may clash.', advice: 'Designate domains of authority.' }; }
+  }
+  result.score = Math.max(0, Math.min(100, result.score));
+  if (result.score >= 85) { result.grade = '💖 Soulmates'; result.gradeK = '천생연분'; result.summary = 'A match written in the stars.'; }
+  else if (result.score >= 70) { result.grade = '💕 Excellent'; result.gradeK = '아주 좋은 궁합'; result.summary = 'Strong harmony with natural flow.'; }
+  else if (result.score >= 55) { result.grade = '💛 Good'; result.gradeK = '좋은 궁합'; result.summary = 'Solid foundation with growth potential.'; }
+  else if (result.score >= 40) { result.grade = '🧡 Average'; result.gradeK = '보통 궁합'; result.summary = 'Different energies that can complement.'; }
+  else { result.grade = '💔 Challenging'; result.gradeK = '노력 필요'; result.summary = 'Significant differences requiring conscious work.'; }
+  return result;
+}
+
+function analyzeYearlyRisks(mySaju, partnerSaju, startYear, years) {
+  const risks = [];
+  for (let year = startYear; year < startYear + years; year++) {
+    const yearBranch = (year - 4) % 12;
+    const yearEvents = [];
+    const pBrIdx = BRANCH.findIndex(b => b.c === partnerSaju.day.b.c);
+    if (BRANCH_CLASH.some(([a,b]) => (pBrIdx===a&&yearBranch===b)||(pBrIdx===b&&yearBranch===a))) { yearEvents.push({ type: 'partner_clash', severity: 'HIGH', desc: 'Partner Day Branch clashes with '+year, advice: 'Be extra supportive.' }); }
+    if (SELF_PUNISHMENT.some(([a,b]) => pBrIdx===a&&yearBranch===b)) { yearEvents.push({ type: 'partner_self_punishment', severity: 'MEDIUM', desc: 'Partner enters self-punishment year in '+year, advice: 'Watch for self-destructive tendencies.' }); }
+    const myBrIdx = BRANCH.findIndex(b => b.c === mySaju.day.b.c);
+    if (BRANCH_CLASH.some(([a,b]) => (myBrIdx===a&&yearBranch===b)||(myBrIdx===b&&yearBranch===a))) { yearEvents.push({ type: 'my_clash', severity: 'HIGH', desc: 'Your Day Branch clashes with '+year, advice: 'Focus on self-care.' }); }
+    if (yearEvents.length > 0) risks.push({ year, events: yearEvents });
+  }
+  return risks;
+}
+
+function analyzeMatch() {
+  if (!SAJU) { toast('Please analyze your birth chart first!'); switchGame('saju'); return; }
+  const pYear = parseInt(document.getElementById('match-year')?.value);
+  const pMonth = parseInt(document.getElementById('match-month')?.value);
+  const pDay = parseInt(document.getElementById('match-day')?.value);
+  const pHour = document.getElementById('match-hour')?.value;
+  const mode = document.getElementById('match-mode')?.value || 'romance';
+  if (!pYear || !pMonth || !pDay) { toast('Please enter partner birth date'); return; }
+  const pYearPillar = calcYearPillar(pYear, pMonth, pDay);
+  const pMonthPillar = calcMonthPillar(pYear, pMonth, pDay);
+  const pDayPillar = calcDayPillar(pYear, pMonth, pDay);
+  let pHourPillar = null;
+  if (pHour !== '' && pHour !== undefined) { const hourIdx = parseInt(pHour); pHourPillar = calcHourPillar(pDayPillar, hourIdx); }
+  PARTNER_SAJU = { year: pYearPillar, month: pMonthPillar, day: pDayPillar, hour: pHourPillar };
+  PARTNER_STRENGTH = calcStrength(PARTNER_SAJU, pMonth);
+  const pDmIdx = STEM.findIndex(s => s.c === PARTNER_SAJU.day.s.c);
+  const pDm = STEM[pDmIdx];
+  PARTNER_GODS = calcGods(PARTNER_SAJU, PARTNER_STRENGTH);
+  MATCH_RESULT = analyzeMatchAdvanced(SAJU, GODS, STRENGTH, PARTNER_SAJU, PARTNER_GODS, PARTNER_STRENGTH, mode);
+  const currentYear = new Date().getFullYear();
+  MATCH_RESULT.yearlyRisks = analyzeYearlyRisks(SAJU, PARTNER_SAJU, currentYear, 5);
+  displayMatchResult(MATCH_RESULT, mode);
+}
+
+function displayMatchResult(result, mode) {
+  const resultDiv = document.getElementById('match-result');
+  if (!resultDiv) return;
+  document.getElementById('match-grade').textContent = result.grade;
+  document.getElementById('match-score').textContent = result.score + '/100';
+  document.getElementById('match-score-bar').style.width = result.score + '%';
+  document.getElementById('match-summary').textContent = result.summary;
+  const myIlju = SAJU.day.s.c + SAJU.day.b.c;
+  document.getElementById('match-my-ilju').textContent = myIlju;
+  document.getElementById('match-my-emoji').textContent = result.myCharacter?.emoji || '🔮';
+  document.getElementById('match-my-name').textContent = result.myCharacter?.name || 'Unknown';
+  document.getElementById('match-my-desc').textContent = result.myCharacter?.desc || '';
+  const pIlju = PARTNER_SAJU.day.s.c + PARTNER_SAJU.day.b.c;
+  document.getElementById('match-partner-ilju').textContent = pIlju;
+  document.getElementById('match-partner-emoji').textContent = result.partnerCharacter?.emoji || '🔮';
+  document.getElementById('match-partner-name').textContent = result.partnerCharacter?.name || 'Unknown';
+  document.getElementById('match-partner-desc').textContent = result.partnerCharacter?.desc || '';
+  const interaction = result.myToPartner || result.partnerToMe;
+  if (interaction) { document.getElementById('match-interaction-emoji').textContent = interaction.emoji; document.getElementById('match-interaction-name').textContent = interaction.name; }
+  const dynamicsDiv = document.getElementById('match-dynamics');
+  let dynamicsHTML = '';
+  if (result.myToPartner) { dynamicsHTML += '<div class="info-box" style="border-left-color:var(--gold);margin-bottom:10px;"><p style="font-weight:bold;margin-bottom:5px;"><span style="color:var(--gold);">Me</span> → <span style="color:#FF69B4;">Partner</span>: "'+result.myToPartner.name+'" '+result.myToPartner.emoji+'</p><p style="font-size:0.85rem;color:var(--pearl);margin-bottom:5px;">'+result.myToPartner.desc+'</p><p style="font-size:0.8rem;color:var(--gray);">💡 '+result.myToPartner.advice+'</p></div>'; }
+  if (result.partnerToMe) { dynamicsHTML += '<div class="info-box" style="border-left-color:#FF69B4;"><p style="font-weight:bold;margin-bottom:5px;"><span style="color:#FF69B4;">Partner</span> → <span style="color:var(--gold);">Me</span>: "'+result.partnerToMe.name+'" '+result.partnerToMe.emoji+'</p><p style="font-size:0.85rem;color:var(--pearl);margin-bottom:5px;">'+result.partnerToMe.desc+'</p><p style="font-size:0.8rem;color:var(--gray);">💡 '+result.partnerToMe.advice+'</p></div>'; }
+  dynamicsDiv.innerHTML = dynamicsHTML || '<p style="color:var(--gray);">Same element relationship</p>';
+  const catDiv = document.getElementById('match-categories');
+  let catHTML = '';
+  for (const [key, cat] of Object.entries(result.categories)) { const isPositive = cat.score > 0; catHTML += '<div class="match-category-item '+(isPositive?'positive':'negative')+'"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;"><span style="font-weight:bold;color:var(--pearl);">'+cat.title+'</span><span style="color:'+(isPositive?'var(--wood)':'var(--fire)')+';font-weight:bold;">'+(isPositive?'+':'')+cat.score+'</span></div><p style="font-size:0.85rem;color:var(--gray);">'+cat.desc+'</p>'+(cat.advice?'<p style="font-size:0.8rem;color:var(--gold);margin-top:5px;">💡 '+cat.advice+'</p>':'')+'</div>'; }
+  catDiv.innerHTML = catHTML || '<p style="color:var(--gray);">Analysis will appear here</p>';
+  if (result.yearlyRisks && result.yearlyRisks.length > 0) { const yearlyCard = document.getElementById('match-yearly-card'); const yearlyDiv = document.getElementById('match-yearly'); let yearlyHTML = ''; for (const risk of result.yearlyRisks) { yearlyHTML += '<div style="margin-bottom:15px;"><p style="font-weight:bold;color:var(--gold);margin-bottom:8px;">📅 '+risk.year+'</p>'; for (const event of risk.events) { const severityClass = event.severity === 'HIGH' ? '' : 'medium'; yearlyHTML += '<div class="match-year-risk '+severityClass+'"><p style="font-weight:bold;margin-bottom:5px;">⚠️ ['+event.severity+'] '+event.type.replace(/_/g,' ').toUpperCase()+'</p><p style="font-size:0.85rem;margin-bottom:5px;">'+event.desc+'</p><p style="font-size:0.8rem;color:var(--gold);">→ '+event.advice+'</p></div>'; } yearlyHTML += '</div>'; } yearlyDiv.innerHTML = yearlyHTML; yearlyCard.style.display = 'block'; } else { document.getElementById('match-yearly-card').style.display = 'none'; }
+  resultDiv.style.display = 'block';
+  document.getElementById('match-score-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods, mode) { try {
+  const modeNames = { 'romance': 'Romance / Marriage', 'business': 'Business Partnership', 'family': 'Family / Parent-Child' };
+  const myIlju = mySaju.day.s.c + mySaju.day.b.c;
+  const pIlju = partnerSaju.day.s.c + partnerSaju.day.b.c;
+  const myDm = mySaju.day.s;
+  const pDm = partnerSaju.day.s;
+  const getTenGodSimple = (stem, dm) => { if (!stem || !dm) return { k: '?' }; const elOrder = ['wood', 'fire', 'earth', 'metal', 'water']; const diff = (elOrder.indexOf(stem.e) - elOrder.indexOf(dm.e) + 5) % 5; const sameP = stem.y === dm.y; const godMap = { 0: sameP ? '比肩' : '劫財', 1: sameP ? '食神' : '傷官', 2: sameP ? '偏財' : '正財', 3: sameP ? '偏官' : '正官', 4: sameP ? '偏印' : '正印' }; return { k: godMap[diff] || '?' }; };
+  const getTwelveStateSimple = (dm, branch) => { if (!dm || !branch) return { k: '?', l: 0 }; const statesK = ['Birth','Bath','Crown','Office','Peak','Decline','Sick','Death','Tomb','Cut','Womb','Nurture']; const levels = [9, 7, 8, 10, 12, 5, 3, 1, 4, 2, 6, 8]; const startMap = { wood: { y: 11, n: 6 }, fire: { y: 2, n: 9 }, earth: { y: 2, n: 9 }, metal: { y: 5, n: 0 }, water: { y: 8, n: 3 } }; const branchIdx = BRANCH.findIndex(b => b.c === branch.c); const start = startMap[dm.e]?.[dm.y ? 'y' : 'n'] || 0; const dir = dm.y ? 1 : -1; const idx = ((branchIdx - start) * dir % 12 + 12) % 12; return { k: statesK[idx], l: levels[idx] }; };
+  const getSpouseStar = (dm, gender) => { const elOrder = ['wood', 'fire', 'earth', 'metal', 'water']; const dmIdx = elOrder.indexOf(dm.e); return gender === 'm' ? { el: elOrder[(dmIdx + 2) % 5], name: '財星' } : { el: elOrder[(dmIdx + 3) % 5], name: '官星' }; };
+  const countElInChart = (saju, el) => { let cnt = 0; [saju.year.s, saju.month.s, saju.day.s, saju.hour?.s].filter(Boolean).forEach(s => { if (s.e === el) cnt++; }); [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(Boolean).forEach(b => { if (b.e === el) cnt++; }); return cnt; };
+  const myYearGod = getTenGodSimple(mySaju.year.s, myDm); const myMonthGod = getTenGodSimple(mySaju.month.s, myDm); const myHourGod = mySaju.hour ? getTenGodSimple(mySaju.hour.s, myDm) : null;
+  const pYearGod = getTenGodSimple(partnerSaju.year.s, pDm); const pMonthGod = getTenGodSimple(partnerSaju.month.s, pDm); const pHourGod = partnerSaju.hour ? getTenGodSimple(partnerSaju.hour.s, pDm) : null;
+  const myDayState = getTwelveStateSimple(myDm, mySaju.day.b); const pDayState = getTwelveStateSimple(pDm, partnerSaju.day.b);
+  const mySpouseStar = getSpouseStar(myDm, GENDER); const pSpouseStar = getSpouseStar(pDm, PARTNER_GENDER);
+  const mySSInP = countElInChart(partnerSaju, mySpouseStar.el); const pSSInMe = countElInChart(mySaju, pSpouseStar.el);
+  const myYongInP = myGods?.yong ? countElInChart(partnerSaju, myGods.yong) : 0; const myGiInP = myGods?.gi ? countElInChart(partnerSaju, myGods.gi) : 0;
+  const pYongInMe = partnerGods?.yong ? countElInChart(mySaju, partnerGods.yong) : 0; const pGiInMe = partnerGods?.gi ? countElInChart(mySaju, partnerGods.gi) : 0;
+  const criticals = [];
+  if (result.hasStemCombine) criticals.push('💫 HEAVENLY STEM COMBINATION (天干合) - Soulmate potential!');
+  if (result.hasBranchCombine) criticals.push('💕 SIX HARMONY (六合) - Spouse palace harmony!');
+  if (result.hasBranchClash) criticals.push('⚠️ SPOUSE PALACE CLASH (日支沖) - Tension but passion.');
+  if (mySSInP >= 2 && mySpouseStar?.el && ELEMENT[mySpouseStar.el]) criticals.push('✅ Partner brings ' + mySSInP + 'x of my Spouse Star (' + ELEMENT[mySpouseStar.el].k + ') - Strong attraction!');
+  if (myYongInP >= 2 && myGods?.yong && ELEMENT[myGods.yong]) criticals.push('🌟 Partner brings my 用神 (' + ELEMENT[myGods.yong].k + ') abundantly!');
+  if (myGiInP >= 2 && myGods?.gi && ELEMENT[myGods.gi]) criticals.push('⚠️ Partner brings my 忌神 (' + ELEMENT[myGods.gi].k + ') - Needs management.');
+  // ===== 조후론(調候論) 특수 케이스 =====
+  const mbi = BRANCH.findIndex(b => b.c === mySaju.month.b.c);
+  const myDmEl = myDm.e;
+  const pStemEls = [partnerSaju.year.s.e, partnerSaju.month.s.e, partnerSaju.day.s.e, partnerSaju.hour?.s?.e].filter(Boolean);
+  const pBranchEls = [partnerSaju.year.b?.e, partnerSaju.month.b?.e, partnerSaju.day.b?.e, partnerSaju.hour?.b?.e].filter(Boolean);
+  const pElements = [...pStemEls, ...pBranchEls];
+  
+  // 동토(冬土) + 木
+  if (myDmEl === 'earth' && [0, 1].includes(mbi) && pElements.includes('wood')) {
+    criticals.push('🌱 WINTER EARTH CULTIVATION (冬土開墾): Your frozen Earth needs Wood to plow! This is NOT 忌神 - it is ESSENTIAL!');
+  }
+  // 하토(夏土) + 水
+  if (myDmEl === 'earth' && [6, 7].includes(mbi) && pElements.includes('water')) {
+    criticals.push('💧 SUMMER EARTH IRRIGATION (夏土灌漑): Your parched Earth needs Water! Partner provides life-giving moisture.');
+  }
+  // 한금(寒金) + 火
+  if (myDmEl === 'metal' && [11, 0, 1].includes(mbi) && pElements.includes('fire')) {
+    criticals.push('🔥 WINTER METAL FORGING (寒金鍛造): Cold Metal needs Fire to become useful! Partner is your forge.');
+  }
+  // 한수(寒水) + 火
+  if (myDmEl === 'water' && [11, 0, 1].includes(mbi) && pElements.includes('fire')) {
+    criticals.push('☀️ WINTER WATER WARMING (寒水調暖): Frozen Water needs Sun! Partner brings essential warmth.');
+  }
+  
+  // 삼합 표시
+  if (result.categories.samhap) {
+    criticals.push('🔱 TRIPLE HARMONY (三合): ' + result.categories.samhap.desc);
+  }
+  // 원진 표시
+  if (result.categories.wonjin) {
+    criticals.push('⚠️ RESENTMENT RISK (怨嗔): ' + result.categories.wonjin.desc);
+  }
+  if (criticals.length === 0) criticals.push('No major critical factors detected.');
+  let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.0) =====
+⚠️ AI: This is professional K-Fortune compatibility analysis. Interpret ALL data.
+
+【⚡ CRITICAL FACTORS - ADDRESS FIRST ⚡】
+` + criticals.map((c, i) => (i+1) + '. ' + c).join('\n') + `
+
+【RELATIONSHIP TYPE】 ` + (modeNames[mode] || 'General') + `
+
+【MY FORTUNE CHART】
+• Year: ` + mySaju.year.s.c + mySaju.year.b.c + ` (` + ELEMENT[mySaju.year.s.e].k + `/` + ELEMENT[mySaju.year.b.e].k + `) - ` + myYearGod.k + `
+• Month: ` + mySaju.month.s.c + mySaju.month.b.c + ` (` + ELEMENT[mySaju.month.s.e].k + `/` + ELEMENT[mySaju.month.b.e].k + `) - ` + myMonthGod.k + ` ← Month Lord
+• Day: ` + mySaju.day.s.c + mySaju.day.b.c + ` (` + ELEMENT[mySaju.day.s.e].k + `/` + ELEMENT[mySaju.day.b.e].k + `) - SELF - ` + myDayState.k + `(` + myDayState.l + `/12)
+• Hour: ` + (mySaju.hour ? mySaju.hour.s.c + mySaju.hour.b.c + ' (' + ELEMENT[mySaju.hour.s.e].k + '/' + ELEMENT[mySaju.hour.b.e].k + ') - ' + (myHourGod?.k||'?') : '??') + `
+• Day Master: ` + myDm.c + ` ` + ELEMENT[myDm.e].n + ` (` + (myDm.y ? 'Yang' : 'Yin') + `)
+• Character: "` + (result.myCharacter?.name || '?') + `" ` + (result.myCharacter?.emoji || '') + `
+• Strength: ` + (STRENGTH?.pct || '?') + `% (` + (STRENGTH?.type === 'strong' ? 'STRONG' : STRENGTH?.type === 'weak' ? 'WEAK' : 'BALANCED') + `)
+• 用神: ` + (myGods?.yong ? ELEMENT[myGods.yong].n : '?') + ` | 忌神: ` + (myGods?.gi ? ELEMENT[myGods.gi].n : '?') + `
+• Spouse Palace: ` + mySaju.day.b.c + ` (` + mySaju.day.b.k + `)
+
+【PARTNER'S FORTUNE CHART】
+• Year: ` + partnerSaju.year.s.c + partnerSaju.year.b.c + ` (` + ELEMENT[partnerSaju.year.s.e].k + `/` + ELEMENT[partnerSaju.year.b.e].k + `) - ` + pYearGod.k + `
+• Month: ` + partnerSaju.month.s.c + partnerSaju.month.b.c + ` (` + ELEMENT[partnerSaju.month.s.e].k + `/` + ELEMENT[partnerSaju.month.b.e].k + `) - ` + pMonthGod.k + ` ← Month Lord
+• Day: ` + partnerSaju.day.s.c + partnerSaju.day.b.c + ` (` + ELEMENT[partnerSaju.day.s.e].k + `/` + ELEMENT[partnerSaju.day.b.e].k + `) - SELF - ` + pDayState.k + `(` + pDayState.l + `/12)
+• Hour: ` + (partnerSaju.hour ? partnerSaju.hour.s.c + partnerSaju.hour.b.c + ' (' + ELEMENT[partnerSaju.hour.s.e].k + '/' + ELEMENT[partnerSaju.hour.b.e].k + ') - ' + (pHourGod?.k||'?') : '??') + `
+• Day Master: ` + pDm.c + ` ` + ELEMENT[pDm.e].n + ` (` + (pDm.y ? 'Yang' : 'Yin') + `)
+• Character: "` + (result.partnerCharacter?.name || '?') + `" ` + (result.partnerCharacter?.emoji || '') + `
+• Strength: ` + (PARTNER_STRENGTH?.pct || '?') + `% (` + (PARTNER_STRENGTH?.type === 'strong' ? 'STRONG' : PARTNER_STRENGTH?.type === 'weak' ? 'WEAK' : 'BALANCED') + `)
+• 用神: ` + (partnerGods?.yong ? ELEMENT[partnerGods.yong].n : '?') + ` | 忌神: ` + (partnerGods?.gi ? ELEMENT[partnerGods.gi].n : '?') + `
+• Spouse Palace: ` + partnerSaju.day.b.c + ` (` + partnerSaju.day.b.k + `)
+
+【SPOUSE STAR CROSS-ANALYSIS】 ⚠️ ATTRACTION
+• My Spouse Star (` + ELEMENT[mySpouseStar.el].k + `): Partner has ` + mySSInP + `x → ` + (mySSInP >= 2 ? '✅ Strong!' : mySSInP === 1 ? '😊 Moderate' : '❌ Low') + `
+• Partner's Spouse Star (` + ELEMENT[pSpouseStar.el].k + `): I have ` + pSSInMe + `x → ` + (pSSInMe >= 2 ? '✅ Strong!' : pSSInMe === 1 ? '😊 Moderate' : '❌ Low') + `
+
+【用神/忌神 CROSS-CHECK】
+• My 用神 (` + (myGods?.yong ? ELEMENT[myGods.yong].k : '?') + `): Partner brings ` + myYongInP + `x ` + (myYongInP >= 2 ? '✅ FAVORABLE' : '') + `
+• My 忌神 (` + (myGods?.gi ? ELEMENT[myGods.gi].k : '?') + `): Partner brings ` + myGiInP + `x ` + (myGiInP >= 2 ? '⚠️ CAUTION' : '') + `
+• Partner's 用神 (` + (partnerGods?.yong ? ELEMENT[partnerGods.yong].k : '?') + `): I bring ` + pYongInMe + `x
+• Partner's 忌神 (` + (partnerGods?.gi ? ELEMENT[partnerGods.gi].k : '?') + `): I bring ` + pGiInMe + `x
+
+【ELEMENTAL DYNAMICS】
+`;
+  if (result.myToPartner) { prompt += `Me → Partner: "` + result.myToPartner.name + `" ` + result.myToPartner.emoji + ` (` + (result.myToPartner.type === 'generate' ? 'SUPPORT 生' : result.myToPartner.type === 'control' ? 'CONTROL 克' : 'SAME 比') + `)
+  ` + result.myToPartner.desc + ` → ` + result.myToPartner.advice + `
+`; }
+  if (result.partnerToMe) { prompt += `Partner → Me: "` + result.partnerToMe.name + `" ` + result.partnerToMe.emoji + ` (` + (result.partnerToMe.type === 'generate' ? 'SUPPORT 生' : result.partnerToMe.type === 'control' ? 'CONTROL 克' : 'SAME 比') + `)
+  ` + result.partnerToMe.desc + ` → ` + result.partnerToMe.advice + `
+`; }
+  prompt += `
+【COMPATIBILITY SCORE】 ` + result.score + `/100 - ` + result.grade + `
+` + (result.summary || '') + `
+
+【DETAILED SCORING】
+`;
+  for (const [key, cat] of Object.entries(result.categories)) { prompt += `• ` + cat.title + `: ` + (cat.score > 0 ? '+' : '') + cat.score + ` - ` + cat.desc + (cat.advice ? ' → ' + cat.advice : '') + `
+`; }
+  if (result.yearlyRisks && result.yearlyRisks.length > 0) { prompt += `
+【YEARLY FORECAST】
+`; for (const risk of result.yearlyRisks) { prompt += risk.year + `:
+`; for (const event of risk.events) { prompt += `  ⚠️ [` + event.severity + `] ` + event.desc + ` → ` + event.advice + `
+`; } } }
+  prompt += `
+【⚠️ TERMINOLOGY GUIDE (術語指南)】
+• 六合 (Six Harmony): Spouse palace bond - strongest romantic indicator
+• 三合 (Triple Harmony): Karmic trinity - shared life purpose  
+• 怨嗔 (Resentment): Hidden friction - requires extra patience
+• 天干合 (Stem Combine): Heavenly match - mental/spiritual connection
+• 日支沖 (Branch Clash): Spouse palace conflict - passionate but volatile
+
+【⚠️ 調候論 (CLIMATE THEORY) - CRITICAL FOR INTERPRETATION】
+The traditional 忌神 (Unfavorable Element) concept is OVERRIDDEN by seasonal needs:
+• 冬土 (Winter Earth) + 木: Wood PLOWS frozen soil → FAVORABLE (+15)
+• 夏土 (Summer Earth) + 水: Water IRRIGATES dry soil → FAVORABLE (+15)  
+• 寒金 (Winter Metal) + 火: Fire FORGES cold metal → FAVORABLE (+15)
+• 寒水 (Winter Water) + 火: Fire WARMS frozen water → FAVORABLE (+15)
+
+【RELATIONSHIP TYPE MATTERS】
+• ROMANCE/FAMILY: Comfort matters, but growth friction is still valuable
+• BUSINESS: Tension = Innovation! Opposing forces drive success (+5 bonus)
+
+【AI ANALYSIS REQUEST】
+1. NARRATIVE: Describe "` + (result.myCharacter?.name || '?') + `" meeting "` + (result.partnerCharacter?.name || '?') + `" as a story.
+2. SPOUSE STAR: Am I their type? Are they mine?
+3. 用神/忌神: How does being together affect our energy?
+4. STRENGTHS: What makes this work? (Use pillar references)
+5. CHALLENGES: Recurring conflicts?
+6. ADVICE: Three specific recommendations.
+7. TIMING: Best/worst years based on forecast.
+Use character metaphors throughout.
+`;
+  return prompt; } catch(e) { console.error('generateMatchAIPrompt error:', e); return '=== ERROR: ' + e.message + ' ===' + '\nPlease report this bug.'; }
+}
+
+function copyMatchForAI() { try {
+  if (!MATCH_RESULT || !SAJU || !PARTNER_SAJU) { toast('Please analyze compatibility first'); return; }
+  const mode = document.getElementById('match-mode')?.value || 'romance';
+  const prompt = generateMatchAIPrompt(MATCH_RESULT, SAJU, PARTNER_SAJU, GODS, PARTNER_GODS, mode);
+  navigator.clipboard.writeText(prompt).then(() => { toast('✨ Compatibility analysis copied!'); }).catch(err => { const textarea = document.createElement('textarea'); textarea.value = prompt; document.body.appendChild(textarea); textarea.select(); document.execCommand('copy'); document.body.removeChild(textarea); toast('✨ Copied!'); }); } catch(e) { console.error('copyMatchForAI error:', e); toast('Error: ' + e.message); }
+}
+
+function shareMatchResult() {
+  if (!MATCH_RESULT) { toast('Please analyze compatibility first'); return; }
+  const myIlju = SAJU.day.s.c + SAJU.day.b.c;
+  const pIlju = PARTNER_SAJU.day.s.c + PARTNER_SAJU.day.b.c;
+  const shareData = { title: '💕 K-MUDANG Compatibility', text: myIlju+' "'+MATCH_RESULT.myCharacter?.name+'" & '+pIlju+' "'+MATCH_RESULT.partnerCharacter?.name+'"\n\nScore: '+MATCH_RESULT.score+'/100 '+MATCH_RESULT.grade+'\n\nAnalyze at:', url: window.location.href };
+  if (navigator.share) { navigator.share(shareData).catch(err => { if (err.name !== 'AbortError') copyShareLink(); }); } else { copyShareLink(); }
+}
+
+const PAST_WINNERS = [
 [1,4,16,23,31,41],[10,23,29,33,37,40],[9,13,21,25,32,42],[11,16,19,21,27,31],[14,27,30,31,40,42],[16,24,29,40,41,42],
 [14,15,26,27,40,42],[2,9,16,25,26,40],[8,19,25,34,37,39],[2,4,16,17,36,39],[9,25,30,33,41,44],[1,7,36,37,41,42],
 [2,11,21,25,39,45],[22,34,36,37,42,44],[2,6,12,19,33,44],[1,4,9,23,34,45],[6,13,27,35,40,41],[4,14,22,38,39,45],
@@ -270,16 +778,16 @@ document.addEventListener('contextmenu',function(e){e.preventDefault();return fa
 fire:{c:'火',k:'Fire',n:'火(Fire)',color:'#F44336',icon:'🔥',nums:[2,7,12,17,22,27,32,37,42]},
 earth:{c:'土',k:'Earth',n:'土(Earth)',color:'#FF9800',icon:'🌍',nums:[5,10,15,20,25,30,35,40,45]},
 metal:{c:'金',k:'Metal',n:'金(Metal)',color:'#9E9E9E',icon:'⚙️',nums:[4,9,14,19,24,29,34,39,44]},
-water:{c:'水',k:'Water',n:'水(Water)',color:'#2196F3',icon:'💧',nums:[1,6,11,16,21,26,31,36,41]}};const EL_ORDER = ['wood','fire','earth','metal','water'];const BANGHAP = [
+water:{c:'水',k:'Water',n:'水(Water)',color:'#2196F3',icon:'💧',nums:[1,6,11,16,21,26,31,36,41]}};const EL_ORDER = ['wood','fire','earth','metal','water'];const DIRECTIONAL_HARMONY/*方合*/ = [
 {branches: [2,3,4], element: 'wood', name: '寅卯辰(Tiger-Rabbit-Dragon) 方合(Directional Harmony)', dir: 'Eastern Wood Direction'},
 {branches: [5,6,7], element: 'fire', name: '巳午未(Snake-Horse-Goat) 方合(Directional Harmony)', dir: 'Southern Fire'},
 {branches: [8,9,10], element: 'metal', name: '申酉戌(Monkey-Rooster-Dog) 方合(Directional Harmony)', dir: 'Western Metal Direction'},
 {branches: [11,0,1], element: 'water', name: '亥子丑(Pig-Rat-Ox) 方合(Directional Harmony)', dir: 'Northern Water Direction'}
-];const AMHAP = [
+];const HIDDEN_HARMONY/*暗合*/ = [
 {a: 2, b: 1, name: '寅丑(Tiger-Ox) Hidden Harmony', desc: '寅(Tiger) Yang Fire(丙) + 丑(Ox) Yin Metal(辛) = 丙辛合'},
 {a: 3, b: 8, name: '卯申(Rabbit-Monkey) Hidden Harmony', desc: '卯(Rabbit) Yin Wood(乙) + 申(Monkey) Yang Metal(庚) = 乙庚合'},
 {a: 6, b: 11, name: '午亥(Horse-Pig) Hidden Harmony', desc: '午(Horse) Yin Fire(丁) + 亥(Pig) Yang Water(壬) = 丁壬合'}
-];const NAPEUM = [
+];const SOUND_ELEMENT/*納音*/ = [
 {name: 'Sea Metal (海中金)', element: 'metal', nameK: '해중금', desc: 'Gold hidden beneath the ocean. A treasure waiting to be discovered within your soul.'},
 {name: 'Furnace Fire (爐中火)', element: 'fire', nameK: '노중화', desc: 'Flames within the forge. Your spirit transforms raw potential into refined greatness.'},
 {name: 'Forest Wood (大林木)', element: 'wood', nameK: '대림목', desc: 'Towering trees of a great forest. Your presence commands respect and admiration.'},
@@ -310,16 +818,16 @@ water:{c:'水',k:'Water',n:'水(Water)',color:'#2196F3',icon:'💧',nums:[1,6,11
 {name: 'Heavenly Fire (天上火)', element: 'fire', nameK: '천상화', desc: 'Fire in the heavens — the Sun itself. Your radiance touches all around you.'},
 {name: 'Pomegranate Wood (石榴木)', element: 'wood', nameK: '석류목', desc: 'The pomegranate tree. Abundant fruits of your labor await harvest.'},
 {name: 'Ocean Water (大海水)', element: 'water', nameK: '대해수', desc: 'The vast ocean. Infinite capacity to embrace all of life\'s currents.'}
-];const SEASON = {0:'winter',1:'winter',2:'spring',3:'spring',4:'spring',5:'summer',6:'summer',7:'summer',8:'autumn',9:'autumn',10:'autumn',11:'winter'};const MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];const TEN_GODS = {bijeon:{k:'比肩 Peer',c:'比肩',e:'Peer',d:'The Alter Ego. Confidence and independence drive you. You thrive in equal partnerships.'},
-geupjae:{k:'劫財 Competitor',c:'劫財',e:'Competitor',d:'The Ambition. A fierce competitive spirit burns within. Channel this drive to conquer, not to conflict.'},
-siksin:{k:'食神 Eating God',c:'食神',e:'Eating God',d:'The Creator. Natural optimism and artistic talent flow through you. You are blessed with the joy of life.'},
-sanggwan:{k:'傷官 Expressor',c:'傷官',e:'Expressor',d:'The Innovator. You break rules to create new ones. Your sharp wit and expression are your greatest weapons.'},
-pyeonjae:{k:'偏財 Indirect Wealth',c:'偏財',e:'Indirect Wealth',d:'The Strategist. You see value where others don\'t. A risk-taker destined for dynamic wealth.'},
-jeongjae:{k:'正財 Direct Wealth',c:'正財',e:'Direct Wealth',d:'The Steward. Honest effort builds your empire. You value stability, trust, and tangible results.'},
-pyeongwan:{k:'偏官 Challenger',c:'偏官',e:'Challenger',d:'The Commander. Charisma and willpower define you. You are built to endure pressure and lead in crisis.'},
-jeonggwan:{k:'正官 Direct Officer',c:'正官',e:'Direct Officer',d:'The Guardian. Honor and principles guide your path. You shine in structured environments and leadership.'},
-pyeonin:{k:'偏印 Indirect Seal',c:'偏印',e:'Indirect Seal',d:'The Philosopher. Unconventional wisdom and intuition are your guides. You see the hidden truths of the world.'},
-jeongin:{k:'正印 Direct Seal',c:'正印',e:'Direct Seal',d:'The Scholar. Loved and supported by many. Wisdom and learning are your lifelong companions.'}};const TWELVE_STATES = [
+];const SEASON = {0:'winter',1:'winter',2:'spring',3:'spring',4:'spring',5:'summer',6:'summer',7:'summer',8:'autumn',9:'autumn',10:'autumn',11:'winter'};const MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];const TEN_GODS = {peer:{k:'比肩 Peer',c:'比肩',e:'Peer',d:'The Alter Ego. Confidence and independence drive you. You thrive in equal partnerships.'},
+robWealth:{k:'劫財 Competitor',c:'劫財',e:'Competitor',d:'The Ambition. A fierce competitive spirit burns within. Channel this drive to conquer, not to conflict.'},
+eatingGod:{k:'食神 Eating God',c:'食神',e:'Eating God',d:'The Creator. Natural optimism and artistic talent flow through you. You are blessed with the joy of life.'},
+hurtOfficer:{k:'傷官 Expressor',c:'傷官',e:'Expressor',d:'The Innovator. You break rules to create new ones. Your sharp wit and expression are your greatest weapons.'},
+indirectWealth:{k:'偏財 Indirect Wealth',c:'偏財',e:'Indirect Wealth',d:'The Strategist. You see value where others don\'t. A risk-taker destined for dynamic wealth.'},
+directWealth:{k:'正財 Direct Wealth',c:'正財',e:'Direct Wealth',d:'The Steward. Honest effort builds your empire. You value stability, trust, and tangible results.'},
+indirectOfficer:{k:'偏官 Challenger',c:'偏官',e:'Challenger',d:'The Commander. Charisma and willpower define you. You are built to endure pressure and lead in crisis.'},
+directOfficer:{k:'正官 Direct Officer',c:'正官',e:'Direct Officer',d:'The Guardian. Honor and principles guide your path. You shine in structured environments and leadership.'},
+indirectSeal:{k:'偏印 Indirect Seal',c:'偏印',e:'Indirect Seal',d:'The Philosopher. Unconventional wisdom and intuition are your guides. You see the hidden truths of the world.'},
+directSeal:{k:'正印 Direct Seal',c:'正印',e:'Direct Seal',d:'The Scholar. Loved and supported by many. Wisdom and learning are your lifelong companions.'}};const TWELVE_STATES = [
 {k:'長生(Birth)',l:12,d:'New life awakens. Fresh beginnings and infinite hope bless this phase.'},
 {k:'沐浴(Bath)',l:8,d:'The cleansing waters. Transformation brings temporary instability before renewal.'},
 {k:'冠帶(Crown)',l:10,d:'Rising energy. Growth accelerates as opportunities unfold before you.'},
@@ -501,7 +1009,7 @@ jeongin:{k:'正印 Direct Seal',c:'正印',e:'Direct Seal',d:'The Scholar. Loved
 0x0b273,0x06930,0x07337,0x06aa0,0x0ad50,0x14b55,0x04b60,0x0a570,0x054e4,0x0d160,
 0x0e968,0x0d520,0x0daa0,0x16aa6,0x056d0,0x04ae0,0x0a9d4,0x0a2d0,0x0d150,0x0f252,
 0x0d520
-];const LUNAR_START = 1900;const MY_ACCOUNT = "케이뱅크 100150462483 김대인";let GENDER = 'm';let CALENDAR = 'solar';let SAJU = null;let GODS = null;let STRENGTH = null;let BIRTH_YEAR = null;let BIRTH_MONTH = null;let BIRTH_DAY = null;let BIRTH_HOUR = null;let INPUT_YEAR = null;let INPUT_MONTH = null;let INPUT_DAY = null;let INPUT_IS_LUNAR = false;let INPUT_HOUR_INDEX = null;let CONVERTED_HOUR_INDEX = null;let TIMEZONE_OFFSET = 0;let ORIGINAL_DATE = null;let CONVERTED_DATE = null;let currentNumbers = [];let history = [];const KAKAO_KEY = 'YOUR_KAKAO_JAVASCRIPT_KEY';function initKakao() {if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {try {Kakao.init(KAKAO_KEY);console.log('Kakao SDK initialized');} catch(e) {console.log('Kakao init skipped (key not set)');}}}
+];const LUNAR_START = 1900;const MY_ACCOUNT = "케이뱅크 100150462483 김대인";let GENDER = 'm';let CALENDAR = 'solar';let SAJU = null;let GODS = null;let STRENGTH = null;let BIRTH_YEAR = null;let BIRTH_MONTH = null;let BIRTH_DAY = null;let BIRTH_HOUR = null;let INPUT_YEAR = null;let INPUT_MONTH = null;let INPUT_DAY = null;let INPUT_IS_LUNAR = false;let INPUT_HOUR_INDEX = null;let CONVERTED_HOUR_INDEX = null;let TIMEZONE_OFFSET = 0;let ORIGINAL_DATE = null;let CONVERTED_DATE = null;let currentNumbers = [];let history = [];const KAKAO_KEY = 'YOUR_KAKAO_JAVASCRIPT_KEY';function initKakao() {if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {try {Kakao.init(KAKAO_KEY);} catch(e) {');}}}
 function shareKakao() {const shareData = {title: '🔮 K-MUDANG Pro',
 text: 'Ancient destiny wisdom in a modern app\n\n✨ Expert-level Four Pillars Analysis\n💕 Scientific Compatibility Reading\n🍀 Lottery with historical exclusion',
 url: window.location.href};if (navigator.share) {navigator.share(shareData)
@@ -557,7 +1065,7 @@ for(let i=0;i<W*H*0.15;i++){const x=Math.random()*W;const y=Math.random()*H;cons
 ctx.globalAlpha=0.15;for(let i=0;i<800;i++){const x=Math.random()*W;const y=Math.random()*H;const len=Math.random()*60+20;const isH=Math.random()>0.5;ctx.strokeStyle='rgba(120,80,40,0.3)';ctx.lineWidth=Math.random()*1.5+0.3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(isH?x+len:x+Math.random()*5,isH?y+Math.random()*3:y+len);ctx.stroke();}ctx.globalAlpha=1.0;
 // 3. 가장자리 빈티지 효과 (vignette) 강화
 const vignette=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8);vignette.addColorStop(0,'rgba(139,90,43,0)');vignette.addColorStop(0.7,'rgba(120,80,40,0.05)');vignette.addColorStop(1,'rgba(101,67,33,0.15)');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
-// === RARITY SYSTEM v4.19.22 ===
+// === RARITY SYSTEM v4.22.0 ===
 const rarity = getTalismanRarity();
 // Legendary: 추가 배경 글로우 효과
 if (rarity.grade === 'legendary') {
@@ -662,7 +1170,7 @@ ctx.fillText(`No. ${serialNo}`, W/2, 3560);
 function getTalismanRarity() {
 let hasSamhap = false, hasBanghap = false, hasNoble = false, hasYearMatch = false;
 try { const advInt = analyzeAdvancedInteractions(SAJU); if (advInt && advInt.samhapGuk) hasSamhap = advInt.samhapGuk.some(s => s.complete); } catch(e) {}
-try { const banghap = analyzeBanghap(SAJU); hasBanghap = banghap.some(b => b.type === 'complete'); } catch(e) {}
+try { const banghap = analyzeDirectionalHarmony(SAJU); hasBanghap = banghap.some(b => b.type === 'complete'); } catch(e) {}
 try { const sinsal = calcSinsal(SAJU); hasNoble = sinsal.some(s => s.n.includes('天乙貴人')); } catch(e) {}
 const currentYear = new Date().getFullYear();
 const yearStemIdx = (currentYear - 4) % 10;
@@ -754,13 +1262,21 @@ function shareTalisman() {if (!talismanGenerated) {generateTalisman();if (!talis
 if (navigator.share && navigator.canShare) {const canvas = document.getElementById('talisman-canvas');canvas.toBlob(async (blob) => {const file = new File([blob], '2026_Fortune_Talisman.png', { type: 'image/png' });const shareData = {title: '🏮 2026 Fortune Talisman',
 text: 'My personalized fortune talisman from K-MUDANG Pro!\n\n👉 Create yours:',
 url: window.location.href,
-files: [file]};try {if (navigator.canShare(shareData)) {await navigator.share(shareData);toast('Shared successfully! 🎉');return;}} catch(e) {if (e.name !== 'AbortError') {console.log('Share failed:', e);}}
+files: [file]};try {if (navigator.canShare(shareData)) {await navigator.share(shareData);toast('Shared successfully! 🎉');return;}} catch(e) {if (e.name !== 'AbortError') {}}
 shareTalismanFallback();}, 'image/png');return;}
 shareTalismanFallback();}
 function shareTalismanFallback() {copyShareLink();toast('💡 Save the talisman image first, then share it manually!');}
 function init() {initKakao();const cy = new Date().getFullYear();['birth-year', 'partner-year'].forEach(id => {const el = document.getElementById(id);if (el) for (let i = cy; i >= 1940; i--) el.innerHTML += `<option value="${i}">${i}</option>`;});['birth-month', 'partner-month'].forEach(id => {const el = document.getElementById(id);if (el) for (let i = 1; i <= 12; i++) el.innerHTML += `<option value="${i}">${MONTH_ABBR[i - 1]}</option>`;});['birth-day', 'partner-day'].forEach(id => {const el = document.getElementById(id);if (el) for (let i = 1; i <= 31; i++) el.innerHTML += `<option value="${i}">${i}</option>`;});const hourEl = document.getElementById('birth-hour');if (hourEl) {const hours = ['子時(23:30-01:29)','丑時(01:30-03:29)','寅時(03:30-05:29)','卯時(05:30-07:29)',
 '辰時(07:30-09:29)','巳時(09:30-11:29)','午時(11:30-13:29)','未時(13:30-15:29)',
-'申時(15:30-17:29)','酉時(17:30-19:29)','戌時(19:30-21:29)','亥時(21:30-23:29)'];hours.forEach((t, i) => hourEl.innerHTML += `<option value="${i}">${t}</option>`);hourEl.innerHTML += `<option value="-1">Unknown</option>`;}}
+'申時(15:30-17:29)','酉時(17:30-19:29)','戌時(19:30-21:29)','亥時(21:30-23:29)'];hours.forEach((t, i) => hourEl.innerHTML += `<option value="${i}">${t}</option>`);hourEl.innerHTML += `<option value="-1">Unknown</option>`;}
+const pHourEl = document.getElementById('partner-hour');
+if (pHourEl) {
+  pHourEl.innerHTML = '<option value="">Unknown</option>';
+  const pHours = ['子時(23:30-01:29)','丑時(01:30-03:29)','寅時(03:30-05:29)','卯時(05:30-07:29)',
+'辰時(07:30-09:29)','巳時(09:30-11:29)','午時(11:30-13:29)','未時(13:30-15:29)',
+'申時(15:30-17:29)','酉時(17:30-19:29)','戌時(19:30-21:29)','亥時(21:30-23:29)'];
+  pHours.forEach((t, i) => pHourEl.innerHTML += `<option value="${i}">${t}</option>`);
+}}
 document.addEventListener('DOMContentLoaded', init);if (typeof toast !== 'function') {function toast(msg) {const t = document.getElementById('toast');t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);}}
 function getBallColor(n) {if (n <= 10) return 'y';if (n <= 20) return 'b';if (n <= 30) return 'r';if (n <= 40) return 'g';return 'p';}
 function createBall(n, sm = false) {return `<div class="ball ${sm ? 'sm' : ''} ${getBallColor(n)}">${n}</div>`;}
@@ -870,10 +1386,10 @@ r.pillar === rootInfo.pillar && r.branch === rootInfo.branch
 pillar: pillarNames[sIdx],
 from: branchNames[bIdx],
 god: sIdx === 2 ? 'Day Master' : getTenGod(stem, dm).k});}}});});});return result;}
-function getTenGod(stem, dayStem) {const dEl = EL_ORDER.indexOf(dayStem.e);const sEl = EL_ORDER.indexOf(stem.e);const diff = (sEl - dEl + 5) % 5;const samePol = (dayStem.y === stem.y);const godKeys = ['bijeon','geupjae','siksin','sanggwan','pyeonjae','jeongjae','pyeongwan','jeonggwan','pyeonin','jeongin'];const godMap = { 0: samePol ? 0 : 1, 1: samePol ? 2 : 3, 2: samePol ? 4 : 5, 3: samePol ? 6 : 7, 4: samePol ? 8 : 9 };return TEN_GODS[godKeys[godMap[diff]]];}
+function getTenGod(stem, dayStem) {const dEl = EL_ORDER.indexOf(dayStem.e);const sEl = EL_ORDER.indexOf(stem.e);const diff = (sEl - dEl + 5) % 5;const samePol = (dayStem.y === stem.y);const godKeys = ['peer','robWealth','eatingGod','hurtOfficer','indirectWealth','directWealth','indirectOfficer','directOfficer','indirectSeal','directSeal'];const godMap = { 0: samePol ? 0 : 1, 1: samePol ? 2 : 3, 2: samePol ? 4 : 5, 3: samePol ? 6 : 7, 4: samePol ? 8 : 9 };return TEN_GODS[godKeys[godMap[diff]]];}
 function getTwelveState(dayStem, branch) {const starts = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];const dsi = STEM.indexOf(dayStem);const bi = BRANCH.findIndex(br => br.c === branch.c);const start = starts[dsi];const idx = dayStem.y ? (bi - start + 12) % 12 : (start - bi + 12) % 12;return TWELVE_STATES[idx];}
 function calcNapeum(stem, branch) {const si = STEM.indexOf(stem);const bi = BRANCH.findIndex(br => br.c === branch.c);const diff = (bi - si + 12) % 12;if (diff % 2 !== 0) {console.warn('Napeum: 음양 불일치', stem.c, branch.c);return { name: 'Unknown', element: 'earth', elementK: '토', desc: '' };}
-const idx60 = si + ((6 - diff / 2) % 6) * 10;const napeumIdx = Math.floor(idx60 / 2);const napeum = NAPEUM[napeumIdx];return {name: napeum.name,
+const idx60 = si + ((6 - diff / 2) % 6) * 10;const napeumIdx = Math.floor(idx60 / 2);const napeum = SOUND_ELEMENT[napeumIdx];return {name: napeum.name,
 element: napeum.element,
 elementK: ELEMENT[napeum.element].k,
 desc: napeum.desc};}
@@ -896,7 +1412,7 @@ branch: tBranch,
 pillar: tStem.c + tBranch.c,
 napeum: napeum,
 desc: `Energy at conception. ${napeum.name} (${ELEMENT[napeum.element].k}) energy influence at birth.`};}
-function analyzeBanghap(saju) {const branches = [];if (saju.year) branches.push(BRANCH.findIndex(br => br.c === saju.year.b.c));if (saju.month) branches.push(BRANCH.findIndex(br => br.c === saju.month.b.c));if (saju.day) branches.push(BRANCH.findIndex(br => br.c === saju.day.b.c));if (saju.hour) branches.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));const monthBranchIdx = saju.month ? BRANCH.findIndex(br => br.c === saju.month.b.c) : -1;const results = [];for (const bh of BANGHAP) {const has = bh.branches.map(b => branches.includes(b));const count = has.filter(x => x).length;if (count === 3) {results.push({type: 'complete',
+function analyzeDirectionalHarmony(saju) {const branches = [];if (saju.year) branches.push(BRANCH.findIndex(br => br.c === saju.year.b.c));if (saju.month) branches.push(BRANCH.findIndex(br => br.c === saju.month.b.c));if (saju.day) branches.push(BRANCH.findIndex(br => br.c === saju.day.b.c));if (saju.hour) branches.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));const monthBranchIdx = saju.month ? BRANCH.findIndex(br => br.c === saju.month.b.c) : -1;const results = [];for (const bh of DIRECTIONAL_HARMONY) {const has = bh.branches.map(b => branches.includes(b));const count = has.filter(x => x).length;if (count === 3) {results.push({type: 'complete',
 name: bh.name,
 dir: bh.dir,
 element: bh.element,
@@ -915,7 +1431,7 @@ desc: isQuasi
 ? `Quasi ${bh.dir}! Month Branch included = ${ELEMENT[bh.element].k} energy is DOMINANT even without third branch.`
 : `When ${BRANCH[missing].c} arrives, ${bh.dir} direction completes.`});}}
 return results;}
-function analyzeAmhap(saju) {const branches = [];const pillars = ['Year Branch', 'Month Branch', 'Day Branch', 'Hour Branch'];if (saju.year) branches.push({idx: BRANCH.findIndex(br => br.c === saju.year.b.c), name: 'Year Branch', c: saju.year.b.c});if (saju.month) branches.push({idx: BRANCH.findIndex(br => br.c === saju.month.b.c), name: 'Month Branch', c: saju.month.b.c});if (saju.day) branches.push({idx: BRANCH.findIndex(br => br.c === saju.day.b.c), name: 'Day Branch', c: saju.day.b.c});if (saju.hour) branches.push({idx: BRANCH.findIndex(br => br.c === saju.hour.b.c), name: 'Hour Branch', c: saju.hour.b.c});const results = [];for (let i = 0; i < branches.length; i++) {for (let j = i + 1; j < branches.length; j++) {for (const ah of AMHAP) {if ((branches[i].idx === ah.a && branches[j].idx === ah.b) ||
+function analyzeHiddenHarmony(saju) {const branches = [];const pillars = ['Year Branch', 'Month Branch', 'Day Branch', 'Hour Branch'];if (saju.year) branches.push({idx: BRANCH.findIndex(br => br.c === saju.year.b.c), name: 'Year Branch', c: saju.year.b.c});if (saju.month) branches.push({idx: BRANCH.findIndex(br => br.c === saju.month.b.c), name: 'Month Branch', c: saju.month.b.c});if (saju.day) branches.push({idx: BRANCH.findIndex(br => br.c === saju.day.b.c), name: 'Day Branch', c: saju.day.b.c});if (saju.hour) branches.push({idx: BRANCH.findIndex(br => br.c === saju.hour.b.c), name: 'Hour Branch', c: saju.hour.b.c});const results = [];for (let i = 0; i < branches.length; i++) {for (let j = i + 1; j < branches.length; j++) {for (const ah of HIDDEN_HARMONY) {if ((branches[i].idx === ah.a && branches[j].idx === ah.b) ||
 (branches[i].idx === ah.b && branches[j].idx === ah.a)) {results.push({name: ah.name,
 positions: `${branches[i].name}(${branches[i].c})↔${branches[j].name}(${branches[j].c})`,
 desc: ah.desc,
@@ -1035,7 +1551,7 @@ hourRoot: hasRealRoot.hour,
 dayRoot: hasRealRoot.day,
 disabledSeals,
 disabledPeers};}
-const JOHU_TABLE = {0: {0: {yong:'fire', sub:'wood', desc:'Winter Yang Wood (甲) is frozen; it needs Fire for warmth'},
+const CLIMATE_BALANCE/*調候*/ = {0: {0: {yong:'fire', sub:'wood', desc:'Winter Yang Wood (甲) is frozen; it needs Fire for warmth'},
 1: {yong:'fire', sub:'wood', desc:'丑(Ox) month Earth-dominant season; Fire is needed to dispel the cold'},
 2: {yong:'water', sub:'fire', desc:'寅(Tiger) month spring begins, Water nourishes roots'},
 3: {yong:'water', sub:'fire', desc:'卯(Rabbit) month Wood dominant, Water provides nourishment'},
@@ -1174,10 +1690,16 @@ if ((samhapEl === 'water' && dmEl === 'wood') ||
 (samhapEl === 'fire' && dmEl === 'earth') ||
 (samhapEl === 'earth' && dmEl === 'metal') ||
 (samhapEl === 'metal' && dmEl === 'water')) {yong = exprEl;johuDesc = (johuDesc || '') + ` (${samhapResult.name} → Output Drains Excess)`;}}}
-const johuData = JOHU_TABLE[dmi] && JOHU_TABLE[dmi][mbi];if (johuData && !isFollower) {johu = johuData.yong;if (elCount[sealEl] >= 3 && str.type === 'weak') {johuDesc = johuDesc || johuData.desc;} else {johuDesc = johuData.desc;const isMetalDM = dm.e === 'metal';const isWinterMonth = [10, 11, 0, 1].includes(mbi);const waterCount = [saju.year, saju.month, saju.day, saju.hour].filter(p =>
+const johuData = CLIMATE_BALANCE[dmi] && CLIMATE_BALANCE[dmi][mbi];if (johuData && !isFollower) {johu = johuData.yong;if (elCount[sealEl] >= 3 && str.type === 'weak') {johuDesc = johuDesc || johuData.desc;} else {johuDesc = johuData.desc;const isMetalDM = dm.e === 'metal';const isWinterMonth = [10, 11, 0, 1].includes(mbi);const waterCount = [saju.year, saju.month, saju.day, saju.hour].filter(p =>
 p && ((p.s && p.s.e === 'water') || (p.b && p.b.e === 'water'))
 ).length;const isGeumsooSanggwan = isMetalDM && isWinterMonth && waterCount >= 2;if (isTooCold && johu === 'fire') {yong = 'fire';hee = 'wood';gi = 'water';johuDesc += ' (Climate Priority: Bridge Strategy 水→木→火)';} else if ((isTooHot || isTooDamp) && johu === 'water') {yong = 'water';hee = 'metal';gi = 'fire';johuDesc += ' (Climate Priority: Bridge Strategy 火→金→水)';} else if (isTooCold || isTooHot || isTooDamp) {if (johu !== gi) {const prevYong = yong;yong = johu;hee = prevYong;johuDesc += ' (Climate Priority Override)';}} else if (johu !== gi || isGeumsooSanggwan) {if (isGeumsooSanggwan && johu === 'fire') {gi = 'earth';johuDesc = '金水傷官喜見官 - Winter Metal needs Fire. Fire is beneficial.';}
-hee = yong;yong = johu;}}}
+if (str.type === 'weak') {
+  hee = johu;
+  johuDesc = (johuDesc || '') + ' (Weak: Seal用神, Climate喜神)';
+} else {
+  hee = yong;
+  yong = johu;
+}}}}
 if (yong === hee) { hee = dm.e; }
 const byungYak = findByungYak(saju, str);return {yong, hee, gi,
 type: str.type,
@@ -1189,7 +1711,7 @@ isFollower,
 followerType,
 sealExcess: elCount[sealEl] >= 3};}
 function getElementRelation(dmEl, targetEl) {const idx = EL_ORDER.indexOf(dmEl);const tgtIdx = EL_ORDER.indexOf(targetEl);const diff = (tgtIdx - idx + 5) % 5;if (diff === 1) return 'expression';if (diff === 2) return 'wealth';if (diff === 3) return 'officer';if (diff === 4) return 'seal';return 'peer';}
-const YUKCHEON = {m: {'比肩 Peer': {relation: 'Brothers/Friends', desc: 'Equal relationship', detailed: 'Siblings, friends, colleagues, rivals'},
+const SIX_RELATIONS/*六親*/ = {m: {'比肩 Peer': {relation: 'Brothers/Friends', desc: 'Equal relationship', detailed: 'Siblings, friends, colleagues, rivals'},
 '劫財 Competitor': {relation: 'Brothers/Rivals', desc: 'Competitive relationship', detailed: 'Half-siblings, cousins, competitors, partners'},
 '食神 Eating God': {relation: 'Children(daughter)/Juniors', desc: 'What I create', detailed: 'Daughter, granddaughter, juniors, subordinates'},
 '傷官 Expressor': {relation: 'Children(son)/Talent', desc: 'What I express', detailed: 'Son, grandson, creativity, ideas'},
@@ -1208,10 +1730,10 @@ f: {'比肩 Peer': {relation: 'Sisters/Friends', desc: 'Equal relationship', det
 '偏官 Challenger': {relation: 'Lover/Man', desc: 'What controls me', detailed: 'Lover, affair, passionate man'},
 '正官 Direct Officer': {relation: 'Husband/Honor', desc: 'What disciplines me', detailed: 'Husband, honor, career'},
 '偏印 Indirect Seal': {relation: 'Stepmother/Obstacle', desc: 'Unconventional nurturing', detailed: 'Stepmother, foster mother, incomplete studies'},
-'正印 Direct Seal': {relation: 'Mother/Studies', desc: 'Proper nurturing', detailed: 'Mother, studies, documents'}}};const YUKCHEON_POSITION = {year: {name: 'Year Pillar', meaning: 'Ancestors, Society, Early years (Ages 1-15)', body: 'Head/Face'},
+'正印 Direct Seal': {relation: 'Mother/Studies', desc: 'Proper nurturing', detailed: 'Mother, studies, documents'}}};const SIX_RELATIONS_POSITION = {year: {name: 'Year Pillar', meaning: 'Ancestors, Society, Early years (Ages 1-15)', body: 'Head/Face'},
 month: {name: 'Month Pillar', meaning: 'Parents, Siblings, Career, Youth (Ages 16-30)', body: 'Chest/Shoulders'},
 day: {name: 'Day Pillar', meaning: 'Self, Spouse, Home, Middle age (Ages 31-45)', body: 'Waist/Abdomen'},
-hour: {name: 'Hour Pillar', meaning: 'Children, Juniors, Later years (Ages 46+)', body: 'Legs/Feet'}};function analyzeYukcheon(saju, gender) {const dm = saju.day.s;const g = gender || GENDER || 'm';const yukData = YUKCHEON[g];const result = {positions: [],
+hour: {name: 'Hour Pillar', meaning: 'Children, Juniors, Later years (Ages 46+)', body: 'Legs/Feet'}};function analyzeYukcheon(saju, gender) {const dm = saju.day.s;const g = gender || GENDER || 'm';const yukData = SIX_RELATIONS[g];const result = {positions: [],
 counts: {},
 analysis: [],
 spouse: null,
@@ -1221,7 +1743,7 @@ parents: null};const pillars = [
 {pos: 'month', pillar: saju.month},
 {pos: 'day', pillar: saju.day},
 {pos: 'hour', pillar: saju.hour}
-];pillars.forEach(({pos, pillar}) => {if (!pillar) return;const stemGod = pos === 'day' ? {k: 'Day Master', c: '日干'} : getTenGod(pillar.s, dm);const mainJJ = HIDDEN_STEMS[BRANCH.findIndex(br => br.c === pillar.b.c)];const mainStem = mainJJ && mainJJ.length > 0 ? STEM[mainJJ[mainJJ.length - 1].stem] : null;const branchGod = mainStem ? getTenGod(mainStem, dm) : null;const posInfo = YUKCHEON_POSITION[pos];const yukInfo = yukData[stemGod.k];result.positions.push({position: pos,
+];pillars.forEach(({pos, pillar}) => {if (!pillar) return;const stemGod = pos === 'day' ? {k: 'Day Master', c: '日干'} : getTenGod(pillar.s, dm);const mainJJ = HIDDEN_STEMS[BRANCH.findIndex(br => br.c === pillar.b.c)];const mainStem = mainJJ && mainJJ.length > 0 ? STEM[mainJJ[mainJJ.length - 1].stem] : null;const branchGod = mainStem ? getTenGod(mainStem, dm) : null;const posInfo = SIX_RELATIONS_POSITION[pos];const yukInfo = yukData[stemGod.k];result.positions.push({position: pos,
 posName: posInfo.name,
 posMeaning: posInfo.meaning,
 stem: pillar.s,
@@ -1990,7 +2512,7 @@ hour: hourBranchIdx >= 0 ? calcHourPillar(calcDayPillar(adj.y, adj.m, adj.d).s, 
 BIRTH_YEAR = y;BIRTH_MONTH = sm;BIRTH_DAY = sd;BIRTH_HOUR = hourVal >= 0 ? adj.h : 12;INPUT_YEAR = y;INPUT_MONTH = m;INPUT_DAY = d;INPUT_IS_LUNAR = false;INPUT_HOUR_INDEX = hourVal;CONVERTED_HOUR_INDEX = hourBranchIdx;TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'America/Los_Angeles', sy, sm, sd, realHour);ORIGINAL_DATE = {y: sy, m: sm, d: sd};CONVERTED_DATE = {y: adj.y, m: adj.m, d: adj.d};const str = calcStrength(SAJU);if (!str) { toast('Strength calculation error'); return; }
 STRENGTH = str;GODS = calcGods(SAJU, str);if (!GODS) { toast('Beneficial element calculation error'); return; }
 renderSaju(str);document.getElementById('saju-result').style.display = 'block';const infoDisplay = document.getElementById('my-info-display');if (infoDisplay) {infoDisplay.innerHTML = `<p style="color:var(--gold);">${SAJU.day.s.c}${SAJU.day.b.c}Day (${ELEMENT[SAJU.day.s.e].k})</p>`;}
-syncBirthDateToLottery(y, m, d);toast('🔮 Fortune analysis complete!');} catch (error) {console.error('Four Pillars analysis error:', error);toast('Analysis error. Please check your input.');}}
+syncBirthDateToLottery(y, m, d);toast('🔮 Fortune analysis complete!');} catch (error) {console.error('Fortune analysis error:', error);toast('Analysis error. Please check your input.');}}
 function renderSaju(str) {try {const pillars = ['hour','day','month','year'];const labels = ['Hour','Day','Month','Year'];document.getElementById('pillars').innerHTML = pillars.map((p, i) => {const pillar = SAJU[p];if (!pillar) return `<div class="pillar"><div class="pillar-label">${labels[i]}</div><div class="pillar-stem">-</div><div class="pillar-branch">-</div></div>`;const god = p !== 'day' ? getTenGod(pillar.s, SAJU.day.s) : null;return `<div class="pillar ${p === 'day' ? 'dm' : ''}"><div class="pillar-label">${labels[i]}</div><div class="pillar-stem el-${pillar.s.e}">${pillar.s.c}</div><div class="pillar-branch el-${pillar.b.e}">${pillar.b.c}</div><div class="pillar-sub">${pillar.s.k}${pillar.b.k}</div>
 ${god ? `<div class="pillar-god">${god.k}</div>` : '<div class="pillar-god">Day Master</div>'}
 </div>`;}).join('');const un12 = getTwelveState(SAJU.day.s, SAJU.day.b);document.getElementById('twelve-states').innerHTML = `<div class="info-box"><p><strong>Day Branch Twelve State:</strong> ${un12.k} (Energy ${un12.l}/12)</p></div>`;const typeLabel = {strong:'Strong',weak:'Weak',balanced:'Balanced'};document.getElementById('strength-box').innerHTML = `
@@ -2142,7 +2664,7 @@ ${monthlyLuck.months.map(m => `
 <div style="padding:10px;text-align:center;background:rgba(255,255,255,0.05);border-radius:8px;border:1px solid ${m.rating === 'good' ? 'var(--wood)' : m.rating === 'bad' ? 'var(--fire)' : 'transparent'};"><div style="font-weight:bold;">${MONTH_ABBR[m.month - 1]}</div><div style="font-size:1.2rem;margin:5px 0;">${m.rating === 'good' ? '😊' : m.rating === 'bad' ? '😰' : '😐'}</div><div style="font-size:0.7rem;color:var(--gray);">${m.pillar.s.c}${m.pillar.b.c}</div><div style="font-size:0.7rem;color:var(--gray);">${m.god.e || m.god.k}</div></div>
 `).join('')}
 </div><div class="info-box good"><p>🌟 <strong>Best: ${MONTH_ABBR[monthlyLuck.best.month - 1]}</strong><br>${monthlyLuck.best.god.e || monthlyLuck.best.god.k} energy brings good fortune!</p></div><div class="info-box warn" style="margin-top:10px;"><p>⚠️ <strong>Caution: ${MONTH_ABBR[monthlyLuck.worst.month - 1]}</strong><br>${monthlyLuck.worst.god.e || monthlyLuck.worst.god.k} energy - take it easy.</p></div>
-`;const ints = calcInteractions(SAJU);document.getElementById('interactions').innerHTML = ints.length ? ints.map(i => `<div class="int-item"><div class="int-type">${i.t}</div><div><div class="int-chars">${i.c}</div><div class="int-meaning">${i.m} - ${i.d}</div></div></div>`).join('') : '<p style="color:var(--gray);">No special harmony or clash in chart.</p>';const banghap = analyzeBanghap(SAJU);const amhap = analyzeAmhap(SAJU);document.getElementById('banghap-amhap').innerHTML = `
+`;const ints = calcInteractions(SAJU);document.getElementById('interactions').innerHTML = ints.length ? ints.map(i => `<div class="int-item"><div class="int-type">${i.t}</div><div><div class="int-chars">${i.c}</div><div class="int-meaning">${i.m} - ${i.d}</div></div></div>`).join('') : '<p style="color:var(--gray);">No special harmony or clash in chart.</p>';const banghap = analyzeDirectionalHarmony(SAJU);const amhap = analyzeHiddenHarmony(SAJU);document.getElementById('banghap-amhap').innerHTML = `
 <div class="info-box" style="margin-bottom:10px;"><p><strong>🌀 Directional Harmony (方合)</strong> - Same direction branches form powerful element</p>
 ${banghap.length ? banghap.map(b => `
 <div style="margin-top:10px;padding:12px;background:rgba(${b.type === 'complete' ? '76,175,80' : '255,152,0'},0.1);border-radius:8px;border-left:3px solid ${b.type === 'complete' ? 'var(--wood)' : 'var(--earth)'};"><p style="font-weight:bold;color:${b.type === 'complete' ? 'var(--wood)' : 'var(--earth)'};">${b.name} (${b.branches})</p><p style="margin-top:5px;font-size:0.9rem;">${b.dir}</p><p style="margin-top:5px;font-size:0.85rem;">${b.desc}</p>
@@ -2339,10 +2861,10 @@ let myunggungText = '';try {if (SAJU.hour) {const myunggung = calcMyunggung(SAJU
 • Suitable Fields: ${myunggung.career}`;} else {myunggungText = '• Life Palace: Cannot calculate without Hour';}} catch(e) { myunggungText = '• Life Palace unavailable'; }
 let taewonText = '';try {const taewon = calcTaewon(SAJU.year.s, SAJU.month.s, SAJU.month.b);taewonText = `• Conception Origin (胎元): ${taewon.pillar}
 • Conception Sound Element: ${taewon.napeum.name} (${taewon.napeum.elementK})`;} catch(e) { taewonText = '• Conception Origin unavailable'; }
-let banghapText = '';try {const banghap = analyzeBanghap(SAJU);banghapText = banghap.length ? banghap.map(b =>
+let banghapText = '';try {const banghap = analyzeDirectionalHarmony(SAJU);banghapText = banghap.length ? banghap.map(b =>
 `• ${b.name} (${b.branches}): ${b.dir} ${b.type === 'complete' ? 'COMPLETE!' : 'Incomplete'}`
 ).join('\n') : '• No Directional Harmony';} catch(e) { banghapText = '• 方合(Directional Harmony) unavailable'; }
-let amhapText = '';try {const amhap = analyzeAmhap(SAJU);amhapText = amhap.length ? amhap.map(a =>
+let amhapText = '';try {const amhap = analyzeHiddenHarmony(SAJU);amhapText = amhap.length ? amhap.map(a =>
 `• ${a.name}: ${a.positions} - ${a.desc}`
 ).join('\n') : '• No Hidden Harmony';} catch(e) { amhapText = '• Hidden Harmony unavailable'; }
 let criticalText = '';try {const criticalFeatures = [];if (dm && dm.e) {const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5];if (GODS && GODS.climate && GODS.climate.type) {if (GODS.climate.type.includes('Cold') || GODS.climate.type.includes('Extreme Cold')) {criticalFeatures.push('🔥 CLIMATE EMERGENCY: ' + GODS.climate.type + ' - Fire (火) is ESSENTIAL');}
@@ -2364,7 +2886,7 @@ const locationSelect = document.getElementById('birth-location');const locationT
 • Hour Pillar (${SAJU.hour.s.c}${SAJU.hour.b.c}) calculated based on: ${convertedHourBranch}時
 • ⚠️ AI NOTICE: The Four Pillars are calculated using KOREAN date/time, not the user's local input. This is correct.
 `;} else {hourText = `${convertedHourBranch}時 (${convertedHourRange}) - True Solar Time`;}} else if (SAJU.hour && SAJU.hour.b) {const hourBranch = SAJU.hour.b.c;const hourRange = HOUR_RANGES[hourBranch] || '';hourText = `${hourBranch}時 (${hourRange}) - True Solar Time`;}
-let text = `===== FOUR PILLARS OF DESTINY (SAJU) ANALYSIS =====
+let text = `===== K-FORTUNE DESTINY ANALYSIS =====
 ${criticalText}【BASIC INFO】
 • Birth Date: ${INPUT_YEAR}-${String(INPUT_MONTH).padStart(2,'0')}-${String(INPUT_DAY).padStart(2,'0')}
 • Birth Hour: ${hourText}
@@ -2373,7 +2895,7 @@ ${criticalText}【BASIC INFO】
 • Age: ${age-1} (Korean Age: ${age})
 • Day Master: ${dm.c} ${ELEMENT[dm.e].n} (${dm.c}${ELEMENT[dm.e].c})
 ${timeConversionText}
-【FOUR PILLARS CHART (Year/Month/Day/Hour)】
+【FORTUNE CHART (Year/Month/Day/Hour)】
 • Heavenly Stems: ${SAJU.year.s.c}(${SAJU.year.s.k}) ${SAJU.month.s.c}(${SAJU.month.s.k}) ${SAJU.day.s.c}(${SAJU.day.s.k}) ${SAJU.hour ? SAJU.hour.s.c+'('+SAJU.hour.s.k+')' : 'Unknown'}
 • Earthly Branches: ${SAJU.year.b.c}(${SAJU.year.b.k}) ${SAJU.month.b.c}(${SAJU.month.b.k}) ${SAJU.day.b.c}(${SAJU.day.b.k}) ${SAJU.hour ? SAJU.hour.b.c+'('+SAJU.hour.b.k+')' : 'Unknown'}
 【TEN GODS (Based on Stems)】
@@ -2456,7 +2978,7 @@ ${GODS.isFollower ? '• 🌀 FOLLOWER CHART (' + GODS.followerType + '): Extrem
 ${GODS.sealExcess ? '• ⚠️ SEAL EXCESS (偏印太旺): 3+ Seal elements suffocating Day Master. Output (Expression) needed to drain the overflow.' : ''}
 ${GODS.johu ? '• Seasonal Adjustment: ' + (GODS.johuDesc || '') : ''}
 ${GODS.climate ? '• Climate Balance: ' + GODS.climate.type + ' - ' + GODS.climate.desc : ''}
-【PERSONALITY STRUCTURE (格局)】
+【PUBLICITY STRUCTURE (格局)】
 • ${format.n}
 • Characteristics: ${format.d}
 ${str.pct < 20 && format.n.includes('Wealth') ? '• ⚠️ WEAK CHART WARNING: With low strength (' + str.pct.toFixed(1) + '%), this becomes "Anxious Chaser" rather than "Steady Builder". Wealth overwhelms instead of supports. Health-first strategy required.' : ''}
@@ -3016,7 +3538,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 3. Life Cycle + Annual Fortune Ten Gods - Current life theme
 4. Branch Ten Gods - Hidden influences
 5. Everything else
-===== 🆕 EXTENDED RULES 71-97 (v4.19.22) =====
+===== 🆕 EXTENDED RULES 71-97 (v4.22.0) =====
 71. 【BUREAU/HARMONY = x10 MULTIPLIER EFFECT】
 • Directional Harmony or Three Harmony completion is NOT simple addition.
 • 巳午未 (Southern Fire Bureau) = Fire x10 power
@@ -3151,7 +3673,7 @@ wood: [3, 8],
 metal: [4, 9],
 earth: [5, 0]};function getElementNumbers(element, max) {const endings = ELEMENT_LUCKY_ENDINGS[element] || [1, 6];const nums = [];for(let i = 1; i <= max; i++) {const lastDigit = i % 10;if(endings.includes(lastDigit)) {nums.push(i);}}
 return nums;}
-function getYongsinElement(saju) {const dmi = STEM.indexOf(saju.day.s);const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);if(JOHU_TABLE[dmi] && JOHU_TABLE[dmi][mbi]) {return JOHU_TABLE[dmi][mbi].yong;}
+function getYongsinElement(saju) {const dmi = STEM.indexOf(saju.day.s);const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);if(CLIMATE_BALANCE[dmi] && CLIMATE_BALANCE[dmi][mbi]) {return CLIMATE_BALANCE[dmi][mbi].yong;}
 const dayElement = saju.day.s.e;const supportMap = {water:'wood', wood:'fire', fire:'earth', earth:'metal', metal:'water'};return supportMap[dayElement] || 'fire';}
 function generatePowerball(type) {if (type === 'destiny' && !isPremium) {toast('👑 Destiny Numbers require Premium. Please offer 福債.');openPremiumCheckout();return;}
 const y = +document.getElementById('pb-year').value;const m = +document.getElementById('pb-month').value;const d = +document.getElementById('pb-day').value;let numbers = [];let powerball;if(type === 'destiny' && y && m && d) {let saju, yongsin;if (SAJU && GODS && BIRTH_YEAR === y) {saju = SAJU;yongsin = GODS.yong;} else {saju = {year: calcYearPillar(y, m, d),
@@ -3205,8 +3727,8 @@ while(destinyNumbers.length < 5) {hash = Math.abs((hash * 1103515245 + 12345) & 
 destinyNumbers.sort((a,b) => a-b);const luckyMB = getElementNumbers(yongsin, 25);hash = Math.abs((hash * 1103515245 + 12345) & 0x7fffffff);const destinyMegaball = (luckyMB.length > 0 && hash % 3 !== 0) ? luckyMB[hash % luckyMB.length] : (hash % 25) + 1;const destinyContainer = document.getElementById('mega-destiny-balls');destinyContainer.innerHTML = '';destinyNumbers.forEach(n => {const ball = document.createElement('div');ball.className = 'ball mega';ball.textContent = n;destinyContainer.appendChild(ball);});const dmb = document.createElement('div');dmb.className = 'ball megaball';dmb.textContent = destinyMegaball;destinyContainer.appendChild(dmb);document.getElementById('mega-destiny-section').style.display = 'block';document.getElementById('mega-result').style.display = 'block';megaHistory.unshift({ type: 'DESTINY', numbers: destinyNumbers, megaball: destinyMegaball });if(megaHistory.length > 6) megaHistory.length = 6;renderMegaHistory();toast(`🔮 Destiny Numbers (${yongsin.toUpperCase()} energy)`);}
 function generateMegaQuick() {let quickNumbers = [];const quickUsed = new Set();while(quickNumbers.length < 5) {const n = Math.floor(Math.random() * 70) + 1;if(!quickUsed.has(n)) { quickUsed.add(n); quickNumbers.push(n); }}
 quickNumbers.sort((a,b) => a-b);const quickMegaball = Math.floor(Math.random() * 25) + 1;const quickContainer = document.getElementById('mega-quick-balls');quickContainer.innerHTML = '';quickNumbers.forEach(n => {const ball = document.createElement('div');ball.className = 'ball mega';ball.textContent = n;quickContainer.appendChild(ball);});const qmb = document.createElement('div');qmb.className = 'ball megaball';qmb.textContent = quickMegaball;quickContainer.appendChild(qmb);document.getElementById('mega-quick-section').style.display = 'block';document.getElementById('mega-result').style.display = 'block';megaHistory.unshift({ type: 'QUICK', numbers: quickNumbers, megaball: quickMegaball });if(megaHistory.length > 6) megaHistory.length = 6;renderMegaHistory();toast('🎲 Quick Pick generated!');}
-function switchGame(game) {document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));document.querySelectorAll('.game-btn').forEach(b => b.classList.remove('active'));document.getElementById(`tab-${game}`).classList.add('active');event.target.closest('.game-btn').classList.add('active');document.body.className = game + '-mode';}
-document.addEventListener('DOMContentLoaded', function() {const sajuYear = document.getElementById('saju-year');const sajuMonth = document.getElementById('saju-month');const sajuDay = document.getElementById('saju-day');const sajuHour = document.getElementById('saju-hour');const yearPlaceholder = document.createElement('option');yearPlaceholder.value = ''; yearPlaceholder.textContent = 'Year';yearPlaceholder.disabled = true; yearPlaceholder.selected = true;sajuYear.appendChild(yearPlaceholder);for(let y = 2026; y >= 1940; y--) {const opt = document.createElement('option');opt.value = y; opt.textContent = y;sajuYear.appendChild(opt);}
+function switchGame(game) {document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));document.querySelectorAll('.game-btn').forEach(b => b.classList.remove('active'));document.getElementById(`tab-${game}`).classList.add('active');event.target.closest('.game-btn').classList.add('active');document.body.className = game + '-mode';if(game==='match'&&SAJU)updateMatchMyInfo();}
+document.addEventListener('DOMContentLoaded', function() {initMatchSelects();const sajuYear = document.getElementById('saju-year');const sajuMonth = document.getElementById('saju-month');const sajuDay = document.getElementById('saju-day');const sajuHour = document.getElementById('saju-hour');const yearPlaceholder = document.createElement('option');yearPlaceholder.value = ''; yearPlaceholder.textContent = 'Year';yearPlaceholder.disabled = true; yearPlaceholder.selected = true;sajuYear.appendChild(yearPlaceholder);for(let y = 2026; y >= 1940; y--) {const opt = document.createElement('option');opt.value = y; opt.textContent = y;sajuYear.appendChild(opt);}
 const monthPlaceholder = document.createElement('option');monthPlaceholder.value = ''; monthPlaceholder.textContent = 'Month';monthPlaceholder.disabled = true; monthPlaceholder.selected = true;sajuMonth.appendChild(monthPlaceholder);for(let m = 1; m <= 12; m++) {const opt = document.createElement('option');opt.value = m; opt.textContent = MONTH_ABBR[m - 1];sajuMonth.appendChild(opt);}
 const dayPlaceholder = document.createElement('option');dayPlaceholder.value = ''; dayPlaceholder.textContent = 'Day';dayPlaceholder.disabled = true; dayPlaceholder.selected = true;sajuDay.appendChild(dayPlaceholder);for(let d = 1; d <= 31; d++) {const opt = document.createElement('option');opt.value = d; opt.textContent = d;sajuDay.appendChild(opt);}
 const hourOpts = ['Unknown','子(23:30-01:29)','丑(01:30-03:29)','寅(03:30-05:29)','卯(05:30-07:29)','辰(07:30-09:29)','巳(09:30-11:29)','午(11:30-13:29)','未(13:30-15:29)','申(15:30-17:29)','酉(17:30-19:29)','戌(19:30-21:29)','亥(21:30-23:29)'];hourOpts.forEach((h,i) => {const opt = document.createElement('option');opt.value = i === 0 ? '' : (i-1);opt.textContent = h;sajuHour.appendChild(opt);});['pb', 'mega'].forEach(prefix => {const yearSel = document.getElementById(`${prefix}-year`);const monthSel = document.getElementById(`${prefix}-month`);const daySel = document.getElementById(`${prefix}-day`);const yearPlaceholder = document.createElement('option');yearPlaceholder.value = ''; yearPlaceholder.textContent = 'Year';yearPlaceholder.disabled = true; yearPlaceholder.selected = true;yearSel.appendChild(yearPlaceholder);for(let y = 2026; y >= 1940; y--) {const opt = document.createElement('option');opt.value = y; opt.textContent = y;yearSel.appendChild(opt);}
@@ -3217,11 +3739,11 @@ function handleUrlHash() {const hash = window.location.hash.replace('#', '');if 
 window.addEventListener('load', handleUrlHash);window.addEventListener('hashchange', handleUrlHash);
 /* ========== DEV TEST FUNCTIONS ========== */
 window.runTests = function() {
-  console.log('%c🔬 K-MUDANG REGRESSION TEST SUITE v4.19.22', 'color:#D4AF37;font-size:16px;font-weight:bold');
+  
   let pass=0, fail=0;
   
   // === PART 1: BUREAU 텍스트 파싱 테스트 ===
-  console.log('%c\n📦 BUREAU Tests', 'color:#4FC3F7;font-weight:bold');
+  
   const bureauTests = [
     {m:"甲己 (Wood+Earth) combine to Earth", exp:"Earth"},
     {m:"乙庚 (Wood+Metal) combine to Metal", exp:"Metal"},
@@ -3244,11 +3766,11 @@ window.runTests = function() {
     const result = match ? (match[1] || match[2]) : '';
     const ok = result === t.exp;
     if(ok) pass++; else fail++;
-    console.log(`${ok?'✅':'❌'} ${i+1}. ${t.m.substring(0,30)}... → ${result}`);
+    }... → ${result}`);
   });
   
   // === PART 2: 용신 계산 테스트 ===
-  console.log('%c\n🔥 Yongsin Tests', 'color:#FF7043;font-weight:bold');
+  
   const yongsinTests = [
     {
       name: '己土 신약 겨울생',
@@ -3279,15 +3801,15 @@ window.runTests = function() {
       const gods = calcGods(t.saju, str);
       const ok = t.check(gods);
       if(ok) pass++; else fail++;
-      console.log(`${ok?'✅':'❌'} ${t.name}: ${t.desc} (용신=${gods.yong}, 희신=${gods.hee})`);
+      `);
     } catch(e) {
       fail++;
-      console.log(`❌ ${t.name}: ERROR - ${e.message}`);
+      
     }
   });
   
   // === PART 3: 천간충 테스트 ===
-  console.log('%c\n⚔️ Stem Clash Tests', 'color:#AB47BC;font-weight:bold');
+  
   const stClash = [[0,6],[1,7],[2,8],[3,9]];
   const clashTests = [
     {stems: [0,6], exp: true, name: '甲庚 = 천간충'},
@@ -3300,16 +3822,16 @@ window.runTests = function() {
     const result = stClash.some(([x,y]) => (a===x && b===y) || (a===y && b===x));
     const ok = result === t.exp;
     if(ok) pass++; else fail++;
-    console.log(`${ok?'✅':'❌'} ${t.name}`);
+    
   });
   
   // === SUMMARY ===
-  console.log('%c\n' + '='.repeat(50), 'color:#888');
-  console.log('%c' + (fail===0 ? `✅ ALL ${pass} TESTS PASSED - SAFE TO DEPLOY` : `❌ ${fail} FAILED, ${pass} PASSED - DO NOT DEPLOY`), 
+  , 'color:#888');
+  , 
     `color:${fail===0?'#4CAF50':'#F44336'};font-size:14px;font-weight:bold`);
   return {pass, fail, total: pass+fail};
 };
-console.log('%c💡 Type runTests() to verify BUREAU logic', 'color:#888;font-style:italic');
+ to verify BUREAU logic', 'color:#888;font-style:italic');
 /* ========== END TEST FUNCTIONS ========== */
 </script><!-- ========================================
      LEGAL PAGES
