@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.22.0 [PERSONAL] - 개인 개발용 버전                               ║
+║  K-MUDANG Pro v4.22.1 [PERSONAL] - 개인 개발용 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
@@ -13,7 +13,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.22.0)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.22.1)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -27,7 +27,7 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  v4.22.0 (2026-01-25):
+║  v4.22.1 (2026-01-25):
 ║    - [FIX] BUREAU x10 표기: 天合/六合 제외, 三合/方合/半合에만 적용        ║
 ║  v4.19.21 (2026-01-25):
 ║    - [FIX] 용신=희신 동일 오류 수정 (yong===hee → hee=비겁 교정)        ║
@@ -107,7 +107,7 @@
 ║  Contact: kmudang.official@gmail.com                                          ║
 ║  Last Updated: 2026-01-21                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
---><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI Destiny Analysis"><meta property="og:description" content="🏆 World's Most Advanced BaZi · 🤖 AI 97 Rules Precision · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🔧 K-MUDANG Pro [PUBLIC EDITION] v4.22.0 - DEV MODE');let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
+--><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI Destiny Analysis"><meta property="og:description" content="🏆 World's Most Advanced BaZi · 🤖 AI 97 Rules Precision · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🔧 K-MUDANG Pro [PUBLIC EDITION] v4.22.1 - DEV MODE');let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
 function googleSignIn() { toast('🔓 PERSONAL Edition - Already unlocked!'); }
 function signOut() { toast('🔓 PERSONAL Edition - No login required'); }
 function checkPremiumStatus() { return true; }
@@ -594,7 +594,7 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
     criticals.push('⚠️ RESENTMENT RISK (怨嗔): ' + result.categories.wonjin.desc);
   }
   if (criticals.length === 0) criticals.push('No major critical factors detected.');
-  let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.0) =====
+  let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.1) =====
 ⚠️ AI: This is professional K-Fortune compatibility analysis. Interpret ALL data.
 
 【⚡ CRITICAL FACTORS - ADDRESS FIRST ⚡】
@@ -1075,7 +1075,7 @@ for(let i=0;i<W*H*0.15;i++){const x=Math.random()*W;const y=Math.random()*H;cons
 ctx.globalAlpha=0.15;for(let i=0;i<800;i++){const x=Math.random()*W;const y=Math.random()*H;const len=Math.random()*60+20;const isH=Math.random()>0.5;ctx.strokeStyle='rgba(120,80,40,0.3)';ctx.lineWidth=Math.random()*1.5+0.3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(isH?x+len:x+Math.random()*5,isH?y+Math.random()*3:y+len);ctx.stroke();}ctx.globalAlpha=1.0;
 // 3. 가장자리 빈티지 효과 (vignette) 강화
 const vignette=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8);vignette.addColorStop(0,'rgba(139,90,43,0)');vignette.addColorStop(0.7,'rgba(120,80,40,0.05)');vignette.addColorStop(1,'rgba(101,67,33,0.15)');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
-// === RARITY SYSTEM v4.22.0 ===
+// === RARITY SYSTEM v4.22.1 ===
 const rarity = getTalismanRarity();
 // Legendary: 추가 배경 글로우 효과
 if (rarity.grade === 'legendary') {
@@ -2815,7 +2815,7 @@ return html;}
 function showTodayFortune() {const el = document.getElementById('today-fortune');if (!el) return;const content = document.getElementById('today-fortune-content');if (content) {content.innerHTML = getTodayFortune();}}
 function copySajuForAI() {if (!SAJU) { toast('Please analyze your Four Pillars first'); return; }
 if (!requirePremium('AI Interpretation Copy')) {return;}
-try {const str = calcStrength(SAJU);const dm = SAJU.day.s;const dmName = `${dm.c} ${ELEMENT[dm.e].k}`;const gods = GODS;const format = calcFormat(SAJU);const interactions = calcInteractions(SAJU) || [];const sinsal = calcSinsal(SAJU) || [];const gongmang = calcGongmang(SAJU);const luck = calcLuck(SAJU, BIRTH_YEAR, GENDER, GODS, BIRTH_MONTH, BIRTH_DAY, BIRTH_HOUR) || [];const curLuck = luck.find(l => l.isCur);const currentYear = new Date().getFullYear();const age = currentYear - BIRTH_YEAR + 1;const ilju = getIljuDesc(SAJU.day.s, SAJU.day.b);const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[SAJU.year, SAJU.month, SAJU.day, SAJU.hour].forEach(p => {if(p && p.s) elCount[p.s.e]++;if(p && p.b) elCount[p.b.e]++;});const hiddenElCount = {wood:0, fire:0, earth:0, metal:0, water:0};const JIJANGGAN_MAP = {0: [9],
+try {const str = calcStrength(SAJU);const dm = SAJU.day.s;const dmName = `${dm.c} ${ELEMENT[dm.e].k}`;const gods = GODS;const format = calcFormat(SAJU);const interactions = calcInteractions(SAJU) || [];const sinsal = calcSinsal(SAJU) || [];const gongmang = calcGongmang(SAJU);const luck = calcLuck(SAJU, BIRTH_YEAR, GENDER, GODS, BIRTH_MONTH, BIRTH_DAY, BIRTH_HOUR) || [];const curLuck = luck.find(l => l.isCur);const currentYear = new Date().getFullYear();const age = currentYear - BIRTH_YEAR + 1;const ilju = getIljuDesc(SAJU.day.s, SAJU.day.b);const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[SAJU.year, SAJU.month, SAJU.day, SAJU.hour].forEach(p => {if(p && p.s) elCount[p.s.e]++;if(p && p.b) elCount[p.b.e]++;});const hiddenElCount = {wood:0, fire:0, earth:0, metal:0, water:0};const hiddenElInfo = {wood:[], fire:[], earth:[], metal:[], water:[]};const JIJANGGAN_MAP = {0: [9],
 1: [5,7,9],
 2: [0,2,4],
 3: [1],
@@ -2826,7 +2826,7 @@ try {const str = calcStrength(SAJU);const dm = SAJU.day.s;const dmName = `${dm.c
 8: [6,8,4],
 9: [7],
 10:[4,7,3],
-11:[8,0]};[SAJU.year.b, SAJU.month.b, SAJU.day.b, SAJU.hour?.b].filter(b => b).forEach(b => {const bi = BRANCH.findIndex(br => br.c === b.c);const hidden = JIJANGGAN_MAP[bi] || [];hidden.forEach(hi => { hiddenElCount[STEM[hi].e]++; });});const yearGod = getTenGod(SAJU.year.s, dm);const monthGod = getTenGod(SAJU.month.s, dm);const hourGod = SAJU.hour ? getTenGod(SAJU.hour.s, dm) : null;const getBranchYang = (branch) => {const idx = BRANCH.findIndex(b => b.c === branch.c);return idx % 2 === 0;};const yearBranchYang = getBranchYang(SAJU.year.b) ? '陽' : '陰';const monthBranchYang = getBranchYang(SAJU.month.b) ? '陽' : '陰';const dayBranchYang = getBranchYang(SAJU.day.b) ? '陽' : '陰';const hourBranchYang = SAJU.hour ? (getBranchYang(SAJU.hour.b) ? '陽' : '陰') : '';const yearBranchGod = getTenGod({e: SAJU.year.b.e, y: getBranchYang(SAJU.year.b)}, dm);const monthBranchGod = getTenGod({e: SAJU.month.b.e, y: getBranchYang(SAJU.month.b)}, dm);const dayBranchGod = getTenGod({e: SAJU.day.b.e, y: getBranchYang(SAJU.day.b)}, dm);const hourBranchGod = SAJU.hour ? getTenGod({e: SAJU.hour.b.e, y: getBranchYang(SAJU.hour.b)}, dm) : null;const dmEl = dm.e;const elOrder = ['wood', 'fire', 'earth', 'metal', 'water'];const dmIdx = elOrder.indexOf(dmEl);const tenGodMap = {peer: elOrder[dmIdx],
+11:[8,0]};[SAJU.year.b, SAJU.month.b, SAJU.day.b, SAJU.hour?.b].filter(b => b).forEach(b => {const bi = BRANCH.findIndex(br => br.c === b.c);const hidden = JIJANGGAN_MAP[bi] || [];hidden.forEach(hi => { hiddenElCount[STEM[hi].e]++; hiddenElInfo[STEM[hi].e].push({branch:b.c, stem:STEM[hi].c}); });});const yearGod = getTenGod(SAJU.year.s, dm);const monthGod = getTenGod(SAJU.month.s, dm);const hourGod = SAJU.hour ? getTenGod(SAJU.hour.s, dm) : null;const getBranchYang = (branch) => {const idx = BRANCH.findIndex(b => b.c === branch.c);return idx % 2 === 0;};const yearBranchYang = getBranchYang(SAJU.year.b) ? '陽' : '陰';const monthBranchYang = getBranchYang(SAJU.month.b) ? '陽' : '陰';const dayBranchYang = getBranchYang(SAJU.day.b) ? '陽' : '陰';const hourBranchYang = SAJU.hour ? (getBranchYang(SAJU.hour.b) ? '陽' : '陰') : '';const yearBranchGod = getTenGod({e: SAJU.year.b.e, y: getBranchYang(SAJU.year.b)}, dm);const monthBranchGod = getTenGod({e: SAJU.month.b.e, y: getBranchYang(SAJU.month.b)}, dm);const dayBranchGod = getTenGod({e: SAJU.day.b.e, y: getBranchYang(SAJU.day.b)}, dm);const hourBranchGod = SAJU.hour ? getTenGod({e: SAJU.hour.b.e, y: getBranchYang(SAJU.hour.b)}, dm) : null;const dmEl = dm.e;const elOrder = ['wood', 'fire', 'earth', 'metal', 'water'];const dmIdx = elOrder.indexOf(dmEl);const tenGodMap = {peer: elOrder[dmIdx],
 output: elOrder[(dmIdx + 1) % 5],
 wealth: elOrder[(dmIdx + 2) % 5],
 officer: elOrder[(dmIdx + 3) % 5],
@@ -2940,7 +2940,7 @@ ${hourState ? '• Hour Branch ' + SAJU.hour.b.c + ': ' + hourState.k + ' (Energ
 • Earth (土): ${elCount.earth}
 • Metal (金): ${elCount.metal}
 • Water (水): ${elCount.water}
-• Missing Elements: ${(() => {const missing = Object.entries(elCount).filter(e => e[1] === 0);if (missing.length === 0) return 'None';return missing.map(([el, cnt]) => {if (hiddenElCount[el] > 0) {return ELEMENT[el].c + '(' + ELEMENT[el].k + ') - Weak (Hidden in branches)';}
+• Missing Elements: ${(() => {const missing = Object.entries(elCount).filter(e => e[1] === 0);if (missing.length === 0) return 'None';return missing.map(([el, cnt]) => {if (hiddenElCount[el] > 0) {const locs = hiddenElInfo[el].map(h => h.branch + ':' + h.stem).join(', ');return ELEMENT[el].c + '(' + ELEMENT[el].k + ') - Hidden in ' + locs;}
 return ELEMENT[el].c + '(' + ELEMENT[el].k + ')';}).join(', ');})()}
 【DAY MASTER STRENGTH】
 • Strength: ${str.pct}% (${str.type === 'strong' ? 'STRONG Body' : str.type === 'weak' ? 'WEAK Body' : 'BALANCED'})
@@ -3548,7 +3548,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 3. Life Cycle + Annual Fortune Ten Gods - Current life theme
 4. Branch Ten Gods - Hidden influences
 5. Everything else
-===== 🆕 EXTENDED RULES 71-97 (v4.22.0) =====
+===== 🆕 EXTENDED RULES 71-97 (v4.22.1) =====
 71. 【BUREAU/HARMONY = x10 MULTIPLIER EFFECT】
 • Directional Harmony or Three Harmony completion is NOT simple addition.
 • 巳午未 (Southern Fire Bureau) = Fire x10 power
@@ -3749,7 +3749,7 @@ function handleUrlHash() {const hash = window.location.hash.replace('#', '');if 
 window.addEventListener('load', handleUrlHash);window.addEventListener('hashchange', handleUrlHash);
 /* ========== DEV TEST FUNCTIONS ========== */
 window.runTests = function() {
-  console.log('%c🔬 K-MUDANG REGRESSION TEST SUITE v4.22.0', 'color:#D4AF37;font-size:16px;font-weight:bold');
+  console.log('%c🔬 K-MUDANG REGRESSION TEST SUITE v4.22.1', 'color:#D4AF37;font-size:16px;font-weight:bold');
   let pass=0, fail=0;
   
   // === PART 1: BUREAU 텍스트 파싱 테스트 ===
