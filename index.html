@@ -602,6 +602,7 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
   if (result.hasBranchClash) criticals.push('⚠️ SPOUSE PALACE CLASH (日支沖) - Tension but passion.');
   if (mySSInP >= 2 && mySpouseStar?.el && ELEMENT[mySpouseStar.el]) criticals.push('✅ Partner brings ' + mySSInP + 'x of my Spouse Star (' + ELEMENT[mySpouseStar.el].k + ') - Strong attraction!');
   if (myYongInP >= 2 && myGods?.yong && ELEMENT[myGods.yong]) criticals.push('🌟 Partner brings my 用神 (' + ELEMENT[myGods.yong].k + ') abundantly!');
+  if (pYongInMe >= 2 && partnerGods?.yong && ELEMENT[partnerGods.yong]) criticals.push('💫 I bring partner\'s 用神 (' + ELEMENT[partnerGods.yong].k + ') ' + pYongInMe + 'x - I am their fortune!');
   if (myGiInP >= 2 && myGods?.gi && ELEMENT[myGods.gi]) criticals.push('⚠️ Partner brings my 忌神 (' + ELEMENT[myGods.gi].k + ') - Needs management.');
   // ===== 조후론(調候論) 특수 케이스 =====
   const mbi = BRANCH.findIndex(b => b.c === mySaju.month.b.c);
@@ -646,6 +647,10 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
   // 동일 조후 경고
   if (result.categories.sameClimate) {
     criticals.push('🌡️ SAME CLIMATE (同調候): Both ' + (myGods?.climate?.type?.includes('Cold') || myGods?.climate?.type?.includes('한') ? '寒(Cold)' : '燥(Dry)') + ' - Neither provides balance!');
+  }
+  // 조후 보완 (johuMatch)
+  if (result.categories.johuMatch) {
+    criticals.push('🌡️ CLIMATE HARMONY (調候保完): ' + result.categories.johuMatch.desc);
   }
   if (criticals.length === 0) criticals.push('No major critical factors detected.');
   let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.5) =====
