@@ -643,6 +643,10 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
   if (result.categories.hyung) {
     criticals.push('⚠️ MUTUAL PUNISHMENT (刑): ' + result.categories.hyung.desc);
   }
+  // 동일 조후 경고
+  if (result.categories.sameClimate) {
+    criticals.push('🌡️ SAME CLIMATE (同調候): Both ' + (myGods?.climate?.type?.includes('Cold') || myGods?.climate?.type?.includes('한') ? '寒(Cold)' : '燥(Dry)') + ' - Neither provides balance!');
+  }
   if (criticals.length === 0) criticals.push('No major critical factors detected.');
   let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.5) =====
 ⚠️ AI: This is professional K-Fortune compatibility analysis. Interpret ALL data.
@@ -662,6 +666,7 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
 • Strength: ` + (STRENGTH?.pct || '?') + `% (` + (STRENGTH?.type === 'strong' ? 'STRONG' : STRENGTH?.type === 'weak' ? 'WEAK' : 'BALANCED') + `)
 • 用神: ` + (myGods?.yong ? ELEMENT[myGods.yong].n : '?') + ` | 忌神: ` + (myGods?.gi ? ELEMENT[myGods.gi].n : '?') + `
 • Spouse Palace: ` + mySaju.day.b.c + ` (` + mySaju.day.b.k + `)
+• Climate: ` + (myGods?.climate?.type || '?') + `
 
 【PARTNER'S FORTUNE CHART】
 • Year: ` + partnerSaju.year.s.c + partnerSaju.year.b.c + ` (` + ELEMENT[partnerSaju.year.s.e].k + `/` + ELEMENT[partnerSaju.year.b.e].k + `) - ` + pYearGod.k + `
@@ -673,6 +678,7 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
 • Strength: ` + (PARTNER_STRENGTH?.pct || '?') + `% (` + (PARTNER_STRENGTH?.type === 'strong' ? 'STRONG' : PARTNER_STRENGTH?.type === 'weak' ? 'WEAK' : 'BALANCED') + `)
 • 用神: ` + (partnerGods?.yong ? ELEMENT[partnerGods.yong].n : '?') + ` | 忌神: ` + (partnerGods?.gi ? ELEMENT[partnerGods.gi].n : '?') + `
 • Spouse Palace: ` + partnerSaju.day.b.c + ` (` + partnerSaju.day.b.k + `)
+• Climate: ` + (partnerGods?.climate?.type || '?') + `
 
 【SPOUSE STAR CROSS-ANALYSIS】 ⚠️ ATTRACTION
 • My Spouse Star (` + ELEMENT[mySpouseStar.el].k + `): Partner has ` + mySSInP + `x → ` + (mySSInP >= 2 ? '✅ Strong!' : mySSInP === 1 ? '😊 Moderate' : '❌ Low') + `
