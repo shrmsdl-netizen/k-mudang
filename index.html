@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.22.5 [PERSONAL] - 개인 개발용 버전                               ║
+║  K-MUDANG Pro v4.22.6 [PERSONAL] - 개인 개발용 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
@@ -13,7 +13,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.22.5)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.22.6)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -27,7 +27,7 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  v4.22.5 (2026-01-27):                                                         ║
+║  v4.22.6 (2026-01-27):                                                         ║
 ║    - [FIX] 궁합 동일 조후 페널티 추가 (-3점)                                   ║
 ║           → 둘 다 寒(겨울) 또는 둘 다 燥(여름) 계열 시 페널티 적용             ║
 ║    - [SYNC] 사주로또 v34.5와 동기화                                            ║
@@ -117,7 +117,7 @@
 ║  Contact: kmudang.official@gmail.com                                          ║
 ║  Last Updated: 2026-01-21                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
---><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI BaZi Analysis"><meta property="og:description" content="📜 Patent 10-2026-0010452 · 🌡️ Climate Theory (調候論) · 💕 60 Archetype Compatibility · 🏮 2026 Fortune Talisman · 🌍 Global Timezone"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🔧 K-MUDANG Pro [PUBLIC EDITION] v4.22.5 - DEV MODE');let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
+--><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI BaZi Analysis"><meta property="og:description" content="📜 Patent 10-2026-0010452 · 🌡️ Climate Theory (調候論) · 💕 60 Archetype Compatibility · 🏮 2026 Fortune Talisman · 🌍 Global Timezone"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🔧 K-MUDANG Pro [PUBLIC EDITION] v4.22.6 - DEV MODE');let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
 function googleSignIn() { toast('🔓 PERSONAL Edition - Already unlocked!'); }
 function signOut() { toast('🔓 PERSONAL Edition - No login required'); }
 function checkPremiumStatus() { return true; }
@@ -200,7 +200,7 @@ var devtools={open:false};setInterval(function(){var start=performance.now();deb
          ======================================== --><div id="tab-powerball" class="tab-content"><header><div class="dragon-seal"><svg viewBox="0 0 100 100"><defs><linearGradient id="dragonGold2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="50%" style="stop-color:#FFA500"/><stop offset="100%" style="stop-color:#FFD700"/></linearGradient></defs><circle cx="50" cy="50" r="45" fill="none" stroke="url(#dragonGold2)" stroke-width="2"/><text x="50" y="58" text-anchor="middle" fill="url(#dragonGold2)" font-size="32" font-family="serif">龍</text></svg></div><h1>K-MUDANG</h1><span class="game-title">POWERBALL</span><p class="subtitle">Extensive Metaphysical Data · Flawless Precision · Deep AI Insight</p></header><div class="card"><h3>📅 Your Birth Date</h3><div class="form-row" style="grid-template-columns: repeat(3, 1fr);"><div class="form-group"><label>Month</label><select id="pb-month"></select></div><div class="form-group"><label>Day</label><select id="pb-day"></select></div><div class="form-group"><label>Year</label><select id="pb-year"></select></div></div><div style="display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-primary" onclick="generatePowerballDestiny()" style="flex:1;min-width:140px;padding:15px;">🔮 Destiny Numbers</button><button class="btn btn-secondary" onclick="generatePowerballQuick()" style="flex:1;min-width:140px;padding:15px;">🎲 Quick Pick</button></div></div><div class="card" id="pb-result" style="display:none;"><div id="pb-destiny-section" style="margin-bottom:20px;padding:15px;background:rgba(255,215,0,0.08);border-radius:10px;border:1px solid rgba(212,175,55,0.3);display:none;"><h3 style="color:var(--gold);margin-bottom:10px;">🔮 Destiny Numbers</h3><p style="font-size:0.75rem;color:var(--gray);margin-bottom:10px;" id="pb-destiny-info"></p><div class="balls-container" id="pb-destiny-balls"></div></div><div id="pb-quick-section" style="padding:15px;background:rgba(100,100,100,0.1);border-radius:10px;border:1px solid rgba(150,150,150,0.2);display:none;"><h3 style="color:var(--gray);margin-bottom:10px;">🎲 Quick Pick (Random)</h3><div class="balls-container" id="pb-quick-balls"></div></div></div><div class="card history-section" id="pb-history" style="display:none;"><h3>📋 History</h3><div id="pb-history-list"></div></div></div><!-- ========================================
          Tab 3: MEGA MILLIONS
          ======================================== --><div id="tab-mega" class="tab-content"><header><div class="dragon-seal"><svg viewBox="0 0 100 100"><defs><linearGradient id="dragonGold3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="50%" style="stop-color:#FFA500"/><stop offset="100%" style="stop-color:#FFD700"/></linearGradient></defs><circle cx="50" cy="50" r="45" fill="none" stroke="url(#dragonGold3)" stroke-width="2"/><text x="50" y="58" text-anchor="middle" fill="url(#dragonGold3)" font-size="32" font-family="serif">龍</text></svg></div><h1>K-MUDANG</h1><span class="game-title">MEGA MILLIONS</span><p class="subtitle">Extensive Metaphysical Data · Flawless Precision · Deep AI Insight</p></header><div class="card"><h3>📅 Your Birth Date</h3><div class="form-row" style="grid-template-columns: repeat(3, 1fr);"><div class="form-group"><label>Month</label><select id="mega-month"></select></div><div class="form-group"><label>Day</label><select id="mega-day"></select></div><div class="form-group"><label>Year</label><select id="mega-year"></select></div></div><div style="display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-primary" onclick="generateMegaDestiny()" style="flex:1;min-width:140px;padding:15px;">🔮 Destiny Numbers</button><button class="btn btn-secondary" onclick="generateMegaQuick()" style="flex:1;min-width:140px;padding:15px;">🎲 Quick Pick</button></div></div><div class="card" id="mega-result" style="display:none;"><div id="mega-destiny-section" style="margin-bottom:20px;padding:15px;background:rgba(255,215,0,0.08);border-radius:10px;border:1px solid rgba(212,175,55,0.3);display:none;"><h3 style="color:var(--gold);margin-bottom:10px;">🔮 Destiny Numbers</h3><p style="font-size:0.75rem;color:var(--gray);margin-bottom:10px;" id="mega-destiny-info"></p><div class="balls-container" id="mega-destiny-balls"></div></div><div id="mega-quick-section" style="padding:15px;background:rgba(100,100,100,0.1);border-radius:10px;border:1px solid rgba(150,150,150,0.2);display:none;"><h3 style="color:var(--gray);margin-bottom:10px;">🎲 Quick Pick (Random)</h3><div class="balls-container" id="mega-quick-balls"></div></div></div><div class="card history-section" id="mega-history" style="display:none;"><h3>📋 History</h3><div id="mega-history-list"></div></div></div><!-- ========================================
-         Tab 4: MATCH (궁합)
+         Tab 4: MATCH (Compatibility)
          ======================================== --><div id="tab-match" class="tab-content"><header><div class="dragon-seal"><svg viewBox="0 0 100 100"><defs><linearGradient id="dragonGold4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF69B4"/><stop offset="50%" style="stop-color:#FFD700"/><stop offset="100%" style="stop-color:#FF69B4"/></linearGradient></defs><circle cx="50" cy="50" r="45" fill="none" stroke="url(#dragonGold4)" stroke-width="2"/><text x="50" y="58" text-anchor="middle" fill="url(#dragonGold4)" font-size="28" font-family="serif">緣</text></svg></div><h1>K-MUDANG</h1><span class="game-title" style="background:linear-gradient(135deg,#FF69B4,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">COMPATIBILITY</span><p class="subtitle">60 Archetypes · Elemental Dynamics · Destiny Forecast</p></header><div class="card" id="match-my-info"><h3>👤 My Profile</h3><div id="match-my-display"><p style="color:var(--gold);text-align:center;padding:20px;">First analyze your birth chart in [K-Fortune] tab</p></div></div><div class="card"><h3>💕 Partner's Birth Info</h3><div class="form-row"><div class="form-group"><label>Month</label><select id="match-month"></select></div><div class="form-group"><label>Day</label><select id="match-day"></select></div><div class="form-group"><label>Year</label><select id="match-year"></select></div><div class="form-group"><label>Hour</label><select id="match-hour"><option value="">Unknown</option></select></div></div><div class="form-row" style="grid-template-columns: 1fr;"><div class="form-group"><label>🌍 Partner's Birth Location</label><select id="partner-location"><optgroup label="🇺🇸 United States"><option value="America/Los_Angeles" selected>Pacific (CA, WA, OR)</option><option value="America/Denver">Mountain (CO, AZ, UT, NV)</option><option value="America/Chicago">Central (TX, IL, MN)</option><option value="America/New_York">Eastern (NY, FL, GA)</option><option value="America/Anchorage">Alaska</option><option value="Pacific/Honolulu">Hawaii</option></optgroup><optgroup label="🌏 East Asia"><option value="Asia/Seoul">🇰🇷 Korea</option><option value="Asia/Tokyo">🇯🇵 Japan</option><option value="Asia/Shanghai">🇨🇳 China</option><option value="Asia/Taipei">🇹🇼 Taiwan</option><option value="Asia/Hong_Kong">🇭🇰 Hong Kong</option></optgroup><optgroup label="🌏 Southeast Asia"><option value="Asia/Ho_Chi_Minh">🇻🇳 Vietnam</option><option value="Asia/Bangkok">🇹🇭 Thailand</option><option value="Asia/Singapore">🇸🇬 Singapore</option><option value="Asia/Manila">🇵🇭 Philippines</option><option value="Asia/Jakarta">🇮🇩 Indonesia</option></optgroup><optgroup label="🌏 South Asia / Middle East"><option value="Asia/Kolkata">🇮🇳 India</option><option value="Asia/Dubai">🇦🇪 UAE / Dubai</option><option value="Asia/Jerusalem">🇮🇱 Israel</option><option value="Asia/Riyadh">🇸🇦 Saudi Arabia</option></optgroup><optgroup label="🇪🇺 Europe"><option value="Europe/London">🇬🇧 UK</option><option value="Europe/Berlin">🇩🇪 Germany</option><option value="Europe/Paris">🇫🇷 France</option><option value="Europe/Madrid">🇪🇸 Spain</option><option value="Europe/Rome">🇮🇹 Italy</option><option value="Europe/Moscow">🇷🇺 Russia (Moscow)</option></optgroup><optgroup label="🌎 Americas"><option value="America/Vancouver">🇨🇦 Canada West</option><option value="America/Toronto">🇨🇦 Canada East</option><option value="America/Mexico_City">🇲🇽 Mexico</option><option value="America/Sao_Paulo">🇧🇷 Brazil</option></optgroup><optgroup label="🌏 Oceania"><option value="Australia/Sydney">🇦🇺 Australia East</option><option value="Australia/Perth">🇦🇺 Australia West</option><option value="Pacific/Auckland">🇳🇿 New Zealand</option></optgroup></select></div></div><div class="form-row" style="grid-template-columns: repeat(2, 1fr);"><div class="form-group"><label>Gender</label><div class="toggle-btns"><button class="toggle-btn" data-pgender="m" onclick="setPartnerGender('m')">👨 M</button><button class="toggle-btn on" data-pgender="f" onclick="setPartnerGender('f')">👩 F</button></div></div><div class="form-group"><label>Relationship</label><select id="match-mode"><option value="romance">💕 Romance</option><option value="business">💼 Business</option><option value="family">👨‍👩‍👧 Family</option></select></div></div><button class="btn" onclick="analyzeMatch()" style="background:linear-gradient(135deg,#FF69B4,#C71585);">💕 Analyze Compatibility</button></div><div id="match-result" style="display:none;"><div class="card" id="match-score-card" style="text-align:center;background:linear-gradient(145deg,rgba(255,105,180,0.15),rgba(26,35,50,0.95));"><p style="font-size:0.9rem;color:var(--gray);margin-bottom:10px;">Compatibility Score</p><p id="match-grade" style="font-size:2.5rem;margin-bottom:5px;">💕</p><p id="match-score" style="font-size:2rem;font-weight:bold;margin-bottom:10px;">0</p><div style="background:#333;border-radius:10px;height:20px;margin:15px 0;"><div id="match-score-bar" style="background:linear-gradient(90deg,#FF69B4,#FFD700);height:100%;border-radius:10px;width:0%;transition:width 1s;"></div></div><p id="match-summary" style="font-size:0.95rem;color:var(--gray);"></p></div><div class="card"><h3>⚔️ Two Souls</h3><div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;"><div style="text-align:center;padding:15px;background:rgba(253,216,53,0.1);border-radius:10px;"><p style="font-size:0.8rem;color:var(--gray);margin-bottom:5px;">Me</p><p id="match-my-ilju" style="font-size:1.5rem;font-weight:bold;color:var(--gold);"></p><p id="match-my-emoji" style="font-size:2rem;margin:10px 0;"></p><p id="match-my-name" style="font-size:0.85rem;color:var(--pearl);"></p></div><div style="text-align:center;"><p id="match-interaction-emoji" style="font-size:2rem;"></p><p id="match-interaction-name" style="font-size:0.75rem;color:var(--gold);margin-top:5px;"></p></div><div style="text-align:center;padding:15px;background:rgba(255,105,180,0.1);border-radius:10px;"><p style="font-size:0.8rem;color:var(--gray);margin-bottom:5px;">Partner</p><p id="match-partner-ilju" style="font-size:1.5rem;font-weight:bold;color:#FF69B4;"></p><p id="match-partner-emoji" style="font-size:2rem;margin:10px 0;"></p><p id="match-partner-name" style="font-size:0.85rem;color:var(--pearl);"></p></div></div></div><div class="card"><h3>🎭 Character Archetypes</h3><div class="info-box" style="border-left-color:var(--gold);margin-bottom:10px;"><p style="font-weight:bold;color:var(--gold);margin-bottom:5px;">Your Archetype</p><p id="match-my-desc" style="font-size:0.9rem;"></p></div><div class="info-box" style="border-left-color:#FF69B4;"><p style="font-weight:bold;color:#FF69B4;margin-bottom:5px;">Partner's Archetype</p><p id="match-partner-desc" style="font-size:0.9rem;"></p></div></div><div class="card"><h3>🔄 Elemental Dynamics</h3><div id="match-dynamics"></div></div><div class="card"><h3>📊 Detailed Analysis</h3><div id="match-categories"></div></div><div class="card" id="match-yearly-card" style="display:none;"><h3>📅 Yearly Forecast</h3><div id="match-yearly"></div></div><div class="card gold"><h3>🤖 AI Deep Analysis</h3><div style="text-align:center;padding:20px;"><p style="font-size:1rem;color:var(--gold-light);margin-bottom:15px;">Get expert-level relationship analysis from AI</p><p style="font-size:0.85rem;color:var(--gray);margin-bottom:20px;">Copy the detailed compatibility data and paste into<br><strong style="color:#4285F4;">Gemini</strong>, <strong style="color:#10A37F;">ChatGPT</strong>, or any AI</p><button class="btn" onclick="copyMatchForAI()" style="background:linear-gradient(135deg,#9C27B0,#E91E63);padding:16px 32px;font-size:16px;border-radius:50px;">✨ Copy Compatibility Analysis</button></div></div><div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(255,105,180,0.1),transparent);"><p style="font-size:1rem;margin-bottom:15px;">💕 Share your compatibility results</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;"><button class="btn" onclick="shareMatchResult()" style="background:linear-gradient(135deg,#25D366,#128C7E);padding:12px 24px;">📤 Share</button></div></div></div></div></div><footer><p style="font-size:1.1rem;color:var(--gold);margin-bottom:8px;">🆓 FREE · No Ads · No Judgment</p><p style="font-size:1rem;color:var(--gray);margin-bottom:10px;">Where exhausted achievers find balance</p><p style="font-size:1rem;margin-bottom:10px;"><a href="https://ko-fi.com/kmudang" target="_blank" style="color:var(--gold-light);text-decoration:none;">☕ Honor the Oracle</a></p><p style="opacity:0.6;font-size:0.9rem;">© K-MUDANG · 命理硏究所</p></footer><div class="toast" id="toast"></div><script>
 // ========================================
 // 60갑자 일주 캐릭터 이미지
@@ -495,9 +495,47 @@ function analyzeMatchAdvanced(mySaju, myGods, myStrength, partnerSaju, partnerGo
   if (myStrength && partnerStrength) {
     const myType = myStrength.type;
     const pType = partnerStrength.type;
-    if ((myType==='strong'&&pType==='weak')||(myType==='weak'&&pType==='strong')) { result.score += 10; result.categories.strengthBalance = { score: 10, title: '陰陽 Balance', desc: 'Perfect yin-yang complement.' }; }
-    else if (myType==='strong'&&pType==='strong') { result.score -= 5; result.categories.strengthBalance = { score: -5, title: 'Double Strong', desc: 'Two strong wills may clash.', advice: 'Designate domains of authority.' }; }
+    if ((myType==='strong'&&pType==='weak')||(myType==='weak'&&pType==='strong')) { result.score += 10; result.categories.strengthBalance = { score: 10, title: '身强身弱/Strength Balance', desc: 'Perfect yin-yang complement. One leads, one supports.' }; }
+    else if (myType==='strong'&&pType==='strong') { result.score -= 5; result.categories.strengthBalance = { score: -5, title: '雙强/Double Strong', desc: 'Two strong wills may clash.', advice: 'Designate domains of authority.' }; }
   }
+  
+  // ===== 납음 궁합 (納音宮合) =====
+  const myNapeum = calcNapeum(mySaju.day.s, mySaju.day.b);
+  const pNapeum = calcNapeum(partnerSaju.day.s, partnerSaju.day.b);
+  if (myNapeum.name === pNapeum.name) {
+    result.score += 12;
+    result.categories.napeumMatch = { score: 12, title: '納音/Napeum (Soul Resonance)', desc: 'Both "' + myNapeum.name + '"! Your souls vibrate on the same frequency.', advice: 'Rare spiritual connection.' };
+  } else if (myNapeum.element === pNapeum.element) {
+    result.score += 6;
+    result.categories.napeumMatch = { score: 6, title: '納音/Napeum (Element Match)', desc: 'Both ' + ELEMENT[myNapeum.element].n + ' element souls. Similar emotional wavelengths.' };
+  } else {
+    const myNEl = EL_ORDER.indexOf(myNapeum.element);
+    const pNEl = EL_ORDER.indexOf(pNapeum.element);
+    if ((myNEl + 1) % 5 === pNEl || (pNEl + 1) % 5 === myNEl) {
+      result.score += 4;
+      result.categories.napeumMatch = { score: 4, title: '納音/Napeum (Soul Harmony)', desc: myNapeum.name + ' and ' + pNapeum.name + ' support each other.' };
+    }
+  }
+  result.myNapeum = myNapeum;
+  result.partnerNapeum = pNapeum;
+  
+  // ===== 12운성 궁합 (十二運星) =====
+  const myDayState = getTwelveState(mySaju.day.s, mySaju.day.b);
+  const pDayState = getTwelveState(partnerSaju.day.s, partnerSaju.day.b);
+  const myEnergy = myDayState.l;
+  const pEnergy = pDayState.l;
+  const energyDiff = Math.abs(myEnergy - pEnergy);
+  if (energyDiff <= 2 && myEnergy >= 6 && pEnergy >= 6) {
+    result.score += 5;
+    result.categories.twelveState = { score: 5, title: '十二運星/Energy Match', desc: 'Both high energy (' + myDayState.k + ' & ' + pDayState.k + '). Active and dynamic couple!' };
+  } else if (energyDiff <= 2 && myEnergy <= 4 && pEnergy <= 4) {
+    result.categories.twelveState = { score: 0, title: '十二運星/Energy Match', desc: 'Both low energy (' + myDayState.k + ' & ' + pDayState.k + '). Gentle and contemplative.', advice: 'Find external sources of vitality together.' };
+  } else if (energyDiff >= 6) {
+    result.categories.twelveState = { score: 0, title: '十二運星/Energy Gap', desc: 'Energy mismatch (' + myDayState.k + ' vs ' + pDayState.k + ').', advice: 'Balance activity levels consciously.' };
+  }
+  result.myTwelveState = myDayState;
+  result.partnerTwelveState = pDayState;
+
   result.score = Math.max(0, Math.min(100, result.score));
   if (result.score >= 85) { result.grade = '💖 Soulmates'; result.gradeK = '천생연분'; result.summary = 'A match written in the stars.'; }
   else if (result.score >= 70) { result.grade = '💕 Excellent'; result.gradeK = '아주 좋은 궁합'; result.summary = 'Strong harmony with natural flow.'; }
@@ -612,7 +650,7 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
   const pElements = [...pStemEls, ...pBranchEls];
   
   // 동토(冬土) + 木
-  if (myDmEl === 'earth' && [0, 1].includes(mbi) && pElements.includes('wood')) {
+  if (myDmEl === 'earth' && [0, 1, 11].includes(mbi) && pElements.includes('wood')) {
     criticals.push('🌱 WINTER EARTH CULTIVATION (冬土開墾): Your frozen Earth needs Wood to plow! This is NOT 忌神 - it is ESSENTIAL!');
   }
   // 하토(夏土) + 水
@@ -653,7 +691,7 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
     criticals.push('🌡️ CLIMATE HARMONY (調候保完): ' + result.categories.johuMatch.desc);
   }
   if (criticals.length === 0) criticals.push('No major critical factors detected.');
-  let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.5) =====
+  let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.6) =====
 ⚠️ AI: This is professional K-Fortune compatibility analysis. Interpret ALL data.
 
 【⚡ CRITICAL FACTORS - ADDRESS FIRST ⚡】
@@ -671,6 +709,8 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
 • Strength: ` + (STRENGTH?.pct || '?') + `% (` + (STRENGTH?.type === 'strong' ? 'STRONG' : STRENGTH?.type === 'weak' ? 'WEAK' : 'BALANCED') + `)
 • 用神: ` + (myGods?.yong ? ELEMENT[myGods.yong].n : '?') + ` | 忌神: ` + (myGods?.gi ? ELEMENT[myGods.gi].n : '?') + `
 • Spouse Palace: ` + mySaju.day.b.c + ` (` + mySaju.day.b.k + `)
+• Napeum (納音): ` + (result.myNapeum?.name || '?') + ` (` + (result.myNapeum?.elementK || '?') + `)
+• Energy (十二運星): ` + (result.myTwelveState?.k || '?') + ` (` + (result.myTwelveState?.l || '?') + `/12)
 • Climate: ` + (myGods?.climate?.type || '?') + `
 
 【PARTNER'S FORTUNE CHART】
@@ -683,6 +723,8 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
 • Strength: ` + (PARTNER_STRENGTH?.pct || '?') + `% (` + (PARTNER_STRENGTH?.type === 'strong' ? 'STRONG' : PARTNER_STRENGTH?.type === 'weak' ? 'WEAK' : 'BALANCED') + `)
 • 用神: ` + (partnerGods?.yong ? ELEMENT[partnerGods.yong].n : '?') + ` | 忌神: ` + (partnerGods?.gi ? ELEMENT[partnerGods.gi].n : '?') + `
 • Spouse Palace: ` + partnerSaju.day.b.c + ` (` + partnerSaju.day.b.k + `)
+• Napeum (納音): ` + (result.partnerNapeum?.name || '?') + ` (` + (result.partnerNapeum?.elementK || '?') + `)
+• Energy (十二運星): ` + (result.partnerTwelveState?.k || '?') + ` (` + (result.partnerTwelveState?.l || '?') + `/12)
 • Climate: ` + (partnerGods?.climate?.type || '?') + `
 
 【SPOUSE STAR CROSS-ANALYSIS】 ⚠️ ATTRACTION
@@ -902,18 +944,18 @@ indirectOfficer:{k:'偏官 Challenger',c:'偏官',e:'Challenger',d:'The Commande
 directOfficer:{k:'正官 Direct Officer',c:'正官',e:'Direct Officer',d:'The Guardian. Honor and principles guide your path. You shine in structured environments and leadership.'},
 indirectSeal:{k:'偏印 Indirect Seal',c:'偏印',e:'Indirect Seal',d:'The Philosopher. Unconventional wisdom and intuition are your guides. You see the hidden truths of the world.'},
 directSeal:{k:'正印 Direct Seal',c:'正印',e:'Direct Seal',d:'The Scholar. Loved and supported by many. Wisdom and learning are your lifelong companions.'}};const TWELVE_STATES = [
-{k:'長生(Birth)',l:12,d:'New life awakens. Fresh beginnings and infinite hope bless this phase.'},
-{k:'沐浴(Bath)',l:8,d:'The cleansing waters. Transformation brings temporary instability before renewal.'},
-{k:'冠帶(Crown)',l:10,d:'Rising energy. Growth accelerates as opportunities unfold before you.'},
-{k:'臨官(Official)',l:11,d:'Peak vitality. Maximum energy propels you toward your greatest achievements.'},
-{k:'帝旺(Peak)',l:12,d:'The summit. Power and status reach their zenith under heaven\'s favor.'},
-{k:'衰(Decline)',l:7,d:'Gentle descent. Wisdom accumulates as you embrace graceful transition.'},
-{k:'病(Illness)',l:4,d:'Waning strength. Rest and reflection restore what ambition has spent.'},
-{k:'死(Stillness)',l:3,d:'Completion approaches. Honor endings as you prepare for rebirth.'},
-{k:'墓(Storage)',l:2,d:'The hidden phase. Inner cultivation in silence precedes emergence.'},
-{k:'絶(Void)',l:1,d:'Complete emptiness. From the void, new possibilities are born.'},
-{k:'胎(Conception)',l:5,d:'Life stirs. Seeds of future potential take root in cosmic soil.'},
-{k:'養(Nurture)',l:6,d:'Gentle growth. Patient development builds strength for the journey ahead.'}
+{k:'Birth (長生)',l:12,d:'New life awakens. Fresh beginnings and infinite hope bless this phase.'},
+{k:'Bath (沐浴)',l:8,d:'The cleansing waters. Transformation brings temporary instability before renewal.'},
+{k:'Crown (冠帶)',l:10,d:'Rising energy. Growth accelerates as opportunities unfold before you.'},
+{k:'Official (臨官)',l:11,d:'Peak vitality. Maximum energy propels you toward your greatest achievements.'},
+{k:'Peak (帝旺)',l:12,d:'The summit. Power and status reach their zenith under heaven\'s favor.'},
+{k:'Decline (衰)',l:7,d:'Gentle descent. Wisdom accumulates as you embrace graceful transition.'},
+{k:'Illness (病)',l:4,d:'Waning strength. Rest and reflection restore what ambition has spent.'},
+{k:'Stillness (死)',l:3,d:'Completion approaches. Honor endings as you prepare for rebirth.'},
+{k:'Storage (墓)',l:2,d:'The hidden phase. Inner cultivation in silence precedes emergence.'},
+{k:'Void (絶)',l:1,d:'Complete emptiness. From the void, new possibilities are born.'},
+{k:'Conception (胎)',l:5,d:'Life stirs. Seeds of future potential take root in cosmic soil.'},
+{k:'Nurture (養)',l:6,d:'Gentle growth. Patient development builds strength for the journey ahead.'}
 ];const SOLAR_TERMS = {1940:[[2,5,1,8],[3,6,18,51],[4,5,23,17],[5,6,11,19],[6,6,15,30],[7,7,2,4],[8,8,11,44],[9,8,14,18],[10,9,5,53],[11,8,8,30],[12,7,1,15],[1,6,7,8]],
 1941:[[2,4,6,50],[3,6,0,34],[4,5,5,3],[5,6,17,9],[6,6,21,22],[7,8,7,59],[8,8,17,40],[9,8,20,15],[10,9,11,51],[11,8,14,27],[12,7,7,12],[1,6,12,58]],
 1942:[[2,4,12,34],[3,6,6,17],[4,5,10,49],[5,5,22,57],[6,6,3,11],[7,7,13,49],[8,7,23,31],[9,8,2,7],[10,8,17,43],[11,7,20,20],[12,7,13,5],[1,6,18,49]],
@@ -1115,7 +1157,7 @@ function copyShareLink() {const text = `🔮 K-MUDANG Pro | Patent-Pending AI Ba
 🌡️ Climate Theory (調候論) · 💕 60 Archetype Compatibility
 ☯ Where Ancient Eastern Wisdom Meets Modern Fortune
 👉 ${window.location.href}`;navigator.clipboard.writeText(text).then(() => {toast('📋 Link copied to clipboard!');}).catch(() => {const ta = document.createElement('textarea');ta.value = text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('📋 Link copied to clipboard!');});}
-let talismanGenerated = false;let talismanDataUrl = null;let wheelRotation = 0;let isWheelSpinning = false;function spinZodiacWheel(targetIndex, callback) {if (isWheelSpinning) return;isWheelSpinning = true;const container = document.getElementById('zodiac-wheel-container');const wheel = document.getElementById('zodiacWheel');const glow = document.getElementById('wheelGlow');const sparkle = document.getElementById('sparkleOverlay');const loading = document.getElementById('zodiacLoading');const resultText = document.getElementById('zodiacResultText');container.style.display = 'block';resultText.style.opacity = '0';resultText.textContent = '';loading.style.display = 'block';glow.classList.add('active');sparkle.classList.add('active');const targetPos = ((12 - targetIndex) % 12) * 30 + 15;const currentPos = wheelRotation % 360;let diff = targetPos - currentPos;if (diff <= 0) diff += 360;wheelRotation = wheelRotation + 720 + diff;setTimeout(() => {wheel.style.transform = `rotate(${wheelRotation}deg)`;}, 50);setTimeout(() => {loading.style.display = 'none';glow.classList.remove('active');sparkle.classList.remove('active');const animal = BRANCH[targetIndex];resultText.textContent = `✨ ${animal.a} (${animal.c}) ✨`;resultText.style.opacity = '1';isWheelSpinning = false;if (callback) callback();}, 1550);}
+let talismanGenerated = false;let talismanDataUrl = null;let wheelRotation = 0;let isWheelSpinning = false;function spinZodiacWheel(targetIndex, callback) {if (isWheelSpinning) return;isWheelSpinning = true;const container = document.getElementById('zodiac-wheel-container');const wheel = document.getElementById('zodiacWheel');const glow = document.getElementById('wheelGlow');const sparkle = document.getElementById('sparkleOverlay');const loading = document.getElementById('zodiacLoading');const resultText = document.getElementById('zodiacResultText');container.style.display = 'block';resultText.style.opacity = '0';resultText.textContent = '';loading.style.display = 'block';glow.classList.add('active');sparkle.classList.add('active');const targetPos = ((12 - targetIndex) % 12) * 30 + 15;const currentPos = wheelRotation % 360;let diff = targetPos - currentPos;if (diff <= 0) diff += 360;wheelRotation = wheelRotation + 720 + diff;setTimeout(() => {wheel.style.transform = `rotate(${wheelRotation}deg)`;}, 50);setTimeout(() => {loading.style.display = 'none';glow.classList.remove('active');sparkle.classList.remove('active');const animal = BRANCH[targetIndex];resultText.textContent = `✨ ${animal.m} (${animal.c}) ✨`;resultText.style.opacity = '1';isWheelSpinning = false;if (callback) callback();}, 1550);}
 function generateTalisman() {if (!SAJU || !SAJU.day) {toast('Please analyze your Four Pillars first! 🔮');return;}
 const yearBranchIdx = BRANCH.findIndex(b => b.c === SAJU.year.b.c);spinZodiacWheel(yearBranchIdx, function() {if(!talismanGenerated) createHighResTalisman();document.getElementById('talisman-preview').style.display = 'block';document.getElementById('talisman-btn-wrapper').style.display = 'none';toast('🏮 Your fortune talisman has been created!');});setTimeout(() => { if(!talismanGenerated) createHighResTalisman(); }, 100);}
 function playRitualAnimation(callback) {const canvas = document.getElementById('ritual-canvas');const ctx = canvas.getContext('2d');const W = 300, H = 400;ctx.fillStyle = '#0a0505';ctx.fillRect(0, 0, W, H);const yongEl = GODS && GODS.yong ? GODS.yong : 'fire';const colors = {fire: { main: '#C41E3A', accent: '#FFD700' },
@@ -1139,7 +1181,7 @@ for(let i=0;i<W*H*0.15;i++){const x=Math.random()*W;const y=Math.random()*H;cons
 ctx.globalAlpha=0.15;for(let i=0;i<800;i++){const x=Math.random()*W;const y=Math.random()*H;const len=Math.random()*60+20;const isH=Math.random()>0.5;ctx.strokeStyle='rgba(120,80,40,0.3)';ctx.lineWidth=Math.random()*1.5+0.3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(isH?x+len:x+Math.random()*5,isH?y+Math.random()*3:y+len);ctx.stroke();}ctx.globalAlpha=1.0;
 // 3. 가장자리 빈티지 효과 (vignette) 강화
 const vignette=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8);vignette.addColorStop(0,'rgba(139,90,43,0)');vignette.addColorStop(0.7,'rgba(120,80,40,0.05)');vignette.addColorStop(1,'rgba(101,67,33,0.15)');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
-// === RARITY SYSTEM v4.22.5 ===
+// === RARITY SYSTEM v4.22.6 ===
 const rarity = getTalismanRarity();
 // Legendary: 추가 배경 글로우 효과
 if (rarity.grade === 'legendary') {
@@ -1594,7 +1636,7 @@ factors.push({ l: '🔗 天干合', v: `${pair.s1.c}${pair.s2.c}合 (${pair.pos1
 10: {earth:2, metal:1, fire:-1, wood:-2, water:-1},
 11: {water:3, wood:1, fire:-2, earth:-2, metal:0},
 0: {water:3, wood:2, fire:-2, earth:-2, metal:0},
-1: {earth:2, water:0, metal:-1, wood:-1, fire:-2}};const ms = monthScore[mbi][dme];const deukRyung = ms >= 2;score += ms * 6;const monthNames = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];factors.push({ l: '月令 (Seasonal Power)', v: `${monthNames[mbi]}월 ${deukRyung ? '✓ In Season' : '✗ Out of Season'} (${ms >= 0 ? '+' : ''}${ms*6})`, p: deukRyung });let realRootScore = 0;let hasRealRoot = { day: false, hour: false };const TWELVE_STARTS = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];const TWELVE_NAMES = ['Birth','Bath','Crown','Fortune','Peak','Decline','Illness','Death','Tomb','End','Conception','Nurture'];const dmIdx = STEM.findIndex(s => s.c === dm.c);const isYangGan = dmIdx % 2 === 0;allBranches.forEach((b, idx) => {const bi = BRANCH.indexOf(b);const position = ['year', 'month', 'day', 'hour'][idx];const posWeight = position === 'day' ? 1.5 : position === 'hour' ? 1.3 : position === 'month' ? 1.2 : 1.0;let twIdx = bi - TWELVE_STARTS[dmIdx];if (!isYangGan) twIdx = -twIdx;twIdx = ((twIdx % 12) + 12) % 12;const twName = TWELVE_NAMES[twIdx];let twelveBonus = 0;if (twName === '건록' || twName === '제왕') {twelveBonus = 4 * posWeight;if (position === 'day' || position === 'hour') hasRealRoot[position] = true;} else if (twName === '관대' || twName === '장생') {twelveBonus = 2 * posWeight;if (position === 'day' || position === 'hour') hasRealRoot[position] = true;}
+1: {earth:2, water:0, metal:-1, wood:-1, fire:-2}};const ms = monthScore[mbi][dme];const deukRyung = ms >= 2;score += ms * 6;const monthNames = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];factors.push({ l: '月令 (Seasonal Power)', v: `${monthNames[mbi]} Month ${deukRyung ? '✓ In Season' : '✗ Out of Season'} (${ms >= 0 ? '+' : ''}${ms*6})`, p: deukRyung });let realRootScore = 0;let hasRealRoot = { day: false, hour: false };const TWELVE_STARTS = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];const TWELVE_NAMES = ['Birth','Bath','Crown','Fortune','Peak','Decline','Illness','Death','Tomb','End','Conception','Nurture'];const dmIdx = STEM.findIndex(s => s.c === dm.c);const isYangGan = dmIdx % 2 === 0;allBranches.forEach((b, idx) => {const bi = BRANCH.indexOf(b);const position = ['year', 'month', 'day', 'hour'][idx];const posWeight = position === 'day' ? 1.5 : position === 'hour' ? 1.3 : position === 'month' ? 1.2 : 1.0;let twIdx = bi - TWELVE_STARTS[dmIdx];if (!isYangGan) twIdx = -twIdx;twIdx = ((twIdx % 12) + 12) % 12;const twName = TWELVE_NAMES[twIdx];let twelveBonus = 0;if (twName === 'Fortune' || twName === 'Peak') {twelveBonus = 4 * posWeight;if (position === 'day' || position === 'hour') hasRealRoot[position] = true;} else if (twName === 'Crown' || twName === 'Birth') {twelveBonus = 2 * posWeight;if (position === 'day' || position === 'hour') hasRealRoot[position] = true;}
 realRootScore += twelveBonus;const hidden = JIJANGGAN[bi] || [];hidden.forEach(h => {const hStem = STEM[h.s];if (hStem.e === peerEl || hStem.e === sealEl) {realRootScore += h.w * posWeight * 2;if (position === 'day') hasRealRoot.day = true;if (position === 'hour') hasRealRoot.hour = true;}});});score += Math.min(realRootScore, 15);const rootStrong = realRootScore >= 4;factors.push({ l: '通根 (Root Strength)', v: rootStrong ? `✓ ${realRootScore.toFixed(1)}pts` : `✗ Weak Root (${realRootScore.toFixed(1)})`, p: rootStrong });let helpCount = 0;let attackCount = 0;let exprStemCount = 0;allStems.forEach((st, idx) => {const si = STEM.indexOf(st);if (disabledSeals.includes(si) || disabledPeers.includes(si)) {factors.push({ l: '⚠️ Merged Away', v: `${st.c} Neutralized`, p: false });return;}
 if (st.e === peerEl) { helpCount++; score += 2.5; }
 if (st.e === sealEl) { helpCount++; score += 2; }
@@ -2401,11 +2443,11 @@ function analyzeAdvancedInteractions(saju) {const result = {hapHwa: [],
 chungHaeso: [],
 samhapGuk: [],
 warnings: []};const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);const season = SEASON[mbi];const stems = [saju.year?.s, saju.month?.s, saju.day?.s, saju.hour?.s].filter(s => s);const stemIdxs = stems.map(s => STEM.indexOf(s));const brs = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) brs.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));const ganHap = [
-{pair: [0,5], result: 'earth', name: '甲己 (Wood+Earth) combine to Earth(甲己合土)', condition: 'Earth월(辰戌丑未月) 또는 Earth가 왕성할 때'},
-{pair: [1,6], result: 'metal', name: '乙庚 (Wood+Metal) combine to Metal(乙庚合金)', condition: 'Metal월(申酉月) 또는 Metal이 왕성할 때'},
-{pair: [2,7], result: 'water', name: '丙辛 (Fire+Metal) combine to Water(丙辛合水)', condition: 'Water월(亥子月) 또는 Water가 왕성할 때'},
-{pair: [3,8], result: 'wood', name: '丁壬 (Fire+Water) combine to Wood(丁壬合木)', condition: 'Wood월(寅卯月) 또는 Wood이 왕성할 때'},
-{pair: [4,9], result: 'fire', name: '戊癸 (Earth+Water) combine to Fire(戊癸合火)', condition: 'Fire월(巳午月) 또는 Fire가 왕성할 때'}
+{pair: [0,5], result: 'earth', name: '甲己 (Wood+Earth) combine to Earth(甲己合土)', condition: 'Earth month (辰戌丑未) or when Earth is strong'},
+{pair: [1,6], result: 'metal', name: '乙庚 (Wood+Metal) combine to Metal(乙庚合金)', condition: 'Metal month (申酉) or when Metal is strong'},
+{pair: [2,7], result: 'water', name: '丙辛 (Fire+Metal) combine to Water(丙辛合水)', condition: 'Water month (亥子) or when Water is strong'},
+{pair: [3,8], result: 'wood', name: '丁壬 (Fire+Water) combine to Wood(丁壬合木)', condition: 'Wood month (寅卯) or when Wood is strong'},
+{pair: [4,9], result: 'fire', name: '戊癸 (Earth+Water) combine to Fire(戊癸合火)', condition: 'Fire month (巳午) or when Fire is strong'}
 ];for (let gh of ganHap) {if (stemIdxs.includes(gh.pair[0]) && stemIdxs.includes(gh.pair[1])) {const resultEl = gh.result;let isHwa = false;let reason = '';let isFake = false;let fakeReason = '';const seasonEl = {spring:'wood', summer:'fire', autumn:'metal', winter:'water'};if (seasonEl[season] === resultEl) {isHwa = true;reason = `Month energy is ${ELEMENT[resultEl].k} - Combination formed!`;}
 const resultElCount = brs.filter(b => BRANCH[b].e === resultEl).length;if (resultElCount >= 2) {isHwa = true;reason = `Branches have ${ELEMENT[resultEl].k} x${resultElCount} - Combination formed!`;}
 const elementKills = {wood:'metal', fire:'water', earth:'wood', metal:'fire', water:'earth'};const killerEl = elementKills[resultEl];const killerCount = brs.filter(b => BRANCH[b].e === killerEl).length;if (isHwa && killerCount >= 1) {isFake = true;fakeReason = `⚠️ FAKE COMBINE: ${ELEMENT[killerEl].k} in branches blocks transformation to ${ELEMENT[resultEl].k}. Energy is tied up but cannot transform.`;isHwa = false;}
@@ -2505,9 +2547,9 @@ const months = [];const monthlyData = getYearlyMonthLuck(year, saju, gods);for (
 else if (mData.score >= 2) { tip = '🟢 Good'; bg = 'rgba(76,175,80,0.2)'; }
 else if (mData.score <= -2) { tip = '🔴 Bad'; bg = 'rgba(244,67,54,0.15)'; }
 else { tip = '🟡 Neutral'; }
-months.push(`<span style="display:inline-block;margin:3px;padding:5px 8px;background:${bg};border-radius:5px;font-size:0.75rem;">${m}월 ${tip}</span>`);}
+months.push(`<span style="display:inline-block;margin:3px;padding:5px 8px;background:${bg};border-radius:5px;font-size:0.75rem;">${m}M ${tip}</span>`);}
 return `
-<div class="info-box gold"><p><strong>📆 ${year}Year Fortune</strong></p><p style="font-size:0.85rem;color:var(--gray);margin-top:5px;">${yp.s.c}${yp.b.c}년 (${yp.b.m} ${yp.b.a}의 해)</p></div><div style="text-align:center;margin:15px 0;"><span style="font-size:2rem;">${'⭐'.repeat(rating)}${'☆'.repeat(5-rating)}</span></div><div class="info-box"><p><strong>This Year's God: ${god.k}</strong></p><p style="margin-top:10px;line-height:1.8;">${desc}</p></div><div class="info-box" style="margin-top:12px;"><p><strong>📌 Annual Energy: ${state.k}</strong><br>${state.d}</p></div><div class="info-box" style="margin-top:12px;"><p><strong>🗓️ Monthly Highlights</strong></p><div style="margin-top:10px;">${months.join('')}</div></div>`;}
+<div class="info-box gold"><p><strong>📆 ${year}Year Fortune</strong></p><p style="font-size:0.85rem;color:var(--gray);margin-top:5px;">${yp.s.c}${yp.b.c} Year (Year of the ${yp.b.m})</p></div><div style="text-align:center;margin:15px 0;"><span style="font-size:2rem;">${'⭐'.repeat(rating)}${'☆'.repeat(5-rating)}</span></div><div class="info-box"><p><strong>This Year's God: ${god.k}</strong></p><p style="margin-top:10px;line-height:1.8;">${desc}</p></div><div class="info-box" style="margin-top:12px;"><p><strong>📌 Annual Energy: ${state.k}</strong><br>${state.d}</p></div><div class="info-box" style="margin-top:12px;"><p><strong>🗓️ Monthly Highlights</strong></p><div style="margin-top:10px;">${months.join('')}</div></div>`;}
 function genCareerFortune(saju, str, gods) {const dm = saju.day.s;const ec = countElements(saju);const jaeEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5];const gwanEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];const sikEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];let rating = 3, style = '', advice = '';if (str.type === 'strong' && ec[jaeEl] >= 2) {rating = 5; style = 'CEO Type';advice = 'Strong chart with many Wealth stars - natural entrepreneur! Excellent money management. Starting your own business leads to great success.';} else if (str.type === 'strong' && ec[gwanEl] >= 2) {rating = 4; style = 'Executive Type';advice = 'Strong chart with many Officer stars - you rise in organizations! Can reach high positions in government, corporations, or politics.';} else if (str.type === 'weak') {rating = 3; style = 'Specialist Type';advice = 'Weak chart suits teamwork over solo. Diving deep into a specialty can make you a recognized expert.';} else {rating = 4; style = 'Versatile Type';advice = 'Well balanced! You can adapt and succeed in any field.';}
 if (ec[sikEl] >= 2) {advice += '<br><br>✨ <strong>With many Eating Gods, you make money through talent!</strong> You shine in art, technology, and creative fields.';}
 const careerByElement = {wood: 'Education, Publishing, Clothing, Furniture, Landscaping, Agriculture, Traditional Medicine',
@@ -2642,8 +2684,8 @@ ${GODS.climate.needs.length ? `<p style="margin-top:5px;font-size:0.85rem;">Need
 `;}
 if (GODS.byungYak && GODS.byungYak.byung) {godsDetailHtml += `
 <div class="info-box" style="margin-top:10px;"><p><strong>💊 Disease-Medicine Analysis</strong></p><p style="margin-top:8px;font-size:0.9rem;">
-병(病): ${ELEMENT[GODS.byungYak.byung].k}(${ELEMENT[GODS.byungYak.byung].c}) excess<br>
-약(藥): ${ELEMENT[GODS.byungYak.yak].k}(${ELEMENT[GODS.byungYak.yak].c}) controls it
+Illness (病): ${ELEMENT[GODS.byungYak.byung].n}(${ELEMENT[GODS.byungYak.byung].c}) excess<br>
+Medicine (藥): ${ELEMENT[GODS.byungYak.yak].n}(${ELEMENT[GODS.byungYak.yak].c}) controls it
 </p></div>
 `;}
 document.getElementById('gods-detail').innerHTML = godsDetailHtml;const yukcheon = analyzeYukcheon(SAJU, GENDER);document.getElementById('yukcheon-analysis').innerHTML = `
@@ -3613,7 +3655,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 3. Life Cycle + Annual Fortune Ten Gods - Current life theme
 4. Branch Ten Gods - Hidden influences
 5. Everything else
-===== 🆕 EXTENDED RULES 71-97 (v4.22.5) =====
+===== 🆕 EXTENDED RULES 71-97 (v4.22.6) =====
 71. 【BUREAU/HARMONY = x10 MULTIPLIER EFFECT】
 • Directional Harmony or Three Harmony completion is NOT simple addition.
 • 巳午未 (Southern Fire Bureau) = Fire x10 power
@@ -3814,7 +3856,7 @@ function handleUrlHash() {const hash = window.location.hash.replace('#', '');if 
 window.addEventListener('load', handleUrlHash);window.addEventListener('hashchange', handleUrlHash);
 /* ========== DEV TEST FUNCTIONS ========== */
 window.runTests = function() {
-  console.log('%c🔬 K-MUDANG REGRESSION TEST SUITE v4.22.5', 'color:#D4AF37;font-size:16px;font-weight:bold');
+  console.log('%c🔬 K-MUDANG REGRESSION TEST SUITE v4.22.6', 'color:#D4AF37;font-size:16px;font-weight:bold');
   let pass=0, fail=0;
   
   // === PART 1: BUREAU 텍스트 파싱 테스트 ===
