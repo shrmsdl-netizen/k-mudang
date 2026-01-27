@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><!--
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  K-MUDANG Pro v4.22.4 [PERSONAL] - 개인 개발용 버전                               ║
+║  K-MUDANG Pro v4.22.5 [PERSONAL] - 개인 개발용 버전                               ║
 ║  Ancient Korean Four Pillars Destiny Analysis & Lottery Number Generator      ║
 ║                                                                                ║
 ║  🆓 FREE EDITION - 모든 기능 무료 / Ko-fi 후원 환영                           ║
@@ -13,7 +13,7 @@
 ║    • 데이터: STEM, BRANCH, TEN_GODS, ELEMENT, JIJANGGAN, TWELVE_STATES       ║
 ║    • 계산: calcYearPillar, calcMonthPillar, calcDayPillar, calcHourPillar    ║
 ║    • 분석: calcStrength, calcGods, calcFormat, calcLuck, calcYearLuck        ║
-║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.22.4)                ║
+║    • 십신: getTenGod, getTwelveState, getBranchYang (v4.22.5)                ║
 ║    • 신살: calcGongmang, calcSinsal, analyzeJijanggan                        ║
 ║    • 합충: analyzeAdvancedInteractions, analyzeSamhapBureau                  ║
 ║    • 통변: analyzeClimate, analyzeHealth, analyzeYukChinRon                  ║
@@ -27,6 +27,10 @@
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  📝 VERSION HISTORY                                                           ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
+║  v4.22.5 (2026-01-27):                                                         ║
+║    - [FIX] 궁합 동일 조후 페널티 추가 (-3점)                                   ║
+║           → 둘 다 寒(겨울) 또는 둘 다 燥(여름) 계열 시 페널티 적용             ║
+║    - [SYNC] 사주로또 v34.5와 동기화                                            ║
 ║  v4.22.4 (2026-01-26):                                                         ║
 ║    - [FIX] INTERACTION_METAPHOR 피극관계 5개 키 추가 (earth_wood 등)           ║
 ║    - [FIX] isTooCold/isTooHot 조건 버그 수정                                   ║
@@ -113,7 +117,7 @@
 ║  Contact: kmudang.official@gmail.com                                          ║
 ║  Last Updated: 2026-01-21                                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
---><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG | Ancient Wisdom for Modern Leaders"><meta property="og:description" content="✨ Find clarity in chaos · 🏛️ Where exhausted achievers find balance · 🌍 Global Timezone Support"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🔧 K-MUDANG Pro [PERSONAL EDITION] v4.22.4 - DEV MODE');let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
+--><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>K-MUDANG Pro | Four Pillars Destiny & Lottery</title><meta name="description" content="FREE Ancient Korean Four Pillars Destiny Analysis for Powerball & Mega Millions. Professional Saju fortune reading."><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="🔮 K-MUDANG Pro | Patent-Pending AI BaZi Analysis"><meta property="og:description" content="📜 Patent 10-2026-0010452 · 🌡️ Climate Theory (調候論) · 💕 60 Archetype Compatibility · 🏮 2026 Fortune Talisman · 🌍 Global Timezone"><meta property="og:image" content="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>console.log('🔧 K-MUDANG Pro [PUBLIC EDITION] v4.22.5 - DEV MODE');let isPremium = true;let currentUser = { displayName: 'PERSONAL', email: 'personal@local' };function toast(msg) {const t = document.getElementById('toast');if (t) {t.textContent = msg;t.classList.add('show');setTimeout(() => t.classList.remove('show'), 3000);} else {console.log('Toast:', msg);}}
 function googleSignIn() { toast('🔓 PERSONAL Edition - Already unlocked!'); }
 function signOut() { toast('🔓 PERSONAL Edition - No login required'); }
 function checkPremiumStatus() { return true; }
@@ -150,6 +154,14 @@ body.match-mode{--theme-primary:#FF69B4;--theme-secondary:#C71585;--theme-accent
     visibility: hidden;
 }
 </style>
+<script>(function(){
+document.addEventListener('contextmenu',function(e){e.preventDefault();return false;});
+document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))||(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))){e.preventDefault();return false;}});
+document.addEventListener('selectstart',function(e){if(e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){e.preventDefault();}});
+document.addEventListener('dragstart',function(e){e.preventDefault();});
+document.addEventListener('copy',function(e){if(e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){e.preventDefault();}});
+var devtools={open:false};setInterval(function(){var start=performance.now();debugger;if(performance.now()-start>100){if(!devtools.open){devtools.open=true;}}},1000);
+})();</script>
 </head><body class="saju-mode"><!-- Bagua decoration --><div class="bagua tl">☰<span class="bagua-sub">乾</span></div><div class="bagua tr">☷<span class="bagua-sub">坤</span></div><div class="bagua bl">☵<span class="bagua-sub">坎</span></div><div class="bagua br">☲<span class="bagua-sub">離</span></div><img class="oracle-watermark" src="https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png" alt="" /><!-- 3-Tab Navigation --><div class="game-switcher"><button class="game-btn active" onclick="switchGame('saju')"><span class="tab-main">🔮 K-Fortune</span><span class="tab-sub">四柱</span></button><button class="game-btn" onclick="switchGame('match')"><span class="tab-main">💕 Match</span></button><button class="game-btn" onclick="switchGame('powerball')"><span class="tab-main">🔴 Powerball</span></button><button class="game-btn" onclick="switchGame('mega')"><span class="tab-main">🔵 Mega</span></button></div><!-- Auth Bar --><!-- Auth bar hidden for Personal Edition --><div class="auth-bar" id="auth-bar"><button class="login-btn" id="login-btn" onclick="googleSignIn()"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         Sign in with Google
     </button><div class="user-info" id="user-info" style="display:none;"><span class="user-name" id="user-name"></span><span class="premium-badge" id="premium-badge" style="display:none;">👑 Premium</span><button class="logout-btn" onclick="signOut()">Logout</button></div></div><div class="container"><!-- ========================================
@@ -457,6 +469,18 @@ function analyzeMatchAdvanced(mySaju, myGods, myStrength, partnerSaju, partnerGo
       johuApplied = true;
     }
     
+    // 동일 조후 계열 페널티 (둘 다 寒 또는 둘 다 燥)
+    const pbi = BRANCH.findIndex(b => b.c === partnerSaju.month.b.c);
+    const myIsWinter = [0, 1, 11].includes(mbi);
+    const myIsSummer = [5, 6, 7].includes(mbi);
+    const pIsWinter = [0, 1, 11].includes(pbi);
+    const pIsSummer = [5, 6, 7].includes(pbi);
+    
+    if (!johuApplied && ((myIsWinter && pIsWinter) || (myIsSummer && pIsSummer))) {
+      result.score -= 3;
+      result.categories.sameClimate = { score: -3, title: '同調候/Same Climate', desc: myIsWinter ? 'Both need warmth but neither provides it.' : 'Both need cooling but neither provides it.', advice: 'Seek external balance together.' };
+    }
+    
     // 忌神 로직 (조후론 미적용 시에만)
     if (!johuApplied && giCount >= 2) {
       if (mode === 'business') {
@@ -620,7 +644,7 @@ function generateMatchAIPrompt(result, mySaju, partnerSaju, myGods, partnerGods,
     criticals.push('⚠️ MUTUAL PUNISHMENT (刑): ' + result.categories.hyung.desc);
   }
   if (criticals.length === 0) criticals.push('No major critical factors detected.');
-  let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.4) =====
+  let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.5) =====
 ⚠️ AI: This is professional K-Fortune compatibility analysis. Interpret ALL data.
 
 【⚡ CRITICAL FACTORS - ADDRESS FIRST ⚡】
@@ -695,6 +719,9 @@ The traditional 忌神 (Unfavorable Element) concept is OVERRIDDEN by seasonal n
 • 夏土 (Summer Earth) + 水: Water IRRIGATES dry soil → FAVORABLE (+15)  
 • 寒金 (Winter Metal) + 火: Fire FORGES cold metal → FAVORABLE (+15)
 • 寒水 (Winter Water) + 火: Fire WARMS frozen water → FAVORABLE (+15)
+⚠️ SAME CLIMATE PENALTY:
+• 寒 + 寒 (Both Winter): Neither provides warmth → UNFAVORABLE (-3)
+• 燥 + 燥 (Both Summer): Neither provides cooling → UNFAVORABLE (-3)
 
 【RELATIONSHIP TYPE MATTERS】
 • ROMANCE/FAMILY: Comfort matters, but growth friction is still valuable
@@ -1046,8 +1073,8 @@ directSeal:{k:'正印 Direct Seal',c:'正印',e:'Direct Seal',d:'The Scholar. Lo
 0x0e968,0x0d520,0x0daa0,0x16aa6,0x056d0,0x04ae0,0x0a9d4,0x0a2d0,0x0d150,0x0f252,
 0x0d520
 ];const LUNAR_START = 1900;const MY_ACCOUNT = "케이뱅크 100150462483 김대인";let GENDER = 'm';let CALENDAR = 'solar';let SAJU = null;let GODS = null;let STRENGTH = null;let BIRTH_YEAR = null;let BIRTH_MONTH = null;let BIRTH_DAY = null;let BIRTH_HOUR = null;let INPUT_YEAR = null;let INPUT_MONTH = null;let INPUT_DAY = null;let INPUT_IS_LUNAR = false;let INPUT_HOUR_INDEX = null;let CONVERTED_HOUR_INDEX = null;let TIMEZONE_OFFSET = 0;let ORIGINAL_DATE = null;let CONVERTED_DATE = null;let currentNumbers = [];let history = [];const KAKAO_KEY = 'YOUR_KAKAO_JAVASCRIPT_KEY';function initKakao() {if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {try {Kakao.init(KAKAO_KEY);console.log('Kakao SDK initialized');} catch(e) {console.log('Kakao init skipped (key not set)');}}}
-function shareKakao() {const shareData = {title: '🔮 K-MUDANG Pro',
-text: 'Ancient destiny wisdom in a modern app\n\n✨ Expert-level Four Pillars Analysis\n💕 Scientific Compatibility Reading\n🍀 Lottery with historical exclusion',
+function shareKakao() {const shareData = {title: '🔮 K-MUDANG Pro | Patent-Pending AI BaZi',
+text: '📜 Patent 10-2026-0010452\n\n🌡️ Climate Theory (調候論)\n💕 60 Archetype Compatibility\n🏮 2026 Fortune Talisman',
 url: window.location.href};if (navigator.share) {navigator.share(shareData)
 .then(() => toast('Shared successfully! 🎉'))
 .catch((err) => {if (err.name !== 'AbortError') {copyShareLink();}});return;}
@@ -1067,14 +1094,14 @@ function getShareText() {return `Align your cosmic blueprint with fortune throug
 ☯ Where millennia-old Eastern wisdom meets modern fortune
 Discover your destined path 🔮`;}
 function getShareImageUrl() {return 'https://raw.githubusercontent.com/shrmsdl-netizen/k-mudang/main/og-image.png';}
-function shareApp() {const shareData = {title: '🔮 K-MUDANG Pro - Korean Astrology & Fortune',
-text: 'Harness ancient Four Pillars wisdom to align your cosmic energy with destiny-based lottery numbers.',
+function shareApp() {const shareData = {title: '🔮 K-MUDANG Pro | Patent-Pending AI BaZi',
+text: '📜 Patent 10-2026-0010452 · Climate Theory (調候論) · 60 Archetype Compatibility · 2026 Fortune Talisman · Global Timezone Support',
 url: window.location.href};if (navigator.share) {navigator.share(shareData)
 .then(() => toast('Shared successfully! 🎉'))
 .catch(() => copyShareLink());} else {copyShareLink();}}
-function copyShareLink() {const text = `🔮 K-MUDANG Pro - Korean Astrology & Fortune
-✨ Professional Four Pillars Destiny Analysis
-🎰 Lottery Numbers Aligned with Your Cosmic Energy
+function copyShareLink() {const text = `🔮 K-MUDANG Pro | Patent-Pending AI BaZi
+📜 Patent 10-2026-0010452
+🌡️ Climate Theory (調候論) · 💕 60 Archetype Compatibility
 ☯ Where Ancient Eastern Wisdom Meets Modern Fortune
 👉 ${window.location.href}`;navigator.clipboard.writeText(text).then(() => {toast('📋 Link copied to clipboard!');}).catch(() => {const ta = document.createElement('textarea');ta.value = text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('📋 Link copied to clipboard!');});}
 let talismanGenerated = false;let talismanDataUrl = null;let wheelRotation = 0;let isWheelSpinning = false;function spinZodiacWheel(targetIndex, callback) {if (isWheelSpinning) return;isWheelSpinning = true;const container = document.getElementById('zodiac-wheel-container');const wheel = document.getElementById('zodiacWheel');const glow = document.getElementById('wheelGlow');const sparkle = document.getElementById('sparkleOverlay');const loading = document.getElementById('zodiacLoading');const resultText = document.getElementById('zodiacResultText');container.style.display = 'block';resultText.style.opacity = '0';resultText.textContent = '';loading.style.display = 'block';glow.classList.add('active');sparkle.classList.add('active');const targetPos = ((12 - targetIndex) % 12) * 30 + 15;const currentPos = wheelRotation % 360;let diff = targetPos - currentPos;if (diff <= 0) diff += 360;wheelRotation = wheelRotation + 720 + diff;setTimeout(() => {wheel.style.transform = `rotate(${wheelRotation}deg)`;}, 50);setTimeout(() => {loading.style.display = 'none';glow.classList.remove('active');sparkle.classList.remove('active');const animal = BRANCH[targetIndex];resultText.textContent = `✨ ${animal.a} (${animal.c}) ✨`;resultText.style.opacity = '1';isWheelSpinning = false;if (callback) callback();}, 1550);}
@@ -1101,7 +1128,7 @@ for(let i=0;i<W*H*0.15;i++){const x=Math.random()*W;const y=Math.random()*H;cons
 ctx.globalAlpha=0.15;for(let i=0;i<800;i++){const x=Math.random()*W;const y=Math.random()*H;const len=Math.random()*60+20;const isH=Math.random()>0.5;ctx.strokeStyle='rgba(120,80,40,0.3)';ctx.lineWidth=Math.random()*1.5+0.3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(isH?x+len:x+Math.random()*5,isH?y+Math.random()*3:y+len);ctx.stroke();}ctx.globalAlpha=1.0;
 // 3. 가장자리 빈티지 효과 (vignette) 강화
 const vignette=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8);vignette.addColorStop(0,'rgba(139,90,43,0)');vignette.addColorStop(0.7,'rgba(120,80,40,0.05)');vignette.addColorStop(1,'rgba(101,67,33,0.15)');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
-// === RARITY SYSTEM v4.22.4 ===
+// === RARITY SYSTEM v4.22.5 ===
 const rarity = getTalismanRarity();
 // Legendary: 추가 배경 글로우 효과
 if (rarity.grade === 'legendary') {
@@ -3575,7 +3602,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 3. Life Cycle + Annual Fortune Ten Gods - Current life theme
 4. Branch Ten Gods - Hidden influences
 5. Everything else
-===== 🆕 EXTENDED RULES 71-97 (v4.22.4) =====
+===== 🆕 EXTENDED RULES 71-97 (v4.22.5) =====
 71. 【BUREAU/HARMONY = x10 MULTIPLIER EFFECT】
 • Directional Harmony or Three Harmony completion is NOT simple addition.
 • 巳午未 (Southern Fire Bureau) = Fire x10 power
@@ -3776,7 +3803,7 @@ function handleUrlHash() {const hash = window.location.hash.replace('#', '');if 
 window.addEventListener('load', handleUrlHash);window.addEventListener('hashchange', handleUrlHash);
 /* ========== DEV TEST FUNCTIONS ========== */
 window.runTests = function() {
-  console.log('%c🔬 K-MUDANG REGRESSION TEST SUITE v4.22.4', 'color:#D4AF37;font-size:16px;font-weight:bold');
+  console.log('%c🔬 K-MUDANG REGRESSION TEST SUITE v4.22.5', 'color:#D4AF37;font-size:16px;font-weight:bold');
   let pass=0, fail=0;
   
   // === PART 1: BUREAU 텍스트 파싱 테스트 ===
