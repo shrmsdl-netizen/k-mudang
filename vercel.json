@@ -1,15 +1,16 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
+  "functions": {
+    "api/*.js": {
+      "runtime": "@vercel/node@3"
     }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    }
-  ]
+  }
 }
+```
+
+4. **Commit changes**
+
+---
+
+Vercel이 자동으로 재배포함. 1분 후 다시 테스트:
+```
+https://k-mudang.vercel.app/api/fortune
