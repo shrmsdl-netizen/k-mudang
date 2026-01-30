@@ -1,170 +1,81 @@
-
-/**
- * K-MUDANG Vercel Serverless API
- * /api/fortune - AI 운세 엔드포인트
- */
-
-const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-
-// 모델 설정
-const MODELS = {
-  FREE: { id: 'claude-3-haiku-20240307', maxTokens: 512 },
-  PAID: { id: 'claude-sonnet-4-20250514', maxTokens: 1024 }
-};
-
-// CORS 헤더
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
-
-export default async function handler(req, res) {
-  // CORS preflight
-  if (req.method === 'OPTIONS') {
-    return res.status(200).json({});
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  // Set CORS headers
-  Object.entries(corsHeaders).forEach(([key, value]) => {
-    res.setHeader(key, value);
-  });
-
-  try {
-    const { year, month, day, hour = 12, question = '오늘의 운세', productType = 'FREE_FORTUNE', language = 'ko' } = req.body;
-
-    // 필수 파라미터 검증
-    if (!year || !month || !day) {
-      return res.status(400).json({ success: false, error: '생년월일은 필수입니다.' });
-    }
-
-    // 사주 계산
-    const saju = calculateSaju(parseInt(year), parseInt(month), parseInt(day), parseInt(hour));
-    
-    // 모델 선택
-    const model = productType === 'FREE_FORTUNE' ? MODELS.FREE : MODELS.PAID;
-
-    // 프롬프트 생성
-    const systemPrompt = generateSystemPrompt(language);
-    const userPrompt = generateUserPrompt(saju, question, language);
-
-    // Claude API 호출
-    const response = await fetch(ANTHROPIC_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: model.id,
-        max_tokens: model.maxTokens,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userPrompt }]
-      })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Anthropic API Error:', errorData);
-      return res.status(500).json({ success: false, error: 'AI 응답 생성 실패' });
-    }
-
-    const data = await response.json();
-    const content = data.content[0]?.text || '';
-
-    // JSON 파싱 시도
-    let fortune;
-    try {
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      fortune = jsonMatch ? JSON.parse(jsonMatch[0]) : { body: content };
-    } catch {
-      fortune = { body: content };
-    }
-
-    return res.status(200).json({
-      success: true,
-      fortune,
-      saju: {
-        dayMaster: saju.dayMaster,
-        elements: saju.elements,
-        strength: saju.strength,
-        gods: saju.gods
-      },
-      usage: data.usage
-    });
-
-  } catch (error) {
-    console.error('Handler Error:', error);
-    return res.status(500).json({ success: false, error: '서버 오류' });
-  }
-}
-
-// ============================================================================
-// 사주 계산 함수들
-// ============================================================================
+const Anthropic = require('@anthropic-ai/sdk').default;
 
 const STEM = [
-  { c: '甲', k: '갑', e: 'wood', p: true, eng: 'Yang Wood' },
-  { c: '乙', k: '을', e: 'wood', p: false, eng: 'Yin Wood' },
-  { c: '丙', k: '병', e: 'fire', p: true, eng: 'Yang Fire' },
-  { c: '丁', k: '정', e: 'fire', p: false, eng: 'Yin Fire' },
-  { c: '戊', k: '무', e: 'earth', p: true, eng: 'Yang Earth' },
-  { c: '己', k: '기', e: 'earth', p: false, eng: 'Yin Earth' },
-  { c: '庚', k: '경', e: 'metal', p: true, eng: 'Yang Metal' },
-  { c: '辛', k: '신', e: 'metal', p: false, eng: 'Yin Metal' },
-  { c: '壬', k: '임', e: 'water', p: true, eng: 'Yang Water' },
-  { c: '癸', k: '계', e: 'water', p: false, eng: 'Yin Water' }
+  { c: '甲', k: '갑', e: 'wood', p: true },
+  { c: '乙', k: '을', e: 'wood', p: false },
+  { c: '丙', k: '병', e: 'fire', p: true },
+  { c: '丁', k: '정', e: 'fire', p: false },
+  { c: '戊', k: '무', e: 'earth', p: true },
+  { c: '己', k: '기', e: 'earth', p: false },
+  { c: '庚', k: '경', e: 'metal', p: true },
+  { c: '辛', k: '신', e: 'metal', p: false },
+  { c: '壬', k: '임', e: 'water', p: true },
+  { c: '癸', k: '계', e: 'water', p: false }
 ];
 
 const BRANCH = [
-  { c: '子', k: '자', e: 'water', animal: '쥐', eng: 'Rat' },
-  { c: '丑', k: '축', e: 'earth', animal: '소', eng: 'Ox' },
-  { c: '寅', k: '인', e: 'wood', animal: '호랑이', eng: 'Tiger' },
-  { c: '卯', k: '묘', e: 'wood', animal: '토끼', eng: 'Rabbit' },
-  { c: '辰', k: '진', e: 'earth', animal: '용', eng: 'Dragon' },
-  { c: '巳', k: '사', e: 'fire', animal: '뱀', eng: 'Snake' },
-  { c: '午', k: '오', e: 'fire', animal: '말', eng: 'Horse' },
-  { c: '未', k: '미', e: 'earth', animal: '양', eng: 'Goat' },
-  { c: '申', k: '신', e: 'metal', animal: '원숭이', eng: 'Monkey' },
-  { c: '酉', k: '유', e: 'metal', animal: '닭', eng: 'Rooster' },
-  { c: '戌', k: '술', e: 'earth', animal: '개', eng: 'Dog' },
-  { c: '亥', k: '해', e: 'water', animal: '돼지', eng: 'Pig' }
+  { c: '子', k: '자', e: 'water', a: '쥐' },
+  { c: '丑', k: '축', e: 'earth', a: '소' },
+  { c: '寅', k: '인', e: 'wood', a: '호랑이' },
+  { c: '卯', k: '묘', e: 'wood', a: '토끼' },
+  { c: '辰', k: '진', e: 'earth', a: '용' },
+  { c: '巳', k: '사', e: 'fire', a: '뱀' },
+  { c: '午', k: '오', e: 'fire', a: '말' },
+  { c: '未', k: '미', e: 'earth', a: '양' },
+  { c: '申', k: '신', e: 'metal', a: '원숭이' },
+  { c: '酉', k: '유', e: 'metal', a: '닭' },
+  { c: '戌', k: '술', e: 'earth', a: '개' },
+  { c: '亥', k: '해', e: 'water', a: '돼지' }
 ];
 
-const ELEMENT_KO = { wood: '木', fire: '火', earth: '土', metal: '金', water: '水' };
+const ELEMENT = {
+  wood: { k: '木', color: '초록색', dir: '동쪽' },
+  fire: { k: '火', color: '빨간색', dir: '남쪽' },
+  earth: { k: '土', color: '노란색', dir: '중앙' },
+  metal: { k: '金', color: '흰색', dir: '서쪽' },
+  water: { k: '水', color: '검정색', dir: '북쪽' }
+};
+
 const EL_ORDER = ['wood', 'fire', 'earth', 'metal', 'water'];
 const EL_PRODUCE = { wood: 'fire', fire: 'earth', earth: 'metal', metal: 'water', water: 'wood' };
 
-function calculateSaju(year, month, day, hour) {
+function getStemBranch(year, month, day, hour) {
   const baseYear = 1984;
   const yearDiff = year - baseYear;
   const yearStemIdx = ((yearDiff % 10) + 10) % 10;
   const yearBranchIdx = ((yearDiff % 12) + 12) % 12;
-  
   const monthStemIdx = ((yearStemIdx * 2 + month) % 10 + 10) % 10;
   const monthBranchIdx = ((month + 1) % 12 + 12) % 12;
-  
   const dayNum = Math.floor((new Date(year, month - 1, day) - new Date(1900, 0, 1)) / 86400000);
   const dayStemIdx = ((dayNum + 10) % 10 + 10) % 10;
   const dayBranchIdx = ((dayNum + 10) % 12 + 12) % 12;
+  const hourBranchIdx = hour !== undefined ? Math.floor((hour + 1) / 2) % 12 : null;
+  const hourStemIdx = hour !== undefined ? ((dayStemIdx * 2 + hourBranchIdx) % 10 + 10) % 10 : null;
   
-  const hourBranchIdx = Math.floor((hour + 1) / 2) % 12;
-  const hourStemIdx = ((dayStemIdx * 2 + hourBranchIdx) % 10 + 10) % 10;
+  return {
+    year: { s: STEM[yearStemIdx], b: BRANCH[yearBranchIdx], si: yearStemIdx, bi: yearBranchIdx },
+    month: { s: STEM[monthStemIdx], b: BRANCH[monthBranchIdx], si: monthStemIdx, bi: monthBranchIdx },
+    day: { s: STEM[dayStemIdx], b: BRANCH[dayBranchIdx], si: dayStemIdx, bi: dayBranchIdx },
+    hour: hour !== undefined ? { s: STEM[hourStemIdx], b: BRANCH[hourBranchIdx], si: hourStemIdx, bi: hourBranchIdx } : null
+  };
+}
 
-  const dm = STEM[dayStemIdx];
-  
-  // 오행 카운트
-  const elements = { wood: 0, fire: 0, earth: 0, metal: 0, water: 0 };
-  [yearStemIdx, monthStemIdx, dayStemIdx, hourStemIdx].forEach(i => elements[STEM[i].e]++);
-  [yearBranchIdx, monthBranchIdx, dayBranchIdx, hourBranchIdx].forEach(i => elements[BRANCH[i].e]++);
+function countElements(saju) {
+  const counts = { wood: 0, fire: 0, earth: 0, metal: 0, water: 0 };
+  ['year', 'month', 'day', 'hour'].forEach(p => {
+    if (saju[p]) {
+      counts[saju[p].s.e]++;
+      counts[saju[p].b.e]++;
+    }
+  });
+  return counts;
+}
 
-  // 신강신약
+function calcStrength(saju) {
+  const dm = saju.day.s;
+  const dmEl = dm.e;
   let score = 50;
+  const mbi = saju.month.bi;
   const seasonBonus = {
     wood: [0, 0, 15, 15, 5, -10, -15, -10, -15, -15, 0, 5],
     fire: [-10, -5, 5, 10, 10, 15, 15, 10, -5, -10, -5, -15],
@@ -172,63 +83,152 @@ function calculateSaju(year, month, day, hour) {
     metal: [-10, 5, -15, -15, -5, -10, -15, 5, 15, 15, 10, 0],
     water: [15, 5, 0, -10, -10, -15, -15, -10, 5, 10, 5, 15]
   };
-  score += seasonBonus[dm.e]?.[monthBranchIdx] || 0;
-  
-  [yearBranchIdx, monthBranchIdx, dayBranchIdx].forEach(bi => {
-    if (BRANCH[bi].e === dm.e) score += 5;
-  });
-  
-  const pct = Math.max(10, Math.min(90, score));
-  const strengthType = pct >= 55 ? 'strong' : pct <= 45 ? 'weak' : 'balanced';
-
-  // 용신
-  const isWinter = [0, 1, 11].includes(monthBranchIdx);
-  const isSummer = [5, 6, 7].includes(monthBranchIdx);
-  
-  let yong, hee, gi;
-  if (isWinter) {
-    yong = 'fire'; hee = 'earth'; gi = 'water';
-  } else if (isSummer) {
-    yong = 'water'; hee = 'metal'; gi = 'fire';
-  } else if (strengthType === 'strong') {
-    yong = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];
-    hee = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5];
-    gi = dm.e;
-  } else {
-    yong = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];
-    hee = dm.e;
-    gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];
-  }
-
-  return {
-    pillars: {
-      year: { stem: STEM[yearStemIdx], branch: BRANCH[yearBranchIdx] },
-      month: { stem: STEM[monthStemIdx], branch: BRANCH[monthBranchIdx] },
-      day: { stem: STEM[dayStemIdx], branch: BRANCH[dayBranchIdx] },
-      hour: { stem: STEM[hourStemIdx], branch: BRANCH[hourBranchIdx] }
-    },
-    dayMaster: {
-      hanja: dm.c,
-      hangul: dm.k,
-      element: dm.e,
-      elementKo: ELEMENT_KO[dm.e],
-      eng: dm.eng,
-      isYang: dm.p
-    },
-    elements,
-    strength: {
-      type: strengthType,
-      typeKo: strengthType === 'strong' ? '신강' : strengthType === 'weak' ? '신약' : '중화',
-      percentage: pct
-    },
-    gods: {
-      yong: { element: yong, ko: ELEMENT_KO[yong] },
-      hee: { element: hee, ko: ELEMENT_KO[hee] },
-      gi: { element: gi, ko: ELEMENT_KO[gi] }
+  score += seasonBonus[dmEl]?.[mbi] || 0;
+  ['year', 'month', 'day', 'hour'].forEach(p => {
+    if (saju[p]) {
+      if (saju[p].b.e === dmEl) score += 5;
+      if (saju[p].s.e === dmEl) score += 3;
+      if (EL_PRODUCE[saju[p].s.e] === dmEl) score += 2;
     }
-  };
+  });
+  const pct = Math.max(10, Math.min(90, score));
+  return { type: pct >= 55 ? 'strong' : pct <= 45 ? 'weak' : 'balanced', pct };
 }
 
-// ============================================================================
-// 프롬프트 생성
-// =========================================================================
+function calcGods(saju, strength) {
+  const dmEl = saju.day.s.e;
+  const mbi = saju.month.bi;
+  const isWinter = [0, 1, 11].includes(mbi);
+  const isSummer = [5, 6, 7].includes(mbi);
+  let yong, hee, gi;
+  if (isWinter) { yong = 'fire'; hee = 'earth'; gi = 'water'; }
+  else if (isSummer) { yong = 'water'; hee = 'metal'; gi = 'fire'; }
+  else if (strength.type === 'strong') {
+    yong = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 1) % 5];
+    hee = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 2) % 5];
+    gi = dmEl;
+  } else {
+    yong = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 4) % 5];
+    hee = dmEl;
+    gi = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 1) % 5];
+  }
+  return { yong, hee, gi, isWinter, isSummer };
+}
+
+function generateSystemPrompt() {
+  return `당신은 K-MUDANG의 AI 운세 해석 엔진 "령(靈)"입니다.
+사주명리학 데이터를 기반으로 현대적이고 감성적인 운세를 작성합니다.
+
+[절대 규칙]
+1. 제공된 사주 데이터의 수치/판정을 절대 변경하지 마세요
+2. 전문 용어는 일상 언어로 번역하세요
+3. "~해요" 친근한 말투 사용
+4. 부정적 내용도 희망적 관점으로 리프레이밍
+5. 300자 이내로 작성
+6. 이모지 적절히 활용
+
+[금지사항]
+- 죽음, 큰 사고, 재앙 등 극단적 부정 예언
+- 복권 당첨, 대박 등 비현실적 긍정 예언
+
+[출력 형식]
+반드시 다음 JSON 형식으로만 응답:
+{
+  "headline": "한 줄 요약 (15자 이내, 이모지 포함)",
+  "body": "본문 (300자 이내)",
+  "advice": "오늘의 한 마디 (20자 이내)",
+  "lucky": {
+    "time": "행운의 시간",
+    "color": "행운의 색",
+    "direction": "행운의 방향"
+  }
+}`;
+}
+
+function buildUserPrompt(saju, elCounts, strength, gods) {
+  const dm = saju.day.s;
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일`;
+  
+  return `[사주 원국]
+일간(Day Master): ${dm.c}(${dm.k}) - ${ELEMENT[dm.e].k}(${dm.e})
+년주: ${saju.year.s.c}${saju.year.b.c}
+월주: ${saju.month.s.c}${saju.month.b.c}
+일주: ${saju.day.s.c}${saju.day.b.c}
+${saju.hour ? `시주: ${saju.hour.s.c}${saju.hour.b.c}` : '시주: 미입력'}
+
+[오행 분포]
+木${elCounts.wood} 火${elCounts.fire} 土${elCounts.earth} 金${elCounts.metal} 水${elCounts.water}
+
+[신강/신약]
+${strength.type === 'strong' ? '신강' : strength.type === 'weak' ? '신약' : '중화'} (${strength.pct}%)
+
+[용신/희신/기신]
+용신: ${ELEMENT[gods.yong].k}(${gods.yong})
+희신: ${ELEMENT[gods.hee].k}(${gods.hee})
+기신: ${ELEMENT[gods.gi].k}(${gods.gi})
+
+[오늘 날짜]
+${todayStr}
+
+위 사주 데이터를 바탕으로 오늘의 운세를 작성해주세요.`;
+}
+
+module.exports = async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  
+  try {
+    const { year, month, day, hour, tier } = req.body;
+    if (!year || !month || !day) {
+      return res.status(400).json({ error: 'year, month, day required' });
+    }
+    
+    const saju = getStemBranch(parseInt(year), parseInt(month), parseInt(day), hour ? parseInt(hour) : undefined);
+    const elCounts = countElements(saju);
+    const strength = calcStrength(saju);
+    const gods = calcGods(saju, strength);
+    
+    const model = tier === 'premium' ? 'claude-sonnet-4-20250514' : 'claude-3-5-haiku-20241022';
+    
+    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    
+    const response = await client.messages.create({
+      model: model,
+      max_tokens: 1024,
+      system: generateSystemPrompt(),
+      messages: [{ role: 'user', content: buildUserPrompt(saju, elCounts, strength, gods) }]
+    });
+    
+    const text = response.content[0].text;
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch {
+      result = { headline: '🔮 오늘의 운세', body: text, advice: '좋은 하루 되세요', lucky: { time: '오전', color: ELEMENT[gods.yong].color, direction: ELEMENT[gods.yong].dir } };
+    }
+    
+    return res.status(200).json({
+      success: true,
+      saju: {
+        year: `${saju.year.s.c}${saju.year.b.c}`,
+        month: `${saju.month.s.c}${saju.month.b.c}`,
+        day: `${saju.day.s.c}${saju.day.b.c}`,
+        hour: saju.hour ? `${saju.hour.s.c}${saju.hour.b.c}` : null
+      },
+      dayMaster: { hanja: saju.day.s.c, hangul: saju.day.s.k, element: saju.day.s.e },
+      strength: strength,
+      gods: { yong: gods.yong, hee: gods.hee, gi: gods.gi },
+      fortune: result,
+      model: model
+    });
+    
+  } catch (error) {
+    console.error('Fortune API Error:', error);
+    return res.status(500).json({ error: 'Internal server error', message: error.message });
+  }
+};
