@@ -1,12 +1,12 @@
-export default function handler(req, res) {
+module.exports = (req, res) => {
   res.status(200).json({ message: "API works!", time: new Date().toISOString() });
-}
+};
 ```
 
-5. **Commit changes**
+**Commit changes**
 
 ---
 
-1분 후 테스트:
+1분 후 다시:
 ```
 https://k-mudang.vercel.app/api/test
