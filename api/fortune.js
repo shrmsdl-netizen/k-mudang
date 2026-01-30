@@ -193,7 +193,8 @@ module.exports = async function handler(req, res) {
     const strength = calcStrength(saju);
     const gods = calcGods(saju, strength);
     
-    const model = tier === 'premium' ? 'claude-sonnet-4-20250514' : 'claude-3-5-haiku-20241022';
+    // 무료: Haiku, 유료: Sonnet
+    const model = tier === 'premium' ? 'claude-sonnet-4-20250514' : 'claude-3-haiku-20240307';
     
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
     
