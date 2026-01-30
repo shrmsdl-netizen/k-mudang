@@ -160,4 +160,100 @@ function calculateSaju(year, month, day, hour) {
   const isSummer = [5, 6, 7].includes(monthBranchIdx);
   
   let yong, hee, gi;
-  if (isWi
+  if (isWinter) {
+    yong = 'fire'; hee = 'earth'; gi = 'water';
+  } else if (isSummer) {
+    yong = 'water'; hee = 'metal'; gi = 'fire';
+  } else if (strengthType === 'strong') {
+    yong = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];
+    hee = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5];
+    gi = dm.e;
+  } else {
+    yong = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];
+    hee = dm.e;
+    gi = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];
+  }
+
+  return {
+    dayMaster: {
+      hanja: dm.c,
+      hangul: dm.k,
+      element: dm.e,
+      elementKo: ELEMENT_KO[dm.e],
+      eng: dm.eng,
+      isYang: dm.p
+    },
+    elements,
+    strength: {
+      type: strengthType,
+      typeKo: strengthType === 'strong' ? '신강' : strengthType === 'weak' ? '신약' : '중화',
+      percentage: pct
+    },
+    gods: {
+      yong: { element: yong, ko: ELEMENT_KO[yong] },
+      hee: { element: hee, ko: ELEMENT_KO[hee] },
+      gi: { element: gi, ko: ELEMENT_KO[gi] }
+    }
+  };
+}
+
+// ============================================================================
+// 프롬프트 생성
+// ============================================================================
+
+function generateMatchSystemPrompt(language, mode) {
+  const modeText = mode === 'romance' ? '연애/결혼' : '비즈니스';
+  
+  if (language === 'ko') {
+    return `당신은 K-MUDANG의 AI 궁합 분석 엔진 "령(靈)"입니다.
+
+[분석 모드: ${modeText}]
+
+[페르소나]
+- 다정하지만 통찰력 있는 조언자
+- 두 사람의 시너지를 찾아주는 역할
+- 어려움도 성장의 기회로 해석
+
+[절대 규칙]
+1. 두 사주 데이터를 정확히 분석
+2. 점수와 함께 구체적 이유 제시
+3. 장점과 주의점 균형있게
+4. 400자 이내
+
+[금지사항]
+- "절대 안 맞는다", "헤어져라" 같은 극단적 표현
+- 한쪽만 탓하는 분석`;
+  }
+  
+  return `You are K-MUDANG's compatibility engine. Analyze synergy between two people. Mode: ${mode}. Under 400 words.`;
+}
+
+function generateMatchUserPrompt(mySaju, partnerSaju, mode, language) {
+  const isKo = language === 'ko';
+  
+  return `<my_saju>
+일간: ${mySaju.dayMaster.hanja} (${mySaju.dayMaster.hangul}) - ${mySaju.dayMaster.elementKo}
+신강/신약: ${mySaju.strength.typeKo} (${mySaju.strength.percentage}%)
+용신: ${mySaju.gods.yong.ko}
+오행: 木${mySaju.elements.wood} 火${mySaju.elements.fire} 土${mySaju.elements.earth} 金${mySaju.elements.metal} 水${mySaju.elements.water}
+</my_saju>
+
+<partner_saju>
+일간: ${partnerSaju.dayMaster.hanja} (${partnerSaju.dayMaster.hangul}) - ${partnerSaju.dayMaster.elementKo}
+신강/신약: ${partnerSaju.strength.typeKo} (${partnerSaju.strength.percentage}%)
+용신: ${partnerSaju.gods.yong.ko}
+오행: 木${partnerSaju.elements.wood} 火${partnerSaju.elements.fire} 土${partnerSaju.elements.earth} 金${partnerSaju.elements.metal} 水${partnerSaju.elements.water}
+</partner_saju>
+
+<output_format>
+{
+  "score": 0-100,
+  "grade": "S/A/B/C/D",
+  "headline": "${isKo ? '한 줄 요약 (이모지 포함)' : 'Summary with emoji'}",
+  "chemistry": "${isKo ? '두 분의 케미 분석 (200자)' : 'Chemistry analysis'}",
+  "strengths": ["${isKo ? '장점1' : 'Strength1'}", "${isKo ? '장점2' : 'Strength2'}"],
+  "cautions": ["${isKo ? '주의점' : 'Caution'}"],
+  "advice": "${isKo ? '두 분을 위한 조언' : 'Advice'}"
+}
+</output_format>`;
+}
