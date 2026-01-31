@@ -3147,7 +3147,7 @@ return html;}
 function showTodayFortune() {const el = document.getElementById('today-fortune');if (!el) return;const content = document.getElementById('today-fortune-content');if (content) {content.innerHTML = getTodayFortune();}}
 function copySajuForAI() {if (!SAJU) { toast('Please analyze your chart first'); return; }
 if (!requirePremium('AI Interpretation Copy')) {return;}
-try {const str = calcStrength(SAJU);const dm = SAJU.day.s;const dmName = `${dm.c} ${ELEMENT[dm.e].k}`;const gods = GODS;const format = calcFormat(SAJU);const interactions = calcInteractions(SAJU) || [];const sinsal = calcSinsal(SAJU) || [];const gongmang = calcGongmang(SAJU);const luck = calcLuck(SAJU, BIRTH_YEAR, GENDER, GODS, BIRTH_MONTH, BIRTH_DAY, BIRTH_HOUR) || [];const curLuck = luck.find(l => l.isCur);const currentYear = new Date().getFullYear();const age = currentYear - BIRTH_YEAR + 1;const ilju = getIljuDesc(SAJU.day.s, SAJU.day.b);const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[SAJU.year, SAJU.month, SAJU.day, SAJU.hour].forEach(p => {if(p && p.s) elCount[p.s.e]++;if(p && p.b) elCount[p.b.e]++;});const hiddenElCount = {wood:0, fire:0, earth:0, metal:0, water:0};const hiddenElInfo = {wood:[], fire:[], earth:[], metal:[], water:[]};const JIJANGGAN_MAP = {0: [9],
+try {const str = calcStrength(SAJU);const dm = SAJU.day.s;const dmName = `${dm.c} ${ELEMENT[dm.e].k}`;const gods = GODS;const format = calcFormat(SAJU);const interactions = calcInteractions(SAJU) || [];const sinsal = calcSinsal(SAJU) || [];const gongmang = calcGongmang(SAJU);const luck = calcLuck(SAJU, BIRTH_YEAR, GENDER, GODS, BIRTH_MONTH, BIRTH_DAY, BIRTH_HOUR) || [];const curLuck = luck.find(l => l.isCur);const currentYear = new Date().getFullYear();const today = new Date();const age = currentYear - BIRTH_YEAR + 1;const manAge = (() => { let a = currentYear - BIRTH_YEAR; const m = today.getMonth() + 1; const d = today.getDate(); if (m < BIRTH_MONTH || (m === BIRTH_MONTH && d < BIRTH_DAY)) a--; return a; })();const ilju = getIljuDesc(SAJU.day.s, SAJU.day.b);const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[SAJU.year, SAJU.month, SAJU.day, SAJU.hour].forEach(p => {if(p && p.s) elCount[p.s.e]++;if(p && p.b) elCount[p.b.e]++;});const hiddenElCount = {wood:0, fire:0, earth:0, metal:0, water:0};const hiddenElInfo = {wood:[], fire:[], earth:[], metal:[], water:[]};const JIJANGGAN_MAP = {0: [9],
 1: [5,7,9],
 2: [0,2,4],
 3: [1],
@@ -3234,7 +3234,7 @@ ${criticalText}【BASIC INFO】
 • Birth Hour: ${hourText}
 • Gender: ${GENDER === 'm' ? 'Male (남)' : 'Female (여)'}
 • Birth Location: ${locationText}
-• Age: ${age-1} (Korean Age: ${age})
+• Age: ${manAge} (Korean Age: ${age})
 • Day Master: ${dm.c} ${ELEMENT[dm.e].n} (${dm.c}${ELEMENT[dm.e].c})
 ${timeConversionText}
 【FORTUNE CHART (Year/Month/Day/Hour)】
