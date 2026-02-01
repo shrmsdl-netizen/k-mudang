@@ -1119,7 +1119,113 @@ const PAST_WINNERS = [
 {stem: 4, type: 'yeo', days: 7, name: '戊(余氣)'},
 {stem: 0, type: 'jung', days: 7, name: '甲(中氣)'},
 {stem: 8, type: 'jung', days: 16, name: '壬(正氣)'}
-]};const ELEMENT = {wood:{c:'木',k:'Wood',n:'木(Wood)',color:'#4CAF50',icon:'🌳',nums:[3,8,13,18,23,28,33,38,43]},
+]};
+// === 12 Animal SVG Silhouettes ===
+const ANIMAL_SVG = {
+'子': 'M25,15 C20,10 15,12 12,18 C10,22 12,28 15,32 C18,36 22,38 25,38 C28,38 32,36 35,32 C38,28 40,22 38,18 C35,12 30,10 25,15 M20,20 L18,25 M30,20 L32,25 M22,30 Q25,33 28,30',
+'丑': 'M15,35 L15,20 C15,15 20,10 25,10 C30,10 35,15 35,20 L35,35 M10,12 L15,18 M40,12 L35,18 M20,25 L20,35 M30,25 L30,35',
+'寅': 'M25,8 L20,15 L15,12 L18,20 L10,25 L18,28 L15,38 L25,32 L35,38 L32,28 L40,25 L32,20 L35,12 L30,15 Z M22,22 L22,26 M28,22 L28,26',
+'卯': 'M25,38 C20,38 18,35 18,30 L18,15 C18,12 20,10 22,8 L22,5 C22,3 24,2 25,2 C26,2 28,3 28,5 L28,8 C30,10 32,12 32,15 L32,30 C32,35 30,38 25,38 M22,18 L22,22 M28,18 L28,22',
+'辰': 'M25,5 C15,8 10,18 12,28 C14,35 20,40 28,40 C35,38 40,32 40,25 L35,20 L40,15 L35,12 C32,8 28,5 25,5 M18,20 C20,18 22,20 20,22 M15,28 L10,32 M18,32 L15,38',
+'巳': 'M30,38 C25,40 20,38 18,35 C15,30 15,25 18,20 C20,16 25,15 28,18 C32,15 35,18 35,22 C35,26 32,28 28,28 C25,28 22,25 22,22 M35,30 L38,35',
+'午': 'M25,5 L20,12 L15,10 L18,18 L10,22 L15,25 L15,40 L22,35 L25,40 L28,35 L35,40 L35,25 L40,22 L32,18 L35,10 L30,12 Z M22,22 L22,26 M28,22 L28,26',
+'未': 'M25,8 C20,8 15,12 15,18 C15,22 18,25 20,26 L15,40 L25,35 L35,40 L30,26 C32,25 35,22 35,18 C35,12 30,8 25,8 M12,15 C10,12 8,15 10,18 M38,15 C40,12 42,15 40,18',
+'申': 'M25,5 C18,5 15,10 15,15 C15,20 18,23 22,25 C20,28 18,32 20,36 C22,40 28,40 30,36 C32,32 30,28 28,25 C32,23 35,20 35,15 C35,10 32,5 25,5 M20,12 L20,16 M30,12 L30,16 M25,35 L25,40 L22,42 M25,40 L28,42',
+'酉': 'M25,5 C20,5 18,8 18,12 L18,15 L15,18 L15,25 L18,28 L18,35 C18,38 22,40 25,40 C28,40 32,38 32,35 L32,28 L35,25 L35,18 L32,15 L32,12 C32,8 30,5 25,5 M22,20 L22,24 M28,20 L28,24',
+'戌': 'M25,5 C18,5 15,10 15,15 L15,25 C12,28 10,32 12,35 C15,40 22,40 25,38 C28,40 35,40 38,35 C40,32 38,28 35,25 L35,15 C35,10 32,5 25,5 M20,15 L20,20 M30,15 L30,20 M22,28 Q25,32 28,28',
+'亥': 'M25,8 C18,8 12,15 12,22 C12,30 18,35 22,38 L18,42 L25,40 L32,42 L28,38 C32,35 38,30 38,22 C38,15 32,8 25,8 M18,18 L18,22 M32,18 L32,22 M20,28 L22,32 M30,28 L28,32'
+};
+
+// === 12 Animal Quotes ===
+const ANIMAL_QUOTE = {
+'子': { ko: '지혜와 기민함으로 기회를 포착하라', en: 'Seize opportunities with wisdom and agility' },
+'丑': { ko: '묵묵한 인내가 큰 성취를 이룬다', en: 'Silent perseverance leads to great achievement' },
+'寅': { ko: '용맹한 기운으로 새 길을 개척하라', en: 'Blaze new trails with courageous spirit' },
+'卯': { ko: '부드러움 속에 강인함을 품어라', en: 'Embrace strength within gentleness' },
+'辰': { ko: '하늘의 기운을 받아 비상하라', en: 'Rise with the energy of the heavens' },
+'巳': { ko: '깊은 통찰로 본질을 꿰뚫어라', en: 'Pierce through to essence with deep insight' },
+'午': { ko: '열정의 불꽃으로 세상을 밝혀라', en: 'Light up the world with passionate flame' },
+'未': { ko: '온화한 마음으로 화합을 이루어라', en: 'Achieve harmony with a gentle heart' },
+'申': { ko: '영리한 재치로 난관을 돌파하라', en: 'Break through obstacles with clever wit' },
+'酉': { ko: '빛나는 자신감으로 앞서 나가라', en: 'Lead the way with radiant confidence' },
+'戌': { ko: '충직한 마음이 신뢰를 쌓는다', en: 'Loyal heart builds lasting trust' },
+'亥': { ko: '풍요로운 복으로 모두를 이롭게 하라', en: 'Bless all with abundant fortune' }
+};
+
+// === 60 Archetype System (Global Standard) ===
+const ARCHETYPE_60 = {
+// 甲 (Wood/Blue) series
+'甲子': { ko: '푸른 쥐', en: 'Blue Rat', color: '#2E7D32' },
+'甲寅': { ko: '푸른 호랑이', en: 'Blue Tiger', color: '#2E7D32' },
+'甲辰': { ko: '푸른 용', en: 'Blue Dragon', color: '#2E7D32' },
+'甲午': { ko: '푸른 말', en: 'Blue Horse', color: '#2E7D32' },
+'甲申': { ko: '푸른 원숭이', en: 'Blue Monkey', color: '#2E7D32' },
+'甲戌': { ko: '푸른 개', en: 'Blue Dog', color: '#2E7D32' },
+// 乙 (Wood/Green) series
+'乙丑': { ko: '청록 소', en: 'Green Ox', color: '#1B5E20' },
+'乙卯': { ko: '청록 토끼', en: 'Green Rabbit', color: '#1B5E20' },
+'乙巳': { ko: '청록 뱀', en: 'Green Snake', color: '#1B5E20' },
+'乙未': { ko: '청록 양', en: 'Green Goat', color: '#1B5E20' },
+'乙酉': { ko: '청록 닭', en: 'Green Rooster', color: '#1B5E20' },
+'乙亥': { ko: '청록 돼지', en: 'Green Pig', color: '#1B5E20' },
+// 丙 (Fire/Red) series
+'丙子': { ko: '붉은 쥐', en: 'Red Rat', color: '#C62828' },
+'丙寅': { ko: '붉은 호랑이', en: 'Red Tiger', color: '#C62828' },
+'丙辰': { ko: '붉은 용', en: 'Red Dragon', color: '#C62828' },
+'丙午': { ko: '붉은 말', en: 'Red Horse', color: '#C62828' },
+'丙申': { ko: '붉은 원숭이', en: 'Red Monkey', color: '#C62828' },
+'丙戌': { ko: '붉은 개', en: 'Red Dog', color: '#C62828' },
+// 丁 (Fire/Crimson) series
+'丁丑': { ko: '진홍 소', en: 'Crimson Ox', color: '#B71C1C' },
+'丁卯': { ko: '진홍 토끼', en: 'Crimson Rabbit', color: '#B71C1C' },
+'丁巳': { ko: '진홍 뱀', en: 'Crimson Snake', color: '#B71C1C' },
+'丁未': { ko: '진홍 양', en: 'Crimson Goat', color: '#B71C1C' },
+'丁酉': { ko: '진홍 닭', en: 'Crimson Rooster', color: '#B71C1C' },
+'丁亥': { ko: '진홍 돼지', en: 'Crimson Pig', color: '#B71C1C' },
+// 戊 (Earth/Golden) series
+'戊子': { ko: '황금 쥐', en: 'Golden Rat', color: '#F9A825' },
+'戊寅': { ko: '황금 호랑이', en: 'Golden Tiger', color: '#F9A825' },
+'戊辰': { ko: '황금 용', en: 'Golden Dragon', color: '#F9A825' },
+'戊午': { ko: '황금 말', en: 'Golden Horse', color: '#F9A825' },
+'戊申': { ko: '황금 원숭이', en: 'Golden Monkey', color: '#F9A825' },
+'戊戌': { ko: '황금 개', en: 'Golden Dog', color: '#F9A825' },
+// 己 (Earth/Brown) series
+'己丑': { ko: '갈색 소', en: 'Brown Ox', color: '#8D6E63' },
+'己卯': { ko: '갈색 토끼', en: 'Brown Rabbit', color: '#8D6E63' },
+'己巳': { ko: '갈색 뱀', en: 'Brown Snake', color: '#8D6E63' },
+'己未': { ko: '갈색 양', en: 'Brown Goat', color: '#8D6E63' },
+'己酉': { ko: '갈색 닭', en: 'Brown Rooster', color: '#8D6E63' },
+'己亥': { ko: '갈색 돼지', en: 'Brown Pig', color: '#8D6E63' },
+// 庚 (Metal/White) series
+'庚子': { ko: '흰 쥐', en: 'White Rat', color: '#757575' },
+'庚寅': { ko: '흰 호랑이', en: 'White Tiger', color: '#757575' },
+'庚辰': { ko: '흰 용', en: 'White Dragon', color: '#757575' },
+'庚午': { ko: '흰 말', en: 'White Horse', color: '#757575' },
+'庚申': { ko: '흰 원숭이', en: 'White Monkey', color: '#757575' },
+'庚戌': { ko: '흰 개', en: 'White Dog', color: '#757575' },
+// 辛 (Metal/Silver) series
+'辛丑': { ko: '은빛 소', en: 'Silver Ox', color: '#9E9E9E' },
+'辛卯': { ko: '은빛 토끼', en: 'Silver Rabbit', color: '#9E9E9E' },
+'辛巳': { ko: '은빛 뱀', en: 'Silver Snake', color: '#9E9E9E' },
+'辛未': { ko: '은빛 양', en: 'Silver Goat', color: '#9E9E9E' },
+'辛酉': { ko: '은빛 닭', en: 'Silver Rooster', color: '#9E9E9E' },
+'辛亥': { ko: '은빛 돼지', en: 'Silver Pig', color: '#9E9E9E' },
+// 壬 (Water/Black) series
+'壬子': { ko: '검은 쥐', en: 'Black Rat', color: '#37474F' },
+'壬寅': { ko: '검은 호랑이', en: 'Black Tiger', color: '#37474F' },
+'壬辰': { ko: '검은 용', en: 'Black Dragon', color: '#37474F' },
+'壬午': { ko: '검은 말', en: 'Black Horse', color: '#37474F' },
+'壬申': { ko: '검은 원숭이', en: 'Black Monkey', color: '#37474F' },
+'壬戌': { ko: '검은 개', en: 'Black Dog', color: '#37474F' },
+// 癸 (Water/Dark) series
+'癸丑': { ko: '어두운 소', en: 'Dark Ox', color: '#263238' },
+'癸卯': { ko: '어두운 토끼', en: 'Dark Rabbit', color: '#263238' },
+'癸巳': { ko: '어두운 뱀', en: 'Dark Snake', color: '#263238' },
+'癸未': { ko: '어두운 양', en: 'Dark Goat', color: '#263238' },
+'癸酉': { ko: '어두운 닭', en: 'Dark Rooster', color: '#263238' },
+'癸亥': { ko: '어두운 돼지', en: 'Dark Pig', color: '#263238' }
+};
+const ELEMENT = {wood:{c:'木',k:'Wood',n:'木(Wood)',color:'#4CAF50',icon:'🌳',nums:[3,8,13,18,23,28,33,38,43]},
 fire:{c:'火',k:'Fire',n:'火(Fire)',color:'#F44336',icon:'🔥',nums:[2,7,12,17,22,27,32,37,42]},
 earth:{c:'土',k:'Earth',n:'土(Earth)',color:'#FF9800',icon:'🌍',nums:[5,10,15,20,25,30,35,40,45]},
 metal:{c:'金',k:'Metal',n:'金(Metal)',color:'#9E9E9E',icon:'⚙️',nums:[4,9,14,19,24,29,34,39,44]},
@@ -1410,53 +1516,14 @@ for(let i=0;i<W*H*0.15;i++){const x=Math.random()*W;const y=Math.random()*H;cons
 ctx.globalAlpha=0.15;for(let i=0;i<800;i++){const x=Math.random()*W;const y=Math.random()*H;const len=Math.random()*60+20;const isH=Math.random()>0.5;ctx.strokeStyle='rgba(120,80,40,0.3)';ctx.lineWidth=Math.random()*1.5+0.3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(isH?x+len:x+Math.random()*5,isH?y+Math.random()*3:y+len);ctx.stroke();}ctx.globalAlpha=1.0;
 // 3. 가장자리 빈티지 효과 (vignette) 강화
 const vignette=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8);vignette.addColorStop(0,'rgba(139,90,43,0)');vignette.addColorStop(0.7,'rgba(120,80,40,0.05)');vignette.addColorStop(1,'rgba(101,67,33,0.15)');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
-// === RARITY SYSTEM v4.22.4 ===
-const rarity = getTalismanRarity();
-// Legendary: 추가 배경 글로우 효과
-if (rarity.grade === 'legendary') {
-const glow = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, H*0.6);
-glow.addColorStop(0, 'rgba(255,215,0,0.08)');
-glow.addColorStop(0.5, 'rgba(255,180,0,0.04)');
-glow.addColorStop(1, 'rgba(255,150,0,0)');
-ctx.fillStyle = glow;
-ctx.fillRect(0, 0, W, H);
-}
-// 등급별 테두리 스타일
-if (rarity.grade === 'legendary') {
-// Triple gold border with glow
-ctx.shadowColor = '#FFD700';
-ctx.shadowBlur = 30;
-ctx.strokeStyle = '#FFD700';
-ctx.lineWidth = 16;
-ctx.strokeRect(60, 60, W-120, H-120);
-ctx.shadowBlur = 0;
-ctx.strokeStyle = theme.border;
-ctx.lineWidth = 10;
-ctx.strokeRect(85, 85, W-170, H-170);
-ctx.strokeStyle = '#FFD700';
-ctx.lineWidth = 4;
-ctx.strokeRect(115, 115, W-230, H-230);
-} else if (rarity.grade === 'epic') {
-// Double gold accent border
-ctx.strokeStyle = theme.border;
-ctx.lineWidth = 12;
-ctx.strokeRect(80, 80, W-160, H-160);
-ctx.strokeStyle = '#D4AF37';
-ctx.lineWidth = 6;
-ctx.strokeRect(100, 100, W-200, H-200);
-ctx.strokeStyle = theme.main;
-ctx.lineWidth = 3;
-ctx.strokeRect(115, 115, W-230, H-230);
-} else {
-// Rare: 기본 스타일
+// === Border (Element Theme Based) ===
 ctx.strokeStyle = theme.border;
 ctx.lineWidth = 12;
 ctx.strokeRect(80, 80, W-160, H-160);
 ctx.strokeStyle = theme.main;
 ctx.lineWidth = 4;
 ctx.strokeRect(110, 110, W-220, H-220);
-}
-drawCornerOrnamentsHD(ctx, W, H, theme, rarity.grade);drawTaegeukHD(ctx, W/2, 300, 120, theme);
+drawCornerOrnamentsHD(ctx, W, H, theme);drawTaegeukHD(ctx, W/2, 300, 120, theme);
 // === 연도 자동 계산 ===
 const currentYear = new Date().getFullYear();
 const yearStemIdx = (currentYear - 4) % 10;
@@ -1473,45 +1540,40 @@ fire: { hanja: '火德昌盛 光明大吉', meaning: 'Fire virtue blazes, great 
 earth: { hanja: '土德厚載 財祿豊盈', meaning: 'Earth virtue endures, wealth overflows' },
 metal: { hanja: '金德堅固 百事成就', meaning: 'Metal virtue strengthens, all goals achieved' },
 water: { hanja: '水德潤澤 智慧通達', meaning: 'Water virtue nourishes, wisdom flows freely' }};const mantra = mantras[yongEl] || mantras.fire;ctx.fillStyle = theme.main;ctx.font = 'bold 104px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText(mantra.hanja, W/2, 900);ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText(mantra.meaning, W/2, 1000);ctx.fillStyle = theme.main;ctx.font = 'bold 560px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText('符', W/2, 1500);ctx.fillStyle = theme.elColor;ctx.font = 'bold 160px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText(theme.symbol, W/2, 1700);ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText(`${theme.energyTitle}`, W/2, 1770);ctx.font = '44px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillStyle = theme.elColor;ctx.fillText(`${theme.energyDesc}`, W/2, 1825);const dayStem = SAJU.day.s.c;const dayBranch = SAJU.day.b.c;ctx.fillStyle = theme.main;ctx.font = 'bold 160px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText(dayStem + dayBranch, W/2, 1980);const iljuKey = dayStem + dayBranch;const dayDesc = (typeof ILJU_60 !== 'undefined' && ILJU_60[iljuKey]) ? ILJU_60[iljuKey].name : '';ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText(dayDesc + ' Day Master', W/2, 2060);ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';roundRectHD(ctx, 200, 2120, W-400, 560, 40);ctx.fill();ctx.strokeStyle = theme.border;ctx.lineWidth = 4;roundRectHD(ctx, 200, 2120, W-400, 560, 40);ctx.stroke();ctx.textAlign = 'left';ctx.font = '64px "Ma Shan Zheng", "Noto Sans KR", sans-serif';const yongsinEl = ELEMENT[GODS.yong];const huisinEl = ELEMENT[GODS.hee];const gisinEl = ELEMENT[GODS.gi];ctx.fillStyle = '#E63946';ctx.fillText('用神 (Beneficial)', 300, 2260);ctx.fillStyle = theme.main;ctx.fillText(`${yongsinEl.n} ${theme.emoji}`, 900, 2260);ctx.fillStyle = '#2A9D8F';ctx.fillText('喜神 (Favorable)', 300, 2380);ctx.fillStyle = theme.main;ctx.fillText(`${huisinEl.n}`, 900, 2380);ctx.fillStyle = '#6C757D';ctx.fillText('忌神 (Avoid)', 300, 2500);ctx.fillStyle = '#666';ctx.fillText(`${gisinEl.n}`, 900, 2500);ctx.fillStyle = theme.text;ctx.fillText('Body Strength', 300, 2620);ctx.fillStyle = theme.main;const strType = STRENGTH ? (STRENGTH.type === 'strong' ? 'Strong' : STRENGTH.type === 'weak' ? 'Weak' : 'Balanced') : '?';const strPct = STRENGTH ? STRENGTH.pct + '%' : '';ctx.fillText(`${strType} ${strPct}`, 900, 2620);ctx.textAlign = 'center';ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText(`─── ${currentYear} ${yearStem.c}${yearBranch.c}年 ${yearElement.n} ${yearAnimal} Year ───`, W/2, 2800);let bestMonth = '?', worstMonth = '?';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU, GODS);if (monthlyLuck && monthlyLuck.best) bestMonth = monthlyLuck.best.month;if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;} catch(e) {}
-ctx.font = '64px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillStyle = '#2A9D8F';ctx.fillText(`✨ Best Month: ${bestMonth}`, W/2 - 360, 2920);ctx.fillStyle = '#E63946';ctx.fillText(`⚠️ Caution: ${worstMonth}`, W/2 + 360, 2920);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 3040);ctx.lineTo(W-300, 3040);ctx.stroke();ctx.fillStyle = theme.main;ctx.font = 'bold 88px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText('厄退福來 百事大吉', W/2, 3180);ctx.fillStyle = theme.text;ctx.font = '52px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText('Misfortune retreats, blessings arrive', W/2, 3280);ctx.fillStyle = theme.text;ctx.font = '44px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText('K-MUDANG Pro ☯ kmudang.com', W/2, 3480);const serialNo = generateSerialNumber();
-// === 등급 라벨 (시리얼 위) ===
-if (rarity.grade === 'legendary') {
-const labelGrad = ctx.createLinearGradient(W/2-150, 3520, W/2+150, 3520);
-labelGrad.addColorStop(0, '#FFD700');
-labelGrad.addColorStop(0.5, '#FFF8DC');
-labelGrad.addColorStop(1, '#FFD700');
-ctx.fillStyle = labelGrad;
-ctx.font = 'bold 40px "Ma Shan Zheng", "Noto Sans KR", sans-serif';
-ctx.fillText('「 LEGENDARY 」', W/2, 3520);
-} else if (rarity.grade === 'epic') {
-ctx.fillStyle = '#D4AF37';
-ctx.font = 'bold 36px "Ma Shan Zheng", "Noto Sans KR", sans-serif';
-ctx.fillText('「 EPIC 」', W/2, 3520);
+ctx.font = '64px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillStyle = '#2A9D8F';ctx.fillText(`✨ Best Month: ${bestMonth}`, W/2 - 360, 2920);ctx.fillStyle = '#E63946';ctx.fillText(`⚠️ Caution: ${worstMonth}`, W/2 + 360, 2920);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 3040);ctx.lineTo(W-300, 3040);ctx.stroke();const serialNo = generateSerialNumber();
+// === 60 Archetype Label (moved up) ===
+const iljuKey2 = dayStem + dayBranch;
+const archetype = ARCHETYPE_60[iljuKey2];
+const animalBranch = dayBranch;
+if (archetype) {
+// Archetype Text (calligraphy style, larger)
+ctx.fillStyle = archetype.color;
+ctx.font = 'bold 88px "Ma Shan Zheng", "Noto Serif KR", serif';
+ctx.fillText(`${archetype.en} (${iljuKey2})`, W/2, 3180);
+// Quote (calligraphy style)
+const quote = ANIMAL_QUOTE[animalBranch];
+if (quote) {
+ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+ctx.font = '52px "Ma Shan Zheng", "Noto Serif KR", serif';
+ctx.fillText(quote.en, W/2, 3280);
 }
-// === 등급별 시리얼 넘버 스타일 ===
-if (rarity.grade === 'legendary') {
-// Holographic rainbow effect
-const grad = ctx.createLinearGradient(W/2-200, 3560, W/2+200, 3560);
-grad.addColorStop(0, '#FF6B6B');
-grad.addColorStop(0.2, '#FFD93D');
-grad.addColorStop(0.4, '#6BCB77');
-grad.addColorStop(0.6, '#4D96FF');
-grad.addColorStop(0.8, '#9B59B6');
-grad.addColorStop(1, '#FF6B6B');
-ctx.fillStyle = grad;
-ctx.font = 'bold 36px monospace';
-ctx.fillText(`★★★★★ ${serialNo} ★★★★★`, W/2, 3560);
-} else if (rarity.grade === 'epic') {
-// Gold serial
-ctx.fillStyle = '#D4AF37';
-ctx.font = 'bold 34px monospace';
-ctx.fillText(`★★★★ ${serialNo} ★★★★`, W/2, 3560);
-} else {
-// Standard gray
+}
+// === Chinese Blessing (moved down) ===
+ctx.fillStyle = theme.main;
+ctx.font = 'bold 72px "Ma Shan Zheng", "Noto Serif KR", serif';
+ctx.fillText('厄退福來 百事大吉', W/2, 3420);
+ctx.fillStyle = theme.text;
+ctx.font = '44px "Ma Shan Zheng", "Noto Sans KR", sans-serif';
+ctx.fillText('Misfortune retreats, blessings arrive', W/2, 3510);
+// === Serial Number ===
 ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
 ctx.font = '32px monospace';
-ctx.fillText(`No. ${serialNo}`, W/2, 3560);
-}ctx.fillStyle = theme.text;ctx.font = '40px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText('📥 Save this Talisman · Keep it 7 days to seal your fortune', W/2, 3680);talismanGenerated = true;talismanDataUrl = canvas.toDataURL('image/png', 1.0);}
+ctx.fillText(`No. ${serialNo}`, W/2, 3590);
+// === K-MUDANG Logo (bottom) ===
+ctx.fillStyle = theme.text;
+ctx.font = '40px "Ma Shan Zheng", "Noto Sans KR", sans-serif';
+ctx.fillText('K-MUDANG ☯ k-mudang.com', W/2, 3660);
+ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';ctx.font = '36px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText('📥 Save & set as wallpaper for 7 days', W/2, 3720);talismanGenerated = true;talismanDataUrl = canvas.toDataURL('image/png', 1.0);}
 function getTalismanRarity() {
 let hasSamhap = false, hasBanghap = false, hasNoble = false, hasYearMatch = false;
 try { const advInt = analyzeAdvancedInteractions(SAJU); if (advInt && advInt.samhapGuk) hasSamhap = advInt.samhapGuk.some(s => s.complete); } catch(e) {}
@@ -1544,12 +1606,11 @@ ctx.beginPath();ctx.arc(x, y, r * 0.85, Math.PI, Math.PI * 2, false);ctx.fillSty
 ctx.beginPath();ctx.arc(x - r * 0.35, y, r * 0.28, 0, Math.PI * 2);ctx.fillStyle = TAEGEUK_RED;ctx.fill();
 // 우측 소원 (파랑)
 ctx.beginPath();ctx.arc(x + r * 0.35, y, r * 0.28, 0, Math.PI * 2);ctx.fillStyle = TAEGEUK_BLUE;ctx.fill();}
-function drawCornerOrnamentsHD(ctx, W, H, theme, grade = 'rare') {
-const size = grade === 'legendary' ? 140 : grade === 'epic' ? 120 : 100;
+function drawCornerOrnamentsHD(ctx, W, H, theme) {
+const size = 100;
 const offset = 140;
-const lw = grade === 'legendary' ? 10 : grade === 'epic' ? 8 : 6;
-const color = grade === 'legendary' ? '#FFD700' : grade === 'epic' ? '#D4AF37' : theme.main;
-ctx.strokeStyle = color;
+const lw = 6;
+ctx.strokeStyle = theme.main;
 ctx.lineWidth = lw;
 // 좌상단
 ctx.beginPath();
@@ -1575,28 +1636,6 @@ ctx.moveTo(W - offset - size, H - offset);
 ctx.lineTo(W - offset, H - offset);
 ctx.lineTo(W - offset, H - offset - size);
 ctx.stroke();
-// Epic/Legendary: 추가 내부 장식
-if (grade === 'epic' || grade === 'legendary') {
-const innerSize = size * 0.5;
-const innerOffset = offset + 25;
-ctx.lineWidth = 3;
-ctx.strokeStyle = grade === 'legendary' ? '#FFD700' : theme.main;
-// 내부 코너 (작은 L자)
-ctx.beginPath();ctx.moveTo(innerOffset, innerOffset + innerSize);ctx.lineTo(innerOffset, innerOffset);ctx.lineTo(innerOffset + innerSize, innerOffset);ctx.stroke();
-ctx.beginPath();ctx.moveTo(W - innerOffset - innerSize, innerOffset);ctx.lineTo(W - innerOffset, innerOffset);ctx.lineTo(W - innerOffset, innerOffset + innerSize);ctx.stroke();
-ctx.beginPath();ctx.moveTo(innerOffset, H - innerOffset - innerSize);ctx.lineTo(innerOffset, H - innerOffset);ctx.lineTo(innerOffset + innerSize, H - innerOffset);ctx.stroke();
-ctx.beginPath();ctx.moveTo(W - innerOffset - innerSize, H - innerOffset);ctx.lineTo(W - innerOffset, H - innerOffset);ctx.lineTo(W - innerOffset, H - innerOffset - innerSize);ctx.stroke();
-}
-// Legendary: 코너 다이아몬드 장식
-if (grade === 'legendary') {
-ctx.fillStyle = '#FFD700';
-const dSize = 12;
-const dOffset = offset - 20;
-[[dOffset + size/2, dOffset], [W - dOffset - size/2, dOffset], [dOffset + size/2, H - dOffset], [W - dOffset - size/2, H - dOffset],
- [dOffset, dOffset + size/2], [dOffset, H - dOffset - size/2], [W - dOffset, dOffset + size/2], [W - dOffset, H - dOffset - size/2]].forEach(([x, y]) => {
-ctx.beginPath();ctx.moveTo(x, y - dSize);ctx.lineTo(x + dSize, y);ctx.lineTo(x, y + dSize);ctx.lineTo(x - dSize, y);ctx.closePath();ctx.fill();
-});
-}
 }
 function roundRectHD(ctx, x, y, w, h, r) {ctx.beginPath();ctx.moveTo(x + r, y);ctx.lineTo(x + w - r, y);ctx.quadraticCurveTo(x + w, y, x + w, y + r);ctx.lineTo(x + w, y + h - r);ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);ctx.lineTo(x + r, y + h);ctx.quadraticCurveTo(x, y + h, x, y + h - r);ctx.lineTo(x, y + r);ctx.quadraticCurveTo(x, y, x + r, y);ctx.closePath();}
 function drawTaegeuk(ctx, x, y, r) {ctx.beginPath();ctx.arc(x, y, r, 0, Math.PI * 2);ctx.strokeStyle = '#D4AF37';ctx.lineWidth = 2;ctx.stroke();ctx.beginPath();ctx.arc(x, y, r * 0.8, 0, Math.PI, false);ctx.fillStyle = '#C41E3A';ctx.fill();ctx.beginPath();ctx.arc(x, y, r * 0.8, Math.PI, Math.PI * 2, false);ctx.fillStyle = '#1E3A5F';ctx.fill();ctx.beginPath();ctx.arc(x - r * 0.35, y, r * 0.25, 0, Math.PI * 2);ctx.fillStyle = '#1E3A5F';ctx.fill();ctx.beginPath();ctx.arc(x + r * 0.35, y, r * 0.25, 0, Math.PI * 2);ctx.fillStyle = '#C41E3A';ctx.fill();}
