@@ -758,16 +758,29 @@ const ctx = canvas.getContext('2d');const W = 300, H = 400;ctx.fillStyle = '#0a0
 water: { main: '#1E3A5F', accent: '#87CEEB' },
 wood: { main: '#228B22', accent: '#90EE90' },
 metal: { main: '#B8860B', accent: '#FFD700' },
-earth: { main: '#8B4513', accent: '#DEB887' }};const color = colors[yongEl] || colors.fire;let opacity = 0;const interval = setInterval(() => {ctx.fillStyle = '#0a0505';ctx.fillRect(0, 0, W, H);ctx.strokeStyle = color.main;ctx.lineWidth = 3;ctx.strokeRect(20, 20, W-40, H-40);opacity = Math.min(1, opacity + 0.08);ctx.fillStyle = `rgba(255, 215, 0, ${opacity})`;ctx.font = 'bold 180px "Ma Shan Zheng", cursive';ctx.textAlign = 'center';ctx.textBaseline = 'middle';ctx.fillText('符', W/2, H/2 - 30);ctx.fillStyle = `rgba(139, 115, 85, ${opacity})`;ctx.font = '24px "Nanum Pen Script", "Ma Shan Zheng", cursive';ctx.fillText('개운부적 생성중...', W/2, H - 60);if (opacity >= 1) {clearInterval(interval);setTimeout(callback, 500);}}, 80);}
+earth: { main: '#8B4513', accent: '#DEB887' }};const color = colors[yongEl] || colors.fire;let opacity = 0;const interval = setInterval(() => {ctx.fillStyle = '#0a0505';ctx.fillRect(0, 0, W, H);ctx.strokeStyle = color.main;ctx.lineWidth = 3;ctx.strokeRect(20, 20, W-40, H-40);opacity = Math.min(1, opacity + 0.08);ctx.fillStyle = `rgba(255, 215, 0, ${opacity})`;ctx.font = 'bold 180px "Ma Shan Zheng", cursive';ctx.textAlign = 'center';ctx.textBaseline = 'middle';ctx.fillText('符', W/2, H/2 - 30);ctx.fillStyle = `rgba(139, 115, 85, ${opacity})`;ctx.font = '24px "Ma Shan Zheng", cursive';ctx.fillText('개운부적 생성중...', W/2, H - 60);if (opacity >= 1) {clearInterval(interval);setTimeout(callback, 500);}}, 80);}
 async function createHighResTalisman() {
     // ★ Wait for fonts to load ★
     await document.fonts.ready;
-    await document.fonts.load('560px "Ma Shan Zheng"');
-    await document.fonts.load('160px "Ma Shan Zheng"');
-    await document.fonts.load('180px "Ma Shan Zheng"');
-    await document.fonts.load('104px "Ma Shan Zheng"');
-    await document.fonts.load('128px "Ma Shan Zheng"');
-    const canvas = document.getElementById('talisman-canvas');const ctx = canvas.getContext('2d');const W = 2160, H = 3840;canvas.width = W;canvas.height = H;
+    await document.fonts.load('bold 560px "Ma Shan Zheng"');
+    await document.fonts.load('bold 180px "Ma Shan Zheng"');
+    await document.fonts.load('bold 160px "Ma Shan Zheng"');
+    await document.fonts.load('bold 128px "Ma Shan Zheng"');
+    await document.fonts.load('bold 104px "Ma Shan Zheng"');
+    await document.fonts.load('bold 88px "Ma Shan Zheng"');
+    await document.fonts.load('bold 72px "Ma Shan Zheng"');
+    await document.fonts.load('bold 32px "Ma Shan Zheng"');
+    await document.fonts.load('bold 28px "Ma Shan Zheng"');
+    await document.fonts.load('64px "Ma Shan Zheng"');
+    await document.fonts.load('56px "Ma Shan Zheng"');
+    await document.fonts.load('48px "Ma Shan Zheng"');
+    await document.fonts.load('44px "Ma Shan Zheng"');
+    await document.fonts.load('40px "Ma Shan Zheng"');
+    await document.fonts.load('36px "Ma Shan Zheng"');
+    await document.fonts.load('32px "Ma Shan Zheng"');
+    await document.fonts.load('24px "Ma Shan Zheng"');
+    await document.fonts.load('16px "Ma Shan Zheng"');
+    await document.fonts.load('14px "Ma Shan Zheng"');const canvas = document.getElementById('talisman-canvas');const ctx = canvas.getContext('2d');const W = 2160, H = 3840;canvas.width = W;canvas.height = H;
 // === 자동 연도 시스템 ===
 const currentYear = new Date().getFullYear();
 const yearStemIdx = (currentYear - 4) % 10;
@@ -794,25 +807,25 @@ ctx.strokeRect(80, 80, W-160, H-160);
 ctx.strokeStyle = theme.main;
 ctx.lineWidth = 4;
 ctx.strokeRect(110, 110, W-220, H-220);
-drawCornerOrnamentsHD(ctx, W, H, theme);drawTaegeukHD(ctx, W/2, 300, 120, theme);ctx.fillStyle = theme.main;ctx.font = 'bold 128px "Ma Shan Zheng", cursive';ctx.textAlign = 'center';ctx.fillText(`${yearChinese} 開運符`, W/2, 560);ctx.fillStyle = theme.text;ctx.font = '64px "Nanum Pen Script", "Ma Shan Zheng", cursive';ctx.fillText(`${currentYear}년 개운 부적`, W/2, 660);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 740);ctx.lineTo(W-300, 740);ctx.stroke();const mantras = {wood: { hanja: '木德生發 萬事亨通', meaning: '나무의 덕이 생발하여 만사형통' },
+drawCornerOrnamentsHD(ctx, W, H, theme);drawTaegeukHD(ctx, W/2, 300, 120, theme);ctx.fillStyle = theme.main;ctx.font = 'bold 128px "Ma Shan Zheng", cursive';ctx.textAlign = 'center';ctx.fillText(`${yearChinese} 開運符`, W/2, 560);ctx.fillStyle = theme.text;ctx.font = '64px "Ma Shan Zheng", cursive';ctx.fillText(`${currentYear}년 개운 부적`, W/2, 660);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 740);ctx.lineTo(W-300, 740);ctx.stroke();const mantras = {wood: { hanja: '木德生發 萬事亨通', meaning: '나무의 덕이 생발하여 만사형통' },
 fire: { hanja: '火德昌盛 光明大吉', meaning: '불의 덕이 창성하여 광명대길' },
 earth: { hanja: '土德厚載 財祿豊盈', meaning: '흙의 덕이 두터워 재록풍영' },
 metal: { hanja: '金德堅固 百事成就', meaning: '쇠의 덕이 견고하여 백사성취' },
-water: { hanja: '水德潤澤 智慧通達', meaning: '물의 덕이 윤택하여 지혜통달' }};const mantra = mantras[yongEl] || mantras.fire;ctx.fillStyle = theme.main;ctx.font = 'bold 104px "Ma Shan Zheng", cursive';ctx.fillText(mantra.hanja, W/2, 900);ctx.fillStyle = theme.border;ctx.font = '56px "Nanum Pen Script", "Ma Shan Zheng", cursive';ctx.fillText(mantra.meaning, W/2, 1000);ctx.fillStyle = theme.main;ctx.font = 'bold 560px "Ma Shan Zheng", cursive';ctx.fillText('符', W/2, 1500);ctx.fillStyle = theme.elColor;ctx.font = 'bold 160px "Ma Shan Zheng", cursive';ctx.fillText(theme.symbol, W/2, 1700);ctx.fillStyle = theme.text;ctx.font = '56px "Nanum Pen Script", "Ma Shan Zheng", cursive';ctx.fillText(`${theme.energyTitle}`, W/2, 1770);ctx.font = '44px "Nanum Pen Script", "Ma Shan Zheng", cursive';ctx.fillStyle = theme.elColor;ctx.fillText(`${theme.energyDesc}`, W/2, 1825);const dayStem = SAJU.day.s.c;const dayBranch = SAJU.day.b.c;ctx.fillStyle = theme.main;ctx.font = 'bold 180px "Ma Shan Zheng", cursive';ctx.fillText(dayStem + dayBranch, W/2, 1980);const iljuKey = dayStem + dayBranch;const dayDesc = (typeof ILJU_60 !== 'undefined' && ILJU_60[iljuKey]) ? ILJU_60[iljuKey].name : '';ctx.fillStyle = theme.border;ctx.font = '56px "Nanum Pen Script", "Ma Shan Zheng", cursive';ctx.fillText(dayDesc + ' 일주', W/2, 2070);ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';roundRectHD(ctx, 200, 2140, W-400, 560, 40);ctx.fill();ctx.strokeStyle = theme.main;ctx.lineWidth = 4;roundRectHD(ctx, 200, 2140, W-400, 560, 40);ctx.stroke();ctx.textAlign = 'left';ctx.font = '64px "Nanum Pen Script", "Ma Shan Zheng", cursive';const yongsinEl = ELEMENT[GODS.yong];const huisinEl = ELEMENT[GODS.hee];const gisinEl = ELEMENT[GODS.gi];ctx.fillStyle = '#CC0000';ctx.fillText('用神 (용신)', 300, 2280);ctx.fillStyle = theme.main;ctx.fillText(`${yongsinEl.k} ${theme.emoji}`, 900, 2280);ctx.fillStyle = '#006600';ctx.fillText('喜神 (희신)', 300, 2400);ctx.fillStyle = theme.main;ctx.fillText(`${huisinEl.k}`, 900, 2400);ctx.fillStyle = '#666666';ctx.fillText('忌神 (기신)', 300, 2520);ctx.fillStyle = '#888';ctx.fillText(`${gisinEl.k}`, 900, 2520);ctx.fillStyle = theme.border;ctx.fillText('身强弱 (신강약)', 300, 2640);ctx.fillStyle = theme.main;const strType = STRENGTH ? (STRENGTH.type === 'strong' ? '신강' : STRENGTH.type === 'weak' ? '신약' : '중화') : '?';const strPct = STRENGTH ? STRENGTH.pct + '%' : '';ctx.fillText(`${strType} ${strPct}`, 900, 2640);ctx.textAlign = 'center';ctx.fillStyle = theme.border;ctx.font = '56px "Nanum Pen Script", "Ma Shan Zheng", cursive';ctx.fillText(`─── ${currentYear}년 ${yearStem.c}${yearBranch.c}年 ${yearColor} ${yearAnimal}띠 해 ───`, W/2, 2820);let bestMonth = '?', worstMonth = '?';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU, GODS);if (monthlyLuck && monthlyLuck.best) bestMonth = monthlyLuck.best.month;if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;} catch(e) {}
-ctx.font = '64px "Nanum Pen Script", "Ma Shan Zheng", cursive';ctx.fillStyle = '#006600';ctx.fillText(`✨ 최고의 달: ${bestMonth}월`, W/2 - 360, 2940);ctx.fillStyle = '#CC0000';ctx.fillText(`⚠️ 주의할 달: ${worstMonth}월`, W/2 + 360, 2940);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 3060);ctx.lineTo(W-300, 3060);ctx.stroke();const serialNo = generateSerialNumber();
+water: { hanja: '水德潤澤 智慧通達', meaning: '물의 덕이 윤택하여 지혜통달' }};const mantra = mantras[yongEl] || mantras.fire;ctx.fillStyle = theme.main;ctx.font = 'bold 104px "Ma Shan Zheng", cursive';ctx.fillText(mantra.hanja, W/2, 900);ctx.fillStyle = theme.border;ctx.font = '56px "Ma Shan Zheng", cursive';ctx.fillText(mantra.meaning, W/2, 1000);ctx.fillStyle = theme.main;ctx.font = 'bold 560px "Ma Shan Zheng", cursive';ctx.fillText('符', W/2, 1500);ctx.fillStyle = theme.elColor;ctx.font = 'bold 160px "Ma Shan Zheng", cursive';ctx.fillText(theme.symbol, W/2, 1700);ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", cursive';ctx.fillText(`${theme.energyTitle}`, W/2, 1770);ctx.font = '44px "Ma Shan Zheng", cursive';ctx.fillStyle = theme.elColor;ctx.fillText(`${theme.energyDesc}`, W/2, 1825);const dayStem = SAJU.day.s.c;const dayBranch = SAJU.day.b.c;ctx.fillStyle = theme.main;ctx.font = 'bold 180px "Ma Shan Zheng", cursive';ctx.fillText(dayStem + dayBranch, W/2, 1980);const iljuKey = dayStem + dayBranch;const dayDesc = (typeof ILJU_60 !== 'undefined' && ILJU_60[iljuKey]) ? ILJU_60[iljuKey].name : '';ctx.fillStyle = theme.border;ctx.font = '56px "Ma Shan Zheng", cursive';ctx.fillText(dayDesc + ' 일주', W/2, 2070);ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';roundRectHD(ctx, 200, 2140, W-400, 560, 40);ctx.fill();ctx.strokeStyle = theme.main;ctx.lineWidth = 4;roundRectHD(ctx, 200, 2140, W-400, 560, 40);ctx.stroke();ctx.textAlign = 'left';ctx.font = '64px "Ma Shan Zheng", cursive';const yongsinEl = ELEMENT[GODS.yong];const huisinEl = ELEMENT[GODS.hee];const gisinEl = ELEMENT[GODS.gi];ctx.fillStyle = '#CC0000';ctx.fillText('用神 (용신)', 300, 2280);ctx.fillStyle = theme.main;ctx.fillText(`${yongsinEl.k} ${theme.emoji}`, 900, 2280);ctx.fillStyle = '#006600';ctx.fillText('喜神 (희신)', 300, 2400);ctx.fillStyle = theme.main;ctx.fillText(`${huisinEl.k}`, 900, 2400);ctx.fillStyle = '#666666';ctx.fillText('忌神 (기신)', 300, 2520);ctx.fillStyle = '#888';ctx.fillText(`${gisinEl.k}`, 900, 2520);ctx.fillStyle = theme.border;ctx.fillText('身强弱 (신강약)', 300, 2640);ctx.fillStyle = theme.main;const strType = STRENGTH ? (STRENGTH.type === 'strong' ? '신강' : STRENGTH.type === 'weak' ? '신약' : '중화') : '?';const strPct = STRENGTH ? STRENGTH.pct + '%' : '';ctx.fillText(`${strType} ${strPct}`, 900, 2640);ctx.textAlign = 'center';ctx.fillStyle = theme.border;ctx.font = '56px "Ma Shan Zheng", cursive';ctx.fillText(`─── ${currentYear}년 ${yearStem.c}${yearBranch.c}年 ${yearColor} ${yearAnimal}띠 해 ───`, W/2, 2820);let bestMonth = '?', worstMonth = '?';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU, GODS);if (monthlyLuck && monthlyLuck.best) bestMonth = monthlyLuck.best.month;if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;} catch(e) {}
+ctx.font = '64px "Ma Shan Zheng", cursive';ctx.fillStyle = '#006600';ctx.fillText(`✨ 최고의 달: ${bestMonth}월`, W/2 - 360, 2940);ctx.fillStyle = '#CC0000';ctx.fillText(`⚠️ 주의할 달: ${worstMonth}월`, W/2 + 360, 2940);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 3060);ctx.lineTo(W-300, 3060);ctx.stroke();const serialNo = generateSerialNumber();
 // === 60갑자 아키타입 라벨 ===
 const archetype = ARCHETYPE_60[iljuKey];
 const animalBranch = dayBranch;
 if (archetype) {
 // 아키타입 텍스트 (한글 서예체)
 ctx.fillStyle = archetype.color;
-ctx.font = 'bold 88px "Nanum Pen Script", "Ma Shan Zheng", cursive';
+ctx.font = 'bold 88px "Ma Shan Zheng", cursive';
 ctx.fillText(`${archetype.ko} (${iljuKey})`, W/2, 3200);
 // 멘트 (한글 서예체)
 const quote = ANIMAL_QUOTE[animalBranch];
 if (quote) {
 ctx.fillStyle = 'rgba(75, 55, 40, 0.85)';
-ctx.font = '56px "Nanum Pen Script", "Ma Shan Zheng", cursive';
+ctx.font = '56px "Ma Shan Zheng", cursive';
 ctx.fillText(quote.ko, W/2, 3300);
 }
 }
@@ -821,17 +834,17 @@ ctx.fillStyle = theme.main;
 ctx.font = 'bold 72px "Ma Shan Zheng", cursive';
 ctx.fillText('厄退福來 百事大吉', W/2, 3440);
 ctx.fillStyle = theme.border;
-ctx.font = '48px "Nanum Pen Script", "Ma Shan Zheng", cursive';
+ctx.font = '48px "Ma Shan Zheng", cursive';
 ctx.fillText('액은 물러가고 복이 오니 모든 일이 대길하리라', W/2, 3530);
 // === 시리얼 넘버 ===
 ctx.fillStyle = 'rgba(75, 55, 40, 0.6)';
-ctx.font = '32px monospace';
+ctx.font = '32px "Ma Shan Zheng", cursive';
 ctx.fillText(`No. ${serialNo}`, W/2, 3610);
 // === K-MUDANG 로고 (맨 아래) ===
 ctx.fillStyle = theme.border;
-ctx.font = '40px "Nanum Pen Script", "Ma Shan Zheng", cursive';
+ctx.font = '40px "Ma Shan Zheng", cursive';
 ctx.fillText('K-MUDANG ☯ k-mudang.com', W/2, 3680);
-ctx.fillStyle = 'rgba(75, 55, 40, 0.5)';ctx.font = '36px "Nanum Pen Script", "Ma Shan Zheng", cursive';ctx.fillText('📱 휴대폰 배경화면으로 설정하세요', W/2, 3740);talismanGenerated = true;talismanDataUrl = canvas.toDataURL('image/png', 1.0);}
+ctx.fillStyle = 'rgba(75, 55, 40, 0.5)';ctx.font = '36px "Ma Shan Zheng", cursive';ctx.fillText('📱 휴대폰 배경화면으로 설정하세요', W/2, 3740);talismanGenerated = true;talismanDataUrl = canvas.toDataURL('image/png', 1.0);}
 function drawHanjiTexture(ctx, W, H) {
 // === 한지(Hanji) 질감 효과 60% - K-MUDANG 원본 ===
 // 1. 기본 노이즈 (점)
@@ -879,7 +892,7 @@ ctx.beginPath();ctx.moveTo(W - offset - size, H - offset);ctx.lineTo(W - offset,
 }
 function roundRectHD(ctx, x, y, w, h, r) {ctx.beginPath();ctx.moveTo(x + r, y);ctx.lineTo(x + w - r, y);ctx.quadraticCurveTo(x + w, y, x + w, y + r);ctx.lineTo(x + w, y + h - r);ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);ctx.lineTo(x + r, y + h);ctx.quadraticCurveTo(x, y + h, x, y + h - r);ctx.lineTo(x, y + r);ctx.quadraticCurveTo(x, y, x + r, y);ctx.closePath();}
 function drawTaegeuk(ctx, x, y, r) {ctx.beginPath();ctx.arc(x, y, r, 0, Math.PI * 2);ctx.strokeStyle = '#D4AF37';ctx.lineWidth = 2;ctx.stroke();ctx.beginPath();ctx.arc(x, y, r * 0.8, 0, Math.PI, false);ctx.fillStyle = '#C41E3A';ctx.fill();ctx.beginPath();ctx.arc(x, y, r * 0.8, Math.PI, Math.PI * 2, false);ctx.fillStyle = '#1E3A5F';ctx.fill();ctx.beginPath();ctx.arc(x - r * 0.35, y, r * 0.25, 0, Math.PI * 2);ctx.fillStyle = '#1E3A5F';ctx.fill();ctx.beginPath();ctx.arc(x + r * 0.35, y, r * 0.25, 0, Math.PI * 2);ctx.fillStyle = '#C41E3A';ctx.fill();}
-function drawCornerOrnaments(ctx, W, H) {ctx.fillStyle = '#D4AF37';ctx.font = '14px serif';ctx.textAlign = 'center';ctx.fillText('福', 35, 40);ctx.fillText('祿', W-35, 40);ctx.fillText('壽', 35, H-25);ctx.fillText('喜', W-35, H-25);}
+function drawCornerOrnaments(ctx, W, H) {ctx.fillStyle = '#D4AF37';ctx.font = '14px "Ma Shan Zheng", cursive';ctx.textAlign = 'center';ctx.fillText('福', 35, 40);ctx.fillText('祿', W-35, 40);ctx.fillText('壽', 35, H-25);ctx.fillText('喜', W-35, H-25);}
 function roundRect(ctx, x, y, w, h, r) {ctx.beginPath();ctx.moveTo(x + r, y);ctx.lineTo(x + w - r, y);ctx.quadraticCurveTo(x + w, y, x + w, y + r);ctx.lineTo(x + w, y + h - r);ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);ctx.lineTo(x + r, y + h);ctx.quadraticCurveTo(x, y + h, x, y + h - r);ctx.lineTo(x, y + r);ctx.quadraticCurveTo(x, y, x + r, y);ctx.closePath();}
 function downloadTalisman() {if (!talismanGenerated) {generateTalisman();if (!talismanGenerated) return;}
 const link = document.createElement('a');link.download = 'K-MUDANG_2026_개운부적.png';link.href = talismanDataUrl;link.click();toast('📥 부적 이미지가 저장되었습니다!');}
@@ -3747,6 +3760,6 @@ function copyNumbers() {safeClipboard(`🍀 사주로또: ${currentNumbers.join(
 function copyAccount() {
   safeClipboard(MY_ACCOUNT, '계좌번호 복사 완료! 🙏', '📋 ' + MY_ACCOUNT);
 }
-function saveImage() {if (!currentNumbers.length) { toast('먼저 번호를 생성하세요'); return; }const canvas = document.createElement('canvas');canvas.width = 600; canvas.height = 400;const ctx = canvas.getContext('2d');const grad = ctx.createLinearGradient(0,0,600,400);grad.addColorStop(0,'#1a1a2e'); grad.addColorStop(1,'#16213e');ctx.fillStyle = grad; ctx.fillRect(0,0,600,400);ctx.strokeStyle = '#FFD700'; ctx.lineWidth = 4;ctx.strokeRect(10,10,580,380);ctx.fillStyle = '#FFD700'; ctx.font = 'bold 32px serif';ctx.textAlign = 'center'; ctx.fillText('☯ K-MUDANG',300,60);ctx.font = '16px serif'; ctx.fillStyle = '#aaa';ctx.fillText('사주 기반 행운의 번호',300,90);const colors = ['#FFC107','#2196F3','#F44336','#F44336','#4CAF50','#9C27B0'];const ballY = 200;currentNumbers.forEach((n,i) => {const x = 100 + i*80;ctx.beginPath(); ctx.arc(x,ballY,35,0,Math.PI*2);ctx.fillStyle = colors[i]; ctx.fill();ctx.fillStyle = '#fff'; ctx.font = 'bold 28px serif';ctx.fillText(n,x,ballY+10);});ctx.fillStyle = '#888'; ctx.font = '14px serif';ctx.fillText('✨ 역대 당첨번호 100% 제외 ✨',300,320);ctx.fillText('k-mudang.com',300,350);const link = document.createElement('a');link.download = 'K-MUDANG_로또번호.png';link.href = canvas.toDataURL('image/png');link.click();toast('📥 이미지가 저장되었습니다!');
+function saveImage() {if (!currentNumbers.length) { toast('먼저 번호를 생성하세요'); return; }const canvas = document.createElement('canvas');canvas.width = 600; canvas.height = 400;const ctx = canvas.getContext('2d');const grad = ctx.createLinearGradient(0,0,600,400);grad.addColorStop(0,'#1a1a2e'); grad.addColorStop(1,'#16213e');ctx.fillStyle = grad; ctx.fillRect(0,0,600,400);ctx.strokeStyle = '#FFD700'; ctx.lineWidth = 4;ctx.strokeRect(10,10,580,380);ctx.fillStyle = '#FFD700'; ctx.font = 'bold 32px "Ma Shan Zheng", cursive';ctx.textAlign = 'center'; ctx.fillText('☯ K-MUDANG',300,60);ctx.font = '16px "Ma Shan Zheng", cursive'; ctx.fillStyle = '#aaa';ctx.fillText('사주 기반 행운의 번호',300,90);const colors = ['#FFC107','#2196F3','#F44336','#F44336','#4CAF50','#9C27B0'];const ballY = 200;currentNumbers.forEach((n,i) => {const x = 100 + i*80;ctx.beginPath(); ctx.arc(x,ballY,35,0,Math.PI*2);ctx.fillStyle = colors[i]; ctx.fill();ctx.fillStyle = '#fff'; ctx.font = 'bold 28px "Ma Shan Zheng", cursive';ctx.fillText(n,x,ballY+10);});ctx.fillStyle = '#888'; ctx.font = '14px "Ma Shan Zheng", cursive';ctx.fillText('✨ 역대 당첨번호 100% 제외 ✨',300,320);ctx.fillText('k-mudang.com',300,350);const link = document.createElement('a');link.download = 'K-MUDANG_로또번호.png';link.href = canvas.toDataURL('image/png');link.click();toast('📥 이미지가 저장되었습니다!');
 /*removed*/}</script><!-- 저작권 표시 --><div style="text-align:center;padding:20px;color:#555;font-size:11px;">
     © 2026 K-MUDANG. All Rights Reserved.<br><span style="font-size:10px;color:#444;">이 서비스의 모든 콘텐츠와 코드는 저작권법에 의해 보호됩니다.</span></div></body></html>
