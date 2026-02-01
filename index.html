@@ -1,111 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>K-MUDANG | Select Language</title>
-<meta name="description" content="K-MUDANG: AI-Powered Saju Analysis. Choose your language.">
-<meta property="og:title" content="K-MUDANG | 케이무당">
-<meta property="og:description" content="60 Archetypes of Destiny. Beyond MBTI.">
-<meta property="og:image" content="og-image.png">
-<meta property="og:url" content="https://k-mudang.com">
-<link rel="canonical" href="https://k-mudang.com">
+<title>K-MUDANG</title>
+<meta http-equiv="refresh" content="0;url=ko.html">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f0f23 100%);
-  color:#fff;
-  font-family:'Noto Sans KR',sans-serif;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:20px;
-}
-.logo{
-  font-size:4rem;
-  margin-bottom:10px;
-}
-h1{
-  font-size:2.5rem;
-  font-weight:900;
-  background:linear-gradient(135deg,#FFD700,#FFA500,#FFD700);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-  margin-bottom:10px;
-}
-.subtitle{
-  font-size:1rem;
-  color:#D4AF37;
-  margin-bottom:40px;
-  letter-spacing:2px;
-}
-.lang-buttons{
-  display:flex;
-  gap:20px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
-.lang-btn{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:10px;
-  padding:30px 50px;
-  background:linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));
-  border:2px solid rgba(212,175,55,0.3);
-  border-radius:20px;
-  color:#fff;
-  text-decoration:none;
-  font-size:1.2rem;
-  font-weight:700;
-  transition:all 0.3s;
-}
-.lang-btn:hover{
-  border-color:#D4AF37;
-  background:linear-gradient(145deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05));
-  transform:translateY(-5px);
-  box-shadow:0 10px 30px rgba(212,175,55,0.3);
-}
-.lang-btn .flag{
-  font-size:3rem;
-}
-.lang-btn .lang-name{
-  color:#D4AF37;
-}
-.tagline{
-  margin-top:50px;
-  font-size:0.9rem;
-  color:#888;
-  max-width:400px;
-  line-height:1.8;
-}
-.tagline strong{
-  color:#D4AF37;
-}
+body{background:#1a1a2e;color:#D4AF37;font-family:serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;flex-direction:column;gap:30px;}
+h1{font-size:2.5rem;}
+.links{display:flex;gap:20px;}
+a{color:#fff;background:linear-gradient(135deg,#D4AF37,#8B7020);padding:15px 40px;border-radius:10px;text-decoration:none;font-size:1.2rem;font-weight:bold;}
+a:hover{transform:scale(1.05);}
 </style>
 </head>
 <body>
-<div class="logo">☯</div>
-<h1>K-MUDANG</h1>
-<p class="subtitle">60 ARCHETYPES OF DESTINY</p>
-
-<div class="lang-buttons">
-  <a href="ko.html" class="lang-btn">
-    <span class="flag">🇰🇷</span>
-    <span class="lang-name">한국어</span>
-  </a>
-  <a href="en.html" class="lang-btn">
-    <span class="flag">🇺🇸</span>
-    <span class="lang-name">English</span>
-  </a>
+<h1>☯ K-MUDANG</h1>
+<div class="links">
+<a href="ko.html">🇰🇷 한국어</a>
+<a href="en.html">🇺🇸 English</a>
 </div>
-
-<p class="tagline">
-  <strong>"MBTI의 16가지는 잊어라.<br>당신은 60가지 우주의 리듬으로 설명된다."</strong>
-</p>
+<script>
+// 자동 리다이렉트 (브라우저 언어 감지)
+const lang = navigator.language || '';
+if (!lang.startsWith('ko')) {
+  // 영어권이면 영어로
+  // window.location.href = 'en.html';
+}
+// 기본: 한국어 (meta refresh로 처리)
+</script>
 </body>
 </html>
