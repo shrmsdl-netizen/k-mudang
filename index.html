@@ -1,29 +1,248 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>K-MUDANG | Select Language</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>K-MUDANG | 데이터 기반 AI 명리학</title>
+<meta name="description" content="K-MUDANG: 만세력 AI 엔진 기반 사주분석. 518,400가지 정밀 연산. 특허출원 10-2026-0010452">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="☯ K-MUDANG | AI 사주명리">
+<meta property="og:description" content="📜 특허출원 AI 만세력 엔진 · 60甲子 518,400 조합 정밀 연산 · 사주분석 · 궁합 · 개운부적">
+<meta property="og:image" content="main-bg.png">
+<meta property="og:url" content="https://k-mudang.com">
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="☯ K-MUDANG | AI 사주명리">
+<meta name="twitter:description" content="📜 특허출원 AI 만세력 엔진 · 60甲子 518,400 조합 정밀 연산">
+<meta name="twitter:image" content="main-bg.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:linear-gradient(135deg,#1a1a2e 0%,#0f0f23 100%);color:#D4AF37;font-family:'Noto Serif KR',serif;display:flex;justify-content:center;align-items:center;min-height:100vh;flex-direction:column;gap:40px;}
-h1{font-size:3rem;text-shadow:0 0 30px rgba(212,175,55,0.5);}
-.subtitle{font-size:1rem;opacity:0.7;margin-top:-20px;}
-.links{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;}
-a{color:#1a1a2e;background:linear-gradient(135deg,#D4AF37,#F5D77A);padding:20px 50px;border-radius:15px;text-decoration:none;font-size:1.3rem;font-weight:bold;transition:all 0.3s;box-shadow:0 5px 20px rgba(212,175,55,0.3);}
-a:hover{transform:scale(1.08);box-shadow:0 8px 30px rgba(212,175,55,0.5);}
-.footer{position:fixed;bottom:20px;font-size:0.8rem;opacity:0.5;}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'Noto Serif KR',serif;
+  background:#0a0a12;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  position:relative;
+}
+/* 배경 이미지 */
+.bg-image{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:url('main-bg.png') center center/cover no-repeat;
+  opacity:0.4;
+  z-index:0;
+}
+/* 그라데이션 오버레이 */
+.bg-overlay{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(
+    180deg,
+    rgba(10,10,18,0.3) 0%,
+    rgba(10,10,18,0.5) 40%,
+    rgba(10,10,18,0.85) 100%
+  );
+  z-index:1;
+}
+/* 메인 컨테이너 */
+.container{
+  position:relative;
+  z-index:10;
+  text-align:center;
+  padding:30px 20px;
+  max-width:420px;
+  width:100%;
+}
+/* 로고 */
+.logo{
+  font-size:4rem;
+  margin-bottom:10px;
+  text-shadow:0 0 60px rgba(212,175,55,0.8);
+  animation:glow 3s ease-in-out infinite;
+}
+@keyframes glow{
+  0%,100%{text-shadow:0 0 60px rgba(212,175,55,0.8);}
+  50%{text-shadow:0 0 80px rgba(212,175,55,1),0 0 120px rgba(212,175,55,0.5);}
+}
+.title{
+  font-size:2.2rem;
+  font-weight:900;
+  background:linear-gradient(135deg,#D4AF37 0%,#F5E6A3 50%,#D4AF37 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:shine 3s linear infinite;
+  letter-spacing:8px;
+  margin-bottom:15px;
+}
+@keyframes shine{
+  0%{background-position:0% center;}
+  100%{background-position:200% center;}
+}
+.subtitle{
+  font-size:0.95rem;
+  color:rgba(212,175,55,0.9);
+  margin-bottom:8px;
+  letter-spacing:2px;
+}
+.subtitle-en{
+  font-size:0.85rem;
+  color:rgba(255,255,255,0.6);
+  margin-bottom:40px;
+  font-style:italic;
+}
+/* 글래스 카드 */
+.glass-card{
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(212,175,55,0.3);
+  border-radius:24px;
+  padding:35px 25px;
+  margin-bottom:30px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.3),inset 0 0 30px rgba(212,175,55,0.05);
+}
+.card-title{
+  font-size:1.1rem;
+  color:#D4AF37;
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.card-title::before,.card-title::after{
+  content:'✦';
+  font-size:0.8rem;
+  opacity:0.7;
+}
+/* 언어 버튼 */
+.lang-buttons{
+  display:flex;
+  gap:15px;
+  justify-content:center;
+}
+.lang-btn{
+  flex:1;
+  max-width:160px;
+  padding:18px 20px;
+  background:linear-gradient(135deg,#D4AF37 0%,#B8960C 100%);
+  color:#1a1a2e;
+  text-decoration:none;
+  font-size:1.1rem;
+  font-weight:700;
+  border-radius:16px;
+  transition:all 0.3s ease;
+  box-shadow:0 4px 20px rgba(212,175,55,0.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.lang-btn:hover{
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 8px 30px rgba(212,175,55,0.6);
+}
+.lang-btn:active{
+  transform:scale(0.98);
+}
+/* 특징 뱃지 */
+.features{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  margin-bottom:25px;
+}
+.badge{
+  background:rgba(212,175,55,0.15);
+  border:1px solid rgba(212,175,55,0.3);
+  color:#D4AF37;
+  padding:8px 14px;
+  border-radius:20px;
+  font-size:0.75rem;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+/* 하단 정보 */
+.footer{
+  position:fixed;
+  bottom:20px;
+  left:0;right:0;
+  text-align:center;
+  z-index:10;
+}
+.footer p{
+  font-size:0.7rem;
+  color:rgba(255,255,255,0.4);
+  margin:3px 0;
+}
+.footer .patent{
+  color:rgba(212,175,55,0.6);
+}
+/* 장식 요소 */
+.deco{
+  position:fixed;
+  font-size:1.5rem;
+  opacity:0.3;
+  color:#D4AF37;
+  z-index:5;
+}
+.deco.tl{top:20px;left:20px;}
+.deco.tr{top:20px;right:20px;}
+.deco.bl{bottom:80px;left:20px;}
+.deco.br{bottom:80px;right:20px;}
+/* 모바일 최적화 */
+@media(max-width:380px){
+  .title{font-size:1.8rem;letter-spacing:5px;}
+  .logo{font-size:3rem;}
+  .lang-btn{padding:15px 15px;font-size:1rem;}
+}
 </style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-<h1>☯ K-MUDANG</h1>
-<p class="subtitle">데이터 기반 AI 명리학 · Data-Driven AI Fortune</p>
-<div class="links">
-<a href="ko.html">🇰🇷 한국어</a>
-<a href="en.html">🇺🇸 English</a>
+<div class="bg-image"></div>
+<div class="bg-overlay"></div>
+
+<div class="deco tl">☰</div>
+<div class="deco tr">☱</div>
+<div class="deco bl">☲</div>
+<div class="deco br">☳</div>
+
+<div class="container">
+  <div class="logo">☯</div>
+  <h1 class="title">K-MUDANG</h1>
+  <p class="subtitle">데이터 기반 AI 명리학</p>
+  <p class="subtitle-en">Data-Driven AI Fortune Analysis</p>
+  
+  <div class="glass-card">
+    <div class="card-title">언어 선택 · Select Language</div>
+    
+    <div class="features">
+      <span class="badge">🧬 60甲子 시스템</span>
+      <span class="badge">🔢 518,400 조합</span>
+      <span class="badge">🤖 AI 해석 엔진</span>
+    </div>
+    
+    <div class="lang-buttons">
+      <a href="ko.html" class="lang-btn">🇰🇷 한국어</a>
+      <a href="en.html" class="lang-btn">🇺🇸 English</a>
+    </div>
+  </div>
 </div>
-<p class="footer">© 2026 K-MUDANG · Patent Pending 10-2026-0010452</p>
+
+<div class="footer">
+  <p class="patent">📜 Patent Pending: 10-2026-0010452</p>
+  <p>© 2026 K-MUDANG · AI-Powered Saju Engine</p>
+</div>
 </body>
 </html>
