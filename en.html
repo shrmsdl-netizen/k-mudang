@@ -1504,6 +1504,10 @@ async function createHighResTalisman() {
     // ★ Wait for fonts to load ★
     await document.fonts.ready;
     await document.fonts.load('560px "Ma Shan Zheng"');
+    await document.fonts.load('160px "Ma Shan Zheng"');
+    await document.fonts.load('180px "Ma Shan Zheng"');
+    await document.fonts.load('104px "Ma Shan Zheng"');
+    await document.fonts.load('128px "Ma Shan Zheng"');
     const canvas = document.getElementById('talisman-canvas');const ctx = canvas.getContext('2d');const W = 2160, H = 3840;canvas.width = W;canvas.height = H;const yongEl = GODS && GODS.yong ? GODS.yong : 'fire';const themes = {fire: { bg1: '#FFF0F0', bg2: '#FFE0E0', bg3: '#FFF5F5', main: '#B20000', accent: '#8B0000', border: '#4D0000', text: '#1A0A08', symbol: '鳳', symbolName: 'Phoenix', energyTitle: 'Phoenix Energy', energyDesc: 'Leadership & Achievement', emoji: '🔥', elColor: '#CC0000' },
 water: { bg1: '#E8F0FF', bg2: '#D0E0F8', bg3: '#F0F5FF', main: '#0000AA', accent: '#000080', border: '#000055', text: '#0A0A1E', symbol: '龜', symbolName: 'Black Tortoise', energyTitle: 'Tortoise Energy', energyDesc: 'Wisdom & Strategy', emoji: '💧', elColor: '#0000CC' },
 wood: { bg1: '#E8FFE8', bg2: '#D0F0D0', bg3: '#F0FFF0', main: '#003300', accent: '#002200', border: '#001100', text: '#050A05', symbol: '龍', symbolName: 'Azure Dragon', energyTitle: 'Dragon Energy', energyDesc: 'Growth & Innovation', emoji: '🌳', elColor: '#004D00' },

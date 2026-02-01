@@ -763,6 +763,10 @@ async function createHighResTalisman() {
     // ★ Wait for fonts to load ★
     await document.fonts.ready;
     await document.fonts.load('560px "Ma Shan Zheng"');
+    await document.fonts.load('160px "Ma Shan Zheng"');
+    await document.fonts.load('180px "Ma Shan Zheng"');
+    await document.fonts.load('104px "Ma Shan Zheng"');
+    await document.fonts.load('128px "Ma Shan Zheng"');
     const canvas = document.getElementById('talisman-canvas');const ctx = canvas.getContext('2d');const W = 2160, H = 3840;canvas.width = W;canvas.height = H;
 // === 자동 연도 시스템 ===
 const currentYear = new Date().getFullYear();
