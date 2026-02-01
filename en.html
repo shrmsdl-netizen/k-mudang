@@ -201,9 +201,7 @@ body.match-mode{--theme-primary:#FF69B4;--theme-secondary:#C71585;--theme-accent
     visibility: hidden;
 }
 </style>
-<script>
-(function(){'use strict';document.addEventListener('contextmenu',function(e){e.preventDefault();return false;});document.addEventListener('keydown',function(e){if(e.key==='F12'||e.keyCode===123){e.preventDefault();return false;}if(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='i'||e.keyCode===73)){e.preventDefault();return false;}if(e.ctrlKey&&e.shiftKey&&(e.key==='J'||e.key==='j'||e.keyCode===74)){e.preventDefault();return false;}if(e.ctrlKey&&e.shiftKey&&(e.key==='C'||e.key==='c'||e.keyCode===67)){e.preventDefault();return false;}if(e.ctrlKey&&(e.key==='U'||e.key==='u'||e.keyCode===85)){e.preventDefault();return false;}if(e.ctrlKey&&(e.key==='S'||e.key==='s'||e.keyCode===83)){e.preventDefault();return false;}});document.addEventListener('dragstart',function(e){e.preventDefault();return false;});document.addEventListener('selectstart',function(e){if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){return true;}e.preventDefault();return false;});document.addEventListener('copy',function(e){if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){return true;}e.preventDefault();return false;});var style=document.createElement('style');style.textContent='*{-webkit-user-select:none!important;-moz-user-select:none!important;user-select:none!important;}input,textarea{-webkit-user-select:text!important;-moz-user-select:text!important;user-select:text!important;}';document.head.appendChild(style);})();
-</script></head><body class="saju-mode"><!-- Bagua decoration --><div class="bagua tl">☰<span class="bagua-sub">乾</span></div><div class="bagua tr">☷<span class="bagua-sub">坤</span></div><div class="bagua bl">☵<span class="bagua-sub">坎</span></div><div class="bagua br">☲<span class="bagua-sub">離</span></div><img class="oracle-watermark" src="og-image.png" alt="" /><!-- 3-Tab Navigation --><div class="game-switcher"><button class="game-btn active" onclick="switchGame('saju')"><span class="tab-main">🔮 K-Fortune</span><span class="tab-sub">四柱</span></button><button class="game-btn" onclick="switchGame('match')"><span class="tab-main">💕 Match</span></button><button class="game-btn" onclick="switchGame('powerball')"><span class="tab-main">🔴 Powerball</span></button><button class="game-btn" onclick="switchGame('mega')"><span class="tab-main">🔵 Mega</span></button><a href="ko.html" style="display:flex;align-items:center;gap:4px;padding:8px 12px;background:rgba(255,255,255,0.1);border:1px solid var(--gold);border-radius:20px;color:var(--gold);font-size:12px;font-weight:bold;text-decoration:none;">🇰🇷 KO</a></div><!-- Auth Bar --><!-- Auth bar hidden for Personal Edition --><div class="auth-bar" id="auth-bar"><button class="login-btn" id="login-btn" onclick="googleSignIn()"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+<script>document.addEventListener("contextmenu",e=>e.preventDefault());document.addEventListener("keydown",e=>{if(e.key==="F12"||(e.ctrlKey&&e.shiftKey&&["I","J","C"].includes(e.key))||(e.ctrlKey&&["u","s","U","S"].includes(e.key))){e.preventDefault();return false;}});document.addEventListener("selectstart",e=>e.preventDefault());document.addEventListener("dragstart",e=>e.preventDefault());document.addEventListener("copy",e=>e.preventDefault());</script></head><body class="saju-mode"><!-- Bagua decoration --><div class="bagua tl">☰<span class="bagua-sub">乾</span></div><div class="bagua tr">☷<span class="bagua-sub">坤</span></div><div class="bagua bl">☵<span class="bagua-sub">坎</span></div><div class="bagua br">☲<span class="bagua-sub">離</span></div><img class="oracle-watermark" src="og-image.png" alt="" /><!-- 3-Tab Navigation --><div class="game-switcher"><button class="game-btn active" onclick="switchGame('saju')"><span class="tab-main">🔮 K-Fortune</span><span class="tab-sub">四柱</span></button><button class="game-btn" onclick="switchGame('match')"><span class="tab-main">💕 Match</span></button><button class="game-btn" onclick="switchGame('powerball')"><span class="tab-main">🔴 Powerball</span></button><button class="game-btn" onclick="switchGame('mega')"><span class="tab-main">🔵 Mega</span></button><a href="ko.html" style="display:flex;align-items:center;gap:4px;padding:8px 12px;background:rgba(255,255,255,0.1);border:1px solid var(--gold);border-radius:20px;color:var(--gold);font-size:12px;font-weight:bold;text-decoration:none;">🇰🇷 KO</a></div><!-- Auth Bar --><!-- Auth bar hidden for Personal Edition --><div class="auth-bar" id="auth-bar"><button class="login-btn" id="login-btn" onclick="googleSignIn()"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         Sign in with Google
     </button><div class="user-info" id="user-info" style="display:none;"><span class="user-name" id="user-name"></span><span class="premium-badge" id="premium-badge" style="display:none;">👑 Premium</span><button class="logout-btn" onclick="signOut()">Logout</button></div></div><div class="container"><!-- ========================================
          Tab 1: SAJU (四柱) Fortune
@@ -1156,14 +1154,14 @@ const ANIMAL_QUOTE = {
 
 // === 60 Archetype System (Global Standard) ===
 const ARCHETYPE_60 = {
-// 甲 (Wood/Blue) series
-'甲子': { ko: '푸른 쥐', en: 'Blue Rat', color: '#1565C0' },
-'甲寅': { ko: '푸른 호랑이', en: 'Blue Tiger', color: '#1565C0' },
-'甲辰': { ko: '푸른 용', en: 'Blue Dragon', color: '#1565C0' },
-'甲午': { ko: '푸른 말', en: 'Blue Horse', color: '#1565C0' },
-'甲申': { ko: '푸른 원숭이', en: 'Blue Monkey', color: '#1565C0' },
-'甲戌': { ko: '푸른 개', en: 'Blue Dog', color: '#1565C0' },
-// 乙 (Wood/Green) series
+// 甲 (Wood/Blue) series - Pure Blue (#0000AA, same as Water theme)
+'甲子': { ko: '푸른 쥐', en: 'Blue Rat', color: '#0000AA' },
+'甲寅': { ko: '푸른 호랑이', en: 'Blue Tiger', color: '#0000AA' },
+'甲辰': { ko: '푸른 용', en: 'Blue Dragon', color: '#0000AA' },
+'甲午': { ko: '푸른 말', en: 'Blue Horse', color: '#0000AA' },
+'甲申': { ko: '푸른 원숭이', en: 'Blue Monkey', color: '#0000AA' },
+'甲戌': { ko: '푸른 개', en: 'Blue Dog', color: '#0000AA' },
+// 乙 (Wood/Teal) series - Teal (#00897B)
 '乙丑': { ko: '청록 소', en: 'Teal Ox', color: '#00897B' },
 '乙卯': { ko: '청록 토끼', en: 'Teal Rabbit', color: '#00897B' },
 '乙巳': { ko: '청록 뱀', en: 'Teal Snake', color: '#00897B' },
@@ -1192,12 +1190,12 @@ const ARCHETYPE_60 = {
 '戊申': { ko: '황금 원숭이', en: 'Golden Monkey', color: '#F9A825' },
 '戊戌': { ko: '황금 개', en: 'Golden Dog', color: '#F9A825' },
 // 己 (Earth/Brown) series
-'己丑': { ko: '갈색 소', en: 'Brown Ox', color: '#8D6E63' },
-'己卯': { ko: '갈색 토끼', en: 'Brown Rabbit', color: '#8D6E63' },
-'己巳': { ko: '갈색 뱀', en: 'Brown Snake', color: '#8D6E63' },
-'己未': { ko: '갈색 양', en: 'Brown Goat', color: '#8D6E63' },
-'己酉': { ko: '갈색 닭', en: 'Brown Rooster', color: '#8D6E63' },
-'己亥': { ko: '갈색 돼지', en: 'Brown Pig', color: '#8D6E63' },
+'己丑': { ko: '갈색 소', en: 'Brown Ox', color: '#5D4037' },
+'己卯': { ko: '갈색 토끼', en: 'Brown Rabbit', color: '#5D4037' },
+'己巳': { ko: '갈색 뱀', en: 'Brown Snake', color: '#5D4037' },
+'己未': { ko: '갈색 양', en: 'Brown Goat', color: '#5D4037' },
+'己酉': { ko: '갈색 닭', en: 'Brown Rooster', color: '#5D4037' },
+'己亥': { ko: '갈색 돼지', en: 'Brown Pig', color: '#5D4037' },
 // 庚 (Metal/White) series
 '庚子': { ko: '흰 쥐', en: 'White Rat', color: '#757575' },
 '庚寅': { ko: '흰 호랑이', en: 'White Tiger', color: '#757575' },
@@ -1501,16 +1499,16 @@ function playRitualAnimation(callback) {const canvas = document.getElementById('
 water: { main: '#1E3A5F', accent: '#87CEEB' },
 wood: { main: '#228B22', accent: '#90EE90' },
 metal: { main: '#B8860B', accent: '#FFD700' },
-earth: { main: '#8B4513', accent: '#DEB887' }};const color = colors[yongEl] || colors.fire;let opacity = 0;const interval = setInterval(() => {ctx.fillStyle = '#0a0505';ctx.fillRect(0, 0, W, H);ctx.strokeStyle = color.main;ctx.lineWidth = 3;ctx.strokeRect(20, 20, W-40, H-40);opacity = Math.min(1, opacity + 0.08);ctx.fillStyle = `rgba(255, 215, 0, ${opacity})`;ctx.font = 'bold 180px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.textAlign = 'center';ctx.textBaseline = 'middle';ctx.fillText('符', W/2, H/2 - 30);ctx.fillStyle = `rgba(139, 115, 85, ${opacity})`;ctx.font = '24px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText('Fortune Talisman', W/2, H - 60);if (opacity >= 1) {clearInterval(interval);setTimeout(callback, 500);}}, 80);}
+earth: { main: '#8B4513', accent: '#DEB887' }};const color = colors[yongEl] || colors.fire;let opacity = 0;const interval = setInterval(() => {ctx.fillStyle = '#0a0505';ctx.fillRect(0, 0, W, H);ctx.strokeStyle = color.main;ctx.lineWidth = 3;ctx.strokeRect(20, 20, W-40, H-40);opacity = Math.min(1, opacity + 0.08);ctx.fillStyle = `rgba(255, 215, 0, ${opacity})`;ctx.font = 'bold 180px "Ma Shan Zheng", cursive';ctx.textAlign = 'center';ctx.textBaseline = 'middle';ctx.fillText('符', W/2, H/2 - 30);ctx.fillStyle = `rgba(139, 115, 85, ${opacity})`;ctx.font = '24px "Ma Shan Zheng", serif';ctx.fillText('Fortune Talisman', W/2, H - 60);if (opacity >= 1) {clearInterval(interval);setTimeout(callback, 500);}}, 80);}
 async function createHighResTalisman() {
     // ★ Wait for fonts to load ★
     await document.fonts.ready;
     await document.fonts.load('560px "Ma Shan Zheng"');
     const canvas = document.getElementById('talisman-canvas');const ctx = canvas.getContext('2d');const W = 2160, H = 3840;canvas.width = W;canvas.height = H;const yongEl = GODS && GODS.yong ? GODS.yong : 'fire';const themes = {fire: { bg1: '#FFF0F0', bg2: '#FFE0E0', bg3: '#FFF5F5', main: '#B20000', accent: '#8B0000', border: '#4D0000', text: '#1A0A08', symbol: '鳳', symbolName: 'Phoenix', energyTitle: 'Phoenix Energy', energyDesc: 'Leadership & Achievement', emoji: '🔥', elColor: '#CC0000' },
-water: { bg1: '#E8F0FF', bg2: '#D0E0F8', bg3: '#F0F5FF', main: '#0000AA', accent: '#000080', border: '#000055', text: '#0A0A1E', symbol: '龜', symbolName: 'Turtle', energyTitle: 'Dragon Energy', energyDesc: 'Wisdom & Strategy', emoji: '💧', elColor: '#0000CC' },
-wood: { bg1: '#E8FFE8', bg2: '#D0F0D0', bg3: '#F0FFF0', main: '#003300', accent: '#002200', border: '#001100', text: '#050A05', symbol: '龍', symbolName: 'Dragon', energyTitle: 'Creator Energy', energyDesc: 'Growth & Innovation', emoji: '🌳', elColor: '#004D00' },
-metal: { bg1: '#FFFBF0', bg2: '#FFF5E0', bg3: '#FFFEF8', main: '#D4A017', accent: '#C9A227', border: '#8B7500', text: '#3D2B00', symbol: '虎', symbolName: 'Tiger', energyTitle: 'Warrior Energy', energyDesc: 'Precision & Authority', emoji: '⚔️', elColor: '#FFD700' },
-earth: { bg1: '#F0EBE0', bg2: '#E0D8C8', bg3: '#F5F0E8', main: '#4A3728', accent: '#3D2B1F', border: '#2D1F15', text: '#100D08', symbol: '麟', symbolName: 'Qilin', energyTitle: 'Tycoon Energy', energyDesc: 'Wealth & Stability', emoji: '🌍', elColor: '#6B5344' }};const theme = themes[yongEl] || themes.fire;const bgGrad = ctx.createLinearGradient(0, 0, 0, H);bgGrad.addColorStop(0, theme.bg1);bgGrad.addColorStop(0.5, theme.bg2);bgGrad.addColorStop(1, theme.bg3);ctx.fillStyle = bgGrad;ctx.fillRect(0, 0, W, H);
+water: { bg1: '#E8F0FF', bg2: '#D0E0F8', bg3: '#F0F5FF', main: '#0000AA', accent: '#000080', border: '#000055', text: '#0A0A1E', symbol: '龜', symbolName: 'Black Tortoise', energyTitle: 'Tortoise Energy', energyDesc: 'Wisdom & Strategy', emoji: '💧', elColor: '#0000CC' },
+wood: { bg1: '#E8FFE8', bg2: '#D0F0D0', bg3: '#F0FFF0', main: '#003300', accent: '#002200', border: '#001100', text: '#050A05', symbol: '龍', symbolName: 'Azure Dragon', energyTitle: 'Dragon Energy', energyDesc: 'Growth & Innovation', emoji: '🌳', elColor: '#004D00' },
+metal: { bg1: '#FFFBF0', bg2: '#FFF5E0', bg3: '#FFFEF8', main: '#D4A017', accent: '#C9A227', border: '#8B7500', text: '#3D2B00', symbol: '虎', symbolName: 'White Tiger', energyTitle: 'Tiger Energy', energyDesc: 'Precision & Authority', emoji: '⚔️', elColor: '#FFD700' },
+earth: { bg1: '#F0EBE0', bg2: '#E0D8C8', bg3: '#F5F0E8', main: '#4A3728', accent: '#3D2B1F', border: '#2D1F15', text: '#100D08', symbol: '麟', symbolName: 'Qilin', energyTitle: 'Qilin Energy', energyDesc: 'Wealth & Stability', emoji: '🌍', elColor: '#6B5344' }};const theme = themes[yongEl] || themes.fire;const bgGrad = ctx.createLinearGradient(0, 0, 0, H);bgGrad.addColorStop(0, theme.bg1);bgGrad.addColorStop(0.5, theme.bg2);bgGrad.addColorStop(1, theme.bg3);ctx.fillStyle = bgGrad;ctx.fillRect(0, 0, W, H);
 // === 한지(Hanji) 질감 효과 60% ===
 // 1. 기본 노이즈 (점)
 for(let i=0;i<W*H*0.15;i++){const x=Math.random()*W;const y=Math.random()*H;const size=Math.random()*2.5+0.5;const colors=['rgba(139,90,43,','rgba(101,67,33,','rgba(180,140,100,','rgba(120,80,40,','rgba(160,120,80,'];const c=colors[Math.floor(Math.random()*colors.length)];const alpha=Math.random()*0.35+0.1;ctx.fillStyle=c+alpha+')';ctx.fillRect(x,y,size,size);}
@@ -1537,12 +1535,12 @@ const animals = ['Rat','Ox','Tiger','Rabbit','Dragon','Snake','Horse','Goat','Mo
 const yearAnimal = animals[yearBranchIdx];
 const chineseNums = ['〇','一','二','三','四','五','六','七','八','九'];
 const yearChinese = String(currentYear).split('').map(d => chineseNums[parseInt(d)]).join('');
-ctx.fillStyle = theme.main;ctx.font = 'bold 128px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.textAlign = 'center';ctx.fillText(`${yearChinese} 開運符`, W/2, 560);ctx.fillStyle = theme.text;ctx.font = '64px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText(`${currentYear} Fortune Talisman`, W/2, 660);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 740);ctx.lineTo(W-300, 740);ctx.stroke();const mantras = {wood: { hanja: '木德生發 萬事亨通', meaning: 'Wood virtue blooms, all things prosper' },
+ctx.fillStyle = theme.main;ctx.font = 'bold 128px "Ma Shan Zheng", cursive';ctx.textAlign = 'center';ctx.fillText(`${yearChinese} 開運符`, W/2, 560);ctx.fillStyle = theme.text;ctx.font = '64px "Ma Shan Zheng", serif';ctx.fillText(`${currentYear} Fortune Talisman`, W/2, 660);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 740);ctx.lineTo(W-300, 740);ctx.stroke();const mantras = {wood: { hanja: '木德生發 萬事亨通', meaning: 'Wood virtue blooms, all things prosper' },
 fire: { hanja: '火德昌盛 光明大吉', meaning: 'Fire virtue blazes, great fortune shines' },
 earth: { hanja: '土德厚載 財祿豊盈', meaning: 'Earth virtue endures, wealth overflows' },
 metal: { hanja: '金德堅固 百事成就', meaning: 'Metal virtue strengthens, all goals achieved' },
-water: { hanja: '水德潤澤 智慧通達', meaning: 'Water virtue nourishes, wisdom flows freely' }};const mantra = mantras[yongEl] || mantras.fire;ctx.fillStyle = theme.main;ctx.font = 'bold 104px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText(mantra.hanja, W/2, 900);ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText(mantra.meaning, W/2, 1000);ctx.fillStyle = theme.main;ctx.font = 'bold 560px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText('符', W/2, 1500);ctx.fillStyle = theme.elColor;ctx.font = 'bold 160px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText(theme.symbol, W/2, 1700);ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText(`${theme.energyTitle}`, W/2, 1770);ctx.font = '44px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillStyle = theme.elColor;ctx.fillText(`${theme.energyDesc}`, W/2, 1825);const dayStem = SAJU.day.s.c;const dayBranch = SAJU.day.b.c;ctx.fillStyle = theme.main;ctx.font = 'bold 160px "Ma Shan Zheng", "Noto Serif KR", serif';ctx.fillText(dayStem + dayBranch, W/2, 1980);const iljuKey = dayStem + dayBranch;const dayDesc = (typeof ILJU_60 !== 'undefined' && ILJU_60[iljuKey]) ? ILJU_60[iljuKey].name : '';ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText(dayDesc + ' Day Master', W/2, 2060);ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';roundRectHD(ctx, 200, 2120, W-400, 560, 40);ctx.fill();ctx.strokeStyle = theme.border;ctx.lineWidth = 4;roundRectHD(ctx, 200, 2120, W-400, 560, 40);ctx.stroke();ctx.textAlign = 'left';ctx.font = '64px "Ma Shan Zheng", "Noto Sans KR", sans-serif';const yongsinEl = ELEMENT[GODS.yong];const huisinEl = ELEMENT[GODS.hee];const gisinEl = ELEMENT[GODS.gi];ctx.fillStyle = '#E63946';ctx.fillText('用神 (Beneficial)', 300, 2260);ctx.fillStyle = theme.main;ctx.fillText(`${yongsinEl.n} ${theme.emoji}`, 900, 2260);ctx.fillStyle = '#2A9D8F';ctx.fillText('喜神 (Favorable)', 300, 2380);ctx.fillStyle = theme.main;ctx.fillText(`${huisinEl.n}`, 900, 2380);ctx.fillStyle = '#6C757D';ctx.fillText('忌神 (Avoid)', 300, 2500);ctx.fillStyle = '#666';ctx.fillText(`${gisinEl.n}`, 900, 2500);ctx.fillStyle = theme.text;ctx.fillText('Body Strength', 300, 2620);ctx.fillStyle = theme.main;const strType = STRENGTH ? (STRENGTH.type === 'strong' ? 'Strong' : STRENGTH.type === 'weak' ? 'Weak' : 'Balanced') : '?';const strPct = STRENGTH ? STRENGTH.pct + '%' : '';ctx.fillText(`${strType} ${strPct}`, 900, 2620);ctx.textAlign = 'center';ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText(`─── ${currentYear} ${yearStem.c}${yearBranch.c}年 ${yearElement.n} ${yearAnimal} Year ───`, W/2, 2800);let bestMonth = '?', worstMonth = '?';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU, GODS);if (monthlyLuck && monthlyLuck.best) bestMonth = monthlyLuck.best.month;if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;} catch(e) {}
-ctx.font = '64px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillStyle = '#2A9D8F';ctx.fillText(`✨ Best Month: ${bestMonth}`, W/2 - 360, 2920);ctx.fillStyle = '#E63946';ctx.fillText(`⚠️ Caution: ${worstMonth}`, W/2 + 360, 2920);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 3040);ctx.lineTo(W-300, 3040);ctx.stroke();const serialNo = generateSerialNumber();
+water: { hanja: '水德潤澤 智慧通達', meaning: 'Water virtue nourishes, wisdom flows freely' }};const mantra = mantras[yongEl] || mantras.fire;ctx.fillStyle = theme.main;ctx.font = 'bold 104px "Ma Shan Zheng", cursive';ctx.fillText(mantra.hanja, W/2, 900);ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", serif';ctx.fillText(mantra.meaning, W/2, 1000);ctx.fillStyle = theme.main;ctx.font = 'bold 560px "Ma Shan Zheng", cursive';ctx.fillText('符', W/2, 1500);ctx.fillStyle = theme.elColor;ctx.font = 'bold 160px "Ma Shan Zheng", cursive';ctx.fillText(theme.symbol, W/2, 1700);ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", serif';ctx.fillText(`${theme.energyTitle}`, W/2, 1770);ctx.font = '44px "Ma Shan Zheng", serif';ctx.fillStyle = theme.elColor;ctx.fillText(`${theme.energyDesc}`, W/2, 1825);const dayStem = SAJU.day.s.c;const dayBranch = SAJU.day.b.c;ctx.fillStyle = theme.main;ctx.font = 'bold 160px "Ma Shan Zheng", cursive';ctx.fillText(dayStem + dayBranch, W/2, 1980);const iljuKey = dayStem + dayBranch;const dayDesc = (typeof ILJU_60 !== 'undefined' && ILJU_60[iljuKey]) ? ILJU_60[iljuKey].name : '';ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", serif';ctx.fillText(dayDesc + ' Day Master', W/2, 2060);ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';roundRectHD(ctx, 200, 2120, W-400, 560, 40);ctx.fill();ctx.strokeStyle = theme.border;ctx.lineWidth = 4;roundRectHD(ctx, 200, 2120, W-400, 560, 40);ctx.stroke();ctx.textAlign = 'left';ctx.font = '64px "Ma Shan Zheng", serif';const yongsinEl = ELEMENT[GODS.yong];const huisinEl = ELEMENT[GODS.hee];const gisinEl = ELEMENT[GODS.gi];ctx.fillStyle = '#E63946';ctx.fillText('用神 (Beneficial)', 300, 2260);ctx.fillStyle = theme.main;ctx.fillText(`${yongsinEl.n} ${theme.emoji}`, 900, 2260);ctx.fillStyle = '#2A9D8F';ctx.fillText('喜神 (Favorable)', 300, 2380);ctx.fillStyle = theme.main;ctx.fillText(`${huisinEl.n}`, 900, 2380);ctx.fillStyle = '#6C757D';ctx.fillText('忌神 (Avoid)', 300, 2500);ctx.fillStyle = '#666';ctx.fillText(`${gisinEl.n}`, 900, 2500);ctx.fillStyle = theme.text;ctx.fillText('Body Strength', 300, 2620);ctx.fillStyle = theme.main;const strType = STRENGTH ? (STRENGTH.type === 'strong' ? 'Strong' : STRENGTH.type === 'weak' ? 'Weak' : 'Balanced') : '?';const strPct = STRENGTH ? STRENGTH.pct + '%' : '';ctx.fillText(`${strType} ${strPct}`, 900, 2620);ctx.textAlign = 'center';ctx.fillStyle = theme.text;ctx.font = '56px "Ma Shan Zheng", serif';ctx.fillText(`─── ${currentYear} ${yearStem.c}${yearBranch.c}年 ${yearElement.n} ${yearAnimal} Year ───`, W/2, 2800);let bestMonth = '?', worstMonth = '?';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU, GODS);if (monthlyLuck && monthlyLuck.best) bestMonth = monthlyLuck.best.month;if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;} catch(e) {}
+ctx.font = '64px "Ma Shan Zheng", serif';ctx.fillStyle = '#2A9D8F';ctx.fillText(`✨ Best Month: ${bestMonth}`, W/2 - 360, 2920);ctx.fillStyle = '#E63946';ctx.fillText(`⚠️ Caution: ${worstMonth}`, W/2 + 360, 2920);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 3040);ctx.lineTo(W-300, 3040);ctx.stroke();const serialNo = generateSerialNumber();
 // === 60 Archetype Label (moved up) ===
 const iljuKey2 = dayStem + dayBranch;
 const archetype = ARCHETYPE_60[iljuKey2];
@@ -1550,22 +1548,22 @@ const animalBranch = dayBranch;
 if (archetype) {
 // Archetype Text (calligraphy style, larger)
 ctx.fillStyle = archetype.color;
-ctx.font = 'bold 88px "Ma Shan Zheng", "Noto Serif KR", serif';
+ctx.font = 'bold 88px "Ma Shan Zheng", cursive';
 ctx.fillText(`${archetype.en} (${iljuKey2})`, W/2, 3180);
 // Quote (calligraphy style)
 const quote = ANIMAL_QUOTE[animalBranch];
 if (quote) {
 ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
-ctx.font = '52px "Ma Shan Zheng", "Noto Serif KR", serif';
+ctx.font = '52px "Ma Shan Zheng", cursive';
 ctx.fillText(quote.en, W/2, 3280);
 }
 }
 // === Chinese Blessing (moved down) ===
 ctx.fillStyle = theme.main;
-ctx.font = 'bold 72px "Ma Shan Zheng", "Noto Serif KR", serif';
+ctx.font = 'bold 72px "Ma Shan Zheng", cursive';
 ctx.fillText('厄退福來 百事大吉', W/2, 3420);
 ctx.fillStyle = theme.text;
-ctx.font = '44px "Ma Shan Zheng", "Noto Sans KR", sans-serif';
+ctx.font = '44px "Ma Shan Zheng", serif';
 ctx.fillText('Misfortune retreats, blessings arrive', W/2, 3510);
 // === Serial Number ===
 ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
@@ -1573,9 +1571,9 @@ ctx.font = '32px monospace';
 ctx.fillText(`No. ${serialNo}`, W/2, 3590);
 // === K-MUDANG Logo (bottom) ===
 ctx.fillStyle = theme.text;
-ctx.font = '40px "Ma Shan Zheng", "Noto Sans KR", sans-serif';
+ctx.font = '40px "Ma Shan Zheng", serif';
 ctx.fillText('K-MUDANG ☯ k-mudang.com', W/2, 3660);
-ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';ctx.font = '36px "Ma Shan Zheng", "Noto Sans KR", sans-serif';ctx.fillText('📥 Save & set as wallpaper for 7 days', W/2, 3720);talismanGenerated = true;talismanDataUrl = canvas.toDataURL('image/png', 1.0);}
+ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';ctx.font = '36px "Ma Shan Zheng", serif';ctx.fillText('📥 Save & set as wallpaper for 7 days', W/2, 3720);talismanGenerated = true;talismanDataUrl = canvas.toDataURL('image/png', 1.0);}
 function getTalismanRarity() {
 let hasSamhap = false, hasBanghap = false, hasNoble = false, hasYearMatch = false;
 try { const advInt = analyzeAdvancedInteractions(SAJU); if (advInt && advInt.samhapGuk) hasSamhap = advInt.samhapGuk.some(s => s.complete); } catch(e) {}
