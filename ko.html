@@ -116,19 +116,19 @@ const ANIMAL_QUOTE = {
 // === 60갑자 아키타입 (글로벌 표준) ===
 const ARCHETYPE_60 = {
 // 甲 (木/푸른) 시리즈
-'甲子': { ko: '푸른 쥐', en: 'Blue Rat', color: '#2E7D32' },
-'甲寅': { ko: '푸른 호랑이', en: 'Blue Tiger', color: '#2E7D32' },
-'甲辰': { ko: '푸른 용', en: 'Blue Dragon', color: '#2E7D32' },
-'甲午': { ko: '푸른 말', en: 'Blue Horse', color: '#2E7D32' },
-'甲申': { ko: '푸른 원숭이', en: 'Blue Monkey', color: '#2E7D32' },
-'甲戌': { ko: '푸른 개', en: 'Blue Dog', color: '#2E7D32' },
+'甲子': { ko: '푸른 쥐', en: 'Blue Rat', color: '#1565C0' },
+'甲寅': { ko: '푸른 호랑이', en: 'Blue Tiger', color: '#1565C0' },
+'甲辰': { ko: '푸른 용', en: 'Blue Dragon', color: '#1565C0' },
+'甲午': { ko: '푸른 말', en: 'Blue Horse', color: '#1565C0' },
+'甲申': { ko: '푸른 원숭이', en: 'Blue Monkey', color: '#1565C0' },
+'甲戌': { ko: '푸른 개', en: 'Blue Dog', color: '#1565C0' },
 // 乙 (木/청록) 시리즈
-'乙丑': { ko: '청록 소', en: 'Green Ox', color: '#1B5E20' },
-'乙卯': { ko: '청록 토끼', en: 'Green Rabbit', color: '#1B5E20' },
-'乙巳': { ko: '청록 뱀', en: 'Green Snake', color: '#1B5E20' },
-'乙未': { ko: '청록 양', en: 'Green Goat', color: '#1B5E20' },
-'乙酉': { ko: '청록 닭', en: 'Green Rooster', color: '#1B5E20' },
-'乙亥': { ko: '청록 돼지', en: 'Green Pig', color: '#1B5E20' },
+'乙丑': { ko: '청록 소', en: 'Teal Ox', color: '#00897B' },
+'乙卯': { ko: '청록 토끼', en: 'Teal Rabbit', color: '#00897B' },
+'乙巳': { ko: '청록 뱀', en: 'Teal Snake', color: '#00897B' },
+'乙未': { ko: '청록 양', en: 'Teal Goat', color: '#00897B' },
+'乙酉': { ko: '청록 닭', en: 'Teal Rooster', color: '#00897B' },
+'乙亥': { ko: '청록 돼지', en: 'Teal Pig', color: '#00897B' },
 // 丙 (火/붉은) 시리즈
 '丙子': { ko: '붉은 쥐', en: 'Red Rat', color: '#C62828' },
 '丙寅': { ko: '붉은 호랑이', en: 'Red Tiger', color: '#C62828' },
@@ -392,7 +392,9 @@ function generateCharacterSectionHTML(myIlju, pIlju, myDm, pDm) {
     visibility: hidden;
 }
 </style>
-</head><body ><!-- 워터마크 배경 --><div class="watermark"><img src="sharethumbnail.png" alt="" onerror="this.parentElement.style.display='none'"></div><!-- ========================================
+<script>
+(function(){'use strict';document.addEventListener('contextmenu',function(e){e.preventDefault();return false;});document.addEventListener('keydown',function(e){if(e.key==='F12'||e.keyCode===123){e.preventDefault();return false;}if(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='i'||e.keyCode===73)){e.preventDefault();return false;}if(e.ctrlKey&&e.shiftKey&&(e.key==='J'||e.key==='j'||e.keyCode===74)){e.preventDefault();return false;}if(e.ctrlKey&&e.shiftKey&&(e.key==='C'||e.key==='c'||e.keyCode===67)){e.preventDefault();return false;}if(e.ctrlKey&&(e.key==='U'||e.key==='u'||e.keyCode===85)){e.preventDefault();return false;}if(e.ctrlKey&&(e.key==='S'||e.key==='s'||e.keyCode===83)){e.preventDefault();return false;}});document.addEventListener('dragstart',function(e){e.preventDefault();return false;});document.addEventListener('selectstart',function(e){if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){return true;}e.preventDefault();return false;});document.addEventListener('copy',function(e){if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){return true;}e.preventDefault();return false;});var style=document.createElement('style');style.textContent='*{-webkit-user-select:none!important;-moz-user-select:none!important;user-select:none!important;}input,textarea{-webkit-user-select:text!important;-moz-user-select:text!important;user-select:text!important;}';document.head.appendChild(style);})();
+</script></head><body ><!-- 워터마크 배경 --><div class="watermark"><img src="sharethumbnail.png" alt="" onerror="this.parentElement.style.display='none'"></div><!-- ========================================
      팔괘 장식 (사방)
      ======================================== --><div class="bagua tl">☰<span class="bagua-sub">乾</span></div><div class="bagua tr">☷<span class="bagua-sub">坤</span></div><div class="bagua bl">☵<span class="bagua-sub">坎</span></div><div class="bagua br">☲<span class="bagua-sub">離</span></div><!-- ========================================
      Capture Card (Hidden)
