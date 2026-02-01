@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>K-MUDANG</title>
+<meta http-equiv="refresh" content="0;url=ko.html">
+<style>
+body{background:#1a1a2e;color:#D4AF37;font-family:serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;flex-direction:column;gap:30px;}
+h1{font-size:2.5rem;}
+.links{display:flex;gap:20px;}
+a{color:#fff;background:linear-gradient(135deg,#D4AF37,#8B7020);padding:15px 40px;border-radius:10px;text-decoration:none;font-size:1.2rem;font-weight:bold;}
+a:hover{transform:scale(1.05);}
+</style>
+</head>
+<body>
+<h1>☯ K-MUDANG</h1>
+<div class="links">
+<a href="ko.html">🇰🇷 한국어</a>
+<a href="en.html">🇺🇸 English</a>
+</div>
+<script>
+// 자동 리다이렉트 (브라우저 언어 감지)
+const lang = navigator.language || '';
+if (!lang.startsWith('ko')) {
+  // 영어권이면 영어로
+  // window.location.href = 'en.html';
+}
+// 기본: 한국어 (meta refresh로 처리)
+</script>
+</body>
+</html>
