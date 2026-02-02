@@ -846,7 +846,7 @@ ctx.fillText(`No. ${serialNo}`, W/2, 3520);
 // === K-MUDANG 로고 (맨 아래) ===
 ctx.fillStyle = theme.border;
 ctx.font = '64px "Nanum Pen Script", cursive';
-ctx.fillText('K-MUDANG ☯ k-mudang.com', W/2, 3610);
+ctx.fillText('☯ k-mudang.com', W/2, 3610);
 ctx.fillStyle = 'rgba(75, 55, 40, 0.5)';ctx.font = '60px "Nanum Pen Script", cursive';ctx.fillText('📱 휴대폰 배경화면으로 설정하세요', W/2, 3700);talismanGenerated = true;talismanDataUrl = canvas.toDataURL('image/jpeg', 0.92);}
 function drawHanjiTexture(ctx, W, H) {
 // === 한지(Hanji) 질감 효과 60% - K-MUDANG 원본 ===
@@ -879,7 +879,7 @@ if (hasBureau || hasCheonul || hasYearMatch) return { grade: 'epic', label: '영
 // 희귀: 기본
 return { grade: 'rare', label: '희귀', stars: '★★★' };
 }
-function generateSerialNumber() {const now = new Date();const year = now.getFullYear();const random = Math.floor(Math.random() * 9999).toString().padStart(4, '0');const dayPillar = SAJU.day.s.c + SAJU.day.b.c;return `${year}-SJLOTTO-${dayPillar}-${random}`;}
+function generateSerialNumber() {const now = new Date();const year = now.getFullYear();const random = Math.floor(Math.random() * 9999).toString().padStart(4, '0');const dayPillar = SAJU.day.s.c + SAJU.day.b.c;return `${year}-KMUDANG-${dayPillar}-${random}`;}
 function drawTaegeukHD(ctx, x, y, r, theme) {const TAEGEUK_RED = '#C41E3A';const TAEGEUK_BLUE = '#1E3A5F';ctx.beginPath();ctx.arc(x, y, r, 0, Math.PI * 2);ctx.strokeStyle = theme.main;ctx.lineWidth = 8;ctx.stroke();ctx.beginPath();ctx.arc(x, y, r * 0.85, 0, Math.PI, false);ctx.fillStyle = TAEGEUK_BLUE;ctx.fill();ctx.beginPath();ctx.arc(x, y, r * 0.85, Math.PI, Math.PI * 2, false);ctx.fillStyle = TAEGEUK_RED;ctx.fill();ctx.beginPath();ctx.arc(x - r * 0.35, y, r * 0.28, 0, Math.PI * 2);ctx.fillStyle = TAEGEUK_RED;ctx.fill();ctx.beginPath();ctx.arc(x + r * 0.35, y, r * 0.28, 0, Math.PI * 2);ctx.fillStyle = TAEGEUK_BLUE;ctx.fill();}
 function drawCornerOrnamentsHD(ctx, W, H, theme) {
 const size = 100;
