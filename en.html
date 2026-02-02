@@ -1022,7 +1022,7 @@ function shareMatchResult() {
   if (!MATCH_RESULT) { toast('Please analyze compatibility first'); return; }
   const myIlju = SAJU.day.s.c + SAJU.day.b.c;
   const pIlju = PARTNER_SAJU.day.s.c + PARTNER_SAJU.day.b.c;
-  const shareData = { title: '💕 K-MUDANG Compatibility', text: myIlju+' "'+MATCH_RESULT.myCharacter?.name+'" & '+pIlju+' "'+MATCH_RESULT.partnerCharacter?.name+'"\n\nScore: '+MATCH_RESULT.score+'/100 '+MATCH_RESULT.grade+'\n\nAnalyze at:', url: window.location.href };
+  const shareData = { title: '💕 K-MUDANG | Compatibility', text: `${myIlju} × ${pIlju} = ${MATCH_RESULT.score}/100 ${MATCH_RESULT.grade}\n\n🔒 Pure scholarly inquiry, free from all advertisements\n🔮 Discover your cosmic connection`, url: window.location.href };
   if (navigator.share) { navigator.share(shareData).catch(err => { if (err.name !== 'AbortError') copyShareLink(); }); } else { copyShareLink(); }
 }
 
@@ -1449,36 +1449,37 @@ directSeal:{k:'正印 Direct Seal',c:'正印',e:'Direct Seal',d:'The Scholar. Lo
 0x0e968,0x0d520,0x0daa0,0x16aa6,0x056d0,0x04ae0,0x0a9d4,0x0a2d0,0x0d150,0x0f252,
 0x0d520
 ];const LUNAR_START = 1900;const MY_ACCOUNT = "케이뱅크 100150462483 김대인";let GENDER = 'm';let CALENDAR = 'solar';let SAJU = null;let GODS = null;let STRENGTH = null;let BIRTH_YEAR = null;let BIRTH_MONTH = null;let BIRTH_DAY = null;let BIRTH_HOUR = null;let INPUT_YEAR = null;let INPUT_MONTH = null;let INPUT_DAY = null;let INPUT_IS_LUNAR = false;let INPUT_HOUR_INDEX = null;let CONVERTED_HOUR_INDEX = null;let TIMEZONE_OFFSET = 0;let ORIGINAL_DATE = null;let CONVERTED_DATE = null;let currentNumbers = [];let history = [];const KAKAO_KEY = 'YOUR_KAKAO_JAVASCRIPT_KEY';function initKakao() {if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {try {Kakao.init(KAKAO_KEY);console.log('Kakao SDK initialized');} catch(e) {console.log('Kakao init skipped (key not set)');}}}
-function shareKakao() {const shareData = {title: '🔮 K-MUDANG Pro | Patent-Pending AI BaZi',
-text: '📜 Patent 10-2026-0010452\n\n🌡️ Climate Theory (調候論)\n💕 60 Archetype Compatibility\n🏮 2026 Fortune Talisman',
+function shareKakao() {const shareData = {title: '🔮 K-MUDANG | AI-Powered K-Fortune',
+text: '🔒 Pure scholarly inquiry, free from all advertisements\n📜 Patent 10-2026-0010452\n☯ 518,400 unique archetypes',
 url: window.location.href};if (navigator.share) {navigator.share(shareData)
 .then(() => toast('Shared successfully! 🎉'))
 .catch((err) => {if (err.name !== 'AbortError') {copyShareLink();}});return;}
 if (typeof Kakao !== 'undefined' && Kakao.isInitialized()) {try {Kakao.Share.sendDefault({objectType: 'feed',
-content: {title: '🔮 K-MUDANG Pro',
+content: {title: '🔮 K-MUDANG | AI-Powered K-Fortune',
 description: getShareText(),
 imageUrl: getShareImageUrl(),
 link: {mobileWebUrl: window.location.href,
 webUrl: window.location.href}},
-buttons: [{title: 'Check Your Fortune',
+buttons: [{title: 'Discover Your Fortune',
 link: {mobileWebUrl: window.location.href,
 webUrl: window.location.href}}]});return;} catch(e) {console.error('Kakao share error:', e);}}
 copyShareLink();}
-function getShareText() {return `Align your cosmic blueprint with fortune through authentic Korean astrology
-✨ Professional K-Fortune destiny analysis
-🎰 Lottery numbers harmonized with your personal energy
-☯ Where millennia-old Eastern wisdom meets modern fortune
-Discover your destined path 🔮`;}
+function getShareText() {return `🔒 Pure scholarly inquiry, free from all advertisements
+☯ 518,400 unique archetypes · Patent-pending algorithm
+🔮 Discover your destiny at k-mudang.com`;}
 function getShareImageUrl() {return 'og-image.png';}
-function shareApp() {const shareData = {title: '🔮 K-MUDANG Pro | Patent-Pending AI BaZi',
-text: '📜 Patent 10-2026-0010452 · Climate Theory (調候論) · 60 Archetype Compatibility · 2026 Fortune Talisman · Global Timezone Support',
+function shareApp() {const shareData = {title: '🔮 K-MUDANG | AI-Powered K-Fortune',
+text: '🔒 Pure scholarly inquiry, free from all advertisements\n📜 Patent 10-2026-0010452 · ☯ 518,400 Archetypes\n🔮 k-mudang.com',
 url: window.location.href};if (navigator.share) {navigator.share(shareData)
 .then(() => toast('Shared successfully! 🎉'))
 .catch(() => copyShareLink());} else {copyShareLink();}}
-function copyShareLink() {const text = `🔮 K-MUDANG Pro | Patent-Pending AI BaZi
+function copyShareLink() {const text = `🔮 K-MUDANG | AI-Powered K-Fortune
+
+🔒 Pure scholarly inquiry, free from all advertisements
 📜 Patent 10-2026-0010452
-🌡️ Climate Theory (調候論) · 💕 60 Archetype Compatibility
-☯ Where Ancient Eastern Wisdom Meets Modern Fortune
+☯ 518,400 unique archetypes
+
+🔮 Discover your destiny
 👉 ${window.location.href}`;safeClipboard(text, '📋 Link copied to clipboard!');}
 let talismanGenerated = false;let talismanDataUrl = null;let wheelRotation = 0;let isWheelSpinning = false;function spinZodiacWheel(targetIndex, callback) {if (isWheelSpinning) return;isWheelSpinning = true;const container = document.getElementById('zodiac-wheel-container');const wheel = document.getElementById('zodiacWheel');const glow = document.getElementById('wheelGlow');const sparkle = document.getElementById('sparkleOverlay');const loading = document.getElementById('zodiacLoading');const resultText = document.getElementById('zodiacResultText');container.style.display = 'block';resultText.style.opacity = '0';resultText.textContent = '';loading.style.display = 'block';glow.classList.add('active');sparkle.classList.add('active');const targetPos = ((12 - targetIndex) % 12) * 30 + 15;const currentPos = wheelRotation % 360;let diff = targetPos - currentPos;if (diff <= 0) diff += 360;wheelRotation = wheelRotation + 720 + diff;setTimeout(() => {wheel.style.transform = `rotate(${wheelRotation}deg)`;}, 50);setTimeout(() => {loading.style.display = 'none';glow.classList.remove('active');sparkle.classList.remove('active');const animal = BRANCH[targetIndex];resultText.textContent = `✨ ${animal.m} (${animal.c}) ✨`;resultText.style.opacity = '1';isWheelSpinning = false;if (callback) callback();}, 1550);}
 function generateTalisman() {if (!SAJU || !SAJU.day) {toast('Please analyze your chart first! 🔮');return;}

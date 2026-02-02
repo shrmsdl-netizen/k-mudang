@@ -906,7 +906,7 @@ shareKakaoFallback();}, 'image/png');return;}
 shareKakaoFallback();}
 function shareKakaoFallback() {if (typeof Kakao !== 'undefined' && Kakao.isInitialized()) {try {Kakao.Share.sendDefault({objectType: 'feed',
 content: {title: '🏮 2026년 개운 부적',
-description: 'K-MUDANG에서 만든 나만의 개운 부적! 당신의 용신과 2026년 운세를 확인하세요.',
+description: 'MBTI는 16개 유형. K-MUDANG은 518,400개 운명패턴. 당신의 시간이 어디로 흐르는지 확인하세요.',
 imageUrl: 'sharethumbnail.png',
 link: {mobileWebUrl: window.location.href,
 webUrl: window.location.href}},
@@ -915,16 +915,18 @@ link: {mobileWebUrl: window.location.href,
 webUrl: window.location.href}}]});return;} catch(e) {console.error('Kakao share error:', e);}}
 copyShareLink();toast('💡 부적 이미지는 [이미지 저장] 버튼으로 저장 후 직접 공유해주세요!');}
 function shareKakao() {shareTalismanKakao();}
-function getShareText() {return `천년 명리학의 지혜를 현대적으로 구현한 사주 분석 앱
-✨ 전문가 수준 사주팔자 분석
-💕 과학적 궁합 진단
-🍀 역대 당첨번호 제외 로또
-운명의 비밀을 풀어보세요 🔮`;}
+function getShareText() {return `MBTI는 16개 유형. K-MUDANG은 518,400개 운명패턴.
+☯ 데이터 기반 AI 명리학
+📜 특허출원 10-2026-0010452`;}
 function getShareImageUrl() {return 'sharethumbnail.png';}
-function copyShareLink() {const text = `☯ K-MUDANG - 데이터 기반 AI 명리학
-✨ AI급 정밀 사주 분석
-💕 8대 원리 궁합 진단
-🎲 역대 당첨번호 제외 로또
+function copyShareLink() {const text = `☯ K-MUDANG
+
+MBTI는 당신이 누구인지 말해줍니다.
+K-MUDANG은 당신의 시간이 어디로 흐르는지 말해줍니다.
+
+📜 특허출원 10-2026-0010452
+☯ 518,400개 운명패턴
+
 👉 ${window.location.href}`;safeClipboard(text, '📋 공유 링크가 복사되었습니다!');}
 function init() {initKakao();const cy = new Date().getFullYear();['birth-year', 'partner-year'].forEach(id => {const el = document.getElementById(id);if (el) {el.innerHTML = '<option value="" disabled selected>년</option>';for (let i = cy; i >= 1940; i--) el.innerHTML += `<option value="${i}">${i}</option>`;}});['birth-month', 'partner-month'].forEach(id => {const el = document.getElementById(id);if (el) {el.innerHTML = '<option value="" disabled selected>월</option>';for (let i = 1; i <= 12; i++) el.innerHTML += `<option value="${i}">${i}</option>`;}});['birth-day', 'partner-day'].forEach(id => {const el = document.getElementById(id);if (el) {el.innerHTML = '<option value="" disabled selected>일</option>';for (let i = 1; i <= 31; i++) el.innerHTML += `<option value="${i}">${i}</option>`;}});const hourEl = document.getElementById('birth-hour');if (hourEl) {hourEl.innerHTML = '<option value="-1" selected>시간 모름</option>';const hours = ['子時(23:30-01:29)','丑時(01:30-03:29)','寅時(03:30-05:29)','卯時(05:30-07:29)',
 '辰時(07:30-09:29)','巳時(09:30-11:29)','午時(11:30-13:29)','未時(13:30-15:29)',
