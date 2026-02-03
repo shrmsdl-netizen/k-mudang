@@ -1185,19 +1185,19 @@ const ARCHETYPE_60 = {
 '己酉': { ko: '갈색 닭', en: 'Brown Rooster', color: '#5D4037' },
 '己亥': { ko: '갈색 돼지', en: 'Brown Pig', color: '#5D4037' },
 // 庚 (Metal/White) series
-'庚子': { ko: '흰 쥐', en: 'White Rat', color: '#757575' },
-'庚寅': { ko: '흰 호랑이', en: 'White Tiger', color: '#757575' },
-'庚辰': { ko: '흰 용', en: 'White Dragon', color: '#757575' },
-'庚午': { ko: '흰 말', en: 'White Horse', color: '#757575' },
-'庚申': { ko: '흰 원숭이', en: 'White Monkey', color: '#757575' },
-'庚戌': { ko: '흰 개', en: 'White Dog', color: '#757575' },
+'庚子': { ko: '흰 쥐', en: 'White Rat', color: '#FFFFFF' },
+'庚寅': { ko: '흰 호랑이', en: 'White Tiger', color: '#FFFFFF' },
+'庚辰': { ko: '흰 용', en: 'White Dragon', color: '#FFFFFF' },
+'庚午': { ko: '흰 말', en: 'White Horse', color: '#FFFFFF' },
+'庚申': { ko: '흰 원숭이', en: 'White Monkey', color: '#FFFFFF' },
+'庚戌': { ko: '흰 개', en: 'White Dog', color: '#FFFFFF' },
 // 辛 (Metal/Silver) series
-'辛丑': { ko: '은빛 소', en: 'Silver Ox', color: '#9E9E9E' },
-'辛卯': { ko: '은빛 토끼', en: 'Silver Rabbit', color: '#9E9E9E' },
-'辛巳': { ko: '은빛 뱀', en: 'Silver Snake', color: '#9E9E9E' },
-'辛未': { ko: '은빛 양', en: 'Silver Goat', color: '#9E9E9E' },
-'辛酉': { ko: '은빛 닭', en: 'Silver Rooster', color: '#9E9E9E' },
-'辛亥': { ko: '은빛 돼지', en: 'Silver Pig', color: '#9E9E9E' },
+'辛丑': { ko: '은빛 소', en: 'Silver Ox', color: '#D4D4D4' },
+'辛卯': { ko: '은빛 토끼', en: 'Silver Rabbit', color: '#D4D4D4' },
+'辛巳': { ko: '은빛 뱀', en: 'Silver Snake', color: '#D4D4D4' },
+'辛未': { ko: '은빛 양', en: 'Silver Goat', color: '#D4D4D4' },
+'辛酉': { ko: '은빛 닭', en: 'Silver Rooster', color: '#D4D4D4' },
+'辛亥': { ko: '은빛 돼지', en: 'Silver Pig', color: '#D4D4D4' },
 // 壬 (Water/Black) series
 '壬子': { ko: '검은 쥐', en: 'Black Rat', color: '#37474F' },
 '壬寅': { ko: '검은 호랑이', en: 'Black Tiger', color: '#37474F' },
@@ -1589,7 +1589,7 @@ if (animalImg && animalImg.complete && animalImg.naturalWidth > 0) {
   const imgY = boxY;
   const borderW = 12;
   const borderRadius = 20;
-  const borderColor = archImg?.color || '#D4AF37';
+  const borderColor = (archImg?.color === '#FFFFFF') ? '#D4D4D4' : (archImg?.color || '#D4AF37');
   ctx.save();
   ctx.beginPath();
   ctx.roundRect(imgX, imgY, imgSize, imgSize, borderRadius);
@@ -1610,9 +1610,9 @@ const archetype = ARCHETYPE_60[iljuKey2];
 const animalBranch = dayBranch;
 if (archetype) {
 // Archetype Text (calligraphy style, larger)
-ctx.fillStyle = archetype.color;
 ctx.font = 'bold 96px "Nanum Pen Script", cursive';
-ctx.fillText(`${archetype.en} (${iljuKey2})`, W/2, 3180);
+if(archetype.color==='#FFFFFF'||archetype.color==='#D4D4D4'){ctx.strokeStyle='rgba(75,55,40,0.7)';ctx.lineWidth=8;ctx.lineJoin='round';ctx.strokeText(`${archetype.en} (${iljuKey2})`,W/2,3180);}
+ctx.fillStyle = archetype.color;ctx.fillText(`${archetype.en} (${iljuKey2})`, W/2, 3180);
 // Quote (calligraphy style)
 const quote = ANIMAL_QUOTE[animalBranch];
 if (quote) {
