@@ -800,15 +800,22 @@ async function createHighResTalisman() {
     await document.fonts.load('24px "Ma Shan Zheng"');
     await document.fonts.load('16px "Ma Shan Zheng"');
     await document.fonts.load('14px "Ma Shan Zheng"');
-    // Nanum Pen Script 로드 (한글용) - 한글 샘플 포함하여 글리프 로드 보장
-    await document.fonts.load('bold 88px "Nanum Pen Script"', '진홍닭검은쥐');
-    await document.fonts.load('64px "Nanum Pen Script"', '용신희신기신신강약최고의주의할');
-    await document.fonts.load('56px "Nanum Pen Script"', '년개운부적봉황의기운성장과혁신');
-    await document.fonts.load('48px "Nanum Pen Script"', '액은물러가고복이오니모든일이대길');
-    await document.fonts.load('44px "Nanum Pen Script"', '리더십과성취지혜와전략');
-    await document.fonts.load('40px "Nanum Pen Script"', '휴대폰배경화면으로설정하세요');
-    await document.fonts.load('36px "Nanum Pen Script"', '푸른붉은노란흰검은말띠해');
-    await document.fonts.load('32px "Nanum Pen Script"', '일주중화');const canvas = document.getElementById('talisman-canvas');const ctx = canvas.getContext('2d');const W = 2160, H = 3840;canvas.width = W;canvas.height = H;
+    // Nanum Pen Script 로드 (한글용) - 부적 전체 글리프 커버 (v37.27 fix)
+    const _tGlyph = '가갈감게견고관광권기깊꽃꿰끼나난내는늘다달덕도돌두드따뚫뜻라랑록롭뢰룡루룬를린마만맹명무묵민밀받발밝백뱀본불비빛사상새색생서속쇠숲쌓아안앞어에여열영온움워원위윤을음인자재직질착찰창척청충치큰택터통파포품풍한함합혀현형호회흙진홍닭검은쥐용신희기강약최의주할년개운부적봉황기운성장과혁액물러가복이오니모든일대길리더십과성취지혜와전략휴대폰배경화면으로설정하세요푸른붉노란흰말띠해중화정밀권위안정윤택달';
+    await document.fonts.load('bold 96px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('bold 88px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('bold 80px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('bold 72px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('72px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('64px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('60px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('56px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('52px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('48px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('44px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('40px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('36px "Nanum Pen Script"', _tGlyph);
+    await document.fonts.load('32px "Nanum Pen Script"', _tGlyph);const canvas = document.getElementById('talisman-canvas');const ctx = canvas.getContext('2d');const W = 2160, H = 3840;canvas.width = W;canvas.height = H;
 // === 자동 연도 시스템 ===
 const currentYear = new Date().getFullYear();
 const yearStemIdx = (currentYear - 4) % 10;
