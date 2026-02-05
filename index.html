@@ -128,15 +128,15 @@ body{
   font-style:italic;
 }
 .glass-card{
-  background:rgba(255,255,255,0.04);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  border:1px solid rgba(212,175,55,0.3);
+  background:rgba(255,255,255,0.03);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(212,175,55,0.25);
   border-radius:24px;
   padding:25px 25px;
   max-width:400px;
   width:100%;
-  box-shadow:0 8px 32px rgba(0,0,0,0.3),inset 0 0 30px rgba(212,175,55,0.05);
+  box-shadow:0 8px 32px rgba(0,0,0,0.2),inset 0 0 30px rgba(212,175,55,0.03);
 }
 .card-title{
   font-size:1rem;
@@ -163,24 +163,27 @@ body{
   min-width:100px;
   max-width:140px;
   padding:14px 12px;
-  background:linear-gradient(135deg,#D4AF37 0%,#B8960C 100%);
+  background:linear-gradient(135deg,rgba(212,175,55,0.75) 0%,rgba(184,150,12,0.7) 100%);
   color:#1a1a2e;
   text-decoration:none;
   font-weight:700;
   border-radius:14px;
   transition:all 0.3s ease;
-  box-shadow:0 4px 20px rgba(212,175,55,0.4);
+  box-shadow:0 4px 20px rgba(212,175,55,0.3);
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   gap:2px;
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
 }
 .lang-hanja{font-size:1.6rem;line-height:1.2;}
 .lang-label{font-size:0.75rem;opacity:0.85;}
 .lang-btn:hover{
   transform:translateY(-3px) scale(1.03);
-  box-shadow:0 8px 30px rgba(212,175,55,0.6);
+  box-shadow:0 8px 30px rgba(212,175,55,0.5);
+  background:linear-gradient(135deg,rgba(212,175,55,0.9) 0%,rgba(184,150,12,0.85) 100%);
 }
 .lang-btn:active{
   transform:scale(0.98);
