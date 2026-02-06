@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>☯ K-MUDANG | Decode Your Destiny</title>
-<meta name="description" content="MBTI defines you, but K-MUDANG protects you. 518,400 destiny patterns. Patent-pending engine decodes your fate.">
+<meta name="description" content="MBTI tells who you are. K-MUDANG tells where your time flows. Patent 10-2026-0010452 · 518,400 destiny patterns">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="☯ K-MUDANG | Decode Your Destiny">
-<meta property="og:description" content="518,400 destiny patterns. Patent-pending engine decodes your fate.">
+<meta property="og:description" content="MBTI tells who you are. K-MUDANG tells where your time flows. Patent 10-2026-0010452 · 518,400 destiny patterns">
 <meta property="og:image" content="https://k-mudang.com/ogimage.png">
 <meta property="og:url" content="https://k-mudang.com">
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="☯ K-MUDANG | Decode Your Destiny">
-<meta name="twitter:description" content="518,400 destiny patterns. Patent-pending engine decodes your fate.">
+<meta name="twitter:description" content="MBTI tells who you are. K-MUDANG tells where your time flows. Patent 10-2026-0010452 · 518,400 destiny patterns">
 <meta name="twitter:image" content="https://k-mudang.com/ogimage.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"K-MUDANG","alternateName":"K-Fortune Calculator","applicationCategory":"LifestyleApplication","operatingSystem":"Web Browser","description":"Korean Four Pillars (Saju/BaZi) destiny analysis engine. 518,400 destiny patterns from the 60-Stem-Branch system. MBTI defines you, but K-MUDANG protects you.","url":"https://k-mudang.com","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"K-MUDANG","url":"https://k-mudang.com"},"inLanguage":["ko","en"]}
+{"@context":"https://schema.org","@type":"WebApplication","name":"K-MUDANG","alternateName":"K-Fortune Calculator","applicationCategory":"LifestyleApplication","operatingSystem":"Web Browser","description":"MBTI tells who you are. K-MUDANG tells where your time flows. Patent 10-2026-0010452. 518,400 destiny patterns from the 60-Stem-Branch system.","url":"https://k-mudang.com","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"K-MUDANG","url":"https://k-mudang.com"},"inLanguage":["ko","en"]}
 </script>
 <link rel="canonical" href="https://k-mudang.com/">
 <link rel="alternate" hreflang="ko" href="https://k-mudang.com/ko.html">
@@ -250,17 +250,15 @@ body{
 .footer .patent{
   color:rgba(212,175,55,0.5);
 }
-.deco{
-  position:fixed;
-  font-size:1.3rem;
-  opacity:0.25;
-  color:#D4AF37;
-  z-index:5;
-}
-.deco.tl{top:15px;left:15px;transform:rotate(45deg);}
-.deco.tr{top:15px;right:15px;transform:rotate(-45deg);}
-.deco.bl{bottom:70px;left:15px;transform:rotate(135deg);}
-.deco.br{bottom:70px;right:15px;transform:rotate(-135deg);}
+.watermark{position:fixed;top:140px;left:50%;transform:translateX(-50%);width:500px;max-width:100%;opacity:0.15;z-index:999;pointer-events:none}
+.watermark img{width:100%;height:auto;display:block}
+@media (max-width:600px){.watermark{width:100%;left:0;transform:none}}
+.bagua{position:fixed;font-size:2rem;opacity:0.5;pointer-events:none;z-index:1;font-family:serif;line-height:1;text-shadow:0 0 15px currentColor;text-align:center}
+.bagua-sub{display:none}
+.bagua.tl{top:200px;left:10px;color:#FFD700;transform:rotate(45deg)}
+.bagua.tr{top:200px;right:10px;color:#FF6B6B;transform:rotate(-45deg)}
+.bagua.bl{bottom:120px;left:10px;color:#4ECDC4;transform:rotate(135deg)}
+.bagua.br{bottom:120px;right:10px;color:#A29BFE;transform:rotate(-135deg)}
 @media(max-width:380px){
   .title{font-size:1.7rem;letter-spacing:4px;}
   .logo{font-size:3rem;}
@@ -275,11 +273,12 @@ body{
 <body>
 <div class="bg-image"></div>
 <div class="bg-overlay"></div>
+<!-- 워터마크 배경 --><div class="watermark"><img src="sharethumbnail.png" alt="" onerror="this.parentElement.style.display='none'"></div>
 
-<div class="deco tl">☰</div>
-<div class="deco tr">☱</div>
-<div class="deco bl">☲</div>
-<div class="deco br">☳</div>
+<div class="bagua tl">☰</div>
+<div class="bagua tr">☷</div>
+<div class="bagua bl">☵</div>
+<div class="bagua br">☲</div>
 
 <div class="top-section">
   <div class="logo">☯</div>
