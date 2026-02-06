@@ -250,9 +250,6 @@ body{
 .footer .patent{
   color:rgba(212,175,55,0.5);
 }
-.watermark{position:fixed;top:140px;left:50%;transform:translateX(-50%);width:500px;max-width:100%;opacity:0.15;z-index:999;pointer-events:none}
-.watermark img{width:100%;height:auto;display:block}
-@media (max-width:600px){.watermark{width:100%;left:0;transform:none}}
 .bagua{position:fixed;font-size:2rem;opacity:0.5;pointer-events:none;z-index:1;font-family:serif;line-height:1;text-shadow:0 0 15px currentColor;text-align:center}
 .bagua-sub{display:none}
 .bagua.tl{top:200px;left:10px;color:#FFD700;transform:rotate(45deg)}
@@ -273,7 +270,6 @@ body{
 <body>
 <div class="bg-image"></div>
 <div class="bg-overlay"></div>
-<!-- 워터마크 배경 --><div class="watermark"><img src="sharethumbnail.png" alt="" onerror="this.parentElement.style.display='none'"></div>
 
 <div class="bagua tl">☰</div>
 <div class="bagua tr">☷</div>
