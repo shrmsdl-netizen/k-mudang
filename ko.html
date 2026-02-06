@@ -712,7 +712,7 @@ ctx.font = '72px "Nanum Pen Script", cursive';ctx.fillText(quote.ko, W/2, 3300);
 }
 if (archetype.pko) {
 ctx.fillStyle = 'rgba(75, 55, 40, 0.7)';
-ctx.font = 'italic 72px "Nanum Pen Script", cursive';ctx.fillText(archetype.pko, W/2, 3420);
+ctx.font = 'italic 88px "Nanum Pen Script", cursive';ctx.fillText(archetype.pko, W/2, 3420);
 }
 }
 ctx.fillStyle = theme.main;
@@ -720,7 +720,7 @@ ctx.font = 'bold 72px "Nanum Pen Script", cursive';ctx.fillText('액은 물러�
 ctx.fillStyle = theme.border;
 ctx.font = '64px "Nanum Pen Script", cursive';
 ctx.fillText('☯ k-mudang.com', W/2, 3640);
-ctx.fillStyle = 'rgba(75, 55, 40, 0.5)';ctx.font = '60px "Nanum Pen Script", cursive';ctx.fillText('📱 휴대폰 배경화면으로 설정하세요', W/2, 3730);talismanGenerated = true;talismanDataUrl = canvas.toDataURL('image/jpeg', 0.92);}
+ctx.fillStyle = 'rgba(75, 55, 40, 0.5)';ctx.font = '60px "Nanum Pen Script", cursive';ctx.fillText('📱 휴대폰 배경화면으로 설정하세요', W/2, 3710);talismanGenerated = true;talismanDataUrl = canvas.toDataURL('image/jpeg', 0.92);}
 function drawHanjiTexture(ctx, W, H) {
 for(let i=0;i<W*H*0.15;i++){const x=Math.random()*W;const y=Math.random()*H;const size=Math.random()*2.5+0.5;const colors=['rgba(139,90,43,','rgba(101,67,33,','rgba(180,140,100,','rgba(120,80,40,','rgba(160,120,80,'];const c=colors[Math.floor(Math.random()*colors.length)];const alpha=Math.random()*0.35+0.1;ctx.fillStyle=c+alpha+')';ctx.fillRect(x,y,size,size);}
 ctx.globalAlpha=0.15;for(let i=0;i<800;i++){const x=Math.random()*W;const y=Math.random()*H;const len=Math.random()*60+20;const isH=Math.random()>0.5;ctx.strokeStyle='rgba(120,80,40,0.3)';ctx.lineWidth=Math.random()*1.5+0.3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(isH?x+len:x+Math.random()*5,isH?y+Math.random()*3:y+len);ctx.stroke();}ctx.globalAlpha=1.0;
