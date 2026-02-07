@@ -17,12 +17,11 @@
 <meta name="twitter:description" content="In the flow of Five Elements, your story is written. What the stars left empty, the talisman fills.">
 <meta name="twitter:image" content="https://k-mudang.com/ogimage.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"K-MUDANG","alternateName":"K-Fortune Calculator","applicationCategory":"LifestyleApplication","operatingSystem":"Web Browser","description":"White Tiger or Blue Dragon? In the flow of Five Elements, your story is written. Saju · Talisman · Compatibility.","url":"https://k-mudang.com","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"K-MUDANG","url":"https://k-mudang.com"},"inLanguage":["ko","en","ja"]}
+{"@context":"https://schema.org","@type":"WebApplication","name":"K-MUDANG","alternateName":"K-Fortune Calculator","applicationCategory":"LifestyleApplication","operatingSystem":"Web Browser","description":"White Tiger or Blue Dragon? In the flow of Five Elements, your story is written. Saju · Talisman · Compatibility.","url":"https://k-mudang.com","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"K-MUDANG","url":"https://k-mudang.com"},"inLanguage":["ko","en"]}
 </script>
 <link rel="canonical" href="https://k-mudang.com/">
 <link rel="alternate" hreflang="ko" href="https://k-mudang.com/ko.html">
 <link rel="alternate" hreflang="en" href="https://k-mudang.com/en.html">
-<link rel="alternate" hreflang="ja" href="https://k-mudang.com/jp.html">
 <link rel="alternate" hreflang="x-default" href="https://k-mudang.com/">
 <link rel="icon" type="image/png" href="ogimage.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,8 +77,6 @@ body{
   margin-bottom:8px;
   text-shadow:0 0 60px rgba(212,175,55,0.8);
   animation:glow 3s ease-in-out infinite;
-  font-family:serif;
-  -webkit-text-stroke:0;
 }
 @keyframes glow{
   0%,100%{text-shadow:0 0 60px rgba(212,175,55,0.8);}
@@ -157,15 +154,15 @@ body{
 }
 .lang-buttons{
   display:flex;
-  gap:8px;
+  gap:10px;
   justify-content:center;
-  flex-wrap:nowrap;
+  flex-wrap:wrap;
 }
 .lang-btn{
   flex:1;
-  min-width:0;
-  max-width:120px;
-  padding:14px 8px;
+  min-width:100px;
+  max-width:140px;
+  padding:14px 12px;
   background:rgba(212,175,55,0.35);
   border:1px solid rgba(212,175,55,0.5);
   color:#fff;
@@ -262,7 +259,7 @@ body{
 @media(max-width:380px){
   .title{font-size:1.7rem;letter-spacing:4px;}
   .logo{font-size:3rem;}
-  .lang-btn{padding:10px 6px;min-width:0;}
+  .lang-btn{padding:10px 8px;min-width:85px;}
   .top-section{padding-top:20px;}
   .tagline{font-size:0.7rem;}
   .tagline-highlight{font-size:1rem;}
@@ -291,9 +288,8 @@ body{
     <div class="card-title">Select Language</div>
     
     <div class="lang-buttons">
-      <a href="en.html" class="lang-btn"><span class="lang-hanja">英</span><span class="lang-label">English</span></a>
       <a href="ko.html" class="lang-btn"><span class="lang-hanja">韓</span><span class="lang-label">한국어</span></a>
-      <a href="jp.html" class="lang-btn"><span class="lang-hanja">日</span><span class="lang-label">日本語</span></a>
+      <a href="en.html" class="lang-btn"><span class="lang-hanja">英</span><span class="lang-label">English</span></a>
     </div>
   </div>
 </div>
