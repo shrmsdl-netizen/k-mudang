@@ -481,14 +481,14 @@ const MATCH_STEM_COMBINE/*天干合*/ = [[0,5],[1,6],[2,7],[3,8],[4,9]];const HI
 {name: '石榴木（石榴木）', element: 'wood', desc: '石榴の木。豊かな結実。'},
 {name: '大海水(大海水)', element: 'water', desc: '大海の水。果てない包容力。'}
 ];const SEASON = {0:'winter',1:'winter',2:'spring',3:'spring',4:'spring',5:'summer',6:'summer',7:'summer',8:'autumn',9:'autumn',10:'autumn',11:'winter'};const TEN_GODS = {peer:{k:'比肩(ひけん)',c:'比肩',d:'兄弟、友人、競争者。自信と独立心を表します。'},
-robWealth:{k:'劫財',c:'劫財',d:'競争、損財。勝負欲が強いがお金の管理に注意。'},
-eatingGod:{k:'食神',c:'食神',d:'才能、食べ物。創意力と表現力に優れています。'},
-hurtOfficer:{k:'傷官',c:'傷官',d:'表現、創作。芸術的才能があるが言葉に注意 必要.'},
-indirectWealth:{k:'偏財',c:'偏財',d:'横財、投資。事業手腕が良いが浮気注意.'},
-directWealth:{k:'正財',c:'正財',d:'正当な財物。誠実で貯蓄が得意です。'},
-indirectOfficer:{k:'偏官',c:'偏官',d:'権威, 圧迫. 推進力が あるが ストレス 注意.'},
-directOfficer:{k:'正官',c:'正官',d:'名誉、昇進。品位があり社会的認定を受けます。'},
-indirectSeal:{k:'偏印',c:'偏印',d:'学問、霊感。独創的だが鬱になりえます。'},
+robWealth:{k:'劫財(ごうざい)',c:'劫財',d:'競争、損財。勝負欲が強いがお金の管理に注意。'},
+eatingGod:{k:'食神(しょくじん)',c:'食神',d:'才能、食べ物。創意力と表現力に優れています。'},
+hurtOfficer:{k:'傷官(しょうかん)',c:'傷官',d:'表現、創作。芸術的才能があるが言葉に注意 必要.'},
+indirectWealth:{k:'偏財(へんざい)',c:'偏財',d:'横財、投資。事業手腕が良いが浮気注意.'},
+directWealth:{k:'正財(せいざい)',c:'正財',d:'正当な財物。誠実で貯蓄が得意です。'},
+indirectOfficer:{k:'偏官(へんかん)',c:'偏官',d:'権威, 圧迫. 推進力が あるが ストレス 注意.'},
+directOfficer:{k:'正官(せいかん)',c:'正官',d:'名誉、昇進。品位があり社会的認定を受けます。'},
+indirectSeal:{k:'偏印(へんいん)',c:'偏印',d:'学問、霊感。独創的だが鬱になりえます。'},
 directSeal:{k:'正印(せいいん)',c:'正印',d:'学業、文書。試験運が良く年長者の助けを受けます。'}};const TWELVE_STATES = [
 {k:'長生',l:12,d:'新しく生まれる気。始まりと希望があります。'},
 {k:'沐浴',l:8,d:'洗礼を受ける時期。変化と不安定がありえます。'},
@@ -982,10 +982,10 @@ days: h.days,
 god: god,
 tougan: tougan,
 tonggeun: tonggeun,
-strength: isJunggi ? 1.0 : (hIdx === 0 ? 0.3 : 0.5)};pillarInfo.hidden.push(hiddenInfo);result.summary.elements[hiddenStem.e] += hiddenInfo.strength;if (!result.summary.gods[god.k]) result.summary.gods[god.k] = 0;result.summary.gods[god.k] += hiddenInfo.strength;if (tougan && !result.summary.tougans.find(t => t.stem === h.stem)) {result.summary.tougans.push({stem: h.stem,
+strength: isJunggi ? 1.0 : (hIdx === 0 ? 0.3 : 0.5)};pillarInfo.hidden.push(hiddenInfo);result.summary.elements[hiddenStem.e] += hiddenInfo.strength;if (!result.summary.gods[god.c]) result.summary.gods[god.c] = 0;result.summary.gods[god.c] += hiddenInfo.strength;if (tougan && !result.summary.tougans.find(t => t.stem === h.stem)) {result.summary.tougans.push({stem: h.stem,
 name: hiddenStem.c + hiddenStem.k,
 from: pillarNames[pIdx],
-god: god.k});}});result.pillars.push(pillarInfo);});return result;}
+god: god.c});}});result.pillars.push(pillarInfo);});return result;}
 function analyzeTonggeunTougan(saju) {const result = { tonggeun: [], tougan: [] };const dm = saju.day.s;const pillarNames = ['年柱', '月柱', '日柱', '時柱'];const branches = [saju.year?.b, saju.month?.b, saju.day?.b, saju.hour?.b];const stems = [saju.year?.s, saju.month?.s, saju.day?.s, saju.hour?.s];stems.forEach((stem, sIdx) => {if (!stem) return;const si = STEM.indexOf(stem);const roots = [];branches.forEach((branch, bIdx) => {if (!branch) return;const bi = BRANCH.indexOf(branch);const jj = JIJANGGAN[bi];jj.forEach((h, hIdx) => {if (h.stem === si) {const isJunggi = hIdx === jj.length - 1;roots.push({pillar: pillarNames[bIdx].slice(0, 1) + '支',
 branch: branch.c,
 type: isJunggi ? '正気' : (hIdx === 0 ? '余気' : '中気'),
@@ -1410,16 +1410,16 @@ parents: null};const pillars = [
 {pos: 'month', pillar: saju.month},
 {pos: 'day', pillar: saju.day},
 {pos: 'hour', pillar: saju.hour}
-];pillars.forEach(({pos, pillar}) => {if (!pillar) return;const stemGod = pos === 'day' ? {k: '日干', c: '日干'} : getTenGod(pillar.s, dm);const mainJJ = JIJANGGAN[BRANCH.indexOf(pillar.b)];const mainStem = mainJJ && mainJJ.length > 0 ? STEM[mainJJ[mainJJ.length - 1].stem] : null;const branchGod = mainStem ? getTenGod(mainStem, dm) : null;const posInfo = SIX_RELATIONS_POSITION[pos];const yukInfo = yukData[stemGod.k];result.positions.push({position: pos,
+];pillars.forEach(({pos, pillar}) => {if (!pillar) return;const stemGod = pos === 'day' ? {k: '日干', c: '日干'} : getTenGod(pillar.s, dm);const mainJJ = JIJANGGAN[BRANCH.indexOf(pillar.b)];const mainStem = mainJJ && mainJJ.length > 0 ? STEM[mainJJ[mainJJ.length - 1].stem] : null;const branchGod = mainStem ? getTenGod(mainStem, dm) : null;const posInfo = SIX_RELATIONS_POSITION[pos];const yukInfo = yukData[stemGod.c];result.positions.push({position: pos,
 posName: posInfo.name,
 posMeaning: posInfo.meaning,
 stem: pillar.s,
 branch: pillar.b,
-stemGod: stemGod.k,
-branchGod: branchGod ? branchGod.k : null,
+stemGod: stemGod.c,
+branchGod: branchGod ? branchGod.c : null,
 relation: yukInfo ? yukInfo.relation : '本人',
-detailed: yukInfo ? yukInfo.detailed : '自分自身'});if (stemGod.k !== '日干') {result.counts[stemGod.k] = (result.counts[stemGod.k] || 0) + 1;}
-if (branchGod) {result.counts[branchGod.k] = (result.counts[branchGod.k] || 0) + 0.5;}});const spouseGod = g === 'm' ? '正財' : '正官';const spouseGod2 = g === 'm' ? '偏財' : '偏官';const spouseCount = (result.counts[spouseGod] || 0) + (result.counts[spouseGod2] || 0);const dayBranchState = getTwelveState(dm, saju.day.b);let hasHiddenSpouse = false;const branches = [saju.year.b, saju.month.b, saju.day.b];if (saju.hour) branches.push(saju.hour.b);branches.forEach(br => {const bi = BRANCH.indexOf(br);const jj = JIJANGGAN[bi];if (jj) {jj.forEach(j => {const jjGod = getTenGod(STEM[j.stem], dm);if (jjGod && (jjGod.k === spouseGod || jjGod.k === spouseGod2)) {hasHiddenSpouse = true;}});}});let spouseAnalysis = '';const dbi = BRANCH.indexOf(saju.day.b);const ybi = BRANCH.indexOf(saju.year.b);const mbi = BRANCH.indexOf(saju.month.b);const hbi = saju.hour ? BRANCH.indexOf(saju.hour.b) : -1;const otherBranches = [ybi, mbi];if (hbi >= 0) otherBranches.push(hbi);const chungPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];let spouseClash = false;let spouseClashType = '';chungPairs.forEach(([a,b]) => {if ((dbi === a && otherBranches.includes(b)) || (dbi === b && otherBranches.includes(a))) {spouseClash = true;spouseClashType = '沖(沖)';}});const harmPairs = [[3,8],[1,6],[3,4]];harmPairs.forEach(([a,b]) => {if ((dbi === a && otherBranches.includes(b)) || (dbi === b && otherBranches.includes(a))) {if (!spouseClash) {spouseClash = true;spouseClashType = '元嗔/害(害)';}}});if (spouseCount === 0 && !hasHiddenSpouse) {spouseAnalysis = '配偶者星が ありません. 結婚が 遅れるか 縁が 弱い可能性 あります. 大運で 入ると 縁が 生まれる。';} else if (spouseCount === 0 && hasHiddenSpouse) {spouseAnalysis = '天干に 配偶者星が はないが支蔵干に隠れ あります. 表に出ない実益型の配偶者に出会ったり、紹介より自然な出会いで縁が生まれる。';} else if (spouseCount >= 2) {spouseAnalysis = '配偶者星が が多い。異性に人気だが浮気 注意! 一人の人に集中してください。';} else {spouseAnalysis = '配偶者星が 適切です. 良い 縁に出会えることがあります。';}
+detailed: yukInfo ? yukInfo.detailed : '自分自身'});if (stemGod.c !== '日干') {result.counts[stemGod.c] = (result.counts[stemGod.c] || 0) + 1;}
+if (branchGod) {result.counts[branchGod.c] = (result.counts[branchGod.c] || 0) + 0.5;}});const spouseGod = g === 'm' ? '正財' : '正官';const spouseGod2 = g === 'm' ? '偏財' : '偏官';const spouseCount = (result.counts[spouseGod] || 0) + (result.counts[spouseGod2] || 0);const dayBranchState = getTwelveState(dm, saju.day.b);let hasHiddenSpouse = false;const branches = [saju.year.b, saju.month.b, saju.day.b];if (saju.hour) branches.push(saju.hour.b);branches.forEach(br => {const bi = BRANCH.indexOf(br);const jj = JIJANGGAN[bi];if (jj) {jj.forEach(j => {const jjGod = getTenGod(STEM[j.stem], dm);if (jjGod && (jjGod.c === spouseGod || jjGod.c === spouseGod2)) {hasHiddenSpouse = true;}});}});let spouseAnalysis = '';const dbi = BRANCH.indexOf(saju.day.b);const ybi = BRANCH.indexOf(saju.year.b);const mbi = BRANCH.indexOf(saju.month.b);const hbi = saju.hour ? BRANCH.indexOf(saju.hour.b) : -1;const otherBranches = [ybi, mbi];if (hbi >= 0) otherBranches.push(hbi);const chungPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];let spouseClash = false;let spouseClashType = '';chungPairs.forEach(([a,b]) => {if ((dbi === a && otherBranches.includes(b)) || (dbi === b && otherBranches.includes(a))) {spouseClash = true;spouseClashType = '沖(沖)';}});const harmPairs = [[3,8],[1,6],[3,4]];harmPairs.forEach(([a,b]) => {if ((dbi === a && otherBranches.includes(b)) || (dbi === b && otherBranches.includes(a))) {if (!spouseClash) {spouseClash = true;spouseClashType = '元嗔/害(害)';}}});if (spouseCount === 0 && !hasHiddenSpouse) {spouseAnalysis = '配偶者星が ありません. 結婚が 遅れるか 縁が 弱い可能性 あります. 大運で 入ると 縁が 生まれる。';} else if (spouseCount === 0 && hasHiddenSpouse) {spouseAnalysis = '天干に 配偶者星が はないが支蔵干に隠れ あります. 表に出ない実益型の配偶者に出会ったり、紹介より自然な出会いで縁が生まれる。';} else if (spouseCount >= 2) {spouseAnalysis = '配偶者星が が多い。異性に人気だが浮気 注意! 一人の人に集中してください。';} else {spouseAnalysis = '配偶者星が 適切です. 良い 縁に出会えることがあります。';}
 if (spouseClash) {spouseAnalysis += ` ⚠️ ただし、配偶者宮(日支)が${spouseClashType}を受けて夫婦葛藤がある可能性があります。互いに距離を置くか各自忙しい生活がむしろ 良いです.`;}
 result.spouse = {god: spouseGod,
 count: spouseCount,
@@ -1451,12 +1451,18 @@ const FORMATS_INNER = {'比肩':{n:'比肩格(比肩格)',d:'独立心と競争�
 'jongsal': {n:'従殺格(從殺格)', d:'官殺が極度に旺盛で官殺に従する格です。 権力と名誉を追求し組織で高い地位に就きます. 軍警、政治人、高位役員に適しています。', b:'軍警, 政治人, 役員, 法曹人', lv:'特殊'},
 'yangin': {n:'羊刃格(羊刃格)', d:'日支に羊刃(羊刃)があり極めて強い気を持つ格です。 決断力と推進力が大変で危機に強いです。 刃 同じ 性格で 敵を作ることもありますが、うまく使えば英雄になります。', b:'軍人, 外科医, 法曹人, スポーツ選手', lv:'特殊'},
 'geonrok': {n:'建禄格(建祿格)', d:'月支が日干の建禄地で気が旺盛です。 自ら立ち上がる自手成家型で、職業安定性が良いです。 着実な努力で中年以降発福します。', b:'公務員、専門職、自営業', lv:'上'},
-'woldeok': {n:'月徳格(月德格)', d:'月徳貴人があり徳があり困難な時に助けを受けます。 人品が良く信頼され官職運があります。', b:'公職, 教育, 宗教', lv:'上'}};function isFormatBroken(saju, formatGod) {const dm = saju.day.s;const dmEl = dm.e;const breakReasons = [];if (formatGod === '正官') {const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.k === '傷官') {breakReasons.push('傷官肩冠(傷官見官): 傷官が 正官を剋して破格');}}}
-if (formatGod === '食神') {const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.k === '偏印') {breakReasons.push('梟神奪食(梟神奪食): 偏印が食神を剋して破格');}}}
-if (formatGod === '正財' || formatGod === '偏財') {let biCount = 0;const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.k === '比肩' || god.k === '劫財') biCount++;}
+'woldeok': {n:'月徳格(月德格)', d:'月徳貴人があり徳があり困難な時に助けを受けます。 人品が良く信頼され官職運があります。', b:'公職, 教育, 宗教', lv:'上'}};function isFormatBroken(saju, formatGod) {const dm = saju.day.s;const dmEl = dm.e;const breakReasons = [];if (formatGod === '正官') {const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.c === '傷官') {breakReasons.push('傷官肩冠(傷官見官): 傷官が 正官を剋して破格');}}}
+if (formatGod === '食神') {const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.c === '偏印') {breakReasons.push('梟神奪食(梟神奪食): 偏印が食神を剋して破格');}}}
+if (formatGod === '正財' || formatGod === '偏財') {let biCount = 0;const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.c === '比肩' || god.c === '劫財') biCount++;}
 if (biCount >= 2) {breakReasons.push('群劫争財(群劫爭財): 比劫が多く財を奪われる');}}
 return breakReasons;}
-function checkSpecialFormat(saju, strength) {if (!strength.extreme) return null;const dm = saju.day.s;const ec = countElements(saju);const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);const godCounts = {bigeop:0, sikSang:0, jae:0, gwan:0, in:0};allPillars.forEach(p => {const god = getTenGod(p.s, dm);if (['比肩','劫財'].includes(god.k)) godCounts.bigeop++;if (['食神','傷官'].includes(god.k)) godCounts.sikSang++;if (['偏財','正財'].includes(god.k)) godCounts.jae++;if (['偏官','正官'].includes(god.k)) godCounts.gwan++;if (['偏印','正印'].includes(god.k)) godCounts.in++;});const ybi = saju.year ? BRANCH.findIndex(b => b.c === saju.year.b.c) : -1;const hasSikSangWithRoot = saju.year && ['傷官','食神'].includes(getTenGod(saju.year.s, saju.day.s)?.k) &&
+function checkYongOverwhelmed(saju, gods) {const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year, saju.month, saju.day, saju.hour].forEach(p => {if (p?.s) elCount[p.s.e]++;if (p?.b) elCount[p.b.e]++;});const yongCount = elCount[gods.yong] || 0;const giCount = elCount[gods.gi] || 0;if (giCount >= 3 && yongCount <= 1 && giCount >= yongCount * 3) {return { active: true, score: -2, desc: `⚠️ 衰神冲旺(衰神冲旺)：忌神(${ELEMENT[gods.gi].k}) ${giCount}個 vs 用神(${ELEMENT[gods.yong].k}) ${yongCount}個 → 用神が来ても圧倒される！` };}
+return { active: false, score: 0, desc: '' };}
+function checkPyunInDoShik(saju, gods) {const dm = saju.day.s;const monthBi = BRANCH.findIndex(b => b.c === saju.month.b.c);const shikShinEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];const pyunInEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];if (saju.month.b.e !== shikShinEl) return { active: false, score: 0, desc: '' };const clashPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);let found = false, detail = '';branches.forEach(b => {if (b.e === pyunInEl) {const bi = BRANCH.findIndex(br => br.c === b.c);clashPairs.forEach(([a, c]) => {if ((bi === a && monthBi === c) || (bi === c && monthBi === a)) {found = true;detail = `${b.c}(偏印)↔${saju.month.b.c}(食神)`;}});}});if (found) {return { active: true, score: -2, desc: `⚠️ 偏印倒食(偏印倒食)：${detail} 冲 → 才能はあるが敏感さのため機会を蹴飛ばす形局！` };}
+return { active: false, score: 0, desc: '' };}
+function checkWangShinChungBal(yp, saju) {const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year, saju.month, saju.day, saju.hour].forEach(p => {if (p?.s) elCount[p.s.e]++;if (p?.b) elCount[p.b.e]++;});const wangElements = Object.entries(elCount).filter(([el, cnt]) => cnt >= 4);if (wangElements.length === 0) return { active: false, score: 0, desc: '' };const clashPairs = {'子':'午','午':'子','丑':'未','未':'丑','寅':'申','申':'寅','卯':'酉','酉':'卯','辰':'戌','戌':'辰','巳':'亥','亥':'巳'};const yearBranch = yp.b.c;const clashTarget = clashPairs[yearBranch];if (!clashTarget) return { active: false, score: 0, desc: '' };const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);const targetBranches = branches.filter(b => b.c === clashTarget);if (targetBranches.length === 0) return { active: false, score: 0, desc: '' };const targetEl = targetBranches[0].e;const isWang = wangElements.some(([el]) => el === targetEl);if (isWang) {const wangCount = elCount[targetEl];return { active: true, score: -3, desc: `🚨 旺神冲発(旺神冲發)：${yearBranch}(歳運)が${clashTarget}(原局)を冲！${ELEMENT[targetEl].k}が${wangCount}個で旺なのに触れた → 大激変/事故/破財極度注意！` };}
+return { active: false, score: 0, desc: '' };}
+function checkSpecialFormat(saju, strength) {if (!strength.extreme) return null;const dm = saju.day.s;const ec = countElements(saju);const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);const godCounts = {bigeop:0, sikSang:0, jae:0, gwan:0, in:0};allPillars.forEach(p => {const god = getTenGod(p.s, dm);if (['比肩','劫財'].includes(god.c)) godCounts.bigeop++;if (['食神','傷官'].includes(god.c)) godCounts.sikSang++;if (['偏財','正財'].includes(god.c)) godCounts.jae++;if (['偏官','正官'].includes(god.c)) godCounts.gwan++;if (['偏印','正印'].includes(god.c)) godCounts.in++;});const ybi = saju.year ? BRANCH.findIndex(b => b.c === saju.year.b.c) : -1;const hasSikSangWithRoot = saju.year && ['傷官','食神'].includes(getTenGod(saju.year.s, saju.day.s)?.c) &&
 (ybi === 5 || ybi === 6);if (strength.extreme === '極身強' && !hasSikSangWithRoot) {if (godCounts.bigeop >= 3) return FORMATS_SPECIAL.jongwang;if (godCounts.in >= 2 && godCounts.bigeop >= 2) return FORMATS_SPECIAL.jonggang;}
 if (strength.extreme === '極身弱') {if (godCounts.sikSang >= 3) return FORMATS_SPECIAL.jonga;if (godCounts.jae >= 3) return FORMATS_SPECIAL.jongjae;if (godCounts.gwan >= 3) return FORMATS_SPECIAL.jongsal;}
 return null;}
@@ -1473,17 +1479,17 @@ if (samhapFormatInfo) {return {...samhapFormatInfo,
 god: samhapGod,
 type: 'samhap_variation',
 samhapBureau: samhapResult.name};}}
-const mbi = BRANCH.indexOf(saju.month.b);const jj = JIJANGGAN[mbi];const mainJj = jj.find(j => j.days >= 16) || jj[jj.length - 1];const mainStem = STEM[mainJj.stem];const god = getTenGod(mainStem, saju.day.s);const monthGod = getTenGod(saju.month.s, saju.day.s);let finalGod = god.k;let formatReason = '月支 正気';if (['食神','傷官','偏財','正財','偏官','正官','偏印','正印'].includes(monthGod.k)) {const monthStemIdx = STEM.indexOf(saju.month.s);if (jj.some(j => j.stem === monthStemIdx)) {finalGod = monthGod.k;formatReason = '月干 透出+月支 通根';}
+const mbi = BRANCH.indexOf(saju.month.b);const jj = JIJANGGAN[mbi];const mainJj = jj.find(j => j.days >= 16) || jj[jj.length - 1];const mainStem = STEM[mainJj.stem];const god = getTenGod(mainStem, saju.day.s);const monthGod = getTenGod(saju.month.s, saju.day.s);let finalGod = god.c;let formatReason = '月支 正気';if (['食神','傷官','偏財','正財','偏官','正官','偏印','正印'].includes(monthGod.c)) {const monthStemIdx = STEM.indexOf(saju.month.s);if (jj.some(j => j.stem === monthStemIdx)) {finalGod = monthGod.c;formatReason = '月干 透出+月支 通根';}
 const brs = [BRANCH.indexOf(saju.year.b), mbi, BRANCH.indexOf(saju.day.b)];if (saju.hour) brs.push(BRANCH.indexOf(saju.hour.b));const samhapSets = [
 {branches: [2,6,10], result: 'fire', name: '寅午戌 火局'},
 {branches: [5,9,1], result: 'metal', name: '巳酉丑 金局'},
 {branches: [8,0,4], result: 'water', name: '申子辰 水局'},
 {branches: [11,3,7], result: 'wood', name: '亥卯未木局'}
-];const monthStemElement = saju.month.s.e;for (const sh of samhapSets) {const hasCount = sh.branches.filter(b => brs.includes(b)).length;const hasCenter = brs.includes(sh.branches[1]);if (hasCount >= 2 && hasCenter) {const resultElementKey = sh.result;if (monthStemElement === resultElementKey) {finalGod = monthGod.k;formatReason = hasCount === 3 ?
+];const monthStemElement = saju.month.s.e;for (const sh of samhapSets) {const hasCount = sh.branches.filter(b => brs.includes(b)).length;const hasCenter = brs.includes(sh.branches[1]);if (hasCount >= 2 && hasCenter) {const resultElementKey = sh.result;if (monthStemElement === resultElementKey) {finalGod = monthGod.c;formatReason = hasCount === 3 ?
 `月干 透出+${sh.name} 完成` :
 `月干 透出+${sh.name} 半合(旺支含む)`;break;}}}
-if (finalGod !== monthGod.k) {const otherBranches = [saju.year.b, saju.day.b];if (saju.hour) otherBranches.push(saju.hour.b);for (const br of otherBranches) {const brIdx = BRANCH.indexOf(br);const brJj = JIJANGGAN[brIdx];if (brJj.some(j => j.stem === monthStemIdx)) {for (const sh of samhapSets) {const hasCount = sh.branches.filter(b => brs.includes(b)).length;const hasCenter = brs.includes(sh.branches[1]);if (hasCount >= 2 && hasCenter && sh.branches.includes(brIdx)) {finalGod = monthGod.k;formatReason = `月干 透出+${br.c}支通根+${sh.name.split(' ')[0]} 半合`;break;}}
-if (finalGod === monthGod.k) break;}}}}
+if (finalGod !== monthGod.c) {const otherBranches = [saju.year.b, saju.day.b];if (saju.hour) otherBranches.push(saju.hour.b);for (const br of otherBranches) {const brIdx = BRANCH.indexOf(br);const brJj = JIJANGGAN[brIdx];if (brJj.some(j => j.stem === monthStemIdx)) {for (const sh of samhapSets) {const hasCount = sh.branches.filter(b => brs.includes(b)).length;const hasCenter = brs.includes(sh.branches[1]);if (hasCount >= 2 && hasCenter && sh.branches.includes(brIdx)) {finalGod = monthGod.c;formatReason = `月干 透出+${br.c}支通根+${sh.name.split(' ')[0]} 半合`;break;}}
+if (finalGod === monthGod.c) break;}}}}
 const dmEl = saju.day.s.e;const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 2) % 5];const ec = countElements(saju);const wealthPower = ec[wealthEl] || 0;if (wealthPower >= 3 && ['食神','傷官'].includes(finalGod)) {const str = calcStrength(saju);if (str.type === 'weak') {const dayIdx = EL_ORDER.indexOf(dmEl);const wealthGod = (dayIdx % 2 === 0) ? '偏財' : '正財';finalGod = wealthGod;formatReason = `地支 財星(${ELEMENT[wealthEl].k}) 太旺 - 財多身弱`;}}
 if (yangInGeonRok && yangInGeonRok.n.includes('建禄')) {return {...yangInGeonRok, type:'inner', god:'建禄'};}
 const breakReasons = isFormatBroken(saju, finalGod);const f = FORMATS_INNER[finalGod] || FORMATS_INNER['正官'];return {...f,
@@ -1491,9 +1497,9 @@ god: finalGod,
 type: 'inner',
 broken: breakReasons.length > 0,
 breakReasons,
-tougan: monthGod.k !== god.k ? monthGod.k : null,
+tougan: monthGod.c !== god.c ? monthGod.c : null,
 formatReason};}
-function calcFormatSimple(saju) {const god = getTenGod(saju.month.s, saju.day.s);const f = FORMATS_INNER[god.k] || FORMATS_INNER['正官'];f.god = god.k;return f;}
+function calcFormatSimple(saju) {const god = getTenGod(saju.month.s, saju.day.s);const f = FORMATS_INNER[god.c] || FORMATS_INNER['正官'];f.god = god.c;return f;}
 function getIljuDesc(ds, db) {const iljuData = {'甲子':{t:'甲子(きのえね)日柱 - 海辺の大樹',d:'子水が甲木を生じるため聡明で学問に才能があります。頭が良く計画性がありますが、時に心配性です。夜生まれだとさらに良く、配偶者との情が深いです。',s:'配偶者が知的で内助の功があります。年下と相性が良く、水辺で縁を結びやすいです。'},
 '甲寅':{t:'甲寅(きのえとら)日柱 - 虎に乗る木',d:'日干と日支が同じ五行で自尊心が強く独立心があります。長男長女の気質がありリーダーシップがあります。頑固で負けず嫌いです。',s:'配偶者も自尊心が強くぶつかることがあります。互いに譲る姿勢が必要です。'},
 '甲辰':{t:'甲辰(きのえたつ)日柱 - 龍に乗る木',d:'辰土が木の根となり才能が豊富です。野心が大きく出世欲があります。文昌の気があり学問に長け、社会的に認められやすいです。',s:'配偶者が頼もしく財運があります。卯・酉の相性が良いです。'},
@@ -1603,9 +1609,9 @@ warning,
 severity,
 yearsAway: yearsToTransition});}}
 return gyoungiList;}
-function calcLuck(saju, birthYear, gender, gods, birthMonth, birthDay, birthHour) {const isYang = saju.year.s.y;const isMale = gender === 'm';const forward = (isYang && isMale) || (!isYang && !isMale);const periods = [];const msi = STEM.indexOf(saju.month.s);const mbi = BRANCH.indexOf(saju.month.b);const curYear = new Date().getFullYear();const curAge = curYear - birthYear;const daeunStart = calcPreciseDaeunStart(saju, birthYear, birthMonth, birthDay, birthHour, gender);const firstAge = daeunStart.firstAge;for (let i = 0; i < 10; i++) {const si = forward ? (msi + i + 1) % 10 : (msi - i - 1 + 10) % 10;const bi = forward ? (mbi + i + 1) % 12 : (mbi - i - 1 + 12) % 12;const age = firstAge + i * 10;const isCur = curAge >= age && curAge < age + 10;const s = STEM[si], b = BRANCH[bi];let score = 0;let climateClash = false;if ([s.e, b.e].includes(gods.yong)) score += 2;if ([s.e, b.e].includes(gods.hee)) score += 1;if ([s.e, b.e].includes(gods.gi)) score -= 2;if (gods.climate) {const daeunEls = [s.e, b.e];if ((gods.climate.type.includes('燥') || gods.climate.type.includes('暑')) &&
+function calcLuck(saju, birthYear, gender, gods, birthMonth, birthDay, birthHour) {const isYang = saju.year.s.y;const isMale = gender === 'm';const forward = (isYang && isMale) || (!isYang && !isMale);const periods = [];const msi = STEM.indexOf(saju.month.s);const mbi = BRANCH.indexOf(saju.month.b);const curYear = new Date().getFullYear();const curAge = curYear - birthYear;const daeunStart = calcPreciseDaeunStart(saju, birthYear, birthMonth, birthDay, birthHour, gender);const firstAge = daeunStart.firstAge;for (let i = 0; i < 10; i++) {const si = forward ? (msi + i + 1) % 10 : (msi - i - 1 + 10) % 10;const bi = forward ? (mbi + i + 1) % 12 : (mbi - i - 1 + 12) % 12;const age = firstAge + i * 10;const isCur = curAge >= age && curAge < age + 10;const s = STEM[si], b = BRANCH[bi];let score = 0;let climateClash = false;if ([s.e, b.e].includes(gods.yong)) score += 2;if ([s.e, b.e].includes(gods.hee)) score += 1;if ([s.e, b.e].includes(gods.gi)) score -= 2;if (gods.climate) {const daeunEls = [s.e, b.e];if ((gods.climate.type.includes('燥') || gods.climate.type.includes('極燥')) &&
 daeunEls.filter(e => e === 'fire').length >= 1) {score -= 2;climateClash = true;}
-if ((gods.climate.type.includes('極寒') || gods.climate.type.includes('極寒')) &&
+if ((gods.climate.type.includes('寒') || gods.climate.type.includes('極寒')) &&
 daeunEls.filter(e => e === 'water').length >= 1) {score -= 2;climateClash = true;}}
 const startYear = birthYear + age;const endYear = birthYear + age + 9;periods.push({s, b,
 startAge: age,
@@ -1623,92 +1629,173 @@ firstAgeExact: daeunStart.firstAgeExact,
 daysToTerm: daeunStart.daysToTerm,
 targetTerm: daeunStart.targetTerm,
 calculationMethod: daeunStart.calculationMethod};return periods;}
-function calcYearLuck(year, saju, gods) {const yp = calcYearPillar(year, 6, 1);const dm = saju.day.s;const god = getTenGod(yp.s, dm);const state = getTwelveState(dm, yp.b);let score = 0;let warnings = [];if ([yp.s.e, yp.b.e].includes(gods.yong)) score += 3;if ([yp.s.e, yp.b.e].includes(gods.hee)) score += 2;if ([yp.s.e, yp.b.e].includes(gods.gi)) score -= 3;if (state.l >= 10) score += 1;else if (state.l <= 3) score -= 1;const yearEls = [yp.s.e, yp.b.e];if (gods.yong === 'metal' && yearEls.includes('fire')) {score -= 3;warnings.push('⚠️ 火剋金(火克金): 用神(金)が 歳運の火に破壊される');}
-if (gods.yong === 'fire' && yearEls.includes('water')) {score -= 3;warnings.push('⚠️ 水剋火(水克火): 用神(火)が 歳運の水に破壊される');}
-if (gods.yong === 'wood' && yearEls.includes('metal')) {score -= 3;warnings.push('⚠️ 金克木(金克木): 用神(木)が 歳運の金に破壊される');}
-if (gods.yong === 'earth' && yearEls.includes('wood')) {score -= 3;warnings.push('⚠️ 木剋土(木克土): 用神(土)が 歳運の木に破壊される');}
-if (gods.yong === 'water' && yearEls.includes('earth')) {score -= 3;warnings.push('⚠️ 土剋水(土克水): 用神(水)が 歳運の土に破壊される');}
-const ec = countElements(saju);const fireCount = ec.fire || 0;if (fireCount >= 3 && yearEls.includes('fire')) {score -= 2;warnings.push('🔥 火炎燥土: 火の海四柱に火運が来て過熱危険');}
-const sajuBranches = [saju.year.b, saju.month.b, saju.day.b];if (saju.hour) sajuBranches.push(saju.hour.b);const sajuBranchIdxs = sajuBranches.map(b => BRANCH.indexOf(b));const yearBranchIdx = BRANCH.indexOf(yp.b);const wangjiClash = [
-{a: 0, b: 6, name: '子午冲(子午沖)', desc: '水火相戰! 心血管 vs 腎臓/膀胱健康注意'},
-{a: 3, b: 9, name: '卯酉沖(卯酉沖)', desc: '金木交戦！ 肝臓/胆嚢 vs 肺/大腸 健康 注意'}
-];for (const clash of wangjiClash) {if (yearBranchIdx === clash.a && sajuBranchIdxs.includes(clash.b)) {score -= 3;const positions = sajuBranchIdxs.map((idx, i) => idx === clash.b ? ['年支','月支','日支','時支'][i] : null).filter(p => p);warnings.push(`⚡ ${clash.name}: 歳運 ${BRANCH[clash.a].c}と原局 ${positions.join('/')} ${BRANCH[clash.b].c} 衝突! ${clash.desc}`);}
-if (yearBranchIdx === clash.b && sajuBranchIdxs.includes(clash.a)) {score -= 3;const positions = sajuBranchIdxs.map((idx, i) => idx === clash.a ? ['年支','月支','日支','時支'][i] : null).filter(p => p);warnings.push(`⚡ ${clash.name}: 歳運 ${BRANCH[clash.b].c}と原局 ${positions.join('/')} ${BRANCH[clash.a].c} 衝突! ${clash.desc}`);}}
-const waterCount = ec.water || 0;const dmEl = dm.e;if (dmEl === 'fire' && waterCount >= 3 && (ec.fire || 0) <= 1) {if (yearEls.includes('water')) {score -= 2;warnings.push('💧 水多火熄(水多火熄): 水が火を消す形局! 水 運に健康/活力低下注意');}
-if (yearEls.includes('fire') || yearEls.includes('wood')) {score += 2;warnings.push('🔥 水多火熄四柱に火/木の運！消えかけていた火が蘇る良い時期');}}
-const baihuIlju = ['甲辰','乙未','丙戌','丁丑','戊辰','己未','庚戌','辛丑','壬辰','癸未'];const ilju = saju.day.s.c + saju.day.b.c;if (baihuIlju.includes(ilju) && yearEls.includes('fire')) {score -= 1;warnings.push('🐅 白虎大殺日柱に火運！手術、事故、出血に注意。健康検診必須');}
-const wangji = {0: '子', 3: '卯', 6: '午', 9: '酉'};const wangjiEl = {0: 'water', 3: 'wood', 6: 'fire', 9: 'metal'};const wangjiHealth = {0: '腎臓/膀胱応急！ 水害四柱に水歳運',
-3: '肝臓/胆嚢応急！ 怒り爆発注意',
-6: '心血管/脳出血応急！火の海四柱に火歳運 - 倒れる可能性あり',
-9: '肺/呼吸器 応急! 金属中毒注意'};if (wangji[yearBranchIdx]) {const wangjiCount = sajuBranchIdxs.filter(b => b === yearBranchIdx).length;if (wangjiCount >= 2) {score -= 3;warnings.push(`🚨 旺支爆発(${wangji[yearBranchIdx]}×${wangjiCount+1}): ${wangjiHealth[yearBranchIdx]}`);}}
-const yongEl = gods.yong;const giEl = gods.gi;const yongCount = ec[yongEl] || 0;const giCount = ec[giEl] || 0;if (yearEls.includes(yongEl) && giCount >= 3 && yongCount <= 1) {score -= 2;const elKor = {wood:'木', fire:'火', earth:'土', metal:'金', water:'水'};warnings.push(`⚠️ 衰神冲旺(衰神沖旺): 用神(${elKor[yongEl]}) 流入するも 忌神(${elKor[giEl]}) ${giCount}個に圧倒される。機会が来ても競争者/妨害者に奪われる。拡張禁止！`);}
-const elKor = {wood:'木', fire:'火', earth:'土', metal:'金', water:'水'};const elHealth = {wood: '肝臓/胆嚢/目/神経',
-fire: '心臓/血管/脳',
-earth: '脾臓/胃/消化器',
-metal: '肺/大腸/皮膚',
-water: '腎臓/膀胱/生殖器'};const keukRelation = {fire: 'metal',
-metal: 'wood',
-wood: 'earth',
-earth: 'water',
-water: 'fire'};for (const [attackEl, victimEl] of Object.entries(keukRelation)) {const victimCount = ec[victimEl] || 0;const attackCount = ec[attackEl] || 0;if (victimCount >= 4 && attackCount <= 1 && yearEls.includes(attackEl)) {score -= 2;warnings.push(`⚔️ 旺旺者沖発(旺者沖發): ${elKor[attackEl]} 運が太旺な ${elKor[victimEl]}(${victimCount}個)を攻撃するも逆襲される！ ${elKor[attackEl]}が${elKor[victimEl]}に飲み込まれる。 ${elHealth[attackEl]} 損傷 注意!`);}}
-if ((sajuBranchIdxs.includes(0) && yearBranchIdx === 6) ||
-(sajuBranchIdxs.includes(6) && yearBranchIdx === 0)) {const waterPower = ec.water || 0;const firePower = ec.fire || 0;if (waterPower > firePower + 1) {warnings.push(`💧 子午冲 勝敗: 水(${waterPower}個) > 火(${firePower}個) → 火が消える！ ${elHealth.fire} 損傷, 情熱/意欲低下注意`);} else if (firePower > waterPower + 1) {warnings.push(`🔥 子午冲 勝敗: 火(${firePower}個) > 水(${waterPower}個) → 水が枯れる！ ${elHealth.water} 損傷, 腎臓/膀胱注意`);} else {warnings.push(`⚡ 子午冲 激戦: 水(${waterPower}個) ≈ 火(${firePower}個) → 両方とも損傷！ 心血管+腎臓 共に注意`);}}
-if ((sajuBranchIdxs.includes(3) && yearBranchIdx === 9) ||
-(sajuBranchIdxs.includes(9) && yearBranchIdx === 3)) {const woodPower = ec.wood || 0;const metalPower = ec.metal || 0;if (metalPower > woodPower + 1) {warnings.push(`🪓 卯酉沖 勝敗: 金(${metalPower}個) > 木(${woodPower}個) → 木が 切られる！ ${elHealth.wood} 損傷, 肝臓/胆嚢/神経 注意`);} else if (woodPower > metalPower + 1) {warnings.push(`🌳 卯酉沖 勝敗: 木(${woodPower}個) > 金(${metalPower}個) → 斧が折れる！ ${elHealth.metal} 損傷 の代わりに木の反撃`);} else {warnings.push(`⚡ 卯酉沖 激戦: 木(${woodPower}個) ≈ 金(${metalPower}個) → 両方とも損傷！ 肝臓/胆嚢+肺 共に注意`);}}
-return {year,
-pillar: yp,
-god,
-state,
-score,
-warnings,
-rating: score >= 3 ? 'great' : score >= 1 ? 'good' : score <= -2 ? 'bad' : 'neutral'};}
-function checkYongOverwhelmed(saju, gods) {const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year, saju.month, saju.day, saju.hour].forEach(p => {if (p?.s) elCount[p.s.e]++;if (p?.b) elCount[p.b.e]++;});const yongCount = elCount[gods.yong] || 0;const giCount = elCount[gods.gi] || 0;if (giCount >= 3 && yongCount <= 1 && giCount >= yongCount * 3) {return { active: true, score: -2, desc: `⚠️ 衰神冲旺(衰神沖旺): 忌神(${ELEMENT[gods.gi].k}) ${giCount}個 vs 用神(${ELEMENT[gods.yong].k}) ${yongCount}個 → 用神が来ても圧倒される！` };}
+const YEAR_LUCK_CONFIG = {stemCombineMap: [[0,5,'earth'],[1,6,'metal'],[2,7,'water'],[3,8,'wood'],[4,9,'fire']],
+branchCombineMap: [[0,1,'earth'],[2,11,'wood'],[3,10,'fire'],[4,9,'metal'],[5,8,'water'],[6,7,'fire']],
+harmPairs: [[0,7],[1,6],[2,5],[3,4],[8,11],[9,10]],
+selfPunishBranches: [4, 6, 9, 11],
+keMap: {wood:'earth', earth:'water', water:'fire', fire:'metal', metal:'wood'},
+samhapPatterns: [[2,6,10,'fire'],[8,0,4,'water'],[5,9,1,'metal'],[11,3,7,'wood']],
+yanginBranches: {'wood+':3,'wood-':2,'fire+':6,'fire-':5,'earth+':6,'earth-':5,
+'metal+':9,'metal-':8,'water+':0,'water-':11}};
+function ylCheckYongGi(yp, gods) {let score = 0;if ([yp.s.e, yp.b.e].includes(gods.yong)) score += 3;if ([yp.s.e, yp.b.e].includes(gods.hee)) score += 2;if ([yp.s.e, yp.b.e].includes(gods.gi)) score -= 3;return { score };}
+function ylCheckYongAttack(yp, gods) {const { keMap } = YEAR_LUCK_CONFIG;let active = false, desc = '', score = 0;[yp.s.e, yp.b.e].forEach(ye => {if (keMap[ye] === gods.yong) {active = true; score = -4;desc = `⚠️ 用神攻撃！ ${ELEMENT[ye].n} が ${ELEMENT[gods.yong].n} (${ye}克${gods.yong}). を破壊！保守的に運営してください！`;}});return { active, desc, score };}
+function ylCheckRobWealth(yp, saju, gods, strength) {const god = getTenGod(yp.s, saju.day.s);const isPeer = ['比肩', '劫財'].includes(god.c);if (strength.type === 'strong' && isPeer) {return { active: true, score: -3, desc: `⚔️ 群劫争財(群劫爭財)！身強四柱に比劫運。競争者が財物を奪います。共同事業/保証禁止。` };}
 return { active: false, score: 0, desc: '' };}
-function checkPyunInDoShik(saju, gods) {const dm = saju.day.s;const monthBi = BRANCH.findIndex(b => b.c === saju.month.b.c);const shikShinEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];const pyunInEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];if (saju.month.b.e !== shikShinEl) return { active: false, score: 0, desc: '' };const clashPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);let found = false, detail = '';branches.forEach(b => {if (b.e === pyunInEl) {const bi = BRANCH.findIndex(br => br.c === b.c);clashPairs.forEach(([a, c]) => {if ((bi === a && monthBi === c) || (bi === c && monthBi === a)) {found = true;detail = `${b.c}(偏印)↔${saju.month.b.c}(食神)`;}});}});if (found) {return { active: true, score: -2, desc: `⚠️ 偏印倒食(偏印倒食): ${detail}沖 → 才能はあるが敏感さのために機会を蹴飛ばす形局！` };}
+function ylCheckExpressorPeer(yp, saju, strength) {const god = getTenGod(yp.s, saju.day.s);const isPeer = ['比肩', '劫財'].includes(god.c);try {const format = calcFormat(saju, strength);if (format.god && (format.god.includes('傷官') || format.god.includes('傷官')) && isPeer) {return { active: true, score: -2, desc: `⚠️ 傷官+比劫衝突(傷官+比劫)：訴訟・口舌の危険！創作・研究にエネルギーを集中してください。` };}} catch(e) {}
 return { active: false, score: 0, desc: '' };}
-function checkWangShinChungBal(yp, saju) {const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year, saju.month, saju.day, saju.hour].forEach(p => {if (p?.s) elCount[p.s.e]++;if (p?.b) elCount[p.b.e]++;});const wangElements = Object.entries(elCount).filter(([el, cnt]) => cnt >= 4);if (wangElements.length === 0) return { active: false, score: 0, desc: '' };const clashPairs = {'子':'午','午':'子','丑':'未','未':'丑','寅':'申','申':'寅','卯':'酉','酉':'卯','辰':'戌','戌':'辰','巳':'亥','亥':'巳'};const yearBranch = yp.b.c;const clashTarget = clashPairs[yearBranch];if (!clashTarget) return { active: false, score: 0, desc: '' };const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);const targetBranches = branches.filter(b => b.c === clashTarget);if (targetBranches.length === 0) return { active: false, score: 0, desc: '' };const targetEl = targetBranches[0].e;const isWang = wangElements.some(([el]) => el === targetEl);if (isWang) {const wangCount = elCount[targetEl];return { active: true, score: -3, desc: `🚨 旺神冲発(旺神沖發): ${yearBranch}(歳運)が ${clashTarget}(原局)を沖！ ${ELEMENT[targetEl].k}が ${wangCount}個で旺なのに を刺激 → 大激変/事故/破財極度注意！` };}
+function ylCheckClimateClash(yp, gods) {if (!gods.climate) return { active: false, score: 0, desc: '' };const yearEls = [yp.s.e, yp.b.e];const climate = gods.climate.type;if ((climate.includes('조') || climate.includes('극조')) && yearEls.includes('fire')) {return { active: true, score: -(yearEls.filter(e => e === 'fire').length * 3), desc: '燥熱四柱に火運！健康・財物危険。' };}
+if ((climate.includes('한') || climate.includes('극한')) && yearEls.includes('water')) {return { active: true, score: -(yearEls.filter(e => e === 'water').length * 3), desc: '寒湿四柱に水運！うつ病・無気力の危険。' };}
 return { active: false, score: 0, desc: '' };}
+function ylCheckBureau(yp, saju) {const { samhapPatterns } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);const dayBi = BRANCH.findIndex(br => br.c === saju.day.b.c);const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), dayBi];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));for (const [a, b, c, el] of samhapPatterns) {if (ypBi === b && allBr.includes(a) && allBr.includes(c)) {return { active: true, score: 3, element: el, desc: `🔥 ${BRANCH[a].c}${BRANCH[b].c}${BRANCH[c].c} ${ELEMENT[el].n} 三合局成立！冲(冲)無効化。` };}
+if ((ypBi === a || ypBi === c) && allBr.includes(b) && ((ypBi === a) ? allBr.includes(c) : allBr.includes(a))) {return { active: true, score: 3, element: el, desc: `🔥 ${BRANCH[a].c}${BRANCH[b].c}${BRANCH[c].c} ${ELEMENT[el].n} Bureau formed!` };}}
+const halfBureauPatterns = [
+{ pair: [2, 6], wangji: 6, element: 'fire', name: '寅午 Fire Half-Bureau' },
+{ pair: [6, 10], wangji: 6, element: 'fire', name: '午戌 Fire Half-Bureau' },
+{ pair: [8, 0], wangji: 0, element: 'water', name: '申子 Water Half-Bureau' },
+{ pair: [0, 4], wangji: 0, element: 'water', name: '子辰 Water Half-Bureau' },
+{ pair: [5, 9], wangji: 9, element: 'metal', name: '巳酉 Metal Half-Bureau' },
+{ pair: [9, 1], wangji: 9, element: 'metal', name: '酉丑 Metal Half-Bureau' },
+{ pair: [11, 3], wangji: 3, element: 'wood', name: '亥卯 Wood Half-Bureau' },
+{ pair: [3, 7], wangji: 3, element: 'wood', name: '卯未 Wood Half-Bureau' }
+];for (const hb of halfBureauPatterns) {if ((ypBi === hb.pair[0] && dayBi === hb.pair[1]) ||
+(ypBi === hb.pair[1] && dayBi === hb.pair[0])) {return {active: true,
+score: 2,
+element: hb.element,
+isHalfBureau: true,
+desc: `🔥 ${hb.name} formed (Year+Day)! ${ELEMENT[hb.element].n} energy AMPLIFIED!`};}}
+return { active: false, score: 0, element: null, desc: '' };}
+function ylCheckMonthClash(yp, saju, bureauFormed) {if (bureauFormed) return { active: false, score: 0, desc: '' };const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);if (Math.abs(ypBi - mbi) === 6) {const wang = [0, 3, 6, 9];const isWang = wang.includes(ypBi) && wang.includes(mbi);return { active: true, score: isWang ? -4 : -2, desc: `${yp.b.c}↔${saju.month.b.c} 冲(冲)！職場・社会生活激変。` };}
+return { active: false, score: 0, desc: '' };}
+function ylCheckDayClash(yp, saju) {const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);if (Math.abs(ypBi - dbi) === 6) {return { active: true, desc: `${yp.b.c}↔${saju.day.b.c} 冲(冲)が日支(配偶者宮/自分自身)を攻撃！` };}
+return { active: false, desc: '' };}
+function ylCheckYanginClash(yp, saju) {const { yanginBranches } = YEAR_LUCK_CONFIG;const dm = saju.day.s, dmKey = dm.e + (dm.p ? '+' : '-');const yanginIdx = yanginBranches[dmKey];const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);if (dbi === yanginIdx && Math.abs(ypBi - dbi) === 6) {return { active: true, desc: `⚔️ 羊刃冲(沖羊刃)！高リスク高リターン - 手術または横財。` };}
+return { active: false, desc: '' };}
+function ylCheckTripleBranch(yp, saju) {const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));const cnt = allBr.filter(b => b === ypBi).length;if (cnt >= 1) {const clash = (ypBi + 6) % 12;if (allBr.includes(clash)) {return { active: true, target: yp.b, desc: `${yp.b.c} 気運倍加！ ${BRANCH[clash].c} 圧倒される (${cnt + 1}:1 攻撃)。` };}}
+return { active: false, target: null, desc: '' };}
+function ylCheckMissingBridge(yp, saju, gods) {const elCount = {};[saju.year.s.e, saju.year.b.e, saju.month.s.e, saju.month.b.e, saju.day.s.e, saju.day.b.e].forEach(e => elCount[e] = (elCount[e]||0)+1);if (saju.hour) { elCount[saju.hour.s.e] = (elCount[saju.hour.s.e]||0)+1; elCount[saju.hour.b.e] = (elCount[saju.hour.b.e]||0)+1; }
+if ((elCount['water']||0) >= 3 && gods.yong === 'fire' && !(elCount['wood']||0) && [yp.s.e, yp.b.e].includes('fire')) {return { active: true, desc: `🌊🔥 WATER-FIRE WAR without Bridge! No Wood to mediate. Remedy: Add Wood activities.` };}
+if ((elCount['metal']||0) >= 3 && gods.yong === 'fire' && !(elCount['earth']||0) && [yp.s.e, yp.b.e].includes('fire')) {return { active: true, desc: `⚔️🔥 METAL-FIRE WAR without Bridge! No Earth to mediate.` };}
+return { active: false, desc: '' };}
+function ylCheckStemCombine(yp, saju, gods) {const { stemCombineMap } = YEAR_LUCK_CONFIG;const ypSi = STEM.indexOf(yp.s);const allSi = [STEM.indexOf(saju.year.s), STEM.indexOf(saju.month.s), STEM.indexOf(saju.day.s)];if (saju.hour) allSi.push(STEM.indexOf(saju.hour.s));for (const [a, b, resEl] of stemCombineMap) {if (ypSi === a || ypSi === b) {const tgt = ypSi === a ? b : a;if (allSi.includes(tgt)) {const tgtStem = STEM[tgt], myGod = getTenGod(tgtStem, saju.day.s);const ypGod = getTenGod(yp.s, saju.day.s);let desc = `🔗 ${yp.s.c}+${tgtStem.c} 合(合)→ ${ELEMENT[resEl].n}.`;let score = 0;const isPeer = ['比肩', '劫財'].includes(ypGod.c);const isWealth = ['偏財', '正財'].includes(myGod.c);const resultIsGi = resEl === gods.gi;const resultIsGwan = ['water', 'earth'].includes(resEl) &&
+((saju.day.s.e === 'fire' && resEl === 'water') ||
+(saju.day.s.e === 'wood' && resEl === 'metal'));if (isPeer && isWealth && resultIsGi) {desc = `⚠️ ${yp.s.c}+${tgtStem.c} 合(合)→ ${ELEMENT[resEl].n} (BETRAYAL): Your helper (${ypGod.c}) meets your wealth (${myGod.c}) and transforms into PRESSURE. Trust no one with money this year. Reject partnership offers.`;score = -2;} else if (resultIsGi) {desc = `⚠️ ${yp.s.c}+${tgtStem.c} 合(合)→ ${ELEMENT[resEl].n} (忌神): Combine creates unfavorable element. Hidden sabotage.`;score = -1;} else if (yp.s.e === gods.yong && ['食神', '傷官'].includes(myGod.c)) {desc = `🔗 ${yp.s.c}+${tgtStem.c} 합(合) (羈絆): Promotion comes but freedom decreases. Golden handcuffs.`;score = 1;}
+return { active: true, from: yp.s, to: tgtStem, result: resEl, targetGod: myGod.c, desc, score };}}}
+return { active: false, from: null, to: null, result: null, targetGod: null, desc: '', score: 0 };}
+function ylCheckBranchCombine(yp, saju, gods, strength) {const { branchCombineMap } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));for (const [a, b, resEl] of branchCombineMap) {if (ypBi === a || ypBi === b) {const tgt = ypBi === a ? b : a;if (allBr.includes(tgt)) {const tgtBr = BRANCH[tgt];let desc = `🤝 ${yp.b.c}+${tgtBr.c} 合(合)→ ${ELEMENT[resEl].n}.`;let score = 0;const isWeak = strength && strength.pct < 30;const combineIsGi = resEl === gods.gi;const combineIsYong = resEl === gods.yong;if (saju.hour && BRANCH.findIndex(br => br.c === saju.hour.b.c) === tgt) {if (isWeak && combineIsGi) {desc = `⚠️ ${yp.b.c}+${tgtBr.c} 合(合)→ ${ELEMENT[resEl].n}! ⚠️ 身弱四柱に合が忌神を強化！晩年/子女軸に圧迫。腎臓/生殖器健康注意。`;score = -2;} else if (combineIsYong) {desc = `🤝 ${yp.b.c}+${tgtBr.c} 合(合)→ ${ELEMENT[resEl].n}! 시지에 用神 합화! 말년 기반 강화. 말년 기반 안정.`;score = 2;} else {desc = `🤝 ${yp.b.c}+${tgtBr.c} 合(合)→ ${ELEMENT[resEl].n}! 時支気運強化。`;score = 1;}} else if (BRANCH.findIndex(br => br.c === saju.day.b.c) === tgt) {if (isWeak && combineIsGi) {desc = `⚠️ ${yp.b.c}+${tgtBr.c} 合(合)→ ${ELEMENT[resEl].n}! 配偶者宮が忌神に変化。関係ストレス。`;score = -1;} else {desc = `🤝 ${yp.b.c}+${tgtBr.c} 合(合)→ ${ELEMENT[resEl].n}! 配偶者宮調和。`;score = 1;}}
+return { active: true, from: yp.b, to: tgtBr, result: resEl, desc, score };}}}
+return { active: false, from: null, to: null, result: null, desc: '', score: 0 };}
+function ylCheckSelfPunishment(yp, saju) {const { selfPunishBranches } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (!selfPunishBranches.includes(ypBi)) return { active: false, desc: '' };const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));const sameCount = allBr.filter(b => b === ypBi).length;if (sameCount < 1) return { active: false, desc: '' };const bn = yp.b.c;const totalCount = sameCount + 1;if (totalCount >= 3) {const tripleDescMap = {11: `🚨 ${bn}${bn}${bn} 三重自刑(自刑)：極端な水エネルギー！深刻なうつ病の危険。即座に助けを求めてください。`,
+6: `🌋 ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT: VOLCANIC Fire explosion! Extreme impulsiveness, burnout, heart/blood danger. CRITICAL health year.`,
+9: `⚠️ ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT: Obsessive Metal pressure! Respiratory/skin crisis.`,
+4: `⚠️ ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT: Crushing Earth weight! Digestive/immune collapse.`};return { active: true, isTriple: true, desc: tripleDescMap[ypBi] || `🚨 ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT. NUCLEAR EVENT!` };}
+const descMap = {11: `😔 ${bn}${bn} SELF-PUNISHMENT: Doubled Water = depression, overthinking.`,
+6: `🔥 ${bn}${bn} SELF-PUNISHMENT: Doubled Fire = impulsiveness, burnout.`,
+9: `⚠️ ${bn}${bn} SELF-PUNISHMENT: Doubled Metal = obsessive perfectionism.`,
+4: `⚠️ ${bn}${bn} SELF-PUNISHMENT: Doubled Earth = stubbornness.`};return { active: true, isTriple: false, desc: descMap[ypBi] || `⚠️ ${bn}${bn} SELF-PUNISHMENT.` };}
+function ylCheckScandal(yp, saju) {if (!saju.hour) return { active: false, score: 0, desc: '' };const dm = saju.day.s;const hourGod = getTenGod(saju.hour.s, dm), ypGod = getTenGod(yp.s, dm);if (hourGod.c !== '偏財' || ypGod.c !== '偏財') return { active: false, score: 0, desc: '' };const { selfPunishBranches } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), hBi = BRANCH.findIndex(br => br.c === saju.hour.b.c);if (ypBi === hBi && selfPunishBranches.includes(ypBi)) {return { active: true, score: -2, desc: `🚨 色難警告(色難)！時柱+偏財重複+自刑。スキャンダル・賭博高リスク。` };}
+return { active: true, score: -2, desc: `⚠️ AFFAIR WARNING (色難): Indirect Wealth Echo on Hour Pillar. Temptation is a TRAP.` };}
+function ylCheckMissingYong(saju, gods, yongAttacked) {const els = {};[saju.year.s.e, saju.year.b.e, saju.month.s.e, saju.month.b.e, saju.day.s.e, saju.day.b.e].forEach(e => els[e] = true);if (saju.hour) { els[saju.hour.s.e] = true; els[saju.hour.b.e] = true; }
+if (els[gods.yong]) return { active: false, score: 0, desc: '' };let desc = `🛡️ NO SHIELD (用神不在): Beneficial Element (${ELEMENT[gods.yong].n}) MISSING! No defense when crisis hits.`;let score = 0;if (yongAttacked) { desc += ` AND this year attacks that absent element - DOUBLE DANGER!`; score = -2; }
+return { active: true, desc, score };}
+function ylCheckHarmBetrayal(saju) {const { harmPairs } = YEAR_LUCK_CONFIG;const dBi = BRANCH.findIndex(br => br.c === saju.day.b.c), mBi = BRANCH.findIndex(br => br.c === saju.month.b.c);for (const [a, b] of harmPairs) {if ((mBi === a && dBi === b) || (mBi === b && dBi === a)) {if ((mBi === 3 && dBi === 4) || (mBi === 4 && dBi === 3)) {return { active: true, desc: `🗡️ 裏切りの危険(卯辰害)：月支が日支を害(害)。口舌・裏切りで基盤が揺らぐ可能性。保証絶対禁止。` };}
+return { active: true, desc: `⚠️ HARM (六害): Close relationships face friction.` };}}
+return { active: false, desc: '' };}
+function ylDetermineRating(r, score) {if (r.wangShinChungBal && r.wangShinChungBal.active) return 'wang_shin_chung_bal';if (r.yongOverwhelmed && r.yongOverwhelmed.active) return 'yong_overwhelmed';if (r.pyunInDoShik && r.pyunInDoShik.active) return 'pyunin_doshik';if (r.bureau.active && r.yongGi.score > 0) return 'breakthrough';if (r.yongAttack.active) return 'yong_attacked';if (r.robWealth.active) return 'rob_wealth';if (r.yanginClash.active) return 'surgery_risk';if (r.dayClash.active && r.yongGi.score > 0) return 'volatile_wealth';if (r.monthClash.active && score > 0) return 'volatile';if (score >= 4) return 'great';if (score >= 1) return 'good';if (score <= -4) return 'danger';if (score <= -2) return 'bad';return 'neutral';}
+function calcYearLuck(year, saju, gods) {const yp = calcYearPillar(year, 6, 1);const dm = saju.day.s;const god = getTenGod(yp.s, dm);const state = getTwelveState(dm, yp.b);const strength = calcStrength(saju);const r = {yongGi: ylCheckYongGi(yp, gods),
+yongAttack: ylCheckYongAttack(yp, gods),
+robWealth: ylCheckRobWealth(yp, saju, gods, strength),
+expressorPeer: ylCheckExpressorPeer(yp, saju, strength),
+climateClash: ylCheckClimateClash(yp, gods),
+bureau: ylCheckBureau(yp, saju),
+monthClash: ylCheckMonthClash(yp, saju, false),
+dayClash: ylCheckDayClash(yp, saju),
+yanginClash: ylCheckYanginClash(yp, saju),
+tripleBranch: ylCheckTripleBranch(yp, saju),
+missingBridge: ylCheckMissingBridge(yp, saju, gods),
+stemCombine: ylCheckStemCombine(yp, saju, gods),
+branchCombine: ylCheckBranchCombine(yp, saju, gods, strength),
+selfPunishment: ylCheckSelfPunishment(yp, saju),
+scandal: ylCheckScandal(yp, saju),
+missingYong: ylCheckMissingYong(saju, gods, false),
+harmBetrayal: ylCheckHarmBetrayal(saju),
+yongOverwhelmed: checkYongOverwhelmed(saju, gods),
+pyunInDoShik: checkPyunInDoShik(saju, gods),
+wangShinChungBal: checkWangShinChungBal(yp, saju)};
+if (r.bureau.active) r.monthClash = { active: false, score: 0, desc: '' };
+if (r.bureau.active && r.bureau.element === gods.yong && r.yongOverwhelmed.active) {r.yongOverwhelmed = {active:false,score:0,desc:'',overridden:true,overrideReason:`🔥 ${r.bureau.desc} → 用神(${ELEMENT[gods.yong].k}) 増幅！衰神冲旺無効化→突破！`};}
+r.missingYong = ylCheckMissingYong(saju, gods, r.yongAttack.active);
+const score = Object.values(r).reduce((s, x) => s + (x.score || 0), 0);
+const rating = ylDetermineRating(r, score);
+let voidBreak = false, voidBreakDesc = '';
+try {const gm = calcGongmang(saju);const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (gm && gm.indices) {gm.indices.forEach(vi => {if (Math.abs(ypBi - vi) === 6) {voidBreak = true;voidBreakDesc = `🔓 ${yp.b.c}が空亡(${BRANCH[vi].c})を打ち破る！解放の年。`;}});}} catch(e) {}
+let warnings = [];Object.values(r).forEach(chk => {if (chk.active && chk.desc) warnings.push(chk.desc);});
+if (voidBreak) warnings.push(voidBreakDesc);
+const yearEls = [yp.s.e, yp.b.e];const ec = countElements(saju);const yearBranchIdx = BRANCH.indexOf(yp.b);const sajuBranches = [saju.year.b, saju.month.b, saju.day.b];if (saju.hour) sajuBranches.push(saju.hour.b);const sajuBranchIdxs = sajuBranches.map(b => BRANCH.indexOf(b));
+const baihuIlju = ['甲辰','乙未','丙戌','丁丑','戊辰','己未','庚戌','辛丑','壬辰','癸未'];const ilju = saju.day.s.c + saju.day.b.c;if (baihuIlju.includes(ilju) && yearEls.includes('fire')) {warnings.push('🐅 白虎大殺日柱に火運！手術、事故、出血に注意。健康診断必須');}
+const elHealth = {wood:'肝/胆/目/神経',fire:'心臓/血管/脳',earth:'脾臓/胃/消化器',metal:'肺/大腸/皮膚',water:'腎臓/膀胱/生殖器'};
+if ((sajuBranchIdxs.includes(0) && yearBranchIdx === 6) || (sajuBranchIdxs.includes(6) && yearBranchIdx === 0)) {const waterPower = ec.water || 0;const firePower = ec.fire || 0;if (waterPower > firePower + 1) {warnings.push(`💧 子午冲勝敗: 水(${waterPower}個) > 火(${firePower}個) → 火が消える！ ${elHealth.fire} 損傷、情熱/意欲低下注意`);} else if (firePower > waterPower + 1) {warnings.push(`🔥 子午冲勝敗: 火(${firePower}個) > 水(${waterPower}個) → 水が乾く！ ${elHealth.water} 損傷、腎臓/膀胱注意`);} else {warnings.push(`⚡ 子午冲激戦: 水(${waterPower}個) ≈ 火(${firePower}個) → 両方とも損傷！心血管+腎臓共に注意`);}}
+if ((sajuBranchIdxs.includes(3) && yearBranchIdx === 9) || (sajuBranchIdxs.includes(9) && yearBranchIdx === 3)) {const woodPower = ec.wood || 0;const metalPower = ec.metal || 0;if (metalPower > woodPower + 1) {warnings.push(`🪓 卯酉冲勝敗: 金(${metalPower}個) > 木(${woodPower}個) → 木が切られる！ ${elHealth.wood} 損傷、肝胆/神経注意`);} else if (woodPower > metalPower + 1) {warnings.push(`🌳 卯酉冲勝敗: 木(${woodPower}個) > 金(${metalPower}個) → 斧が折れる！ ${elHealth.metal} 損傷の代わりに木の反撃`);} else {warnings.push(`⚡ 卯酉冲激戦: 木(${woodPower}個) ≈ 金(${metalPower}個) → 両方とも損傷！肝胆+肺共に注意`);}}
+return {year,pillar:yp,god,state,score,warnings,rating,
+climateClash:r.climateClash.active,climateClashDesc:r.climateClash.desc,
+monthClash:r.monthClash.active,monthClashDesc:r.monthClash.desc,
+bureauFormed:r.bureau.active,bureauDesc:r.bureau.desc,
+voidBreak,voidBreakDesc,
+dayClash:r.dayClash.active,dayClashDesc:r.dayClash.desc,
+yanginClash:r.yanginClash.active,yanginClashDesc:r.yanginClash.desc,
+tripleBranch:r.tripleBranch.active,tripleBranchDesc:r.tripleBranch.desc,
+stemCombine:r.stemCombine.active?r.stemCombine:null,
+branchCombine:r.branchCombine.active?r.branchCombine:null,
+selfPunishment:r.selfPunishment.active,selfPunishmentDesc:r.selfPunishment.desc,
+yongUnderAttack:r.yongAttack.active,yongAttackDesc:r.yongAttack.desc,
+robWealthThreat:r.robWealth.active,robWealthDesc:r.robWealth.desc,
+expressorPeerClash:r.expressorPeer.active,
+scandalWarning:r.scandal.active,
+missingYong:r.missingYong.active,
+harmBetrayalWarning:r.harmBetrayal.active,
+yongOverwhelmed:r.yongOverwhelmed.active,
+pyunInDoShik:r.pyunInDoShik.active,
+wangShinChungBal:r.wangShinChungBal.active};}
 function determineYearRating(yearLuck, saju, gods) {const yp = yearLuck.pillar;const wangChk = checkWangShinChungBal(yp, saju);const yongChk = checkYongOverwhelmed(saju, gods);const pyunChk = checkPyunInDoShik(saju, gods);if (wangChk.active) return { rating: 'wang_shin_chung_bal', warning: wangChk };if (yongChk.active) return { rating: 'yong_overwhelmed', warning: yongChk };if (pyunChk.active) return { rating: 'pyunin_doshik', warning: pyunChk };return { rating: yearLuck.rating, warning: null };}
 function analyzeLuckCross(saju, birthYear, gender, gods, targetYear, birthMonth, birthDay, birthHour) {const luck = calcLuck(saju, birthYear, gender, gods, birthMonth, birthDay, birthHour);const curAge = targetYear - birthYear;const curDaeun = luck.find(l => curAge >= l.startAge && curAge < l.endAge) || luck[0];const yearLuck = calcYearLuck(targetYear, saju, gods);const result = {daeun: curDaeun,
 saeun: yearLuck,
 analysis: []};const dEl = [curDaeun.s.e, curDaeun.b.e];const sEl = [yearLuck.pillar.s.e, yearLuck.pillar.b.e];const ganHap = [[0,5],[1,6],[2,7],[3,8],[4,9]];const dsi = STEM.indexOf(curDaeun.s), ssi = STEM.indexOf(yearLuck.pillar.s);for (let [a,b] of ganHap) {if ((dsi===a && ssi===b) || (dsi===b && ssi===a)) {result.analysis.push({type:'good', text:'大運-歳運天干合！運が調和的に流れます。'});}}
-const dbi = BRANCH.indexOf(curDaeun.b), sbi = BRANCH.indexOf(yearLuck.pillar.b);if (Math.abs(dbi - sbi) === 6 || Math.abs(dbi - sbi) === 6) {result.analysis.push({type:'bad', text:'大運-歳運地支沖！変化と試練がある可能性があります。'});}
+const dbi = BRANCH.indexOf(curDaeun.b), sbi = BRANCH.indexOf(yearLuck.pillar.b);if (Math.abs(dbi - sbi) === 6 || Math.abs(dbi - sbi) === 6) {result.analysis.push({type:'bad', text:'大運-歳運地支冲！変化と試練がある可能性があります。'});}
 const allBi = [BRANCH.indexOf(saju.year.b), BRANCH.indexOf(saju.month.b), BRANCH.indexOf(saju.day.b)];if (saju.hour) allBi.push(BRANCH.indexOf(saju.hour.b));allBi.forEach((bi, idx) => {const positions = ['年支','月支','日支','時支'];if (Math.abs(bi - sbi) === 6) {const isWangjiClash = (bi === 0 && sbi === 6) || (bi === 6 && sbi === 0) ||
-(bi === 3 && sbi === 9) || (bi === 9 && sbi === 3);if (isWangjiClash) {const clashName = (bi === 0 || sbi === 0) ? '子午冲(子午沖)' : '卯酉沖(卯酉沖)';const healthWarning = (bi === 0 || sbi === 0)
+(bi === 3 && sbi === 9) || (bi === 9 && sbi === 3);if (isWangjiClash) {const clashName = (bi === 0 || sbi === 0) ? '子午冲(子午沖)' : '卯酉冲(卯酉沖)';const healthWarning = (bi === 0 || sbi === 0)
 ? '心血管(火)と腎臓/生殖器(水)が衝突します！'
-: '肝臓(木)と肺/神経(金)が衝突します！';result.analysis.push({type: 'danger',
-text: `🚨 ${clashName} 発動！旺支同士の正面衝突です。 ${healthWarning} ${idx === 3 ? '時支(子女宮/晩年)衝突で手術、事故、子女問題に特に注意してください！' : idx === 2 ? '日支(配偶者宮)衝突で配偶者の健康と夫婦関係に激動がある可能性があります！' : ''}`,});result.wangjiClash = true;} else {result.analysis.push({type:'warning', text:`歳運が ${positions[idx]}と冲！ ${idx===2 ? '配偶者や健康注意！' : idx===0 ? '家の年長者関連の事がある可能性があります。' : idx===1 ? '職場や事業に変化がある可能性があります。' : '子女や後輩関連の事がある可能性があります。'}`});}}
+: '肝(木)と肺/神経(金)が衝突します！';result.analysis.push({type: 'danger',
+text: `🚨 ${clashName} 発動！旺支同士の正面衝突です。 ${healthWarning} ${idx === 3 ? '時支(子女宮/晩年)衝突で手術、事故、子女の問題に特に注意！' : idx === 2 ? '日支(配偶者宮)衝突で配偶者の健康と夫婦関係に激動がある可能性！' : ''}`,});result.wangjiClash = true;} else {result.analysis.push({type:'warning', text:`歳運が ${positions[idx]}と冲！ ${idx===2 ? '配偶者か健康注意！' : idx===0 ? '家の年長者に関連する事がある可能性。' : idx===1 ? '職場や事業に変化がある可能性。' : '子女や後輩に関連する事がある可能性。'}`});}}
 if ((bi === 1 && sbi === 6) || (bi === 6 && sbi === 1)) {result.analysis.push({type: 'warning',
-text: `⚠️ 丑午(丑午) 元嗔! ${positions[idx]}と歳運が 鬼門/湯火 関係です。 精神的ストレスと感情の起伏に注意してください。`});}});result.totalScore = curDaeun.score + yearLuck.score;result.totalRating = result.totalScore >= 4 ? 'excellent' :
+text: `⚠️ 丑午(丑午)怨嗔！ ${positions[idx]}と歳運が鬼門/湯火の関係です。精神的ストレスと感情の起伏に注意してください。`});}});result.totalScore = curDaeun.score + yearLuck.score;result.totalRating = result.totalScore >= 4 ? 'excellent' :
 result.totalScore >= 2 ? 'good' :
 result.totalScore >= 0 ? 'neutral' :
 result.totalScore >= -2 ? 'caution' : 'difficult';if (yearLuck.warnings && yearLuck.warnings.length > 0) {yearLuck.warnings.forEach(w => {result.analysis.push({type: 'danger', text: w});});}
 const tanghwaCheck = () => {const hasChu = allBi.includes(1);const hasO = allBi.includes(6);const hasIn = allBi.includes(2);const hasSa = allBi.includes(5);const hasChuOTanghwa = hasChu && hasO;const hasInSaTanghwa = hasIn && hasSa;const saeunBi = sbi;if (hasChuOTanghwa && saeunBi === 6) {result.analysis.push({type: 'danger',
-text: '⚠️ 双湯火(雙湯火) 警告! 原局の丑午湯火に歳運午が重なります。 感情爆発、火病、精神的ストレスが極に達する可能性があります。 怒り調節とメンタル管理が特に重要です！'});result.tanghwaWarning = true;}
+text: '⚠️ 双湯火(雙湯火)警告！原局の丑午湯火に歳運午が重なります。感情爆発、火病、精神的ストレスが極に達する可能性。怒りのコントロールとメンタル管理が特に重要です！'});result.tanghwaWarning = true;}
 if (hasInSaTanghwa && saeunBi === 5) {result.analysis.push({type: 'danger',
-text: '⚠️ 双湯火(雙湯火) 警告! 原局の寅巳湯火に歳運巳が重なります。 火傷、熱病, 薬物副作用に特に注意してください！'});result.tanghwaWarning = true;}
+text: '⚠️ 双湯火(雙湯火)警告！原局の寅巳湯火に歳運巳が重なります。火傷、熱病、薬物副作用に特に注意！'});result.tanghwaWarning = true;}
 if (hasChuOTanghwa && saeunBi === 5) {result.analysis.push({type: 'warning',
-text: '🔥 湯火殺加重！歳運の火気が原局湯火を刺激します。火気取扱注意！'});}};tanghwaCheck();const selfPunishBranches = [4, 6, 9, 11];if (dbi === sbi && selfPunishBranches.includes(dbi)) {const branchNames = {4:'辰辰', 6:'午午', 9:'酉酉', 11:'亥亥'};const healthWarnings = {4: '脾臓/胃腸疾患、消化不良',
+text: '🔥 湯火殺加重！歳運の火気運が原局湯火を刺激します。火気取り扱い注意！'});}};tanghwaCheck();const selfPunishBranches = [4, 6, 9, 11];if (dbi === sbi && selfPunishBranches.includes(dbi)) {const branchNames = {4:'辰辰', 6:'午午', 9:'酉酉', 11:'亥亥'};const healthWarnings = {4: '脾臓/胃腸疾患、消化不良',
 6: '心血管疾患、脳出血、精神的爆発',
-9: '肺/呼吸器疾患、鬱症',
-11: '腎臓/膀胱疾患、自害衝動'};result.analysis.push({type: 'danger',
-text: `🚨 大運+歳運 自刑(${branchNames[dbi]}自刑)！ 自分自身を攻撃する形局です。 ${healthWarnings[dbi]} 注意! 無理せず自己管理に集中してください.`});result.daeunSaeunJahyung = true;}
+9: '肺/呼吸器疾患、うつ病',
+11: '腎臓/膀胱疾患、自傷衝動'};result.analysis.push({type: 'danger',
+text: `🚨 大運+歳運自刑(${branchNames[dbi]}自刑)! 自分自身を攻撃する形局です。 ${healthWarnings[dbi]} 注意！無理せず自己管理に集中してください。`});result.daeunSaeunJahyung = true;}
 return result;}
 function analyzeDaeunDetail(daeun, saju, gods, startYear) {const dm = saju.day.s;const stemGod = getTenGod(daeun.s, dm);const stemAnalysis = {period: '前半5年',
 dominant: '天干',
 pillar: daeun.s.c,
-god: stemGod.k,
+god: stemGod.c,
 element: daeun.s.e,
 isYong: daeun.s.e === gods.yong,
 isGi: daeun.s.e === gods.gi,
-desc: `${stemGod.k}の気が支配する時期です。`};const branchGod = getTenGod({e: daeun.b.e, y: true, c: '', k: ''}, dm);const branchAnalysis = {period: '後半5年',
+desc: `${stemGod.c}の気運が支配する時期です。`};const branchGod = getTenGod({e: daeun.b.e, y: true, c: '', k: ''}, dm);const branchAnalysis = {period: '後半5年',
 dominant: '地支',
 pillar: daeun.b.c,
 element: daeun.b.e,
 isYong: daeun.b.e === gods.yong,
 isGi: daeun.b.e === gods.gi,
 state: getTwelveState(dm, daeun.b),
-desc: `${ELEMENT[daeun.b.e].k}(${daeun.b.c}) の気と${getTwelveState(dm, daeun.b).k}のエネルギーが作用します。`};return { stem: stemAnalysis, branch: branchAnalysis };}
+desc: `${ELEMENT[daeun.b.e].k}(${daeun.b.c}) 気運と${getTwelveState(dm, daeun.b).k}のエネルギーが作用します。`};return { stem: stemAnalysis, branch: branchAnalysis };}
 function getNext10Years(saju, birthYear, gender, gods) {const curYear = new Date().getFullYear();const years = [];for (let i = 0; i < 10; i++) {const year = curYear + i;const cross = analyzeLuckCross(saju, birthYear, gender, gods, year);years.push({year,
 age: year - birthYear,
 rating: cross.totalRating,
@@ -1747,11 +1834,11 @@ const jiesha = {0:5,1:2,2:11,3:8,4:5,5:2,6:11,7:8,8:5,9:2,10:11,11:8};if (brs.in
 9:[11,0,1],
 10:[8,9,10],
 11:[5,6,7]};const curYear = new Date().getFullYear();const curYearBranch = (curYear - 4) % 12;if (sanzai[ybi] && sanzai[ybi].includes(curYearBranch)) ss.push({n:'三災(三災) 期間',t:'bad',d:'現在三災期間です！3年間注意してください。無理な拡張、引越、手術を避けてください。',i:'🔥',lv:'中'});const panan = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};if (brs.includes(panan[dmi])) ss.push({n:'攀鞍殺(攀鞍殺)',t:'good',d:'職場運が良いです！安定した組織で昇進するタイプ。公企業、大企業に適合。',i:'💺',lv:'中'});const tianchu = {0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};if (brs.includes(tianchu[dmi])) ss.push({n:'天廚貴人(天廚貴人)',t:'good',d:'食べる福があります！一生飢えることはありません。飲食業にも才能！',i:'🍽️',lv:'中'});const tiansha = [[2,0],[3,1],[5,2],[6,3],[8,4],[9,5],[11,6],[0,7],[2,8],[3,9]];if (tiansha.some(ts => dbi === ts[0] && dmi === ts[1])) ss.push({n:'天赦日(天赦日)出生',t:'good',d:'天が許す日に生まれました！罪を犯しても解かれ、凶が吉に変わります。',i:'🕊️',lv:'上'});const tanghuaPairs = [[1,6],[6,1],[2,5],[5,2]];for (let i = 0; i < brs.length; i++) {for (let j = i + 1; j < brs.length; j++) {if (tanghuaPairs.some(p => (brs[i] === p[0] && brs[j] === p[1]))) {ss.push({n:'湯火殺(湯火殺)',t:'bad',d:'火傷、熱病、薬物副作用に注意！火病や精神的ストレスにも脆弱。熱い食べ物、火気を扱う時は注意してください。',i:'🔥',lv:'上'});break;}}}
-const stemIdxs = [STEM.indexOf(saju.year.s), STEM.indexOf(saju.month.s), STEM.indexOf(saju.day.s)];if (saju.hour) stemIdxs.push(STEM.indexOf(saju.hour.s));const stemGods = stemIdxs.map(s => getTenGod(STEM[s], saju.day.s));const hasJungJae = stemGods.some(g => g && g.k === '正財');const hasPyunJae = stemGods.some(g => g && g.k === '偏財');if (hasJungJae && hasPyunJae) {ss.push({n:'正偏財混雑(財混)',t:'bad',d:'正財と偏財が共に天干にあります。異性関係が複雑になりやすいです。財物の出入りも頻繁です。一つのことに集中するのが良いです。',i:'💔',lv:'中'});}
-const hasShangGuan = stemGods.some(g => g && g.k === '傷官');const hasPyunGwan = stemGods.some(g => g && g.k === '偏官');const tianganHap = [[0,5],[1,6],[2,7],[3,8],[4,9]];let hasShangGuanHapSal = false;for (let i = 0; i < stemIdxs.length; i++) {for (let j = i+1; j < stemIdxs.length; j++) {const godI = stemGods[i];const godJ = stemGods[j];if (godI && godJ) {const isHap = tianganHap.some(([a,b]) =>
+const stemIdxs = [STEM.indexOf(saju.year.s), STEM.indexOf(saju.month.s), STEM.indexOf(saju.day.s)];if (saju.hour) stemIdxs.push(STEM.indexOf(saju.hour.s));const stemGods = stemIdxs.map(s => getTenGod(STEM[s], saju.day.s));const hasJungJae = stemGods.some(g => g && g.c === '正財');const hasPyunJae = stemGods.some(g => g && g.c === '偏財');if (hasJungJae && hasPyunJae) {ss.push({n:'正偏財混雑(財混)',t:'bad',d:'正財と偏財が共に天干にあります。異性関係が複雑になりやすいです。財物の出入りも頻繁です。一つのことに集中するのが良いです。',i:'💔',lv:'中'});}
+const hasShangGuan = stemGods.some(g => g && g.c === '傷官');const hasPyunGwan = stemGods.some(g => g && g.c === '偏官');const tianganHap = [[0,5],[1,6],[2,7],[3,8],[4,9]];let hasShangGuanHapSal = false;for (let i = 0; i < stemIdxs.length; i++) {for (let j = i+1; j < stemIdxs.length; j++) {const godI = stemGods[i];const godJ = stemGods[j];if (godI && godJ) {const isHap = tianganHap.some(([a,b]) =>
 (stemIdxs[i] === a && stemIdxs[j] === b) || (stemIdxs[i] === b && stemIdxs[j] === a)
 );if (isHap &&
-((godI.k === '傷官' && godJ.k === '偏官') || (godI.k === '偏官' && godJ.k === '傷官'))) {hasShangGuanHapSal = true;}}}}
+((godI.c === '傷官' && godJ.c === '偏官') || (godI.c === '偏官' && godJ.c === '傷官'))) {hasShangGuanHapSal = true;}}}}
 if (hasShangGuanHapSal) {ss.push({n:'傷官合殺(傷官合殺)',t:'good',d:'危機をチャンスに変える交渉の才能！傷官(弁舌/技術)が偏官(危険/敵)を合で制御します。ロビイスト、交渉家、仲裁者、解決者に卓越しています。',i:'🤝',lv:'上'});}
 return ss.length ? ss : [{n:'特異神殺なし',t:'neutral',d:'特別な神殺がありません。平穏で安定的な四柱です！',i:'☯︎',lv:'中'}];}
 function calcInteractions(saju) {const res = [];const stems = [STEM.indexOf(saju.year.s), STEM.indexOf(saju.month.s), STEM.indexOf(saju.day.s)];const brs = [BRANCH.indexOf(saju.year.b), BRANCH.indexOf(saju.month.b), BRANCH.indexOf(saju.day.b)];if (saju.hour) { stems.push(STEM.indexOf(saju.hour.s)); brs.push(BRANCH.indexOf(saju.hour.b)); }
@@ -1807,11 +1894,11 @@ children: null};const godCount = {};const godPositions = {};const pillars = [
 {name: '年柱', pillar: saju.year},
 {name: '月柱', pillar: saju.month},
 {name: '日柱', pillar: saju.day},
-];if (saju.hour) pillars.push({name: '時柱', pillar: saju.hour});pillars.forEach(p => {if (p.name === '日柱') return;const sGod = getTenGod(p.pillar.s, dm);const branchIdx = BRANCH.findIndex(br => br.c === p.pillar.b.c);const hiddenMain = HIDDEN_STEMS[branchIdx];const mainStem = hiddenMain && hiddenMain.length > 0 ? STEM[hiddenMain[hiddenMain.length - 1].stem] : null;const bGod = mainStem ? getTenGod(mainStem, dm) : null;[sGod, bGod].forEach(god => {if (god && god.k) {if (!godCount[god.k]) godCount[god.k] = 0;if (!godPositions[god.k]) godPositions[god.k] = [];godCount[god.k]++;godPositions[god.k].push(p.name);}});});const fatherGod = '偏財';const fatherCount = godCount[fatherGod] || 0;if (fatherCount >= 2) {result.father = {status: 'strong', desc: '父親との縁が深いです。父の助けを受けます。', icon: '👨‍👦'};} else if (fatherCount === 1) {result.father = {status: 'normal', desc: '父親と平凡な関係です。適度な距離感が良いです。', icon: '👨'};} else {result.father = {status: 'weak', desc: '父親との縁が弱いか早くから離れて暮らす可能性があります。', icon: '👤'};}
+];if (saju.hour) pillars.push({name: '時柱', pillar: saju.hour});pillars.forEach(p => {if (p.name === '日柱') return;const sGod = getTenGod(p.pillar.s, dm);const branchIdx = BRANCH.findIndex(br => br.c === p.pillar.b.c);const hiddenMain = HIDDEN_STEMS[branchIdx];const mainStem = hiddenMain && hiddenMain.length > 0 ? STEM[hiddenMain[hiddenMain.length - 1].stem] : null;const bGod = mainStem ? getTenGod(mainStem, dm) : null;[sGod, bGod].forEach(god => {if (god && god.c) {if (!godCount[god.c]) godCount[god.c] = 0;if (!godPositions[god.c]) godPositions[god.c] = [];godCount[god.c]++;godPositions[god.c].push(p.name);}});});const fatherGod = '偏財';const fatherCount = godCount[fatherGod] || 0;if (fatherCount >= 2) {result.father = {status: 'strong', desc: '父親との縁が深いです。父の助けを受けます。', icon: '👨‍👦'};} else if (fatherCount === 1) {result.father = {status: 'normal', desc: '父親と平凡な関係です。適度な距離感が良いです。', icon: '👨'};} else {result.father = {status: 'weak', desc: '父親との縁が弱いか早くから離れて暮らす可能性があります。', icon: '👤'};}
 const motherCount = (godCount['正印'] || 0) + (godCount['偏印'] || 0);if (motherCount >= 2) {result.mother = {status: 'strong', desc: '母親との縁が深いです。 母の愛を多く受けます。', icon: '👩‍👦'};} else if (motherCount === 1) {result.mother = {status: 'normal', desc: '母と平凡な 関係です.', icon: '👩'};} else {result.mother = {status: 'weak', desc: '母との縁が弱いか独立が早い可能性があります。', icon: '👤'};}
 const siblingCount = (godCount['比肩'] || 0) + (godCount['劫財'] || 0);if (siblingCount >= 2) {result.sibling = {status: 'strong', desc: '兄弟姉妹が多いか縁が深いです. 競争もあり得ます。', icon: '👫'};} else if (siblingCount === 1) {result.sibling = {status: 'normal', desc: '兄弟姉妹と平凡な関係です。', icon: '🧑‍🤝‍🧑'};} else {result.sibling = {status: 'weak', desc: '兄弟姉妹が少ないか縁が薄いです。独立心が強い。', icon: '🧍'};}
 let spouseCount, spouseGods;if (gender === 'm') {spouseCount = (godCount['正財'] || 0) + (godCount['偏財'] || 0);spouseGods = ['正財', '偏財'];} else {spouseCount = (godCount['正官'] || 0) + (godCount['偏官'] || 0);spouseGods = ['正官', '偏官'];}
-const dayBranchIdx = BRANCH.findIndex(br => br.c === saju.day.b.c);const dayHiddenMain = HIDDEN_STEMS[dayBranchIdx];const dayMainStem = dayHiddenMain && dayHiddenMain.length > 0 ? STEM[dayHiddenMain[dayHiddenMain.length - 1].stem] : null;const spouseGod = dayMainStem ? getTenGod(dayMainStem, dm) : null;const spouseGodMatch = spouseGod && spouseGod.k && spouseGods.includes(spouseGod.k);if (spouseCount >= 2 && spouseGodMatch) {result.spouse = {status: 'excellent', desc: '配偶者の福がとても良いです！良い伴侶に出会えます。', icon: '💑'};} else if (spouseCount >= 1 || spouseGodMatch) {result.spouse = {status: 'good', desc: '配偶者運が良い方です。結婚すれば安定します。', icon: '💍'};} else {result.spouse = {status: 'normal', desc: '配偶者の縁は平凡です。遅く出会っても大丈夫です。', icon: '💒'};}
+const dayBranchIdx = BRANCH.findIndex(br => br.c === saju.day.b.c);const dayHiddenMain = HIDDEN_STEMS[dayBranchIdx];const dayMainStem = dayHiddenMain && dayHiddenMain.length > 0 ? STEM[dayHiddenMain[dayHiddenMain.length - 1].stem] : null;const spouseGod = dayMainStem ? getTenGod(dayMainStem, dm) : null;const spouseGodMatch = spouseGod && spouseGod.c && spouseGods.includes(spouseGod.c);if (spouseCount >= 2 && spouseGodMatch) {result.spouse = {status: 'excellent', desc: '配偶者の福がとても良いです！良い伴侶に出会えます。', icon: '💑'};} else if (spouseCount >= 1 || spouseGodMatch) {result.spouse = {status: 'good', desc: '配偶者運が良い方です。結婚すれば安定します。', icon: '💍'};} else {result.spouse = {status: 'normal', desc: '配偶者の縁は平凡です。遅く出会っても大丈夫です。', icon: '💒'};}
 let childCount;if (gender === 'm') {childCount = (godCount['正官'] || 0) + (godCount['偏官'] || 0);} else {childCount = (godCount['食神'] || 0) + (godCount['傷官'] || 0);}
 const hasHour = !!saju.hour;if (childCount >= 2) {result.children = {status: 'strong', desc: '子女の福が良いです！子女が父母を輝かせてくれます。', icon: '👶👶'};} else if (childCount === 1) {result.children = {status: 'normal', desc: '子女と平凡な縁です。1-2人程度が良いです。', icon: '👶'};} else {result.children = {status: 'weak', desc: '子女の縁が弱いか遅い可能性があります。努力が必要です。', icon: '🍼'};}
 return result;}
@@ -1892,7 +1979,7 @@ bodyPart: '脚, 足',
 relationM: '子女, 後輩',
 relationF: '子女, 後輩'}
 ];return gungwi.map((g, idx) => {if (!g.pillar) return {...g, analysis: '時柱 なし', god: null, state: null};const god = idx !== 2 ? getTenGod(g.pillar.s, dm) : null;const state = getTwelveState(dm, g.pillar.b);let analysis = '';let rating = 'neutral';const bi = BRANCH.indexOf(g.pillar.b);const isVoid = gmBranches.includes(bi);if (isVoid) {analysis = '空亡で気が空いています。該当時期に自ら開拓すべきです。';rating = 'neutral';} else if (state.l >= 9) {analysis = 'この時期にエネルギーが強い！活発に動く時期。';rating = 'good';} else if (state.l >= 6) {analysis = '安定的なエネルギーです。順調な時期。';rating = 'good';} else if (state.l >= 3) {analysis = '普通のエネルギーです。努力が必要な時期。';rating = 'neutral';} else {analysis = 'エネルギーが弱い時期。 無理せずお過ごしください。';rating = 'bad';}
-if (god) {if (['正官','正財','正印'].includes(god.k)) {analysis += ` ${god.k}があり安定的です。`;rating = 'good';} else if (['偏官','劫財'].includes(god.k)) {analysis += ` ${god.k}があり変化と挑戦があります。`;}}
+if (god) {if (['正官','正財','正印'].includes(god.c)) {analysis += ` ${god.c}があり安定的です。`;rating = 'good';} else if (['偏官','劫財'].includes(god.c)) {analysis += ` ${god.c}があり変化と挑戦があります。`;}}
 let isCurrent = false;if (idx === 0 && curAge <= 15) isCurrent = true;else if (idx === 1 && curAge >= 16 && curAge <= 30) isCurrent = true;else if (idx === 2 && curAge >= 31 && curAge <= 45) isCurrent = true;else if (idx === 3 && curAge >= 46) isCurrent = true;return {...g,
 god,
 state,
@@ -1958,7 +2045,7 @@ const clashPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];for (let [a,b] of cla
 result.chungHaeso.push({clash: `${BRANCH[a].c}${BRANCH[b].c}沖`,
 isResolved,
 reason: isResolved ? resolveReason : '沖が解消されない - 注意必要'});}}
-const dm = saju.day.s;const godCounts = {};stems.forEach((s, idx) => {if (idx === 2) return;const god = getTenGod(s, dm);godCounts[god.k] = (godCounts[god.k] || 0) + 1;});if (godCounts['傷官'] && godCounts['正官']) {result.warnings.push({type: '傷官肩冠(傷官見官)',
+const dm = saju.day.s;const godCounts = {};stems.forEach((s, idx) => {if (idx === 2) return;const god = getTenGod(s, dm);godCounts[god.c] = (godCounts[god.c] || 0) + 1;});if (godCounts['傷官'] && godCounts['正官']) {result.warnings.push({type: '傷官肩冠(傷官見官)',
 desc: '傷官が正官を剋します。職場、名誉に問題が生じる可能性があります。官職より事業が良いです。'});}
 if (godCounts['偏印'] && godCounts['食神']) {result.warnings.push({type: '梟神奪食(梟神奪食)',
 desc: '偏印が食神を剋します。才能発揮が妨げられる可能性があります。鬱に注意！'});}
@@ -2012,7 +2099,7 @@ function genTodayFortune(saju, gods) {const now = new Date();const ty = now.getF
 '偏官': {r:2, l:'😰 緊張する日', d:'突然仕事が入ったり圧迫を受ける可能性があります。予想外の業務が降りかかるかもしれません。<br><br><strong>💡 ヒント:</strong> 体調管理が重要です. 無理せずお過ごしください。'},
 '正官': {r:5, l:'🏆 認められる日', d:'最高の日！努力が認められたり褒められる可能性があります。<br><br><strong>💡 ヒント:</strong> 重要なミーティングや約束は今日に入れてください。'},
 '偏印': {r:3, l:'📚 一人だけの時間', d:'人が多い場所より一人でいたい日。勉強や読書にぴったり！<br><br><strong>💡 ヒント:</strong> カフェで一人で本を読むのはいかがですか？'},
-'正印': {r:4, l:'🤝 助けをもらう日', d:'誰かの助けをもらうのに良い日！分からないことがあれば聞いてみてください。<br><br><strong>💡 ヒント:</strong> 契約書、書類作業に良い日です。'}};const info = godMeaning[god.k] || {r:3, l:'☀️ 穏やかな日', d:'特別なことなく穏やかな一日です。'};let bonus = '';if ([dp.s.e, dp.b.e].includes(gods.yong)) {info.r = Math.min(5, info.r + 1);bonus = '<div class="info-box good" style="margin-top:12px;"><p>✨ <strong>今日幸運の気が入ってきますよ！</strong> いつもより物事がうまく進むでしょう！</p></div>';} else if ([dp.s.e, dp.b.e].includes(gods.gi)) {info.r = Math.max(1, info.r - 1);bonus = '<div class="info-box warn" style="margin-top:12px;"><p>⚠️ <strong>今日は注意した方が良いです！</strong> 大きな決定は明日に延ばしてください。</p></div>';}
+'正印': {r:4, l:'🤝 助けをもらう日', d:'誰かの助けをもらうのに良い日！分からないことがあれば聞いてみてください。<br><br><strong>💡 ヒント:</strong> 契約書、書類作業に良い日です。'}};const info = godMeaning[god.c] || {r:3, l:'☀️ 穏やかな日', d:'特別なことなく穏やかな一日です。'};let bonus = '';if ([dp.s.e, dp.b.e].includes(gods.yong)) {info.r = Math.min(5, info.r + 1);bonus = '<div class="info-box good" style="margin-top:12px;"><p>✨ <strong>今日幸運の気が入ってきますよ！</strong> いつもより物事がうまく進むでしょう！</p></div>';} else if ([dp.s.e, dp.b.e].includes(gods.gi)) {info.r = Math.max(1, info.r - 1);bonus = '<div class="info-box warn" style="margin-top:12px;"><p>⚠️ <strong>今日は注意した方が良いです！</strong> 大きな決定は明日に延ばしてください。</p></div>';}
 const goodH = [], badH = [];const hourNames = ['夜11時〜深夜1時','深夜1〜3時','深夜3〜5時','朝5〜7時','朝7〜9時','午前9〜11時','昼11時〜午後1時','午後1〜3時','午後3〜5時','夕方5〜7時','夜7〜9時','夜9〜11時'];for (let i = 0; i < 12; i++) {const hEl = BRANCH[i].e;if (hEl === gods.yong) goodH.push(hourNames[i]);else if (hEl === gods.gi) badH.push(hourNames[i]);}
 return `
 <div class="info-box gold"><p><strong>📅 ${tm}月 ${td}日 今日の運勢</strong></p><p style="font-size:0.85rem;color:var(--gray);margin-top:5px;">今日のエネルギー: ${dp.s.c}${dp.b.c} (${dp.b.m} ${dp.b.a}日)</p></div><div style="text-align:center;margin:15px 0;"><span style="font-size:2rem;">${'⭐'.repeat(info.r)}${'☆'.repeat(5-info.r)}</span></div><div class="info-box"><p><strong>${info.l}</strong></p><p style="margin-top:10px;line-height:1.8;">${info.d}</p></div>
@@ -2024,7 +2111,7 @@ else if ([yp.s.e, yp.b.e].includes(gods.gi)) { rating = 2; desc = '忌神が 入
 else { desc = '平穏な年です。着実に努力してください。'; }
 if (state.l >= 9) { rating = Math.min(5, rating + 1); desc += ' 十二運星が強くエネルギーが溢れます！'; }
 else if (state.l <= 3) { rating = Math.max(1, rating - 1); desc += ' 十二運星が弱く体力管理が必要です。'; }
-const months = [];for (let m = 1; m <= 12; m++) {const mp = calcMonthPillar(year, m, 15);const mGod = getTenGod(mp.s, dm);let tip = '';if (['正官','正財'].includes(mGod.k)) tip = '🟢 良い';else if (['偏官','劫財'].includes(mGod.k)) tip = '🔴 注意';else tip = '🟡 普通';months.push(`<span style="display:inline-block;margin:3px;padding:5px 8px;background:rgba(255,255,255,0.05);border-radius:5px;font-size:0.75rem;">${m}月 ${tip}</span>`);}
+const months = [];for (let m = 1; m <= 12; m++) {const mp = calcMonthPillar(year, m, 15);const mGod = getTenGod(mp.s, dm);let tip = '';if (['正官','正財'].includes(mGod.c)) tip = '🟢 良い';else if (['偏官','劫財'].includes(mGod.c)) tip = '🔴 注意';else tip = '🟡 普通';months.push(`<span style="display:inline-block;margin:3px;padding:5px 8px;background:rgba(255,255,255,0.05);border-radius:5px;font-size:0.75rem;">${m}月 ${tip}</span>`);}
 return `
 <div class="info-box gold"><p><strong>📆 ${year}年運勢</strong></p><p style="font-size:0.85rem;color:var(--gray);margin-top:5px;">${yp.s.c}${yp.b.c}年（${yp.b.m} ${yp.b.a}の年)</p></div><div style="text-align:center;margin:15px 0;"><span style="font-size:2rem;">${'⭐'.repeat(rating)}${'☆'.repeat(5-rating)}</span></div><div class="info-box"><p><strong>今年の十神： ${god.k}</strong></p><p style="margin-top:10px;line-height:1.8;">${desc}</p></div><div class="info-box" style="margin-top:12px;"><p><strong>📌 今年のエネルギー: ${state.k}</strong><br>${state.d}</p></div><div class="info-box" style="margin-top:12px;"><p><strong>🗓️ 月別ポイント</strong></p><div style="margin-top:10px;">${months.join('')}</div></div>`;}
 function genCareerFortune(saju, str, gods) {const dm = saju.day.s;const ec = countElements(saju);const jaeEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5];const gwanEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];const sikEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];let rating = 3, style = '', advice = '';if (str.type === 'strong' && ec[jaeEl] >= 2) {rating = 5; style = '社長スタイル';advice = '身強で財星が多く事業家の資質があります！お金を扱う能力に優れ、直接事業をすれば大きく成功する可能性があります。';} else if (str.type === 'strong' && ec[gwanEl] >= 2) {rating = 4; style = '高い地位に就く相';advice = '身強で官星が多く組織で出世です！公務員、大企業、政治方面で高い地位まで上り詰める可能性があります。';} else if (str.type === 'weak') {rating = 3; style = '専門家スタイル';advice = '身弱で一人よりチームで働く方が良いです。専門分野を深く掘れば認められる専門家になれます。';} else {rating = 4; style = '何でもこなすスタイル';advice = '中和されて均衡が取れています！どの分野でもよく適応し成果を出せます。';}
@@ -2151,7 +2238,7 @@ ${ttAnalysis.tougan.length ? ttAnalysis.tougan.map(t => `
 `).join('') : '<p style="color:var(--gray);font-size:0.9rem;">透干した支蔵干がありません。</p>'}
 </div></div>
 `;document.getElementById('gods').innerHTML = `
-<div class="god yong"><div class="god-title">用神(用神)</div><div class="god-element el-${GODS.yong}">${ELEMENT[GODS.yong].c}</div><div class="god-name">${ELEMENT[GODS.yong].k} - ${ELEMENT[GODS.yong].n}</div></div><div class="god hee"><div class="god-title">喜神(喜神)</div><div class="god-element el-${GODS.hee}">${ELEMENT[GODS.hee].c}</div><div class="god-name">${ELEMENT[GODS.hee].k} - ${ELEMENT[GODS.hee].n}</div></div><div class="god gi"><div class="god-title">忌神(忌神)</div><div class="god-element el-${GODS.gi}">${ELEMENT[GODS.gi].c}</div><div class="god-name">${ELEMENT[GODS.gi].k} - ${ELEMENT[GODS.gi].n}</div></div>
+<div class="god yong"><div class="god-title">用神(ようじん)</div><div class="god-element el-${GODS.yong}">${ELEMENT[GODS.yong].c}</div><div class="god-name">${ELEMENT[GODS.yong].k} - ${ELEMENT[GODS.yong].n}</div></div><div class="god hee"><div class="god-title">喜神(きじん)</div><div class="god-element el-${GODS.hee}">${ELEMENT[GODS.hee].c}</div><div class="god-name">${ELEMENT[GODS.hee].k} - ${ELEMENT[GODS.hee].n}</div></div><div class="god gi"><div class="god-title">忌神(きじん)</div><div class="god-element el-${GODS.gi}">${ELEMENT[GODS.gi].c}</div><div class="god-name">${ELEMENT[GODS.gi].k} - ${ELEMENT[GODS.gi].n}</div></div>
 `;let godsDetailHtml = `<div class="info-box gold"><p>${ELEMENT[GODS.yong].n} 気が あなたに幸運をもたらします。</p></div>`;if (GODS.johu) {godsDetailHtml += `
 <div class="info-box" style="margin-top:10px;"><p><strong>🌡️ 調候(調候) 分析</strong></p><p style="margin-top:8px;font-size:0.9rem;">${GODS.johuDesc || '季節に合った調候用神が適用されました。'}</p>
 ${GODS.sub ? `<p style="margin-top:5px;font-size:0.85rem;color:var(--gray);">補助用神: ${ELEMENT[GODS.sub].k}(${ELEMENT[GODS.sub].c})</p>` : ''}
@@ -2397,7 +2484,7 @@ ${personalAdvice.map(a => `
 return html;}
 function showTodayFortune() {const el = document.getElementById('today-fortune');el.style.display = 'block';document.getElementById('today-fortune-content').innerHTML = getTodayFortune();}
 function copySajuForAI() {if (!SAJU) { toast('まず四柱を分析してください'); return; }
-try {const str = calcStrength(SAJU);const dm = SAJU.day.s;const samhap = GODS?.samhap || analyzeSamhapBureau(SAJU);const format = calcFormat(SAJU, str, samhap);const interactions = calcInteractions(SAJU) || [];const sinsal = calcSinsal(SAJU) || [];const gongmang = calcGongmang(SAJU);const luck = calcLuck(SAJU, BIRTH_YEAR, GENDER, GODS, BIRTH_MONTH, BIRTH_DAY, BIRTH_HOUR) || [];const curLuck = luck.find(l => l.isCur);const currentYear = new Date().getFullYear();const today = new Date();const age = currentYear - BIRTH_YEAR + 1;const manAge = (() => { let a = currentYear - BIRTH_YEAR; const m = today.getMonth() + 1; const d = today.getDate(); if (m < BIRTH_MONTH || (m === BIRTH_MONTH && d < BIRTH_DAY)) a--; return a; })();const ilju = getIljuDesc(SAJU.day.s, SAJU.day.b);const yearGodObj = getTenGod(SAJU.year.s, dm);const yearBranchIdx = BRANCH.findIndex(b => b.c === SAJU.year.b.c);const hasSikSangWithRoot = yearGodObj && ['傷官','食神'].includes(yearGodObj.k) &&
+try {const str = calcStrength(SAJU);const dm = SAJU.day.s;const samhap = GODS?.samhap || analyzeSamhapBureau(SAJU);const format = calcFormat(SAJU, str, samhap);const interactions = calcInteractions(SAJU) || [];const sinsal = calcSinsal(SAJU) || [];const gongmang = calcGongmang(SAJU);const luck = calcLuck(SAJU, BIRTH_YEAR, GENDER, GODS, BIRTH_MONTH, BIRTH_DAY, BIRTH_HOUR) || [];const curLuck = luck.find(l => l.isCur);const currentYear = new Date().getFullYear();const today = new Date();const age = currentYear - BIRTH_YEAR + 1;const manAge = (() => { let a = currentYear - BIRTH_YEAR; const m = today.getMonth() + 1; const d = today.getDate(); if (m < BIRTH_MONTH || (m === BIRTH_MONTH && d < BIRTH_DAY)) a--; return a; })();const ilju = getIljuDesc(SAJU.day.s, SAJU.day.b);const yearGodObj = getTenGod(SAJU.year.s, dm);const yearBranchIdx = BRANCH.findIndex(b => b.c === SAJU.year.b.c);const hasSikSangWithRoot = yearGodObj && ['傷官','食神'].includes(yearGodObj.c) &&
 [5, 6].includes(yearBranchIdx);const canBeJonggeok = str.extreme && !hasSikSangWithRoot;const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[SAJU.year, SAJU.month, SAJU.day, SAJU.hour].forEach(p => {if(p && p.s) elCount[p.s.e]++;if(p && p.b) elCount[p.b.e]++;});const yearGod = getTenGod(SAJU.year.s, dm);const monthGod = getTenGod(SAJU.month.s, dm);const hourGod = SAJU.hour ? getTenGod(SAJU.hour.s, dm) : null;const getBranchYang = (branch) => {const idx = BRANCH.findIndex(b => b.c === branch.c);return idx % 2 === 0;};const yearBranchYang = getBranchYang(SAJU.year.b) ? '陽' : '陰';const monthBranchYang = getBranchYang(SAJU.month.b) ? '陽' : '陰';const dayBranchYang = getBranchYang(SAJU.day.b) ? '陽' : '陰';const hourBranchYang = SAJU.hour ? (getBranchYang(SAJU.hour.b) ? '陽' : '陰') : '';const yearBranchGod = getTenGod({e: SAJU.year.b.e, y: getBranchYang(SAJU.year.b)}, dm);const monthBranchGod = getTenGod({e: SAJU.month.b.e, y: getBranchYang(SAJU.month.b)}, dm);const dayBranchGod = getTenGod({e: SAJU.day.b.e, y: getBranchYang(SAJU.day.b)}, dm);const hourBranchGod = SAJU.hour ? getTenGod({e: SAJU.hour.b.e, y: getBranchYang(SAJU.hour.b)}, dm) : null;const dmEl = dm.e;const elOrder = ['wood', 'fire', 'earth', 'metal', 'water'];const dmIdx = elOrder.indexOf(dmEl);const tenGodMap = {peer: elOrder[dmIdx],
 output: elOrder[(dmIdx + 1) % 5],
 wealth: elOrder[(dmIdx + 2) % 5],
@@ -2470,11 +2557,11 @@ const correctionText = correctionInfo.length > 0 ? `\n• 時間補正: ${correc
 • 天干: ${SAJU.year.s.c}(${SAJU.year.s.k}) ${SAJU.month.s.c}(${SAJU.month.s.k}) ${SAJU.day.s.c}(${SAJU.day.s.k}) ${SAJU.hour ? SAJU.hour.s.c+'('+SAJU.hour.s.k+')' : '不明'}
 • 地支: ${SAJU.year.b.c}(${SAJU.year.b.k}) ${SAJU.month.b.c}(${SAJU.month.b.k}) ${SAJU.day.b.c}(${SAJU.day.b.k}) ${SAJU.hour ? SAJU.hour.b.c+'('+SAJU.hour.b.k+')' : '不明'}
 【⚡ 十神マッピング表 (日干 ${dm.c} ${ELEMENT[dm.e].k} 基準) - AI必須参照】
-• 比劫(比劫): ${ELEMENT[tenGodMap.peer].k} (${ELEMENT[tenGodMap.peer].c}) - 日干と同じ五行
-• 食傷(食傷): ${ELEMENT[tenGodMap.output].k} (${ELEMENT[tenGodMap.output].c}) - 日干が生じる五行
-• 財星(財星): ${ELEMENT[tenGodMap.wealth].k} (${ELEMENT[tenGodMap.wealth].c}) - 日干が剋する五行
-• 官殺(官殺): ${ELEMENT[tenGodMap.officer].k} (${ELEMENT[tenGodMap.officer].c}) - 日干を剋する五行
-• 印星(印星): ${ELEMENT[tenGodMap.seal].k} (${ELEMENT[tenGodMap.seal].c}) - 日干を生じる五行
+• 比劫(ひごう): ${ELEMENT[tenGodMap.peer].k} - 日干と同じ五行
+• 食傷(しょくしょう): ${ELEMENT[tenGodMap.output].k} - 日干が生じる五行
+• 財星(ざいせい): ${ELEMENT[tenGodMap.wealth].k} - 日干が剋する五行
+• 官殺(かんさつ): ${ELEMENT[tenGodMap.officer].k} - 日干を剋する五行
+• 印星(いんせい): ${ELEMENT[tenGodMap.seal].k} - 日干を生じる五行
 【十神 - 天干】
 • 年干 ${SAJU.year.s.c}: ${yearGod.k} - ${yearGod.d}
 • 月干 ${SAJU.month.s.c}: ${monthGod.k} - ${monthGod.d}
@@ -2482,24 +2569,24 @@ const correctionText = correctionInfo.length > 0 ? `\n• 時間補正: ${correc
 ${hourGod ? '• 時干 ' + SAJU.hour.s.c + ': ' + hourGod.k + ' - ' + hourGod.d : '• 時干: 不明'}
 【十神 - 地支 ⚠️ 重要】
 • 年支 ${SAJU.year.b.c} (${ELEMENT[SAJU.year.b.e].k}, ${yearBranchYang}): ${yearBranchGod.k}
-• 月支 ${SAJU.month.b.c} (${ELEMENT[SAJU.month.b.e].k}, ${monthBranchYang}): ${monthBranchGod.k} ← 月令(月令)
+• 月支 ${SAJU.month.b.c} (${ELEMENT[SAJU.month.b.e].k}, ${monthBranchYang}): ${monthBranchGod.k} ← 月令(げつれい)
 • 日支 ${SAJU.day.b.c} (${ELEMENT[SAJU.day.b.e].k}, ${dayBranchYang}): ${dayBranchGod.k} ← 配偶者宮
 ${SAJU.hour ? '• 時支 ' + SAJU.hour.b.c + ' (' + ELEMENT[SAJU.hour.b.e].k + ', ' + hourBranchYang + '): ' + hourBranchGod.k + ' ← 子女宮' : '• 時支: 不明'}
 【月令 得令/失令】
 • 出生月: ${SAJU.month.b.k} (${monthSeason})
-• 季節五行: ${ELEMENT[seasonEl].k} (${ELEMENT[seasonEl].c})
-• 日干 ${dm.c} (${ELEMENT[dm.e].k}): ${deukRyung ? '✅ 得令(得令) - 旺季で力がある' : '❌ 失令(失令) - 季節を失い助けが必要'}
+• 季節五行: ${ELEMENT[seasonEl].k}
+• 日干 ${dm.c} (${ELEMENT[dm.e].k}): ${deukRyung ? '✅ 得令(とくれい) - 旺季で力がある' : '❌ 失令(しつれい) - 季節を失い助けが必要'}
 【十二運星 (日干基準)】
 • 年支 ${SAJU.year.b.c}: ${yearState.k} (エネルギー ${yearState.l}/12)
 • 月支 ${SAJU.month.b.c}: ${monthState.k} (エネルギー ${monthState.l}/12)
 • 日支 ${SAJU.day.b.c}: ${dayState.k} (エネルギー ${dayState.l}/12)
 ${hourState ? '• 時支 ' + SAJU.hour.b.c + ': ' + hourState.k + ' (エネルギー ' + hourState.l + '/12)' : '• 時支: 不明'}
 【五行分布】
-• 木(木): ${elCount.wood}個
-• 火(火): ${elCount.fire}個
-• 土(土): ${elCount.earth}個
-• 金(金): ${elCount.metal}個
-• 水(水): ${elCount.water}個
+• 木(もく): ${elCount.wood}個
+• 火(か): ${elCount.fire}個
+• 土(ど): ${elCount.earth}個
+• 金(きん): ${elCount.metal}個
+• 水(すい): ${elCount.water}個
 • 不足五行: ${(() => {const missing = Object.entries(elCount).filter(e => e[1] === 0).map(e => e[0]);if (missing.length === 0) return 'なし';const jijangInfo = {};const pillarNames = ['年', '月', '日', '時'];[SAJU.year?.b, SAJU.month?.b, SAJU.day?.b, SAJU.hour?.b].forEach((b, idx) => {if (!b) return;const bi = BRANCH.indexOf(b);(JIJANGGAN[bi] || []).forEach(j => {const el = STEM[j.stem].e;if (!jijangInfo[el]) jijangInfo[el] = [];jijangInfo[el].push(pillarNames[idx] + b.c + ':' + STEM[j.stem].c);});});const result = [];missing.forEach(el => {if (jijangInfo[el] && jijangInfo[el].length > 0) {result.push(ELEMENT[el].k + '(※' + jijangInfo[el].join(', ') + ')');} else {result.push(ELEMENT[el].k + '(完全不在)');}});return result.join(', ');})()}
 ${(() => {const missing = Object.entries(elCount).filter(e => e[1] === 0).map(e => e[0]);if (missing.length === 0) return '';const healthWarnings = {wood: '⚠️ 木(木) 不在 健康警告: 肝臓/胆嚢/目/神経系が脆弱。怒りのコントロールが困難、優柔不断に注意。緑の野菜、酸味の食べ物、東 方位を推奨.',
 fire: '⚠️ 火(火)不在 健康警告: 心臓/小腸/血圧/目が脆弱。憂鬱感、意欲低下、冷え性に注意。赤色、苦味の食べ物、南 方位、日光浴を推奨.',
@@ -2511,10 +2598,10 @@ water: '⚠️ 水(水)不在 健康警告: 腎臓/膀胱/生殖器/骨が脆弱
 ${canBeJonggeok ? '• 特記事項: ' + str.extreme + ' 四柱 (従格の可能性)' : (str.extreme ? '• 特記事項: ' + str.extreme + ' 四柱' : '')}
 【用神/喜神/忌神】 ⭐ 核心 (必ず 解釈に反映）
 ┌─────────────────────────────────────────────────┐
-│ 用神(用神): ${ELEMENT[GODS.yong].k}(${ELEMENT[GODS.yong].c}) - 最も必要な五行 │
-│ 喜神(喜神): ${ELEMENT[GODS.hee].k}(${ELEMENT[GODS.hee].c}) - 用神を助ける五行 │
-│ 忌神(忌神): ${ELEMENT[GODS.gi].k}(${ELEMENT[GODS.gi].c}) - 避けるべき五行 │
-│ 閑神(閑神): ${ELEMENT[hansinEl].k}(${ELEMENT[hansinEl].c}) - 忌神を助ける五行 │
+│ 用神(ようじん): ${ELEMENT[GODS.yong].k} - 最も必要な五行 │
+│ 喜神(きじん): ${ELEMENT[GODS.hee].k} - 用神を助ける五行 │
+│ 忌神(きじん): ${ELEMENT[GODS.gi].k} - 避けるべき五行 │
+│ 閑神(かんじん): ${ELEMENT[hansinEl].k} - 忌神を助ける五行 │
 └─────────────────────────────────────────────────┘
 ${GODS.yongReason ? '• 判断根拠: ' + GODS.yongReason : ''}
 ${GODS.yongWarning ? '• ' + GODS.yongWarning : ''}
@@ -3162,7 +3249,7 @@ const hyungPairs = [[2,5],[5,8],[2,8],[1,10],[10,7],[1,7],[0,3]];for (const [a,b
 title: '⚡ 刑(刑) 関係',
 desc: '互いに傷つけやすい関係です。',
 tip: '言葉に注意！感情的に接すると傷が大きくなります。'});break;}}
-const myGender = GENDER;const pGenderVal = pGender;const partnerGodToMe = getTenGod(pDm, myDm);const myGodToPartner = getTenGod(myDm, pDm);if (partnerGodToMe) {const godName = partnerGodToMe.k;if (['正財','偏財'].includes(godName)) {if (myGender === 'm') {analysis.yukChin.score = 12;analysis.yukChin.details.push({type: 'excellent',
+const myGender = GENDER;const pGenderVal = pGender;const partnerGodToMe = getTenGod(pDm, myDm);const myGodToPartner = getTenGod(myDm, pDm);if (partnerGodToMe) {const godName = partnerGodToMe.c;if (['正財','偏財'].includes(godName)) {if (myGender === 'm') {analysis.yukChin.score = 12;analysis.yukChin.details.push({type: 'excellent',
 title: '💍 相手が私の財星(財星)',
 desc: `相手が 私の ${godName}です! 男性に財星は妻を意味します。`,
 tip: '運命的な 配偶者 縁がです。 結婚すれば財物運も上がります！'});} else {analysis.yukChin.score = 5;analysis.yukChin.details.push({type: 'good',
