@@ -209,19 +209,34 @@ const dm = STEM[dmIdx] || SAJU.day.s;
 display.innerHTML = '<div style="display:grid;grid-template-columns:auto 1fr;gap:15px;align-items:center;"><div style="text-align:center;"><p style="font-size:2rem;">'+(char?.emoji||'☯︎')+'</p><p style="font-size:1.3rem;font-weight:bold;color:var(--gold);">'+ilju+'</p></div><div><p style="font-size:1rem;font-weight:bold;color:var(--pearl);">"'+(char?.name||'Unknown')+'"</p><p style="font-size:0.8rem;color:var(--gray);margin-top:5px;">'+dm.k+' · '+(STRENGTH?.type==='strong'?'Strong':STRENGTH?.type==='weak'?'Weak':'Balanced')+'</p><p style="font-size:0.75rem;color:var(--gold);margin-top:5px;">Beneficial: '+(GODS?.yong?ELEMENT[GODS.yong].k:'?')+' · Unfavorable: '+(GODS?.gi?ELEMENT[GODS.gi].k:'?')+'</p></div></div>';
 }
 function analyzeMatchAdvanced(mySaju, myGods, myStrength, partnerSaju, partnerGods, partnerStrength, mode) {
-const result = { score: 0, categories: {}, yearlyRisks: [], rawScores: {} };
-const raw = {
-core: { stemCombine: 0, branchCombine: 0, branchClash: 0, elSame: 0, elProduce: 0, elClash: 0 },
-harmony: { samhap: 0, wonjin: 0, guimun: 0, hyung: 0 },
-yongsin: { yongMatch: 0, iAmYong: 0, johu: 0, gisin: 0 },
-balance: { strength: 0, sameClimate: 0 },
-soul: { napeum: 0, twelveState: 0 },
-special: { guiin: 0, amhap: 0, yukChin: 0, sinsal: 0 }
+const result = { score: 0, categories: {}, yearlyRisks: [] };
+let totalScore = 50;
+const analysis = {
+ilgan: { score: 0, details: [] },
+ilji: { score: 0, details: [] },
+oheng: { score: 0, details: [] },
+napeum: { score: 0, details: [] },
+yongsin: { score: 0, details: [] },
+jijanggan: { score: 0, details: [] },
+samhap: { score: 0, details: [] },
+ddi: { score: 0, details: [] },
+ilju: { score: 0, details: [] },
+wonJinGuiMun: { score: 0, details: [], hasWonjin: false },
+yukChin: { score: 0, details: [] },
+twelveState: { score: 0, details: [] },
+strength: { score: 0, details: [] },
+johu: { score: 0, details: [] },
+sinsal: { score: 0, details: [] },
+gongmang: { score: 0, details: [] }
 };
-const myDmIdx = STEM.findIndex(s => s.c === mySaju.day.s.c);
-const pDmIdx = STEM.findIndex(s => s.c === partnerSaju.day.s.c);
-const myDm = STEM[myDmIdx];
-const pDm = STEM[pDmIdx];
+const myDm = mySaju.day.s;
+const pDm = partnerSaju.day.s;
+const myDmIdx = STEM.findIndex(s => s.c === myDm.c);
+const pDmIdx = STEM.findIndex(s => s.c === pDm.c);
+const myDbIdx = BRANCH.findIndex(br => br.c === mySaju.day.b.c);
+const pDbIdx = BRANCH.findIndex(br => br.c === partnerSaju.day.b.c);
+const myYbIdx = BRANCH.findIndex(br => br.c === mySaju.year.b.c);
+const pYbIdx = BRANCH.findIndex(br => br.c === partnerSaju.year.b.c);
 const myIlju = mySaju.day.s.c + mySaju.day.b.c;
 const pIlju = partnerSaju.day.s.c + partnerSaju.day.b.c;
 result.myCharacter = ILJU_IMAGE[myIlju] || { name: 'Unknown', emoji: '❓', desc: '' };
@@ -230,256 +245,355 @@ const interactionKey = myDm.e + '_' + pDm.e;
 const reverseKey = pDm.e + '_' + myDm.e;
 if (INTERACTION_METAPHOR[interactionKey]) result.myToPartner = INTERACTION_METAPHOR[interactionKey];
 if (INTERACTION_METAPHOR[reverseKey]) result.partnerToMe = INTERACTION_METAPHOR[reverseKey];
-const ganHap = [[0,5],[1,6],[2,7],[3,8],[4,9]];
-result.hasStemCombine = ganHap.some(([a,b]) => (myDmIdx === a && pDmIdx === b) || (myDmIdx === b && pDmIdx === a));
-if (result.hasStemCombine) { raw.core.stemCombine = 20; result.categories.stemCombine = { score: 20, title: '天干合/Chungan-Hap (Stem Harmony)', desc: 'Your Day Masters form a divine union! Sign of soulmates.' }; }
-if (!result.hasStemCombine) {
-const myEl = myDm.e;
-const pEl = pDm.e;
-const EL_PRODUCE = { wood: 'fire', fire: 'earth', earth: 'metal', metal: 'water', water: 'wood' };
-const EL_ORDER = ['wood', 'fire', 'earth', 'metal', 'water'];
-if (myEl === pEl) {
-raw.core.elSame = 10;
-result.categories.elSame = { score: 10, title: '同氣相求/Same Element', desc: 'Same day master element - natural understanding.' };
-} else if (EL_PRODUCE[myEl] === pEl || EL_PRODUCE[pEl] === myEl) {
-raw.core.elProduce = 8;
-result.categories.elProduce = { score: 8, title: '相生/Mutual Generation', desc: 'Your elements nurture each other.' };
-} else if (EL_ORDER[(EL_ORDER.indexOf(myEl) + 2) % 5] === pEl) {
-raw.core.elClash = -5;
-result.categories.elClash = { score: -5, title: '相剋/Element Clash', desc: 'Your elements create friction.' };
-}
-}
-const myBrIdx = BRANCH.findIndex(b => b.c === mySaju.day.b.c);
-const pBrIdx = BRANCH.findIndex(b => b.c === partnerSaju.day.b.c);
-const yukHap = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
-result.hasBranchCombine = yukHap.some(([a,b]) => (myBrIdx === a && pBrIdx === b) || (myBrIdx === b && pBrIdx === a));
-if (result.hasBranchCombine) { raw.core.branchCombine = 15; result.categories.branchCombine = { score: 15, title: '六合/Yukhap (Six Harmony - Spouse Bond)', desc: 'Your spouse palaces harmonize beautifully.' }; }
-result.hasBranchClash = BRANCH_CLASH.some(([a,b]) => (myBrIdx === a && pBrIdx === b) || (myBrIdx === b && pBrIdx === a));
-if (result.hasBranchClash) { raw.core.branchClash = -15; result.categories.branchClash = { score: -15, title: '日支沖/Ilji-Chung (Spouse Palace Clash)', desc: 'Creates tension but also passionate energy.', advice: 'Channel conflict into productive debate.' }; }
-const allMyBranches = [BRANCH.findIndex(b=>b.c===mySaju.year.b.c), BRANCH.findIndex(b=>b.c===mySaju.month.b.c), myBrIdx, mySaju.hour?.b ? BRANCH.findIndex(b=>b.c===mySaju.hour.b.c) : -1].filter(i=>i>=0);
-const allPBranches = [BRANCH.findIndex(b=>b.c===partnerSaju.year.b.c), BRANCH.findIndex(b=>b.c===partnerSaju.month.b.c), pBrIdx, partnerSaju.hour?.b ? BRANCH.findIndex(b=>b.c===partnerSaju.hour.b.c) : -1].filter(i=>i>=0);
-for (const [element, trio] of Object.entries(MATCH_TRIPLE_HARMONY)) {
-const allBranches = new Set([...allMyBranches, ...allPBranches]);
-const uniqueTrioCount = trio.filter(t => allBranches.has(t)).length;
-if ((trio.includes(myBrIdx) || trio.includes(pBrIdx)) && uniqueTrioCount >= 3) {
-const bonus = (trio.includes(myBrIdx) && trio.includes(pBrIdx)) ? 12 : 8;
-raw.harmony.samhap = bonus;
-result.categories.samhap = { score: bonus, title: '三合/Samhap '+element.toUpperCase()+'局 (Triple Harmony)', desc: 'Together you form a powerful '+element+' trinity!', advice: 'Strong karmic bond.' };
+/* === 1. ILGAN — Day Master Harmony === */
+const ganHap = [
+{a:0, b:5, name:'Gap-Gi Combine (甲己合土)', result:'Earth'},
+{a:1, b:6, name:'Eul-Gyeong Combine (乙庚合金)', result:'Metal'},
+{a:2, b:7, name:'Byeong-Sin Combine (丙辛合水)', result:'Water'},
+{a:3, b:8, name:'Jeong-Im Combine (丁壬合木)', result:'Wood'},
+{a:4, b:9, name:'Mu-Gye Combine (戊癸合火)', result:'Fire'}
+];
+let ganHapFound = false;
+for (const gh of ganHap) {
+if ((myDmIdx === gh.a && pDmIdx === gh.b) || (myDmIdx === gh.b && pDmIdx === gh.a)) {
+analysis.ilgan.score = 25;
+analysis.ilgan.details.push({type: 'excellent', title: '💕 Heavenly Stem Combination!', desc: gh.name+' — Your Day Masters form a divine union! Like puzzle pieces that fit perfectly.', advice: 'The ultimate complement — you complete each other.'});
+ganHapFound = true; break;
+}}
+if (!ganHapFound) {
+if (myDm.e === pDm.e) {
+analysis.ilgan.score = 10;
+analysis.ilgan.details.push({type: 'good', title: '🤝 Same Element', desc: 'Both '+ELEMENT[myDm.e].k+'! You think alike and understand each other naturally.', advice: 'Comfortable similarity, but sometimes compromise is needed.'});
+} else if ((EL_ORDER.indexOf(myDm.e) + 1) % 5 === EL_ORDER.indexOf(pDm.e)) {
+analysis.ilgan.score = 8;
+analysis.ilgan.details.push({type: 'good', title: '🌱 You Nurture Partner', desc: ELEMENT[myDm.e].k+' generates '+ELEMENT[pDm.e].k+'. You naturally support your partner.', advice: 'A devoted, giving love.'});
+} else if ((EL_ORDER.indexOf(pDm.e) + 1) % 5 === EL_ORDER.indexOf(myDm.e)) {
+analysis.ilgan.score = 8;
+analysis.ilgan.details.push({type: 'good', title: '💝 Partner Nurtures You', desc: ELEMENT[pDm.e].k+' generates '+ELEMENT[myDm.e].k+'. Your partner naturally supports you.', advice: 'You receive abundant love from your partner.'});
+} else if ((EL_ORDER.indexOf(myDm.e) + 2) % 5 === EL_ORDER.indexOf(pDm.e)) {
+analysis.ilgan.score = -5;
+analysis.ilgan.details.push({type: 'caution', title: '⚡ You Overpower Partner', desc: ELEMENT[myDm.e].k+' controls '+ELEMENT[pDm.e].k+'. You may inadvertently pressure your partner.', advice: 'Be mindful of your words — you can hurt without realizing!'});
+} else if ((EL_ORDER.indexOf(pDm.e) + 2) % 5 === EL_ORDER.indexOf(myDm.e)) {
+analysis.ilgan.score = -5;
+analysis.ilgan.details.push({type: 'caution', title: '😰 Partner Overpowers You', desc: ELEMENT[pDm.e].k+' controls '+ELEMENT[myDm.e].k+'. Your partner may be demanding.', advice: 'Express your feelings honestly — it helps!'});
+}}
+/* === 2. ILJI — Day Branch Relation === */
+const jiHap = [{a:0,b:1,name:'Ja-Chuk (子丑合)'},{a:2,b:11,name:'In-Hae (寅亥合)'},{a:3,b:10,name:'Myo-Sul (卯戌合)'},{a:4,b:9,name:'Jin-Yu (辰酉合)'},{a:5,b:8,name:'Sa-Sin (巳申合)'},{a:6,b:7,name:'O-Mi (午未合)'}];
+const jiChung = [{a:0,b:6,name:'Ja-O Clash (子午衝)'},{a:1,b:7,name:'Chuk-Mi Clash (丑未衝)'},{a:2,b:8,name:'In-Sin Clash (寅申衝)'},{a:3,b:9,name:'Myo-Yu Clash (卯酉衝)'},{a:4,b:10,name:'Jin-Sul Clash (辰戌衝)'},{a:5,b:11,name:'Sa-Hae Clash (巳亥衝)'}];
+for (const jh of jiHap) {
+if ((myDbIdx === jh.a && pDbIdx === jh.b) || (myDbIdx === jh.b && pDbIdx === jh.a)) {
+analysis.ilji.score = 20;
+analysis.ilji.details.push({type: 'excellent', title: '💑 Day Branch Six Harmony!', desc: jh.name+' — Your Spouse Palaces combine! Deep comfort together.', advice: 'Great marital bond — marriage will be harmonious.'});
 break;
+}}
+for (const jc of jiChung) {
+if ((myDbIdx === jc.a && pDbIdx === jc.b) || (myDbIdx === jc.b && pDbIdx === jc.a)) {
+analysis.ilji.score = -15;
+analysis.ilji.details.push({type: 'bad', title: '💥 Day Branch Clash!', desc: jc.name+' — Your Spouse Palaces clash! Friction is likely.', advice: 'With open communication, this can become passionate energy.'});
+break;
+}}
+if (myDbIdx === pDbIdx) {
+analysis.ilji.score = 5;
+analysis.ilji.details.push({type: 'neutral', title: '🔄 Same Day Branch', desc: 'Both have '+mySaju.day.b.c+'('+mySaju.day.b.k+')! Very similar temperaments.', advice: 'Too similar can feel stifling — give each other space.'});
 }
+/* === 3. SAMHAP — Three Harmony === */
+const samhapSets = [
+{branches:[2,6,10], name:'In-O-Sul Three Harmony (寅午戌)', element:'Fire'},
+{branches:[5,9,1], name:'Sa-Yu-Chuk Three Harmony (巳酉丑)', element:'Metal'},
+{branches:[8,0,4], name:'Sin-Ja-Jin Three Harmony (申子辰)', element:'Water'},
+{branches:[11,3,7], name:'Hae-Myo-Mi Three Harmony (亥卯未)', element:'Wood'}
+];
+const myAllBr = [BRANCH.findIndex(br=>br.c===mySaju.year.b.c),BRANCH.findIndex(br=>br.c===mySaju.month.b.c),myDbIdx,mySaju.hour?.b?BRANCH.findIndex(br=>br.c===mySaju.hour.b.c):-1].filter(i=>i>=0);
+const pAllBr = [BRANCH.findIndex(br=>br.c===partnerSaju.year.b.c),BRANCH.findIndex(br=>br.c===partnerSaju.month.b.c),pDbIdx,partnerSaju.hour?.b?BRANCH.findIndex(br=>br.c===partnerSaju.hour.b.c):-1].filter(i=>i>=0);
+const allBrSet = new Set([...myAllBr,...pAllBr]);
+for (const sh of samhapSets) {
+const myIn = sh.branches.includes(myDbIdx);
+const pIn = sh.branches.includes(pDbIdx);
+const uniqueCount = sh.branches.filter(b => allBrSet.has(b)).length;
+if ((myIn || pIn) && uniqueCount >= 3) {
+analysis.samhap.score = 12;
+analysis.samhap.details.push({type: 'good', title: '🌀 Three Harmony Bond!', desc: sh.name+' ('+sh.element+' Frame) — You both belong to the same cosmic team!', advice: 'With shared goals, you become an unstoppable duo!'});
+break;
+}}
+for (const bh of DIRECTIONAL_HARMONY) {
+const myIn = bh.branches.includes(myDbIdx);
+const pIn = bh.branches.includes(pDbIdx);
+if (myIn && pIn && myDbIdx !== pDbIdx) {
+analysis.samhap.score += 8;
+analysis.samhap.details.push({type: 'good', title: '🧭 Directional Harmony!', desc: bh.name+' — You both look in the same direction.', advice: 'Shared values mean fewer conflicts.'});
+break;
+}}
+/* === 4. WONJIN early check === */
+const wonjinPairs = [[0,7],[2,9],[1,6],[4,11],[5,10],[3,8]];
+const hasWonjin = wonjinPairs.some(([a,b]) => (myDbIdx===a&&pDbIdx===b)||(myDbIdx===b&&pDbIdx===a));
+if (hasWonjin) {
+const wonjinScore = mode === 'romance' ? -12 : -8;
+analysis.wonJinGuiMun.score = wonjinScore;
+analysis.wonJinGuiMun.hasWonjin = true;
+analysis.wonJinGuiMun.details.push({type: 'caution', title: '😤 Resentment Bond (怨嗔)', desc: 'Your Day Branches form a resentment bond — subtle friction that never quite resolves.', advice: mode==='romance' ? 'Patience and acceptance of differences is key to growth.' : 'In business, constructive tension can drive innovation.'});
 }
-result.hasWonjin = MATCH_RESENTMENT.some(([a,b]) => (myBrIdx === a && pBrIdx === b) || (myBrIdx === b && pBrIdx === a));
-if (result.hasWonjin) {
-const penalty = mode === 'romance' ? -12 : -8;
-raw.harmony.wonjin = penalty;
-result.categories.wonjin = { score: penalty, title: '怨嗔/Wonjin (Karmic Friction)', desc: 'Near-clash energy. Lingering tension.', advice: 'Extra patience and communication needed.' };
-}
-const guiMunPairs = [[2,7],[3,8],[4,9],[5,10],[6,11],[1,6]];
-result.hasGuiMun = guiMunPairs.some(([a,b]) => (myBrIdx === a && pBrIdx === b) || (myBrIdx === b && pBrIdx === a));
-if (result.hasGuiMun) { raw.harmony.guimun = -8; result.categories.guimun = { score: -8, title: '鬼門/Guimun (Ghost Gate)', desc: 'Psychic friction. Arguments may feel irrational.', advice: 'Ground yourself. Avoid late-night conflicts.' }; }
-const hyungPairs = [[2,5],[5,8],[2,8],[1,10],[10,7],[1,7],[0,3]];
-result.hasHyung = hyungPairs.some(([a,b]) => (myBrIdx === a && pBrIdx === b) || (myBrIdx === b && pBrIdx === a));
-if (result.hasHyung) { raw.harmony.hyung = -6; result.categories.hyung = { score: -6, title: '刑/Hyung (Mutual Punishment)', desc: 'Self-destructive patterns may emerge together.', advice: 'Be mindful of enabling bad habits.' }; }
-if (myGods && partnerGods) {
-const pStemElements = [STEM.find(s=>s.c===partnerSaju.year.s.c)?.e,STEM.find(s=>s.c===partnerSaju.month.s.c)?.e,STEM.find(s=>s.c===partnerSaju.day.s.c)?.e,STEM.find(s=>s.c===partnerSaju.hour?.s?.c)?.e].filter(Boolean);
-const pBranchElements = [partnerSaju.year.b?.e, partnerSaju.month.b?.e, partnerSaju.day.b?.e, partnerSaju.hour?.b?.e].filter(Boolean);
-const pElements = [...pStemElements, ...pBranchElements];
-const myYongElement = myGods.yong;
-const yongCount = pElements.filter(e => e === myYongElement).length;
-if (yongCount >= 2) { raw.yongsin.yongMatch = 15; result.categories.yongsinMatch = { score: 15, title: '用神/Yongsin Match', desc: 'Partner brings your Beneficial Element in abundance!' }; }
-else if (yongCount >= 1) { raw.yongsin.yongMatch = 8; result.categories.yongsinMatch = { score: 8, title: '用神/Yongsin Present', desc: 'Partner has your Beneficial Element.' }; }
-if (partnerGods?.yong) {
-const myElements = [];
-[mySaju.year, mySaju.month, mySaju.day, mySaju.hour].forEach(p => {
-if (p?.s) myElements.push(p.s.e);
-if (p?.b) myElements.push(p.b.e);
-});
-const pYongInMe = myElements.filter(e => e === partnerGods.yong).length;
-if (pYongInMe >= 2) { raw.yongsin.iAmYong = 10; result.categories.iAmYongsin = { score: 10, title: '用神/I Bring Partner\'s Yongsin', desc: 'I bring partner\'s Beneficial Element abundantly!' }; }
-else if (pYongInMe >= 1) { raw.yongsin.iAmYong = 5; result.categories.iAmYongsin = { score: 5, title: '用神/I Have Partner\'s Yongsin', desc: 'I have what partner needs.' }; }
-}
-const mbi = BRANCH.findIndex(b => b.c === mySaju.month.b.c);
-const myDmEl = mySaju.day.s.e;
-const pHasFire = pElements.includes('fire');
-const pHasWater = pElements.includes('water');
-const pHasWood = pElements.includes('wood');
-const isDongToFire = myDmEl === 'earth' && [0, 1, 11].includes(mbi) && pHasFire;
-const isHaToWater = myDmEl === 'earth' && [5, 6, 7].includes(mbi) && pHasWater;
-const isHanGeumFire = myDmEl === 'metal' && [0, 1, 11].includes(mbi) && pHasFire;
-const isHanSuFire = myDmEl === 'water' && [0, 1, 11].includes(mbi) && pHasFire;
-const isDongToWood = myDmEl === 'earth' && [0, 1, 11].includes(mbi) && pHasWood;
-let johuApplied = false;
-if (isDongToFire || isHaToWater || isHanGeumFire || isHanSuFire) {
-const caseName = isDongToFire ? '冬土得陽' : isHaToWater ? '夏土得雨' : isHanGeumFire ? '寒金鍛造' : '寒水調暖';
-raw.yongsin.johu = 15;
-result.categories.johuMatch = { score: 15, title: caseName + '/Johu (Climate Match)', desc: 'Perfect climate synergy!', advice: 'Blessed union by traditional theory!' };
-johuApplied = true;
-} else if (isDongToWood) {
-raw.yongsin.johu = 8;
-result.categories.tongguanMatch = { score: 8, title: '冬土通關/Tongguan (Climate Bridge)', desc: 'Wood bridges Water to Fire. Indirect warmth.' };
-johuApplied = true;
-}
-const pbi = BRANCH.findIndex(b => b.c === partnerSaju.month.b.c);
-const myIsWinter = [0, 1, 11].includes(mbi);
-const myIsSummer = [5, 6, 7].includes(mbi);
-const pIsWinter = [0, 1, 11].includes(pbi);
-const pIsSummer = [5, 6, 7].includes(pbi);
-if (!johuApplied && ((myIsWinter && pIsWinter) || (myIsSummer && pIsSummer))) {
-raw.balance.sameClimate = -3;
-result.categories.sameClimate = { score: -3, title: '同調候/Same Climate', desc: myIsWinter ? 'Both need warmth but neither provides it.' : 'Both need cooling but neither provides it.' };
-}
-const myGiElement = myGods.gi;
-const giCount = pElements.filter(e => e === myGiElement).length;
-if (!johuApplied && giCount >= 2) {
-if (mode === 'business') {
-raw.yongsin.gisin = 5;
-result.categories.businessTension = { score: 5, title: '生意相剋 (Productive Friction)', desc: 'In business, tension drives innovation.' };
-} else {
-raw.yongsin.gisin = -5;
-result.categories.gisinConflict = { score: -5, title: '忌神/Gisin Present', desc: 'Partner brings challenging energy.', advice: 'Awareness transforms friction into growth.' };
-}
-}
-}
-if (myStrength && partnerStrength) {
-const myType = myStrength.type;
-const pType = partnerStrength.type;
-if ((myType==='strong'&&pType==='weak')||(myType==='weak'&&pType==='strong')) {
-raw.balance.strength = 10;
-result.categories.strengthBalance = { score: 10, title: '身强身弱/Strength Balance', desc: 'Perfect yin-yang complement.' };
-} else if (myType==='strong'&&pType==='strong') {
-raw.balance.strength = -5;
-result.categories.strengthBalance = { score: -5, title: '雙强/Double Strong', desc: 'Two strong wills may clash.', advice: 'Designate domains of authority.' };
-}
-}
+/* === 5. NAPEUM — Soul Resonance === */
 const myNapeum = calcNapeum(mySaju.day.s, mySaju.day.b);
 const pNapeum = calcNapeum(partnerSaju.day.s, partnerSaju.day.b);
 if (myNapeum.name === pNapeum.name) {
-raw.soul.napeum = 12;
-result.categories.napeumMatch = { score: 12, title: '納音/Napeum (Soul Resonance)', desc: 'Both "' + myNapeum.name + '"! Souls vibrate on same frequency.' };
+analysis.napeum.score = 15;
+analysis.napeum.details.push({type: 'excellent', title: '🎵 Identical Soul Sound!', desc: 'Both "'+myNapeum.name+'"! Your soul frequencies match perfectly.', advice: 'You understand each other without words.'});
 } else if (myNapeum.element === pNapeum.element) {
-raw.soul.napeum = 6;
-result.categories.napeumMatch = { score: 6, title: '納音/Napeum (Element Match)', desc: 'Both ' + ELEMENT[myNapeum.element].n + ' element souls.' };
+analysis.napeum.score = 8;
+analysis.napeum.details.push({type: 'good', title: '🎶 Same Soul Element', desc: 'Both '+(ELEMENT[myNapeum.element]?.k||myNapeum.element)+' type! Basic wavelengths align.', advice: 'Emotional resonance comes naturally.'});
 } else {
 const myNEl = EL_ORDER.indexOf(myNapeum.element);
 const pNEl = EL_ORDER.indexOf(pNapeum.element);
-if ((myNEl + 1) % 5 === pNEl || (pNEl + 1) % 5 === myNEl) {
-raw.soul.napeum = 4;
-result.categories.napeumMatch = { score: 4, title: '納音/Napeum (Soul Harmony)', desc: myNapeum.name + ' and ' + pNapeum.name + ' support each other.' };
+if ((myNEl+1)%5===pNEl || (pNEl+1)%5===myNEl) {
+analysis.napeum.score = 5;
+analysis.napeum.details.push({type: 'good', title: '🎼 Soul Sound Generates', desc: myNapeum.name+' and '+pNapeum.name+' nurture each other.', advice: 'Natural harmony flows between you.'});
+}}
+/* === 6. YONGSIN — Beneficial God Match === */
+const pElMap = {};
+EL_ORDER.forEach(e => pElMap[e] = 0);
+[partnerSaju.year, partnerSaju.month, partnerSaju.day].forEach(p => { if(p&&p.s) pElMap[p.s.e]++; if(p&&p.b) pElMap[p.b.e]++; });
+if (pElMap[myGods.yong] >= 2) {
+analysis.yongsin.score = 15;
+analysis.yongsin.details.push({type: 'excellent', title: '⭐ Partner IS Your Beneficial God!', desc: 'Partner\'s chart is rich in your Beneficial Element ('+ELEMENT[myGods.yong].k+')!', advice: 'Meeting them boosts your fortune — a true benefactor!'});
+} else if (pElMap[myGods.yong] >= 1) {
+analysis.yongsin.score = 8;
+analysis.yongsin.details.push({type: 'good', title: '✨ Beneficial Element Present', desc: 'Partner has your Beneficial Element ('+ELEMENT[myGods.yong].k+').', advice: 'Being together recharges your energy.'});
 }
+const myElMap = {};
+EL_ORDER.forEach(e => myElMap[e] = 0);
+[mySaju.year, mySaju.month, mySaju.day, mySaju.hour].forEach(p => { if(p&&p.s) myElMap[p.s.e]++; if(p&&p.b) myElMap[p.b.e]++; });
+if (myElMap[partnerGods.yong] >= 2) {
+analysis.yongsin.score += 10;
+analysis.yongsin.details.push({type: 'good', title: '💫 You ARE Their Beneficial God!', desc: 'Your chart is rich in partner\'s Beneficial Element ('+ELEMENT[partnerGods.yong].k+')!', advice: 'You are their benefactor!'});
 }
-result.myNapeum = myNapeum;
-result.partnerNapeum = pNapeum;
-const myDayState = getTwelveState(mySaju.day.s, mySaju.day.b);
-const pDayState = getTwelveState(partnerSaju.day.s, partnerSaju.day.b);
-const myEnergy = myDayState.l;
-const pEnergy = pDayState.l;
-const energyDiff = Math.abs(myEnergy - pEnergy);
-if (energyDiff <= 2 && myEnergy >= 6 && pEnergy >= 6) {
-raw.soul.twelveState = 5;
-result.categories.twelveState = { score: 5, title: '十二運星/Energy Match', desc: 'Both high energy (' + myDayState.k + ' & ' + pDayState.k + ').' };
-} else if (energyDiff >= 6) {
-result.categories.twelveState = { score: 0, title: '十二運星/Energy Gap', desc: 'Energy mismatch (' + myDayState.k + ' vs ' + pDayState.k + ').', advice: 'Balance activity levels.' };
-}
-result.myTwelveState = myDayState;
-result.partnerTwelveState = pDayState;
-const GUIIN_TABLE = {0:[1,7],1:[0,8],2:[11,9],3:[11,9],4:[1,7],5:[0,8],6:[7,1],7:[6,2],8:[5,3],9:[5,3]};
-const myGuiinBranches = GUIIN_TABLE[myDmIdx] || [];
-const pGuiinBranches = GUIIN_TABLE[pDmIdx] || [];
-if (myGuiinBranches.includes(pBrIdx)) {
-raw.special.guiin += 10;
-result.categories.guiinPartner = { score: 10, title: '👼 天乙貴人/Partner is My Noble', desc: 'Partner sits in my Noble Person position!', tip: 'They bring luck and protection.' };
-}
-if (pGuiinBranches.includes(myBrIdx)) {
-raw.special.guiin += 8;
-result.categories.guiinMe = { score: 8, title: '👼 天乙貴人/I Am Partner\'s Noble', desc: 'I sit in partner\'s Noble Person position!', tip: 'I bring them fortune.' };
-}
-const AMHAP_PAIRS = [
-{a:2, b:1, name:'寅丑暗合', desc:'寅의 丙과 丑의 辛이 암합 (丙辛合)'},
-{a:3, b:8, name:'卯申暗合', desc:'卯의 乙과 申의 庚이 암합 (乙庚合)'},
-{a:6, b:11, name:'午亥暗合', desc:'午의 丁과 亥의 壬이 암합 (丁壬合)'}
-];
-for (const ah of AMHAP_PAIRS) {
-if ((myBrIdx === ah.a && pBrIdx === ah.b) || (myBrIdx === ah.b && pBrIdx === ah.a)) {
-raw.special.amhap = 8;
-result.categories.amhap = { score: 8, title: '暗合/Amhap (Hidden Harmony)', desc: ah.name + ' - ' + ah.desc, tip: 'Invisible bond, deeper than surface.' };
-break;
-}
-}
-const mySpouseGod = myStrength?.type === 'strong' ?
-(myGods?.gender === 'm' ? '재성' : '관성') :
-(myGods?.gender === 'm' ? '재성' : '관성');
-const pSpouseGodEl = mode === 'romance' ? pDm.e : null;
-const myBrEl = mySaju.day.b.e;
-const pBrEl = partnerSaju.day.b.e;
-const EL_PRODUCE = { wood: 'fire', fire: 'earth', earth: 'metal', metal: 'water', water: 'wood' };
-if (mode === 'romance') {
-if (EL_PRODUCE[myBrEl] === pBrEl || EL_PRODUCE[pBrEl] === myBrEl) {
-raw.special.yukChin = 8;
-result.categories.yukChin = { score: 8, title: '六親/Spouse Palace Harmony', desc: 'Your spouse palaces generate each other!', tip: 'Natural domestic harmony.' };
-} else if (myBrEl === pBrEl) {
-raw.special.yukChin = 4;
-result.categories.yukChin = { score: 4, title: '六親/Spouse Palace Same', desc: 'Same element in spouse palaces.', tip: 'Similar domestic preferences.' };
-}
-}
-const mySinsal = typeof calcSinsal === 'function' ? calcSinsal(mySaju) : [];
-const pSinsal = typeof calcSinsal === 'function' ? calcSinsal(partnerSaju) : [];
-const myDohwa = mySinsal?.find(s => s.n?.includes('桃花') || s.n?.includes('도화'));
-const pDohwa = pSinsal?.find(s => s.n?.includes('桃花') || s.n?.includes('도화'));
-if (myDohwa && pDohwa) {
+if (pElMap[myGods.gi] >= 2) {
 if (mode === 'business') {
-raw.special.sinsal = -3;
-result.categories.doubleDohwa = { score: -3, title: '🌸 쌍도화/Double Peach Blossom', desc: 'Both have Peach Blossom - risky for business!', tip: 'Personal attraction may cloud judgment.' };
+analysis.yongsin.score += 5;
+analysis.yongsin.details.push({type: 'good', title: '⚡ Productive Tension', desc: 'Partner has much of your Harmful Element ('+ELEMENT[myGods.gi].k+'), but in business this creates constructive rivalry!', advice: 'Competition breeds innovation!'});
 } else {
-raw.special.sinsal = 5;
-result.categories.doubleDohwa = { score: 5, title: '🌸 쌍도화/Double Peach Blossom', desc: 'Magnetic mutual attraction!', tip: 'Irresistible chemistry - guard against jealousy.' };
+analysis.yongsin.score -= 8;
+analysis.yongsin.details.push({type: 'caution', title: '⚠️ Harmful Element Warning', desc: 'Partner has much of your Harmful Element ('+ELEMENT[myGods.gi].k+').', advice: 'Prolonged contact may drain your energy.'});
+}}
+/* === 7. JIJANGGAN — Hidden Stems === */
+for (const ah of HIDDEN_HARMONY) {
+if ((myDbIdx===ah.a&&pDbIdx===ah.b)||(myDbIdx===ah.b&&pDbIdx===ah.a)) {
+analysis.jijanggan.score = 10;
+analysis.jijanggan.details.push({type: 'special', title: '🤫 Hidden Harmony Found!', desc: ah.name+' — Not obvious on the surface, but a deep secret attraction!', advice: 'A mysterious pull. Secret romance potential?'});
+break;
+}}
+/* === 8. DDI — Zodiac Relation === */
+for (const sh of samhapSets) {
+const myIn = sh.branches.includes(myYbIdx);
+const pIn = sh.branches.includes(pYbIdx);
+if (myIn && pIn && myYbIdx !== pYbIdx) {
+analysis.ddi.score = 8;
+analysis.ddi.details.push({type: 'good', title: '🐾 Zodiac Three Harmony!', desc: mySaju.year.b.a+' and '+partnerSaju.year.b.a+' form a Three Harmony zodiac bond!', advice: 'A traditionally blessed pairing!'});
+break;
+}}
+for (const jc of jiChung) {
+if ((myYbIdx===jc.a&&pYbIdx===jc.b)||(myYbIdx===jc.b&&pYbIdx===jc.a)) {
+analysis.ddi.score = -5;
+analysis.ddi.details.push({type: 'caution', title: '🐾 Zodiac Clash', desc: mySaju.year.b.a+' and '+partnerSaju.year.b.a+' clash zodiac signs!', advice: 'Traditional folklore warns, but modern couples overcome this.'});
+break;
+}}
+/* === 9. ILJU — Day Pillar Noble Person === */
+const guiin = {0:[1,7],1:[0,8],2:[11,9],3:[11,9],4:[1,7],5:[3,5],6:[2,6],7:[5,11],8:[3,5],9:[3,5]};
+if (guiin[myDmIdx]?.includes(pDbIdx)) {
+analysis.ilju.score = 10;
+analysis.ilju.details.push({type: 'excellent', title: '👼 Heavenly Noble Person!', desc: 'Your partner occupies your Heavenly Noble position!', advice: 'A destined helper who appears when you need them most.'});
 }
+if (guiin[pDmIdx]?.includes(myDbIdx)) {
+analysis.ilju.score += 8;
+analysis.ilju.details.push({type: 'good', title: '👼 You Are Their Noble Person', desc: 'You occupy your partner\'s Heavenly Noble position!', advice: 'You bring luck and fortune to your partner.'});
 }
-const myYeokma = mySinsal?.find(s => s.n?.includes('驛馬') || s.n?.includes('역마'));
-const pYeokma = pSinsal?.find(s => s.n?.includes('驛馬') || s.n?.includes('역마'));
-if (myYeokma && pYeokma) {
-raw.special.sinsal = (raw.special.sinsal || 0) + 4;
-result.categories.doubleYeokma = { score: 4, title: '🐎 쌍역마/Double Traveling Horse', desc: 'Both love movement and travel!', tip: 'Perfect travel partners - long distance OK.' };
+/* === 10. WONJIN/GUIMUN Full === */
+const wonJinPairs2 = [[0,7],[1,6],[2,5],[3,4],[4,3],[5,2],[6,1],[7,0],[8,11],[9,10],[10,9],[11,8]];
+for (const [a,b] of wonJinPairs2) {
+if ((myDbIdx===a&&pDbIdx===b)||(myYbIdx===a&&pYbIdx===b)) {
+analysis.wonJinGuiMun.score = -12;
+analysis.wonJinGuiMun.details.push({type: 'caution', title: '💔 Resentment Bond (怨嗔)', desc: 'A love-hate bond you cannot escape. Even when you try to leave, you are pulled back.', advice: 'Irritating yet irresistible. Distance helps.'});
+break;
+}}
+const guiMunPairs = [[2,7],[3,8],[4,9],[5,10],[6,11],[1,6]];
+for (const [a,b] of guiMunPairs) {
+if ((myDbIdx===a&&pDbIdx===b)||(myDbIdx===b&&pDbIdx===a)) {
+analysis.wonJinGuiMun.score -= 8;
+analysis.wonJinGuiMun.details.push({type: 'bad', title: '👻 Spirit Gate (鬼門)', desc: 'Meeting may bring mental exhaustion.', advice: 'Psychological conflicts run deep. Communication or counseling is essential!'});
+break;
+}}
+const hyungPairs = [[2,5],[5,8],[2,8],[1,10],[10,7],[1,7],[0,3]];
+for (const [a,b] of hyungPairs) {
+if ((myDbIdx===a&&pDbIdx===b)||(myDbIdx===b&&pDbIdx===a)) {
+analysis.wonJinGuiMun.score -= 6;
+analysis.wonJinGuiMun.details.push({type: 'caution', title: '⚡ Punishment (刑)', desc: 'You tend to hurt each other easily.', advice: 'Watch your words! Emotional reactions amplify the damage.'});
+break;
+}}
+/* === 11. YUKCHIN — Six Relations === */
+const partnerGodToMe = getTenGod(pDm, myDm);
+if (partnerGodToMe) {
+const godE = partnerGodToMe.e;
+if (['Direct Wealth','Indirect Wealth'].includes(godE)) {
+if (GENDER === 'm') {
+analysis.yukChin.score = 12;
+analysis.yukChin.details.push({type: 'excellent', title: '💍 Partner Is Your Wealth Star', desc: 'Partner is your '+godE+'! For men, Wealth Star represents the wife.', advice: 'A fated spouse bond. Marriage also boosts wealth fortune!'});
+} else {
+analysis.yukChin.score = 5;
+analysis.yukChin.details.push({type: 'good', title: '💰 Partner Is Your Wealth Star', desc: 'Partner is your '+godE+'. Together, financial fortune improves.', advice: 'A good financial partner.'});
+}}
+else if (['Direct Officer','Challenger'].includes(godE)) {
+if (GENDER === 'f') {
+analysis.yukChin.score = 12;
+analysis.yukChin.details.push({type: 'excellent', title: '👔 Partner Is Your Officer Star', desc: 'Partner is your '+godE+'! For women, Officer Star represents the husband.', advice: 'A fated spouse bond. Marriage also boosts social fortune!'});
+} else {
+analysis.yukChin.score = 3;
+analysis.yukChin.details.push({type: 'neutral', title: '👔 Partner Is Your Officer Star', desc: 'Partner is your '+godE+'. They may try to control you.', advice: 'A power imbalance can form. Maintain equality!'});
+}}
+else if (['Peer','Competitor'].includes(godE)) {
+analysis.yukChin.score = 5;
+analysis.yukChin.details.push({type: 'good', title: '🤝 Partner Is Your Peer', desc: 'Partner is your '+godE+'. An equal, friend-like bond!', advice: 'Some rivalry, but you grow together as allies.'});
 }
-const myHuagai = mySinsal?.find(s => s.n?.includes('華蓋') || s.n?.includes('화개'));
-const pHuagai = pSinsal?.find(s => s.n?.includes('華蓋') || s.n?.includes('화개'));
-if (myHuagai && pHuagai) {
-raw.special.sinsal = (raw.special.sinsal || 0) + 5;
-result.categories.doubleHuagai = { score: 5, title: '🎨 쌍화개/Double Canopy Star', desc: 'Artistic souls unite!', tip: 'Deep spiritual and creative connection.' };
+else if (['Eating God','Expressor'].includes(godE)) {
+analysis.yukChin.score = 4;
+analysis.yukChin.details.push({type: 'good', title: '🎨 Partner Is Your Expressor', desc: 'Partner is your '+godE+'. You nurture and inspire them!', advice: 'Seeing them sparks your creative drive. Great creative partners.'});
 }
-let totalScore = 50; // Base score
-result.rawScores = JSON.parse(JSON.stringify(raw));
-if (raw.core.stemCombine > 0) totalScore += 25;
-if (raw.core.elSame > 0) totalScore += 10;
-if (raw.core.elProduce > 0) totalScore += 8;
-if (raw.core.elClash < 0) totalScore -= 5;
-if (raw.core.branchCombine > 0) totalScore += 20;
-if (raw.core.branchClash < 0) totalScore -= 15;
-if (raw.harmony.samhap > 0) totalScore += raw.harmony.samhap;
-if (raw.harmony.wonjin < 0) totalScore += raw.harmony.wonjin;
-if (raw.harmony.guimun < 0) totalScore += raw.harmony.guimun;
-if (raw.harmony.hyung < 0) totalScore += raw.harmony.hyung;
-if (raw.yongsin.yongMatch >= 15) totalScore += 15;
-else if (raw.yongsin.yongMatch > 0) totalScore += 8;
-if (raw.yongsin.iAmYong >= 10) totalScore += 10;
-else if (raw.yongsin.iAmYong > 0) totalScore += 5;
-if (raw.yongsin.johu > 0) totalScore += 15;
-if (raw.yongsin.gisin !== 0) totalScore += raw.yongsin.gisin;
-if (raw.balance.strength > 0) totalScore += raw.balance.strength;
-if (raw.balance.sameClimate < 0) totalScore += raw.balance.sameClimate;
-if (raw.soul.napeum > 0) totalScore += raw.soul.napeum;
-if (raw.soul.twelveState > 0) totalScore += raw.soul.twelveState;
-if (raw.special.guiin > 0) totalScore += raw.special.guiin;
-if (raw.special.amhap > 0) totalScore += 10;
-if (raw.special.yukChin > 0) totalScore += raw.special.yukChin;
-if (raw.special.sinsal !== 0) totalScore += raw.special.sinsal;
-result.score = Math.max(0, Math.min(100, Math.round(totalScore)));
-if (result.score >= 85) { result.grade = '💖 Soulmates'; result.gradeK = '천생연분'; result.summary = 'A match written in the stars.'; }
-else if (result.score >= 70) { result.grade = '💕 Excellent'; result.gradeK = '아주 좋은 궁합'; result.summary = 'Strong harmony with natural flow.'; }
-else if (result.score >= 55) { result.grade = '💛 Good'; result.gradeK = '좋은 궁합'; result.summary = 'Solid foundation with growth potential.'; }
-else if (result.score >= 40) { result.grade = '🧡 Average'; result.gradeK = '보통 궁합'; result.summary = 'Different energies that can complement.'; }
-else { result.grade = '💔 Challenging'; result.gradeK = '노력 필요'; result.summary = 'Significant differences requiring conscious work.'; }
+else if (['Direct Seal','Indirect Seal'].includes(godE)) {
+analysis.yukChin.score = 6;
+analysis.yukChin.details.push({type: 'good', title: '📚 Partner Is Your Seal Star', desc: 'Partner is your '+godE+'. They care for and protect you!', advice: 'A comforting, nurturing presence — like a guardian.'});
+}}
+/* === 12. TWELVE STATES === */
+const myTwelveState = getTwelveState(myDm, mySaju.day.b);
+const pTwelveState = getTwelveState(pDm, partnerSaju.day.b);
+const highEnergy = ['Birth','Crown','Official','Peak'];
+const lowEnergy = ['Stillness','Storage','Void','Conception'];
+const myHigh = highEnergy.some(h => myTwelveState.k.startsWith(h));
+const pHigh = highEnergy.some(h => pTwelveState.k.startsWith(h));
+const myLow = lowEnergy.some(l => myTwelveState.k.startsWith(l));
+const pLow = lowEnergy.some(l => pTwelveState.k.startsWith(l));
+if (myHigh && pHigh) {
+analysis.twelveState.score = 8;
+analysis.twelveState.details.push({type: 'good', title: '⚡ High-Energy Couple!', desc: 'Both have strong Twelve States! (You: '+myTwelveState.k+', Partner: '+pTwelveState.k+')', advice: 'An active duo! Challenge together for explosive synergy!'});
+} else if (myHigh && pLow) {
+analysis.twelveState.score = 5;
+analysis.twelveState.details.push({type: 'neutral', title: '🔋 Complementary Energy', desc: 'You\'re high-energy ('+myTwelveState.k+'), partner is calm ('+pTwelveState.k+').', advice: 'You lead, they balance — a well-calibrated partnership!'});
+} else if (myLow && pHigh) {
+analysis.twelveState.score = 5;
+analysis.twelveState.details.push({type: 'neutral', title: '🔋 Complementary Energy', desc: 'You\'re calm ('+myTwelveState.k+'), partner is high-energy ('+pTwelveState.k+').', advice: 'They lead — just make sure to voice your opinions too!'});
+} else if (myLow && pLow) {
+analysis.twelveState.score = 0;
+analysis.twelveState.details.push({type: 'caution', title: '🌙 Quiet Couple', desc: 'Both have low energy states (You: '+myTwelveState.k+', Partner: '+pTwelveState.k+').', advice: 'Lean on each other, but find external sources of motivation!'});
+}
+/* === 13. STRENGTH === */
+const myStr = calcStrength(mySaju);
+const myStrType = myStr.type;
+const pStrType = partnerStrength.type;
+if (myStrType==='strong'&&pStrType==='weak') {
+analysis.strength.score = 7;
+analysis.strength.details.push({type: 'good', title: '⚖️ Strong-Weak Complement', desc: 'You are Strong ('+myStr.pct+'%), partner is Weak ('+partnerStrength.pct+'%).', advice: 'You protect, they adapt — a perfect combination!'});
+} else if (myStrType==='weak'&&pStrType==='strong') {
+analysis.strength.score = 7;
+analysis.strength.details.push({type: 'good', title: '⚖️ Weak-Strong Complement', desc: 'You are Weak ('+myStr.pct+'%), partner is Strong ('+partnerStrength.pct+'%).', advice: 'They protect you. Rely on them, but don\'t become dependent!'});
+} else if (myStrType==='strong'&&pStrType==='strong') {
+analysis.strength.score = 3;
+analysis.strength.details.push({type: 'caution', title: '💪 Both Strong!', desc: 'Both are Strong! (You: '+myStr.pct+'%, Partner: '+partnerStrength.pct+'%)', advice: 'Power struggles may arise. Compromise and respect are essential!'});
+} else if (myStrType==='weak'&&pStrType==='weak') {
+analysis.strength.score = 2;
+analysis.strength.details.push({type: 'caution', title: '🤝 Both Weak', desc: 'Both are Weak (You: '+myStr.pct+'%, Partner: '+partnerStrength.pct+'%).', advice: 'Mutual support is wonderful, but you both need a pillar when exhausted.'});
+} else {
+analysis.strength.score = 5;
+analysis.strength.details.push({type: 'neutral', title: '☯︎ Balanced Strength', desc: 'Similar strength levels (You: '+myStr.pct+'%, Partner: '+partnerStrength.pct+'%).', advice: 'Great foundation for an equal relationship!'});
+}
+/* === 14. JOHU — Climate Harmony === */
+const myDmEl = myDm.e;
+const mbi = BRANCH.findIndex(br => br.c === mySaju.month.b.c);
+const isWinter = [0,1,11].includes(mbi);
+const isSummer = [5,6,7].includes(mbi);
+const pElCounts = {wood:0,fire:0,earth:0,metal:0,water:0};
+[partnerSaju.year?.s,partnerSaju.month?.s,partnerSaju.day?.s].filter(Boolean).forEach(s=>pElCounts[s.e]++);
+[partnerSaju.year?.b,partnerSaju.month?.b,partnerSaju.day?.b].filter(Boolean).forEach(b=>pElCounts[b.e]++);
+if (myDmEl==='earth'&&isWinter) {
+if (pElCounts.fire>=1) { analysis.johu.score=15; analysis.johu.details.push({type:'excellent',title:'🌡️ Winter Earth Meets Sunlight!',desc:'Cold winter Earth is warmed by partner\'s Fire energy! Supreme climate harmony!',advice:'Meeting them warms your body and soul — a soulmate!'}); }
+else if (pElCounts.wood>=1) { analysis.johu.score=8; analysis.johu.details.push({type:'good',title:'🌱 Winter Earth Tilled by Wood',desc:'Frozen earth is cultivated by partner\'s Wood energy. A bridging force brings vitality.',advice:'Partner stimulates your growth!'}); }
+} else if (myDmEl==='earth'&&isSummer&&pElCounts.water>=1) {
+analysis.johu.score=15; analysis.johu.details.push({type:'excellent',title:'🌡️ Summer Earth Meets Water!',desc:'Parched summer earth is nourished by partner\'s Water!',advice:'They quench your thirst — a true benefactor!'});
+} else if (myDmEl==='metal'&&isWinter&&pElCounts.fire>=1) {
+analysis.johu.score=15; analysis.johu.details.push({type:'excellent',title:'🌡️ Cold Metal Meets Fire!',desc:'Cold Metal is forged by partner\'s Fire!',advice:'A blade is completed — you become your best self together!'});
+} else if (myDmEl==='water'&&isWinter&&pElCounts.fire>=1) {
+analysis.johu.score=15; analysis.johu.details.push({type:'excellent',title:'🌡️ Frozen Water Meets Fire!',desc:'Frozen Water melts and flows through partner\'s Fire!',advice:'Ice becomes a flowing river — liberation through love!'});
+} else if (myGods.climate&&partnerGods.climate) {
+const myClimate=myGods.climate.type; const pClimate=partnerGods.climate.type;
+const myIsCold=myClimate.includes('Cold')||myClimate.includes('Damp');
+const myIsDry=myClimate.includes('Dry');
+const pIsCold=pClimate.includes('Cold')||pClimate.includes('Damp');
+const pIsDry=pClimate.includes('Dry');
+const isComplementary=(myIsCold&&pIsDry)||(myIsDry&&pIsCold);
+const isExtremeComplement=isComplementary&&myClimate.includes('Extreme')&&pClimate.includes('Extreme');
+if (isComplementary) {
+const johuScore=isExtremeComplement?15:12;
+analysis.johu.score=johuScore;
+analysis.johu.details.push({type:'excellent',title:isExtremeComplement?'🌡️ Extreme Climate Soulmates!':'🌡️ Climate Complement!',desc:'You are '+myClimate+', partner is '+pClimate+'. '+(isExtremeComplement?'Polar opposites unite in perfect harmony!':'You fill each other\'s climate gaps!'),advice:isExtremeComplement?'Destined by the cosmos — supreme compatibility!':'Comfortable together — great climate match!'});
+} else if ((myIsCold&&pIsCold)||(myIsDry&&pIsDry)) {
+analysis.johu.score=-3;
+analysis.johu.details.push({type:'caution',title:'🌡️ Same Climate',desc:'Both '+(myIsCold?'Cold/Damp':'Hot/Dry')+' type.',advice:'Same tendencies — environmental adjustment needed!'});
+}}
+/* === 15. SINSAL — Divine Stars === */
+const mySS = calcSinsal(mySaju); const pSS = calcSinsal(partnerSaju);
+const myDohwa = mySS?.find(s=>s.n&&s.n.includes('桃花'));
+const pDohwa = pSS?.find(s=>s.n&&s.n.includes('桃花'));
+if (myDohwa&&pDohwa) { analysis.sinsal.score=5; analysis.sinsal.details.push({type:'special',title:'🌸 Double Peach Blossom Couple!',desc:'Both have Peach Blossom! A magnetically attractive couple.',advice:'Strong mutual attraction. Trust is essential — guard against jealousy!'}); }
+else if (myDohwa||pDohwa) { analysis.sinsal.score=3; analysis.sinsal.details.push({type:'neutral',title:'🌸 Peach Blossom Present',desc:(myDohwa?'You':'Partner')+' has Peach Blossom charm.',advice:'One side may attract more attention. Keep eyes on each other!'}); }
+const myYM = mySS?.find(s=>s.n&&s.n.includes('驛馬'));
+const pYM = pSS?.find(s=>s.n&&s.n.includes('驛馬'));
+if (myYM&&pYM) { analysis.sinsal.score+=4; analysis.sinsal.details.push({type:'good',title:'🐎 Double Traveling Horse!',desc:'Both have Traveling Horse! An active, mobile couple.',advice:'Travel together for best results! Long-distance works too.'}); }
+else if (myYM&&!pYM||!myYM&&pYM) { analysis.sinsal.score+=1; analysis.sinsal.details.push({type:'neutral',title:'🐎 Traveling Horse Present',desc:(myYM?'You':'Partner')+' has Traveling Horse.',advice:'One travels, one waits. Understanding is needed.'}); }
+const myHG = mySS?.find(s=>s.n&&s.n.includes('華蓋'));
+const pHG = pSS?.find(s=>s.n&&s.n.includes('華蓋'));
+if (myHG&&pHG) { analysis.sinsal.score+=5; analysis.sinsal.details.push({type:'special',title:'🎭 Double Canopy Couple!',desc:'Both have Canopy Star! Artistic souls that resonate together.',advice:'Cultural activities and spiritual practices bring joy. You understand each other\'s solitude.'}); }
+/* === 16. GONGMANG — Void Match === */
+const myGongmang = calcGongmang(mySaju); const pGongmang = calcGongmang(partnerSaju);
+if (myGongmang?.gm?.includes(pDbIdx)) { analysis.gongmang.score=-8; analysis.gongmang.details.push({type:'caution',title:'🕳️ Partner Falls in Your Void!',desc:'Partner\'s Day Branch falls in your Void position.',advice:'Initial attraction, but emptiness may grow. Concrete effort is needed!'}); }
+if (pGongmang?.gm?.includes(myDbIdx)) { analysis.gongmang.score-=6; analysis.gongmang.details.push({type:'caution',title:'🕳️ You Fall in Partner\'s Void!',desc:'Your Day Branch falls in partner\'s Void position.',advice:'Partner may feel you lack presence. Make yourself known!'}); }
+if (myGongmang?.gm&&pGongmang?.gm) { const cmn=myGongmang.gm.filter(v=>pGongmang.gm.includes(v)); if(cmn.length>0) { analysis.gongmang.score+=5; analysis.gongmang.details.push({type:'special',title:'☯︎ Shared Void!',desc:'You share the same Void positions. A shared sense of what feels hollow.',advice:'You understand each other\'s emptiness — a special bond.'}); }}
+/* === SCORE CALCULATION === */
+for (const key in analysis) { totalScore += analysis[key].score; }
+totalScore = Math.max(0, Math.min(100, totalScore));
+let grade, summary;
+if (totalScore>=85) { grade='💖 Soulmates'; summary='Supreme compatibility! A destined union.'; }
+else if (totalScore>=70) { grade='💕 Excellent'; summary='You bring out the best in each other.'; }
+else if (totalScore>=55) { grade='💛 Good Match'; summary='With effort, happiness awaits!'; }
+else if (totalScore>=40) { grade='🧡 Fair'; summary='Embrace your differences for growth.'; }
+else { grade='💔 Challenging'; summary='Difficult, but love conquers all!'; }
+/* === BUILD RESULT === */
+result.score = totalScore;
+result.grade = grade;
+result.summary = summary;
+const catTitles = {
+ilgan:{title:'☯︎ Day Master Harmony (日干合)',desc:'Core elemental chemistry'},
+ilji:{title:'💑 Spouse Palace (日支)',desc:'Marriage life harmony'},
+oheng:{title:'🔥 Five Elements Flow (五行)',desc:'Elemental interaction'},
+samhap:{title:'🌀 Three/Directional Harmony (三合·方合)',desc:'Shared goals and direction'},
+napeum:{title:'🎵 Soul Resonance (納音)',desc:'Soul wavelength match'},
+yongsin:{title:'⭐ Beneficial God Match (用神)',desc:'Mutual fortune-bringing'},
+jijanggan:{title:'🤫 Hidden Harmony (暗合)',desc:'Secret attraction'},
+ddi:{title:'🐾 Zodiac Relation (띠)',desc:'Traditional zodiac compatibility'},
+ilju:{title:'👼 Noble Person (天乙貴人)',desc:'Destined helper bond'},
+wonJinGuiMun:{title:'⚠️ Karmic Friction (怨嗔·鬼門)',desc:'Negative bonds check'},
+yukChin:{title:'💞 Six Relations (六親)',desc:'Fateful destiny analysis'},
+twelveState:{title:'⚡ Twelve States (十二運星)',desc:'Energy level comparison'},
+strength:{title:'⚖️ Strength Balance (身强弱)',desc:'Power balance'},
+johu:{title:'🌡️ Climate Harmony (調候)',desc:'Hot-cold balance'},
+sinsal:{title:'✨ Divine Stars (神煞)',desc:'Peach Blossom / Traveling Horse / Canopy'},
+gongmang:{title:'🕳️ Void Match (空亡)',desc:'Shared emptiness'}
+};
+for (const key in analysis) {
+if (analysis[key].details.length===0&&analysis[key].score===0) continue;
+const cm = catTitles[key]||{title:key,desc:''};
+const descParts = analysis[key].details.map(d=>d.title+': '+d.desc);
+const advParts = analysis[key].details.filter(d=>d.advice).map(d=>d.advice);
+result.categories[key] = { score:analysis[key].score, title:cm.title, desc:descParts.join(' | '), advice:advParts.length>0?advParts.join(' '):undefined };
+}
 return result;
 }
+
 function analyzeYearlyRisks(mySaju, partnerSaju, startYear, years) {
 const risks = [];
 for (let year = startYear; year < startYear + years; year++) {
@@ -594,20 +708,13 @@ criticals.push('☀️ WINTER WATER WARMING (寒水調暖): Frozen Water needs S
 if (result.categories.samhap) {
 criticals.push('🔱 TRIPLE HARMONY (三合): ' + result.categories.samhap.desc);
 }
-if (result.categories.wonjin) {
-criticals.push('⚠️ RESENTMENT RISK (怨嗔): ' + result.categories.wonjin.desc);
+if (result.categories.wonJinGuiMun) {
+criticals.push('⚠️ KARMIC FRICTION (怨嗔·鬼門): ' + result.categories.wonJinGuiMun.desc);
 }
-if (result.categories.guimun) {
-criticals.push('👻 GHOST GATE (鬼門): ' + result.categories.guimun.desc);
-}
-if (result.categories.hyung) {
-criticals.push('⚠️ MUTUAL PUNISHMENT (刑): ' + result.categories.hyung.desc);
-}
-if (result.categories.sameClimate) {
-criticals.push('🌡️ SAME CLIMATE (同調候): Both ' + (myGods?.climate?.type?.includes('Cold') || myGods?.climate?.type?.includes('한') ? '寒(Cold)' : '燥(Dry)') + ' - Neither provides balance!');
-}
-if (result.categories.johuMatch) {
-criticals.push('🌡️ CLIMATE HARMONY (調候保完): ' + result.categories.johuMatch.desc);
+if (result.categories.johu) {
+const johuScore = result.categories.johu.score;
+if (johuScore < 0) criticals.push('🌡️ SAME CLIMATE (同調候): Both same type — neither provides balance!');
+else if (johuScore > 0) criticals.push('🌡️ CLIMATE HARMONY (調候): ' + result.categories.johu.desc);
 }
 if (criticals.length === 0) criticals.push('No major critical factors detected.');
 let prompt = `===== K-MUDANG FORTUNE COMPATIBILITY (v4.22.6) =====
@@ -1650,7 +1757,8 @@ const DIRECTIONAL = [
 { branches: [8, 0, 4], element: 'water', name: '申子辰 수국' },
 { branches: [5, 9, 1], element: 'metal', name: '巳酉丑 금국' },
 { branches: [11, 3, 7], element: 'wood', name: '亥卯未 목국' }
-];if (!directionalFormed) {THREE_HARMONY.forEach(th => {if (th.branches.every(b => branchIndices.includes(b))) {if (th.element === peerEl) {score += 7;factors.push({ l: '🔥 三合', v: `${th.name} → Peer (+7)`, p: true });} else if (th.element === sealEl) {score += 5;factors.push({ l: '🔥 三合', v: `${th.name} → Seal (+5)`, p: true });} else if (th.element === exprEl) {score -= 4;factors.push({ l: '⚠️ 三合', v: `${th.name} → Drain (−4)`, p: false });}}});}
+];if (!directionalFormed) {THREE_HARMONY.forEach(th => {const hasCount = th.branches.filter(b => branchIndices.includes(b)).length;const hasCenter = branchIndices.includes(th.branches[1]);if (hasCount >= 2 && hasCenter) {if (th.element === peerEl) {const bonus = hasCount === 3 ? 7 : 4;score += bonus;factors.push({ l: '🔥 三合', v: `${th.name} → Peer (+${bonus})`, p: true });} else if (th.element === sealEl) {const bonus = hasCount === 3 ? 5 : 3;score += bonus;factors.push({ l: '🔥 三合', v: `${th.name} → Seal (+${bonus})`, p: true });} else if (th.element === exprEl) {const penalty = hasCount === 3 ? 4 : 2;score -= penalty;factors.push({ l: '⚠️ 三合', v: `${th.name} → Drain (−${penalty})`, p: false });} else if (th.element === officerEl) {const penalty = hasCount === 3 ? 5 : 3;score -= penalty;factors.push({ l: '⚠️ 三合', v: `${th.name} → Pressure (−${penalty})`, p: false });}}});}
+const wangjiClash = [[0,6,'子午 Clash'],[3,9,'卯酉 Clash']];for (const [a, b, name] of wangjiClash) {if (branchIndices.includes(a) && branchIndices.includes(b)) {score -= 3;factors.push({ l: '⚡ 旺地冲', v: `${name} (−3)`, p: false });}}
 let type = 'balanced';let extreme = null;if (score >= 15) { type = 'strong'; extreme = 'Extreme Strong'; }
 else if (score >= 8) type = 'strong';else if (score >= 3) type = 'balanced';else if (score <= -5) { type = 'weak'; extreme = 'Extreme Weak'; }
 else if (score <= 2) type = 'weak';if ((hasRealRoot.day || hasRealRoot.hour) && extreme === 'Extreme Weak') {extreme = null;type = 'weak';factors.push({ l: '⚡ Root Adjustment', v: 'Extremely Weak → Weak', p: true });}
@@ -1782,47 +1890,20 @@ const CLIMATE_BALANCE/*調候*/ = {0: {0: {yong:'fire', sub:'wood', desc:'Winter
 8: {yong:'fire', sub:'wood', desc:'申(Monkey) month Metal generates Water, with Fire to balance'},
 9: {yong:'fire', sub:'wood', desc:'酉(Rooster) month Metal dominant, with Fire to release Metal'},
 10: {yong:'fire', sub:'wood', desc:'戌(Dog) month Earthenergy, with Fire for warmth'},
-11: {yong:'fire', sub:'metal', desc:'亥(Pig) month Water dominant, Fire is essential'}}};function analyzeClimate(saju) {const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);const season = SEASON[mbi];let climate = {type: '', desc: '', needs: []};const brs = [saju.year?.b, saju.month?.b, saju.day?.b, saju.hour?.b].filter(b => b);const stems = [saju.year?.s, saju.month?.s, saju.day?.s, saju.hour?.s].filter(s => s);let fireCount = 0, waterCount = 0, earthCount = 0;brs.forEach(b => {if (b.e === 'fire') fireCount++;if (b.e === 'water') waterCount++;if (b.e === 'earth') earthCount++;});stems.forEach(s => {if (s.e === 'fire') fireCount++;if (s.e === 'water') waterCount++;});if (season === 'winter') {if (fireCount >= 2) {climate.type = 'Warm Winter';climate.desc = 'Winter-born but Fire resolves the cold. Balanced and fortunate.';climate.needs = [];} else if (fireCount === 1) {climate.type = 'Mild Cold';climate.desc = 'Winter chart with some warmth. Additional Fire enhances fortune.';climate.needs = ['fire'];} else {climate.type = waterCount >= 2 ? 'Extreme Cold' : 'Cold';climate.desc = 'Cold chart. Needs warming Fire energy.';climate.needs = ['fire', 'wood'];}} else if (season === 'summer') {if (waterCount >= 2) {climate.type = 'Cool Summer';climate.desc = 'Summer-born but Water cools the heat. Balanced and fortunate.';climate.needs = [];} else if (waterCount === 1) {climate.type = 'Mild Hot';climate.desc = 'Summer chart with some cooling. Additional Water enhances fortune.';climate.needs = ['water'];} else {climate.type = fireCount >= 2 ? 'Extreme Dry' : 'Dry';climate.desc = 'Hot and dry chart. Needs cooling Water energy.';climate.needs = ['water', 'metal'];}} else if (mbi === 1 || mbi === 4 || mbi === 7 || mbi === 10) {if (earthCount >= 2) {climate.type = 'Humid';climate.desc = 'Humid chart. Needs Fire to dry.';climate.needs = ['fire', 'wood'];} else {climate.type = 'Balanced';climate.desc = 'Balanced climate chart.';climate.needs = [];}} else {climate.type = 'Mild';climate.desc = 'Mild and temperate chart.';climate.needs = [];}
-return climate;}
+11: {yong:'fire', sub:'metal', desc:'亥(Pig) month Water dominant, Fire is essential'}}};function analyzeClimate(saju) {const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);const season = SEASON[mbi];let climate = {type: '', desc: '', needs: []};const brs = [saju.year?.b, saju.month?.b, saju.day?.b, saju.hour?.b].filter(b => b);const brIdxs = brs.map(b => BRANCH.findIndex(br => br.c === b.c));let coldCount = 0, hotCount = 0;brIdxs.forEach(bi => {if (bi === 0 || bi === 1 || bi === 11) coldCount++;if (bi === 5 || bi === 6 || bi === 7) hotCount++;});const stems = [saju.year?.s, saju.month?.s, saju.day?.s, saju.hour?.s].filter(s => s);let waterStemCount = 0, fireStemCount = 0;stems.forEach(s => {if (s.e === 'water') waterStemCount++;if (s.e === 'fire') fireStemCount++;});const totalCold = coldCount + waterStemCount;const totalHot = hotCount + fireStemCount;const isWinter = [0, 1, 11].includes(mbi);const isSpring = [2, 3, 4].includes(mbi);const isSummer = [5, 6, 7].includes(mbi);const isAutumn = [8, 9, 10].includes(mbi);if (totalCold >= 4) {if (isWinter) {climate.type = 'Extreme Cold(極寒)';climate.desc = 'Frozen winter chart. Fire energy is desperately needed.';} else if (isSpring) {climate.type = 'Cold Damp(寒濕)';climate.desc = 'Spring but Water excess makes it cold and damp. Fire warmth is needed.';} else if (isAutumn) {climate.type = 'Cool Damp(冷濕)';climate.desc = 'Autumn with Water excess, cold and damp. Fire energy is needed.';} else {climate.type = 'Water Excess(水過多)';climate.desc = 'Summer but Water overflows. Balance is needed.';}climate.needs = ['fire', 'wood'];} else if (totalCold >= 3 || (coldCount >= 2 && season !== 'summer')) {climate.type = 'Cold(寒)';climate.desc = 'Cold chart. Warming Fire energy is needed.';climate.needs = ['fire', 'wood'];} else if (totalHot >= 4) {climate.type = 'Extreme Dry(極燥)';climate.desc = 'Blazing chart. Water energy is desperately needed.';climate.needs = ['water', 'metal'];} else if (totalHot >= 3 || (hotCount >= 2 && season !== 'winter')) {climate.type = 'Dry(燥)';climate.desc = 'Hot and dry chart. Cooling Water energy is needed.';climate.needs = ['water', 'metal'];} else if (season === 'winter') {climate.type = 'Cold(寒)';climate.desc = 'Winter chart. Warming Fire energy is needed.';climate.needs = ['fire', 'wood'];} else if (season === 'summer') {climate.type = 'Dry(燥)';climate.desc = 'Summer chart. Cooling Water energy is needed.';climate.needs = ['water', 'metal'];} else {climate.type = 'Balanced(中和)';climate.desc = 'Relatively balanced climate chart.';climate.needs = [];}return climate;}
 function findByungYak(saju, strength) {const dm = saju.day.s;const dmi = STEM.indexOf(dm);const ec = countElements(saju);let byung = null, yak = null;let maxEl = null, maxCount = 0;for (let e of EL_ORDER) {if (ec[e] > maxCount && e !== dm.e) {maxCount = ec[e];maxEl = e;}}
 if (maxCount >= 3) {byung = maxEl;const kontrolIdx = (EL_ORDER.indexOf(maxEl) + 3) % 5;yak = EL_ORDER[kontrolIdx];}
 return { byung, yak, desc: byung ? `${ELEMENT[byung].k} is excessive - ${ELEMENT[yak].k} controls it` : null };}
-function calcGods(saju, str, samhapResult = null) {const dm = saju.day.s;const dmi = STEM.indexOf(dm);const mbi = BRANCH.indexOf(saju.month.b);const season = SEASON[mbi];let yong, hee, gi, johu = null, johuDesc = '';let isFollower = false;let followerType = null;const climate = analyzeClimate(saju);const isTooCold = climate && climate.type.includes('Cold');const isTooHot = climate && (climate.type.includes('Dry') || climate.type.includes('Hot'));const isTooDamp = climate && (climate.type === 'Humid');const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};const sealEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];const exprEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5];const officerEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];[saju.year, saju.month, saju.day, saju.hour].forEach(p => {if (p && p.s) elCount[p.s.e]++;if (p && p.b) elCount[p.b.e]++;});const noRoot = !str.dayRoot && !str.hourRoot;if (str.pct < 10 && noRoot) {const dmEl = dm.e;let maxEl = null, maxCount = 0;Object.entries(elCount).forEach(([el, cnt]) => {if (el !== dmEl && cnt > maxCount) {maxEl = el;maxCount = cnt;}});if (maxCount >= 4) {isFollower = true;const relation = getElementRelation(dmEl, maxEl);if (relation === 'wealth') {followerType = '종재격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 1) % 5];gi = sealEl;} else if (relation === 'officer') {followerType = '종살격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 4) % 5];gi = dm.e;} else if (relation === 'expression') {followerType = '종아격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 1) % 5];gi = sealEl;} else {followerType = '종강격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 4) % 5];gi = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 3) % 5];}}}
-if (!isFollower) {if (str.type === 'strong') {yong = exprEl;hee = wealthEl;gi = sealEl;}
-else if (str.type === 'weak') {yong = sealEl;hee = dm.e;gi = officerEl;if (elCount[sealEl] >= 3) {yong = exprEl;hee = wealthEl;gi = sealEl;johuDesc = '偏印太旺 - Excess Seal (3+) suffocates Day Master. Output needed to drain overflow.';}}
-else {yong = exprEl;hee = wealthEl;gi = officerEl;}
-const officerCount = elCount[officerEl] || 0;const isOfficerStrong = officerCount >= 2 || (samhapResult && samhapResult.element === officerEl);if (str.type === 'weak' && isOfficerStrong && elCount[sealEl] < 3) {yong = sealEl;hee = dm.e;gi = wealthEl;johuDesc = 'Officer Dominant + Weak DM → Seal as Bridge (殺印相生)';}
-if (samhapResult && samhapResult.complete) {const samhapEl = samhapResult.element;const dmEl = dm.e;if ((samhapEl === 'metal' && dmEl === 'wood') ||
-(samhapEl === 'fire' && dmEl === 'metal') ||
-(samhapEl === 'water' && dmEl === 'fire') ||
-(samhapEl === 'wood' && dmEl === 'earth') ||
-(samhapEl === 'earth' && dmEl === 'water')) {yong = exprEl;johuDesc = (johuDesc || '') + ` (${samhapResult.name} → Output Controls Officer)`;}
-if ((samhapEl === 'water' && dmEl === 'wood') ||
-(samhapEl === 'wood' && dmEl === 'fire') ||
-(samhapEl === 'fire' && dmEl === 'earth') ||
-(samhapEl === 'earth' && dmEl === 'metal') ||
-(samhapEl === 'metal' && dmEl === 'water')) {yong = exprEl;johuDesc = (johuDesc || '') + ` (${samhapResult.name} → Output Drains Excess)`;}}}
-const johuData = CLIMATE_BALANCE[dmi] && CLIMATE_BALANCE[dmi][mbi];if (johuData && !isFollower) {johu = johuData.yong;if (elCount[sealEl] >= 3 && str.type === 'weak') {johuDesc = johuDesc || johuData.desc;} else {johuDesc = johuData.desc;const isMetalDM = dm.e === 'metal';const isWinterMonth = [10, 11, 0, 1].includes(mbi);const waterCount = [saju.year, saju.month, saju.day, saju.hour].filter(p =>
-p && ((p.s && p.s.e === 'water') || (p.b && p.b.e === 'water'))
-).length;const isGeumsooSanggwan = isMetalDM && isWinterMonth && waterCount >= 2;if (isTooCold && johu === 'fire') {yong = 'fire';hee = 'wood';gi = 'water';johuDesc += ' (Climate Priority: Bridge Strategy 水→木→火)';} else if ((isTooHot || isTooDamp) && johu === 'water') {yong = 'water';hee = 'metal';gi = 'fire';johuDesc += ' (Climate Priority: Bridge Strategy 火→金→水)';} else if (isTooCold || isTooHot || isTooDamp) {if (johu !== gi) {const prevYong = yong;yong = johu;hee = prevYong;johuDesc += ' (Climate Priority Override)';}} else if (johu !== gi || isGeumsooSanggwan) {if (isGeumsooSanggwan && johu === 'fire') {gi = 'earth';johuDesc = '金水傷官喜見官 - Winter Metal needs Fire. Fire is beneficial.';}
-if (str.type === 'weak') {
-hee = johu;
-johuDesc = (johuDesc || '') + ' (Weak: Seal用神, Climate喜神)';
-} else {
-hee = yong;
-yong = johu;
-}}}}
-if (yong === hee) { hee = dm.e; }
-const byungYak = findByungYak(saju, str);return {yong, hee, gi,
-type: str.type,
-johu, johuDesc,
-climate,
-byungYak,
-sub: johuData?.sub || null,
-isFollower,
-followerType,
-sealExcess: elCount[sealEl] >= 3};}
-function getElementRelation(dmEl, targetEl) {const idx = EL_ORDER.indexOf(dmEl);const tgtIdx = EL_ORDER.indexOf(targetEl);const diff = (tgtIdx - idx + 5) % 5;if (diff === 1) return 'expression';if (diff === 2) return 'wealth';if (diff === 3) return 'officer';if (diff === 4) return 'seal';return 'peer';}
+function calcGods(saju, str, samhapResult) {const dm = saju.day.s;const dmi = STEM.indexOf(dm);const mbi = BRANCH.indexOf(saju.month.b);const season = SEASON[mbi];let yong, hee, gi, johu = null, johuDesc = '';let isFollower = false;let followerType = null;const climate = analyzeClimate(saju);const isHan = climate.type.includes('Cold') || climate.type.includes('Damp');const isJo = climate.type.includes('Dry');const johuData = CLIMATE_BALANCE[dmi] && CLIMATE_BALANCE[dmi][mbi];if (johuData) {johu = johuData.yong;johuDesc = johuData.desc;}
+const dmEl = dm.e;const sealEl = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 4) % 5];const peerEl = dmEl;const exprEl = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 1) % 5];const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 2) % 5];const officerEl = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 3) % 5];const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year, saju.month, saju.day, saju.hour].forEach(p => {if (p && p.s) elCount[p.s.e]++;if (p && p.b) elCount[p.b.e]++;});const noRoot = !str.dayRoot && !str.hourRoot;if (str.pct < 10 && noRoot) {let maxEl = null, maxCount = 0;Object.entries(elCount).forEach(([el, cnt]) => {if (el !== dmEl && cnt > maxCount) {maxEl = el;maxCount = cnt;}});if (maxCount >= 4) {isFollower = true;if (maxEl === wealthEl) {followerType = '종재격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 1) % 5];gi = sealEl;} else if (maxEl === officerEl) {followerType = '종살격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 4) % 5];gi = dmEl;} else if (maxEl === exprEl) {followerType = '종아격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 1) % 5];gi = sealEl;} else {followerType = '종강격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 4) % 5];gi = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 3) % 5];}johuDesc = `${followerType}: Extremely weak, follows dominant ${maxEl}`;}}
+if (!isFollower && str.type === 'strong') {yong = exprEl;hee = wealthEl;gi = sealEl;} else if (!isFollower && str.type === 'weak') {yong = sealEl;hee = peerEl;gi = officerEl;} else if (!isFollower) {yong = exprEl;hee = wealthEl;gi = officerEl;}
+const ec = countElements(saju);const officerCount = ec[officerEl] || 0;const isOfficerStrong = officerCount >= 2 || (samhapResult && samhapResult.element === officerEl);if (str.type === 'weak' && isOfficerStrong) {yong = sealEl;hee = peerEl;gi = wealthEl;johuDesc = (johuDesc || '') + ' (Bridge God: Controls dominant Officer)';}
+else if (isHan && (johu === 'fire' || yong === 'fire')) {yong = 'fire';hee = 'wood';gi = 'water';johuDesc = (johuDesc || '') + ' (Climate Priority: Cold chart)';}
+if (isJo && (johu === 'water' || yong === 'water')) {yong = 'water';hee = 'metal';gi = 'fire';johuDesc = (johuDesc || '') + ' (Climate Priority: Dry chart)';}
+if (samhapResult && samhapResult.complete) {const samhapEl = samhapResult.element;if ((samhapEl === 'metal' && dmEl === 'wood') ||(samhapEl === 'fire' && dmEl === 'metal') ||(samhapEl === 'water' && dmEl === 'fire') ||(samhapEl === 'wood' && dmEl === 'earth') ||(samhapEl === 'earth' && dmEl === 'water')) {yong = exprEl;hee = 'fire';johuDesc = (johuDesc || '') + ` (${samhapResult.name} Controls Officer)`;}
+if ((samhapEl === 'water' && dmEl === 'wood') ||(samhapEl === 'wood' && dmEl === 'fire') ||(samhapEl === 'fire' && dmEl === 'earth') ||(samhapEl === 'earth' && dmEl === 'metal') ||(samhapEl === 'metal' && dmEl === 'water')) {yong = exprEl;johuDesc = (johuDesc || '') + ` (${samhapResult.name} Drains Excess)`;}}
+const byungYak = findByungYak(saju, str);return {yong, hee, gi,type: str.type,johu, johuDesc,climate,byungYak,sub: johuData?.sub || null,isFollower,followerType};}
+
 const SIX_RELATIONS/*六親*/ = {m: {'比肩 Peer': {relation: 'Brothers/Friends', desc: 'Equal relationship', detailed: 'Siblings, friends, colleagues, rivals'},
 '劫財 Competitor': {relation: 'Brothers/Rivals', desc: 'Competitive relationship', detailed: 'Half-siblings, cousins, competitors, partners'},
 '食神 Eating God': {relation: 'Children(daughter)/Juniors', desc: 'What I create', detailed: 'Daughter, granddaughter, juniors, subordinates'},
@@ -1845,72 +1926,37 @@ f: {'比肩 Peer': {relation: 'Sisters/Friends', desc: 'Equal relationship', det
 '正印 Direct Seal': {relation: 'Mother/Studies', desc: 'Proper nurturing', detailed: 'Mother, studies, documents'}}};const SIX_RELATIONS_POSITION = {year: {name: 'Year Pillar', meaning: 'Ancestors, Society, Early years (Ages 1-15)', body: 'Head/Face'},
 month: {name: 'Month Pillar', meaning: 'Parents, Siblings, Career, Youth (Ages 16-30)', body: 'Chest/Shoulders'},
 day: {name: 'Day Pillar', meaning: 'Self, Spouse, Home, Middle age (Ages 31-45)', body: 'Waist/Abdomen'},
-hour: {name: 'Hour Pillar', meaning: 'Children, Juniors, Later years (Ages 46+)', body: 'Legs/Feet'}};function analyzeYukcheon(saju, gender) {const dm = saju.day.s;const g = gender || GENDER || 'm';const yukData = SIX_RELATIONS[g];const result = {positions: [],
-counts: {},
-analysis: [],
-spouse: null,
-children: null,
-parents: null};const pillars = [
-{pos: 'year', pillar: saju.year},
-{pos: 'month', pillar: saju.month},
-{pos: 'day', pillar: saju.day},
-{pos: 'hour', pillar: saju.hour}
-];pillars.forEach(({pos, pillar}) => {if (!pillar) return;const stemGod = pos === 'day' ? {k: 'Day Master', c: '日干'} : getTenGod(pillar.s, dm);const mainJJ = HIDDEN_STEMS[BRANCH.findIndex(br => br.c === pillar.b.c)];const mainStem = mainJJ && mainJJ.length > 0 ? STEM[mainJJ[mainJJ.length - 1].stem] : null;const branchGod = mainStem ? getTenGod(mainStem, dm) : null;const posInfo = SIX_RELATIONS_POSITION[pos];const yukInfo = yukData[stemGod.k];result.positions.push({position: pos,
-posName: posInfo.name,
-posMeaning: posInfo.meaning,
-stem: pillar.s,
-branch: pillar.b,
-stemGod: stemGod.k,
-branchGod: branchGod ? branchGod.k : null,
-relation: yukInfo ? yukInfo.relation : 'Self',
-detailed: yukInfo ? yukInfo.detailed : '자기 자신'});if (stemGod.k !== 'Day Master') {result.counts[stemGod.k] = (result.counts[stemGod.k] || 0) + 1;}
-if (branchGod) {result.counts[branchGod.k] = (result.counts[branchGod.k] || 0) + 0.5;}});const spouseGod = g === 'm' ? '正財(Direct Wealth)' : '正官(Direct Officer)';const spouseAltGod = g === 'm' ? '偏財(Indirect Wealth)' : '偏官(Challenger)';const spouseCount = result.counts[spouseGod] || 0;const spouseAltCount = result.counts[spouseAltGod] || 0;const dayBranchState = getTwelveState(dm, saju.day.b);let hiddenSpouse = {found: false, position: '', damaged: false, damageDesc: ''};const spouseElement = g === 'm' ?
-EL_ORDER[(EL_ORDER.indexOf(dm.e) + 2) % 5] :
-EL_ORDER[(EL_ORDER.indexOf(dm.e) + 3) % 5];pillars.forEach(({pos, pillar}) => {if (!pillar) return;const jjList = HIDDEN_STEMS[BRANCH.findIndex(br => br.c === pillar.b.c)];if (jjList) {jjList.forEach(jj => {const stem = STEM[jj.stem];if (stem.e === spouseElement) {hiddenSpouse.found = true;hiddenSpouse.position = pos;hiddenSpouse.stem = stem;if (spouseElement === 'metal') {const fireCount = (result.counts['食神(Eating God)'] || 0) +
-(result.counts['傷官(Expressor)'] || 0);const fireEl = pillars.filter(p => p.pillar &&
-(p.pillar.s.e === 'fire' || p.pillar.b.e === 'fire')).length;if (fireEl >= 2) {hiddenSpouse.damaged = true;hiddenSpouse.damageDesc = 'Metal spouse melting under Fire excess';}}}});}});let spouseAnalysis = '';if (spouseCount === 0 && !hiddenSpouse.found) {spouseAnalysis = 'Spouse star absent. Marriage may come late or bonds may be weak. Romance arrives when it appears in 大運(Life Cycle).';} else if (spouseCount === 0 && hiddenSpouse.found) {if (hiddenSpouse.damaged) {spouseAnalysis = `Spouse star in ${hiddenSpouse.position} branch (hidden) but ${hiddenSpouse.damageDesc}. Early marriage may face obstacles. Living separately (weekend couple) may actually preserve the relationship.`;} else {spouseAnalysis = `Spouse star hidden in ${hiddenSpouse.position} branch. Quiet attraction. Spouse appears when timing is right.`;}} else if (spouseCount >= 2) {spouseAnalysis = 'Strong spouse energy. Popular with opposite sex but watch for infidelity! Focus on one person.';} else {spouseAnalysis = 'Good spouse energy. You can meet a good partner.';}
-result.spouse = {god: spouseGod,
-count: spouseCount,
-hiddenSpouse: hiddenSpouse,
-dayBranch: dayBranchState,
-analysis: spouseAnalysis};const childGod = g === 'm' ? ['偏官(Challenger)', '正官(Direct Officer)'] : ['食神(Eating God)', '傷官(Expressor)'];const childCount = (result.counts[childGod[0]] || 0) + (result.counts[childGod[1]] || 0);const hourPillar = saju.hour;let hourStemChild = null;if (hourPillar) {const hourGod = getTenGod(hourPillar.s, dm);if (childGod.includes(hourGod.k)) {hourStemChild = {stem: hourPillar.s,
-god: hourGod.k,
-underFire: hourPillar.b.e === 'fire' && hourPillar.s.e === 'metal'};}}
-let childAnalysis = '';if (!hourPillar) {childAnalysis = 'Birth hour needed for children analysis.';} else if (hourStemChild) {if (hourStemChild.underFire) {childAnalysis = `Children star (${hourStemChild.god}) REVEALED on Hour Stem but sitting on Fire - children may face challenges or live far away. Early independence benefits them.`;} else {childAnalysis = `Children star (${hourStemChild.god}) REVEALED on Hour Stem. Children fortune is visible. Pay attention to their development.`;}} else if (childCount === 0) {childAnalysis = 'Children star absent. May have children late or few.';} else if (childCount >= 2) {childAnalysis = 'Strong children stars. Blessed with children fortune.';} else {childAnalysis = 'Moderate children fortune.';}
-result.children = {gods: childGod,
-count: childCount,
-hourStemChild: hourStemChild,
-analysis: childAnalysis};const fatherGod = '偏財(Indirect Wealth)';const motherGod = '正印(Direct Seal)';const fatherCount = result.counts[fatherGod] || 0;const motherCount = result.counts[motherGod] || 0;result.parents = {father: {god: fatherGod, count: fatherCount, analysis: fatherCount > 0 ? 'Strong father connection.' : 'Weak father connection.'},
-mother: {god: motherGod, count: motherCount, analysis: motherCount > 0 ? 'Deep mother connection.' : 'Somewhat weak mother connection.'}};for (let [god, count] of Object.entries(result.counts)) {if (count >= 2) {const info = yukData[god];if (info) {result.analysis.push({type: 'many',
-god,
-count,
-meaning: `${god} appears many times. Significant life events related to this relation..`});}}}
-const allGods = ['比肩(Peer)','劫財(Competitor)','食神(Eating God)','傷官(Expressor)','偏財(Indirect Wealth)','正財(Direct Wealth)','偏官(Challenger)','正官(Direct Officer)','偏印(Indirect Seal)','正印(Direct Seal)'];allGods.forEach(god => {if (!result.counts[god]) {const info = yukData[god];if (info) {result.analysis.push({type: 'none',
-god,
-meaning: `${god}is missing. This connection may be weak in life..`});}}});return result;}
-const FORMATS_INNER = {'比肩(Peer)':{n:'Peer Structure (比肩格)',d:'The Self-Made Soul. Fierce independence and competitive fire drive you to forge your own path. Deep bonds with siblings and partners lead to success through collaboration. Channel your strong will with flexibility, and kingdoms will rise at your command.',b:'Entrepreneurship, Freelance, Athletics, Competition',lv:'Medium'},
-'劫財(Competitor)':{n:'Competitor Structure (劫財格)',d:'The Bold Challenger. Daring ambition and unshakeable courage propel you toward grand ventures. Your hunger for victory runs deep — balance boldness with patience, and fortune shall favor the persistent warrior.',b:'Investment, Venture Capital, Sales, High-Risk Enterprise',lv:'Challenging'},
-'食神(Eating God)':{n:'Eating God Structure (食神格)',d:'The Blessed Creator. Heaven has bestowed abundant talents and life\'s pleasures upon you. Artistic brilliance flows naturally, and fortune follows your optimistic spirit. Guard against complacency — your gifts multiply when cultivated with diligence.',b:'Culinary Arts, Entertainment, Education, Creative Fields',lv:'Excellent'},
-'傷官(Expressor)':{n:'Expressor Structure (傷官格)',d:'The Rebel Genius. Brilliant creativity and sharp wit define your unconventional soul. Your free spirit resists all chains — temper your tongue, for words cut deeper than swords. Channel rebellion into artistry, and the world will remember your name.',b:'Entertainment, Arts, Public Speaking, Innovation',lv:'Medium'},
-'偏財(Indirect Wealth)':{n:'Indirect Wealth Structure (偏財格)',d:'The Fortune Magnet. Business intuition and investment instincts run through your veins. Windfall opportunities find you naturally — wide social networks amplify your luck. Guard your wandering heart, for stability nurtures lasting prosperity.',b:'Trading, Investment, Sales, Networking',lv:'Excellent'},
-'正財(Direct Wealth)':{n:'Direct Wealth Structure (正財格)',d:'The Steady Builder. Honest accumulation and patient persistence build your empire brick by brick. Trustworthiness is your greatest currency — loyal partnerships and domestic harmony crown your efforts. Wealth grows slowly but eternally under your stewardship.',b:'Finance, Accounting, Management, Civil Service',lv:'Excellent'},
-'偏官(Challenger)':{n:'Challenger Structure (七殺格)',d:'The Warrior Commander. Charisma and decisive action forge your path to power. The fire of ambition burns bright within — master this force, and you become a legendary leader. Unchecked, it creates enemies. Refined, it conquers worlds.',b:'Military, Law, Politics, Martial Arts, Athletics',lv:'Medium'},
-'正官(Direct Officer)':{n:'Direct Officer Structure (正官格)',d:'The Noble Authority. Dignity and honor illuminate your every step. Organizations recognize your worth and elevate you swiftly. The cosmos favor those who walk the righteous path — your integrity becomes your crown.',b:'Government, Corporation, Law, Education',lv:'Supreme'},
-'偏印(Indirect Seal)':{n:'Indirect Seal Structure (偏印格)',d:'The Mystic Scholar. Unconventional wisdom and esoteric knowledge call to your soul. Religious, philosophical, and occult matters fascinate your unique mind. Focus your scattered brilliance, and profound discoveries await.',b:'Research, Technology, Spirituality, Medicine',lv:'Medium'},
-'正印(Direct Seal)':{n:'Direct Seal Structure (正印格)',d:'The Blessed Scholar. Heaven\'s favor flows through maternal bonds and elder blessings. Academic pursuits and teaching call to your gentle soul. Your compassionate nature nurtures all who enter your sphere.',b:'Education, Publishing, Academia, Welfare',lv:'Excellent'}};const FORMATS_SPECIAL = {'jongwang': {n:'Following Power (從旺格)', d:'Your Guardian Element blazes with overwhelming force. The cosmos demand you forge your own empire — working under others suffocates your spirit. CEOs, entrepreneurs, and independent visionaries carry this rare blessing. Trust your unstoppable will.', b:'CEO, Entrepreneur, Political Leader, Independent Expert', lv:'Special'},
+hour: {name: 'Hour Pillar', meaning: 'Children, Juniors, Later years (Ages 46+)', body: 'Legs/Feet'}};function analyzeYukcheon(saju, g) {const dm = saju.day.s;const result = {pillars: [], counts: {}, spouseAnalysis: '', childAnalysis: ''};const positions = [{pos:'year',pillar:saju.year},{pos:'month',pillar:saju.month},{pos:'day',pillar:saju.day},{pos:'hour',pillar:saju.hour}];const pillars = positions;pillars.forEach(({pos, pillar}) => {if (!pillar) return;const stemGod = pos === 'day' ? {k: 'Day Master', c: '日干'} : getTenGod(pillar.s, dm);const mainJJ = HIDDEN_STEMS[BRANCH.findIndex(br => br.c === pillar.b.c)];const branchGod = mainJJ && mainJJ.length > 0 ? getTenGod(STEM[mainJJ[0].stem], dm) : null;const yukMap = {'比肩 Peer':'Sibling/Friend','劫財 Competitor':'Sibling/Competitor','食神 Eating God':'Grandchild/Student','傷官 Expressor':'Grandchild/Creative','偏財 Indirect Wealth':'Father/Side Income','正財 Direct Wealth':'Wife/Main Income','偏官 Challenger':'Son(♀)/Authority','正官 Direct Officer':'Husband(♀)/Career','偏印 Indirect Seal':'Stepmother/Side Knowledge','正印 Direct Seal':'Mother/Knowledge'};const yukInfo = yukMap[stemGod.k] ? {relation: yukMap[stemGod.k]} : null;result.pillars.push({position: pos,stemGod: stemGod.k,branchGod: branchGod ? branchGod.k : null,relation: yukInfo ? yukInfo.relation : 'Self',});if (stemGod.k !== 'Day Master') {result.counts[stemGod.k] = (result.counts[stemGod.k] || 0) + 1;}});
+let spouseAnalysis = '';const hourPillar = saju.hour;const spouseGod = g === 'm' ? '正財 Direct Wealth' : '正官 Direct Officer';const spouseGod2 = g === 'm' ? '偏財 Indirect Wealth' : '偏官 Challenger';const spouseCount = (result.counts[spouseGod] || 0) + (result.counts[spouseGod2] || 0);
+let hasHiddenSpouse = false;const branches = [saju.year.b, saju.month.b, saju.day.b];if (saju.hour) branches.push(saju.hour.b);branches.forEach(br => {const bi = BRANCH.findIndex(b => b.c === br.c);const jj = HIDDEN_STEMS[bi];if (jj) {jj.forEach(j => {const jjGod = getTenGod(STEM[j.stem], dm);if (jjGod && (jjGod.k === spouseGod || jjGod.k === spouseGod2)) {hasHiddenSpouse = true;}});}});
+const dbi = BRANCH.findIndex(b => b.c === saju.day.b.c);const ybi = BRANCH.findIndex(b => b.c === saju.year.b.c);const mbi = BRANCH.findIndex(b => b.c === saju.month.b.c);const hbi = saju.hour ? BRANCH.findIndex(b => b.c === saju.hour.b.c) : -1;const otherBranches = [ybi, mbi];if (hbi >= 0) otherBranches.push(hbi);const chungPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];let spouseClash = false;let spouseClashType = '';chungPairs.forEach(([a,b]) => {if ((dbi === a && otherBranches.includes(b)) || (dbi === b && otherBranches.includes(a))) {spouseClash = true;spouseClashType = 'Clash(冲)';}});const harmPairs = [[3,8],[1,6],[3,4]];harmPairs.forEach(([a,b]) => {if ((dbi === a && otherBranches.includes(b)) || (dbi === b && otherBranches.includes(a))) {if (!spouseClash) {spouseClash = true;spouseClashType = 'Grudge/Harm(害)';}}});
+if (spouseCount === 0 && !hasHiddenSpouse) {spouseAnalysis = 'Spouse star absent. Marriage may come late or bonds weak. Romance arrives when it appears in Life Cycle.';} else if (spouseCount === 0 && hasHiddenSpouse) {spouseAnalysis = 'Spouse star hidden in branches. Quiet attraction — substance over flash. Natural meetings over blind dates.';} else if (spouseCount >= 2) {spouseAnalysis = 'Strong spouse energy. Popular with opposite sex but watch for fickleness! Focus on one person.';} else {spouseAnalysis = 'Good spouse energy. You can meet a good partner.';}
+if (spouseClash) {spouseAnalysis += ` ⚠️ However, Spouse Palace (Day Branch) is under ${spouseClashType}. Marital friction likely. Giving each other space or staying busy separately may actually help.`;}
+result.spouseAnalysis = spouseAnalysis;
+const childGod = g === 'm' ? ['偏官 Challenger', '正官 Direct Officer'] : ['食神 Eating God', '傷官 Expressor'];let childCount = 0;Object.entries(result.counts).forEach(([k, v]) => {if (childGod.includes(k)) childCount += v;});let childAnalysis = '';if (childCount === 0) {childAnalysis = 'Child star absent. Children may come late. Arrives when Life Cycle brings it.';} else if (childCount >= 2) {childAnalysis = 'Strong child star. Active children with strong presence.';} else {childAnalysis = 'Balanced child star. Good parent-child bond expected.';}result.childAnalysis = childAnalysis;return result;}
+const FORMATS_INNER = {'比肩 Peer':{n:'Peer Structure (比肩格)',d:'The Self-Made Soul. Fierce independence and competitive fire drive you to forge your own path. Deep bonds with siblings and partners lead to success through collaboration. Channel your strong will with flexibility, and kingdoms will rise at your command.',b:'Entrepreneurship, Freelance, Athletics, Competition',lv:'Medium'},
+'劫財 Competitor':{n:'Competitor Structure (劫財格)',d:'The Bold Challenger. Daring ambition and unshakeable courage propel you toward grand ventures. Your hunger for victory runs deep — balance boldness with patience, and fortune shall favor the persistent warrior.',b:'Investment, Venture Capital, Sales, High-Risk Enterprise',lv:'Challenging'},
+'食神 Eating God':{n:'Eating God Structure (食神格)',d:'The Blessed Creator. Heaven has bestowed abundant talents and life\'s pleasures upon you. Artistic brilliance flows naturally, and fortune follows your optimistic spirit. Guard against complacency — your gifts multiply when cultivated with diligence.',b:'Culinary Arts, Entertainment, Education, Creative Fields',lv:'Excellent'},
+'傷官 Expressor':{n:'Expressor Structure (傷官格)',d:'The Rebel Genius. Brilliant creativity and sharp wit define your unconventional soul. Your free spirit resists all chains — temper your tongue, for words cut deeper than swords. Channel rebellion into artistry, and the world will remember your name.',b:'Entertainment, Arts, Public Speaking, Innovation',lv:'Medium'},
+'偏財 Indirect Wealth':{n:'Indirect Wealth Structure (偏財格)',d:'The Fortune Magnet. Business intuition and investment instincts run through your veins. Windfall opportunities find you naturally — wide social networks amplify your luck. Guard your wandering heart, for stability nurtures lasting prosperity.',b:'Trading, Investment, Sales, Networking',lv:'Excellent'},
+'正財 Direct Wealth':{n:'Direct Wealth Structure (正財格)',d:'The Steady Builder. Honest accumulation and patient persistence build your empire brick by brick. Trustworthiness is your greatest currency — loyal partnerships and domestic harmony crown your efforts. Wealth grows slowly but eternally under your stewardship.',b:'Finance, Accounting, Management, Civil Service',lv:'Excellent'},
+'偏官 Challenger':{n:'Challenger Structure (七殺格)',d:'The Warrior Commander. Charisma and decisive action forge your path to power. The fire of ambition burns bright within — master this force, and you become a legendary leader. Unchecked, it creates enemies. Refined, it conquers worlds.',b:'Military, Law, Politics, Martial Arts, Athletics',lv:'Medium'},
+'正官 Direct Officer':{n:'Direct Officer Structure (正官格)',d:'The Noble Authority. Dignity and honor illuminate your every step. Organizations recognize your worth and elevate you swiftly. The cosmos favor those who walk the righteous path — your integrity becomes your crown.',b:'Government, Corporation, Law, Education',lv:'Supreme'},
+'偏印 Indirect Seal':{n:'Indirect Seal Structure (偏印格)',d:'The Mystic Scholar. Unconventional wisdom and esoteric knowledge call to your soul. Religious, philosophical, and occult matters fascinate your unique mind. Focus your scattered brilliance, and profound discoveries await.',b:'Research, Technology, Spirituality, Medicine',lv:'Medium'},
+'正印 Direct Seal':{n:'Direct Seal Structure (正印格)',d:'The Blessed Scholar. Heaven\'s favor flows through maternal bonds and elder blessings. Academic pursuits and teaching call to your gentle soul. Your compassionate nature nurtures all who enter your sphere.',b:'Education, Publishing, Academia, Welfare',lv:'Excellent'}};const FORMATS_SPECIAL = {'jongwang': {n:'Following Power (從旺格)', d:'Your Guardian Element blazes with overwhelming force. The cosmos demand you forge your own empire — working under others suffocates your spirit. CEOs, entrepreneurs, and independent visionaries carry this rare blessing. Trust your unstoppable will.', b:'CEO, Entrepreneur, Political Leader, Independent Expert', lv:'Special'},
 'jonggang': {n:'Following Seal (從強格)', d:'Guardian Element and Seal energy unite in formidable strength. Academic glory and institutional authority await your claim. Professors, researchers, and high officials often bear this distinguished pattern.', b:'Professor, Researcher, High Government Official', lv:'Special'},
 'jonga': {n:'Following Expression (從兒格)', d:'Creative energy overflows from your soul. Artistic brilliance and expressive genius demand freedom — the stage, the canvas, the page all await your unique voice. Let your spirit roam free.', b:'Artist, Entertainer, Author, Content Creator', lv:'Special'},
 'jongjae': {n:'Following Wealth (從財格)', d:'Wealth energy dominates your chart with magnetic force. Financial mastery flows through your veins — business empires and investment fortunes bend to your intuition. Money and you share a destined bond.', b:'Financier, Business Mogul, Investor, Real Estate', lv:'Special'},
 'jongsal': {n:'Following Authority (從殺格)', d:'Commanding energy fills every corner of your being. Power and prestige call to your warrior soul — military leadership, political influence, and executive authority become your natural domain.', b:'Military Leader, Politician, Executive, Judge', lv:'Special'},
 'yangin': {n:'Sheep Blade Structure (羊刃格)', d:'The cosmic blade rests in your Day Pillar (日柱) — extraordinary power courses through you. Decisive action and crisis mastery define your path. Sharp edges may wound the careless, but heroes are forged from such steel.', b:'Military, Surgeon, Lawyer, Elite Athlete', lv:'Special'},
 'geonrok': {n:'Prime Structure (建祿格)', d:'Your Month Palace holds the Prime energy of your Guardian Element. Self-made success through persistent effort awaits — career stability and mid-life prosperity reward your steady climb.', b:'Civil Service, Professional, Self-Employed', lv:'Excellent'},
-'woldeok': {n:'Moon Virtue Structure (月德格)', d:'The Moon\'s blessing graces your chart. Virtue attracts aid in times of need — your trustworthy character opens doors that remain closed to others. Official fortune shines upon you.', b:'Government, Education, Religious Service', lv:'Excellent'}};function isFormatBroken(saju, formatGod) {const dm = saju.day.s;const dmEl = dm.e;const breakReasons = [];if (formatGod === '正官(Direct Officer)') {const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.k === '傷官(Expressor)') {breakReasons.push('Expressor sees Officer: Expression clashes with Authority (broken)');}}}
-if (formatGod === '食神(Eating God)') {const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.k === '偏印(Indirect Seal)') {breakReasons.push('Owl steals food: Indirect Seal overcomes Eating God (broken)');}}}
-if (formatGod === '正財(Direct Wealth)' || formatGod === '偏財(Indirect Wealth)') {let biCount = 0;const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.k === '比肩(Peer)' || god.k === '劫財(Competitor)') biCount++;}
+'woldeok': {n:'Moon Virtue Structure (月德格)', d:'The Moon\'s blessing graces your chart. Virtue attracts aid in times of need — your trustworthy character opens doors that remain closed to others. Official fortune shines upon you.', b:'Government, Education, Religious Service', lv:'Excellent'}};function isFormatBroken(saju, formatGod) {const dm = saju.day.s;const dmEl = dm.e;const breakReasons = [];if (formatGod === '正官 Direct Officer') {const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.k === '傷官 Expressor') {breakReasons.push('Expressor sees Officer: Expression clashes with Authority (broken)');}}}
+if (formatGod === '食神 Eating God') {const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.k === '偏印 Indirect Seal') {breakReasons.push('Owl steals food: Indirect Seal overcomes Eating God (broken)');}}}
+if (formatGod === '正財 Direct Wealth' || formatGod === '偏財 Indirect Wealth') {let biCount = 0;const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);for (let p of allPillars) {const god = getTenGod(p.s, dm);if (god.k === '比肩 Peer' || god.k === '劫財 Competitor') biCount++;}
 if (biCount >= 2) {breakReasons.push('Peers rob wealth: Too many Peers steal the wealth (broken)');}}
 return breakReasons;}
-function checkSpecialFormat(saju, strength) {if (!strength.extreme) return null;const dm = saju.day.s;const ec = countElements(saju);const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);const godCounts = {bigeop:0, sikSang:0, jae:0, gwan:0, in:0};allPillars.forEach(p => {const god = getTenGod(p.s, dm);if (['比肩(Peer)','劫財(Competitor)'].includes(god.k)) godCounts.bigeop++;if (['食神(Eating God)','傷官(Expressor)'].includes(god.k)) godCounts.sikSang++;if (['偏財(Indirect Wealth)','正財(Direct Wealth)'].includes(god.k)) godCounts.jae++;if (['偏官(Challenger)','正官(Direct Officer)'].includes(god.k)) godCounts.gwan++;if (['偏印(Indirect Seal)','正印(Direct Seal)'].includes(god.k)) godCounts.in++;});allPillars.forEach(p => {const bi = BRANCH.findIndex(br => br.c === p.b.c);const hidden = HIDDEN_STEMS[bi];if (hidden) {hidden.forEach(h => {if (h.type === 'jung') {const hiddenStem = STEM[h.stem];const god = getTenGod(hiddenStem, dm);if (['偏財(Indirect Wealth)','正財(Direct Wealth)'].includes(god.k)) godCounts.jae += 0.5;if (['偏官(Challenger)','正官(Direct Officer)'].includes(god.k)) godCounts.gwan += 0.5;if (['偏印(Indirect Seal)','正印(Direct Seal)'].includes(god.k)) godCounts.in += 0.5;}});}});if (strength.extreme === 'Extreme Strong') {if (godCounts.bigeop >= 3) return FORMATS_SPECIAL.jongwang;if (godCounts.in >= 2 && godCounts.bigeop >= 2) return FORMATS_SPECIAL.jonggang;}
-if (strength.extreme === 'Extreme Weak') {if (godCounts.sikSang >= 3) return FORMATS_SPECIAL.jonga;if (godCounts.jae >= 2.5) return {...FORMATS_SPECIAL.jongjae, fakeFollower: true};if (godCounts.gwan >= 2.5) return {...FORMATS_SPECIAL.jongsal, fakeFollower: true};}
+function checkSpecialFormat(saju, strength) {if (!strength.extreme) return null;const dm = saju.day.s;const ec = countElements(saju);const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);const godCounts = {bigeop:0, sikSang:0, jae:0, gwan:0, in:0};allPillars.forEach(p => {const god = getTenGod(p.s, dm);if (['比肩 Peer','劫財 Competitor'].includes(god.k)) godCounts.bigeop++;if (['食神 Eating God','傷官 Expressor'].includes(god.k)) godCounts.sikSang++;if (['偏財 Indirect Wealth','正財 Direct Wealth'].includes(god.k)) godCounts.jae++;if (['偏官 Challenger','正官 Direct Officer'].includes(god.k)) godCounts.gwan++;if (['偏印 Indirect Seal','正印 Direct Seal'].includes(god.k)) godCounts.in++;});const ybi = saju.year ? BRANCH.findIndex(b => b.c === saju.year.b.c) : -1;const hasSikSangWithRoot = saju.year && ['傷官 Expressor','食神 Eating God'].includes(getTenGod(saju.year.s, saju.day.s)?.k) && (ybi === 5 || ybi === 6);if (strength.extreme === 'Extreme Strong' && !hasSikSangWithRoot) {if (godCounts.bigeop >= 3) return FORMATS_SPECIAL.jongwang;if (godCounts.in >= 2 && godCounts.bigeop >= 2) return FORMATS_SPECIAL.jonggang;}
+if (strength.extreme === 'Extreme Weak') {if (godCounts.sikSang >= 3) return FORMATS_SPECIAL.jonga;if (godCounts.jae >= 3) return FORMATS_SPECIAL.jongjae;if (godCounts.gwan >= 3) return FORMATS_SPECIAL.jongsal;}
 return null;}
 function checkYangInGeonRok(saju) {const dm = saju.day.s;const dsi = STEM.indexOf(dm);const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);const geonrokMap = {0:2, 1:3, 2:5, 3:6, 4:5, 5:6, 6:8, 7:9, 8:11, 9:0};const yanginMap = {0:3, 1:2, 2:6, 3:5, 4:6, 5:5, 6:9, 7:8, 8:0, 9:11};if (mbi === geonrokMap[dsi]) {return FORMATS_SPECIAL.geonrok;}
 const dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);if (dbi === yanginMap[dsi]) {return {...FORMATS_SPECIAL.yangin, hasYangIn: true};}
@@ -1922,32 +1968,32 @@ d: `The ${samhapResult.name} is complete, making Officer/Challenger energy overw
 b: 'Military, Law Enforcement, Medicine, Auditing, Legal Profession',
 formatReason: `${samhapResult.name} fully formed, Officer dominance`};} else if (diff === 4) {samhapGod = 'Indirect Seal';}
 if (samhapFormatInfo) {return {...samhapFormatInfo, god: samhapGod, type: 'samhap_variation', samhapBureau: samhapResult.name};}}
-const dm = saju.day.s;const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);let challengerCount = 0;let eatingGodCount = 0;allPillars.forEach(p => {const god = getTenGod(p.s, dm);if (god.k === '偏官(Challenger)') challengerCount++;if (god.k === '食神(Eating God)') eatingGodCount++;});const allBranches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);allBranches.forEach(b => {const bi = BRANCH.findIndex(br => br.c === b.c);const hidden = HIDDEN_STEMS[bi] || [];hidden.forEach(h => {const hStem = STEM[h.stem];const hGod = getTenGod(hStem, dm);if (hGod.k === '偏官(Challenger)' && h.days >= 10) challengerCount += 0.5;if (hGod.k === '食神(Eating God)' && h.days >= 10) eatingGodCount += 0.5;});});if (challengerCount >= 2 && eatingGodCount >= 1) {return {n: 'Crisis Solver Structure (食神制殺格)',
+const dm = saju.day.s;const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);let challengerCount = 0;let eatingGodCount = 0;allPillars.forEach(p => {const god = getTenGod(p.s, dm);if (god.k === '偏官 Challenger') challengerCount++;if (god.k === '食神 Eating God') eatingGodCount++;});const allBranches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);allBranches.forEach(b => {const bi = BRANCH.findIndex(br => br.c === b.c);const hidden = HIDDEN_STEMS[bi] || [];hidden.forEach(h => {const hStem = STEM[h.stem];const hGod = getTenGod(hStem, dm);if (hGod.k === '偏官 Challenger' && h.days >= 10) challengerCount += 0.5;if (hGod.k === '食神 Eating God' && h.days >= 10) eatingGodCount += 0.5;});});if (challengerCount >= 2 && eatingGodCount >= 1) {return {n: 'Crisis Solver Structure (食神制殺格)',
 d: 'The Warrior Healer. Fierce external pressure (Challenger) meets your sharp skills (Eating God). You thrive in crisis — solving problems others cannot. Not a peaceful artist, but a surgeon cutting through chaos. Your talent shines brightest under fire.',
 b: 'Medicine, Law, Engineering, Consulting, Crisis Management, Auditing',
 lv: 'Excellent',
 type: 'special',
 god: '食神制殺',
 isSikSinJeSal: true};}
-const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);const jj = HIDDEN_STEMS[mbi];const mainJj = jj.find(j => j.days >= 16) || jj[jj.length - 1];const mainStem = STEM[mainJj.stem];const god = getTenGod(mainStem, saju.day.s);const validStructureGods = ['食神(Eating God)','傷官(Expressor)','偏財(Indirect Wealth)','正財(Direct Wealth)','偏官(Challenger)','正官(Direct Officer)','偏印(Indirect Seal)','正印(Direct Seal)'];const yearGod = getTenGod(saju.year.s, saju.day.s);const yearStemIdx = STEM.indexOf(saju.year.s);const yearHasRoot = jj.some(j => j.stem === yearStemIdx) ||
+const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);const jj = HIDDEN_STEMS[mbi];const mainJj = jj.find(j => j.days >= 16) || jj[jj.length - 1];const mainStem = STEM[mainJj.stem];const god = getTenGod(mainStem, saju.day.s);const validStructureGods = ['食神 Eating God','傷官 Expressor','偏財 Indirect Wealth','正財 Direct Wealth','偏官 Challenger','正官 Direct Officer','偏印 Indirect Seal','正印 Direct Seal'];const yearGod = getTenGod(saju.year.s, saju.day.s);const yearStemIdx = STEM.indexOf(saju.year.s);const yearHasRoot = jj.some(j => j.stem === yearStemIdx) ||
 [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b=>b).some(branch => {const bi = BRANCH.indexOf(branch);return (HIDDEN_STEMS[bi] || []).some(h => h.stem === yearStemIdx);});const monthGod = getTenGod(saju.month.s, saju.day.s);const monthStemIdx = STEM.indexOf(saju.month.s);const monthHasRoot = jj.some(j => j.stem === monthStemIdx);let emergentGods = {};if (validStructureGods.includes(yearGod.k) && yearHasRoot) {emergentGods[yearGod.k] = (emergentGods[yearGod.k] || 0) + 1;}
 if (validStructureGods.includes(monthGod.k) && monthHasRoot) {emergentGods[monthGod.k] = (emergentGods[monthGod.k] || 0) + 1;}
 let finalGod = god.k;const emergentEntries = Object.entries(emergentGods);if (emergentEntries.length > 0) {emergentEntries.sort((a,b) => b[1] - a[1]);finalGod = emergentEntries[0][0];}
 if (yangInGeonRok && yangInGeonRok.n.includes('臨官(Official)')) {return {...yangInGeonRok, type:'inner', god:'臨官(Official)'};}
-let siksinJesal = false;const allPillarsForCheck = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);let salCount = 0, sikCount = 0;allPillarsForCheck.forEach(p => {const stemGod = getTenGod(p.s, saju.day.s);if (stemGod.k === '偏官(Challenger)') salCount++;if (stemGod.k === '食神(Eating God)') sikCount++;});[saju.month.b, saju.hour?.b].filter(b => b).forEach(b => {const bi = BRANCH.findIndex(br => br.c === b.c);const jjList = HIDDEN_STEMS[bi] || [];jjList.forEach(jjItem => {const hiddenStem = STEM[jjItem.stem];const hiddenGod = getTenGod(hiddenStem, saju.day.s);if (hiddenGod.k === '食神(Eating God)' && jjItem.days >= 10) sikCount++;});});if (salCount >= 2 && sikCount >= 1) {siksinJesal = true;return {n: 'Solving Structure (食神制殺格)',
+let siksinJesal = false;const allPillarsForCheck = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);let salCount = 0, sikCount = 0;allPillarsForCheck.forEach(p => {const stemGod = getTenGod(p.s, saju.day.s);if (stemGod.k === '偏官 Challenger') salCount++;if (stemGod.k === '食神 Eating God') sikCount++;});[saju.month.b, saju.hour?.b].filter(b => b).forEach(b => {const bi = BRANCH.findIndex(br => br.c === b.c);const jjList = HIDDEN_STEMS[bi] || [];jjList.forEach(jjItem => {const hiddenStem = STEM[jjItem.stem];const hiddenGod = getTenGod(hiddenStem, saju.day.s);if (hiddenGod.k === '食神 Eating God' && jjItem.days >= 10) sikCount++;});});if (salCount >= 2 && sikCount >= 1) {siksinJesal = true;return {n: 'Solving Structure (食神制殺格)',
 d: 'The Crisis Manager. Your sharp skills (Eating God) neutralize overwhelming pressure (Challenger). You thrive in chaos where others crumble. Problem-solving, medicine, law, engineering, and turnaround consulting are your battlegrounds. Not a peaceful artist, but a surgeon with a scalpel.',
 b: 'Medicine, Law, Engineering, Consulting, Auditing, Crisis Management',
 lv: 'Excellent',
 god: '食神制殺',
 type: 'special',
 siksinJesal: true};}
-const breakReasons = isFormatBroken(saju, finalGod);const formatKey = finalGod.replace(' ', '(') + ')';const f = FORMATS_INNER[formatKey] || FORMATS_INNER['正官(Direct Officer)'];return {...f,
+const breakReasons = isFormatBroken(saju, finalGod);const formatKey = finalGod.replace(' ', '(') + ')';const f = FORMATS_INNER[formatKey] || FORMATS_INNER['正官 Direct Officer'];return {...f,
 god: finalGod,
 type: 'inner',
 broken: breakReasons.length > 0,
 breakReasons,
 tougan: monthGod.k !== god.k ? monthGod.k : null};}
-function calcFormatSimple(saju) {const god = getTenGod(saju.month.s, saju.day.s);const f = FORMATS_INNER[god.k] || FORMATS_INNER['正官(Direct Officer)'];f.god = god.k;return f;}
+function calcFormatSimple(saju) {const god = getTenGod(saju.month.s, saju.day.s);const f = FORMATS_INNER[god.k] || FORMATS_INNER['正官 Direct Officer'];f.god = god.k;return f;}
 function getIljuDesc(ds, db) {const iljuData = {'甲子':{t:'甲子Day - Great tree above the ocean',d:'Rat Water nurtures Yang Wood - Brilliant mind with scholarly gifts. Intelligent and organized though sometimes prone to excessive worry. Night birth is especially favorable. Deep bond with spouse.',s:'Spouse is intellectual and supportive. Younger partners suit you. Water brings romantic encounters.'},
 '甲寅':{t:'甲寅Day - Tree riding a tiger',d:'Same element as Day Branch brings strong pride and independence. Firstborn qualities with leadership potential. Stubborn and competitive nature.',s:'Spouse also has strong pride — expect clashes. Mutual compromise is essential.'},
 '甲辰':{t:'甲辰Day - Tree ascending on a dragon',d:'Dragon Earth roots the Wood, bringing abundant talent. Great ambition with desire for success. Scholar star energy grants academic prowess and social recognition.',s:'Spouse is reliable with wealth fortune. Good compatibility with Rabbit and Rooster signs.'},
@@ -2086,9 +2132,9 @@ samhapPatterns: [[2,6,10,'fire'],[8,0,4,'water'],[5,9,1,'metal'],[11,3,7,'wood']
 yanginBranches: {'wood+':3,'wood-':2,'fire+':6,'fire-':5,'earth+':6,'earth-':5,
 'metal+':9,'metal-':8,'water+':0,'water-':11}};function ylCheckYongGi(yp, gods) {let score = 0;if ([yp.s.e, yp.b.e].includes(gods.yong)) score += 3;if ([yp.s.e, yp.b.e].includes(gods.hee)) score += 2;if ([yp.s.e, yp.b.e].includes(gods.gi)) score -= 3;return { score };}
 function ylCheckYongAttack(yp, gods) {const { keMap } = YEAR_LUCK_CONFIG;let active = false, desc = '', score = 0;[yp.s.e, yp.b.e].forEach(ye => {if (keMap[ye] === gods.yong) {active = true; score = -4;desc = `⚠️ BENEFICIAL ELEMENT UNDER ATTACK! ${ELEMENT[ye].n.toUpperCase()} destroys your ${ELEMENT[gods.yong].n} (${ye}克${gods.yong}). Preserve, don't expand!`;}});return { active, desc, score };}
-function ylCheckRobWealth(yp, saju, gods, strength) {const god = getTenGod(yp.s, saju.day.s);const isPeer = ['比肩(Peer)', '劫財(Competitor)'].includes(god.k);if (strength.type === 'strong' && isPeer) {return { active: true, score: -3, desc: `⚔️ ROBBERY WARNING (群劫爭財)! Strong chart + Peer year = Competitors steal wealth. Avoid partnerships.` };}
+function ylCheckRobWealth(yp, saju, gods, strength) {const god = getTenGod(yp.s, saju.day.s);const isPeer = ['比肩 Peer', '劫財 Competitor'].includes(god.k);if (strength.type === 'strong' && isPeer) {return { active: true, score: -3, desc: `⚔️ ROBBERY WARNING (群劫爭財)! Strong chart + Peer year = Competitors steal wealth. Avoid partnerships.` };}
 return { active: false, score: 0, desc: '' };}
-function ylCheckExpressorPeer(yp, saju, strength) {const god = getTenGod(yp.s, saju.day.s);const isPeer = ['比肩(Peer)', '劫財(Competitor)'].includes(god.k);try {const format = calcFormat(saju, strength);if (format.god && (format.god.includes('傷官') || format.god.includes('Expressor')) && isPeer) {return { active: true, score: -2, desc: `⚠️ REBEL + BAD FRIENDS (傷官+比劫): High lawsuit risk! Channel energy into CREATION only.` };}} catch(e) {}
+function ylCheckExpressorPeer(yp, saju, strength) {const god = getTenGod(yp.s, saju.day.s);const isPeer = ['比肩 Peer', '劫財 Competitor'].includes(god.k);try {const format = calcFormat(saju, strength);if (format.god && (format.god.includes('傷官') || format.god.includes('Expressor')) && isPeer) {return { active: true, score: -2, desc: `⚠️ REBEL + BAD FRIENDS (傷官+比劫): High lawsuit risk! Channel energy into CREATION only.` };}} catch(e) {}
 return { active: false, score: 0, desc: '' };}
 function ylCheckClimateClash(yp, gods) {if (!gods.climate) return { active: false, score: 0, desc: '' };const yearEls = [yp.s.e, yp.b.e];const climate = gods.climate.type;if ((climate.includes('Dry') || climate.includes('Hot')) && yearEls.includes('fire')) {return { active: true, score: -(yearEls.filter(e => e === 'fire').length * 3), desc: 'Fire on Dry! Health/wealth at risk.' };}
 if ((climate.includes('Cold') || climate.includes('Extreme Cold')) && yearEls.includes('water')) {return { active: true, score: -(yearEls.filter(e => e === 'water').length * 3), desc: 'Water on Cold! Depression risk.' };}
@@ -2123,9 +2169,9 @@ function ylCheckMissingBridge(yp, saju, gods) {const elCount = {};[saju.year.s.e
 if ((elCount['water']||0) >= 3 && gods.yong === 'fire' && !(elCount['wood']||0) && [yp.s.e, yp.b.e].includes('fire')) {return { active: true, desc: `🌊🔥 WATER-FIRE WAR without Bridge! No Wood to mediate. Remedy: Add Wood activities.` };}
 if ((elCount['metal']||0) >= 3 && gods.yong === 'fire' && !(elCount['earth']||0) && [yp.s.e, yp.b.e].includes('fire')) {return { active: true, desc: `⚔️🔥 METAL-FIRE WAR without Bridge! No Earth to mediate.` };}
 return { active: false, desc: '' };}
-function ylCheckStemCombine(yp, saju, gods) {const { stemCombineMap } = YEAR_LUCK_CONFIG;const ypSi = STEM.indexOf(yp.s);const allSi = [STEM.indexOf(saju.year.s), STEM.indexOf(saju.month.s), STEM.indexOf(saju.day.s)];if (saju.hour) allSi.push(STEM.indexOf(saju.hour.s));for (const [a, b, resEl] of stemCombineMap) {if (ypSi === a || ypSi === b) {const tgt = ypSi === a ? b : a;if (allSi.includes(tgt)) {const tgtStem = STEM[tgt], myGod = getTenGod(tgtStem, saju.day.s);const ypGod = getTenGod(yp.s, saju.day.s);let desc = `🔗 ${yp.s.c}+${tgtStem.c} COMBINE → ${ELEMENT[resEl].n}.`;let score = 0;const isPeer = ['比肩(Peer)', '劫財(Competitor)'].includes(ypGod.k);const isWealth = ['偏財(Indirect Wealth)', '正財(Direct Wealth)'].includes(myGod.k);const resultIsGi = resEl === gods.gi;const resultIsGwan = ['water', 'earth'].includes(resEl) &&
+function ylCheckStemCombine(yp, saju, gods) {const { stemCombineMap } = YEAR_LUCK_CONFIG;const ypSi = STEM.indexOf(yp.s);const allSi = [STEM.indexOf(saju.year.s), STEM.indexOf(saju.month.s), STEM.indexOf(saju.day.s)];if (saju.hour) allSi.push(STEM.indexOf(saju.hour.s));for (const [a, b, resEl] of stemCombineMap) {if (ypSi === a || ypSi === b) {const tgt = ypSi === a ? b : a;if (allSi.includes(tgt)) {const tgtStem = STEM[tgt], myGod = getTenGod(tgtStem, saju.day.s);const ypGod = getTenGod(yp.s, saju.day.s);let desc = `🔗 ${yp.s.c}+${tgtStem.c} COMBINE → ${ELEMENT[resEl].n}.`;let score = 0;const isPeer = ['比肩 Peer', '劫財 Competitor'].includes(ypGod.k);const isWealth = ['偏財 Indirect Wealth', '正財 Direct Wealth'].includes(myGod.k);const resultIsGi = resEl === gods.gi;const resultIsGwan = ['water', 'earth'].includes(resEl) &&
 ((saju.day.s.e === 'fire' && resEl === 'water') ||
-(saju.day.s.e === 'wood' && resEl === 'metal'));if (isPeer && isWealth && resultIsGi) {desc = `⚠️ ${yp.s.c}+${tgtStem.c} COMBINE → ${ELEMENT[resEl].n} (BETRAYAL): Your helper (${ypGod.k}) meets your wealth (${myGod.k}) and transforms into PRESSURE. Trust no one with money this year. Reject partnership offers.`;score = -2;} else if (resultIsGi) {desc = `⚠️ ${yp.s.c}+${tgtStem.c} COMBINE → ${ELEMENT[resEl].n} (忌神): Combine creates unfavorable element. Hidden sabotage.`;score = -1;} else if (yp.s.e === gods.yong && ['食神(Eating God)', '傷官(Expressor)'].includes(myGod.k)) {desc = `🔗 ${yp.s.c}+${tgtStem.c} COMBINE (羈絆): Promotion comes but freedom decreases. Golden handcuffs.`;score = 1;}
+(saju.day.s.e === 'wood' && resEl === 'metal'));if (isPeer && isWealth && resultIsGi) {desc = `⚠️ ${yp.s.c}+${tgtStem.c} COMBINE → ${ELEMENT[resEl].n} (BETRAYAL): Your helper (${ypGod.k}) meets your wealth (${myGod.k}) and transforms into PRESSURE. Trust no one with money this year. Reject partnership offers.`;score = -2;} else if (resultIsGi) {desc = `⚠️ ${yp.s.c}+${tgtStem.c} COMBINE → ${ELEMENT[resEl].n} (忌神): Combine creates unfavorable element. Hidden sabotage.`;score = -1;} else if (yp.s.e === gods.yong && ['食神 Eating God', '傷官 Expressor'].includes(myGod.k)) {desc = `🔗 ${yp.s.c}+${tgtStem.c} COMBINE (羈絆): Promotion comes but freedom decreases. Golden handcuffs.`;score = 1;}
 return { active: true, from: yp.s, to: tgtStem, result: resEl, targetGod: myGod.k, desc, score };}}}
 return { active: false, from: null, to: null, result: null, targetGod: null, desc: '', score: 0 };}
 function ylCheckBranchCombine(yp, saju, gods, strength) {const { branchCombineMap } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));for (const [a, b, resEl] of branchCombineMap) {if (ypBi === a || ypBi === b) {const tgt = ypBi === a ? b : a;if (allBr.includes(tgt)) {const tgtBr = BRANCH[tgt];let desc = `🤝 ${yp.b.c}+${tgtBr.c} COMBINE → ${ELEMENT[resEl].n}.`;let score = 0;const isWeak = strength && strength.pct < 30;const combineIsGi = resEl === gods.gi;const combineIsYong = resEl === gods.yong;if (saju.hour && BRANCH.findIndex(br => br.c === saju.hour.b.c) === tgt) {if (isWeak && combineIsGi) {desc = `⚠️ ${yp.b.c}+${tgtBr.c} COMBINE → ${ELEMENT[resEl].n}! WARNING: Weak chart but combine strengthens unfavorable element. Late-life/children axis under pressure. Health warning for kidneys/reproductive system.`;score = -2;} else if (combineIsYong) {desc = `🤝 ${yp.b.c}+${tgtBr.c} COMBINE → ${ELEMENT[resEl].n}! Hour branch strengthened with Beneficial Element. Late-life foundation solidified.`;score = 2;} else {desc = `🤝 ${yp.b.c}+${tgtBr.c} COMBINE → ${ELEMENT[resEl].n}! Hour branch strengthened.`;score = 1;}} else if (BRANCH.findIndex(br => br.c === saju.day.b.c) === tgt) {if (isWeak && combineIsGi) {desc = `⚠️ ${yp.b.c}+${tgtBr.c} COMBINE → ${ELEMENT[resEl].n}! Spouse Palace transforms to unfavorable element. Relationship stress.`;score = -1;} else {desc = `🤝 ${yp.b.c}+${tgtBr.c} COMBINE → ${ELEMENT[resEl].n}! Spouse Palace harmonized.`;score = 1;}}
@@ -2139,7 +2185,7 @@ const descMap = {11: `😔 ${bn}${bn} SELF-PUNISHMENT: Doubled Water = depressio
 6: `🔥 ${bn}${bn} SELF-PUNISHMENT: Doubled Fire = impulsiveness, burnout.`,
 9: `⚠️ ${bn}${bn} SELF-PUNISHMENT: Doubled Metal = obsessive perfectionism.`,
 4: `⚠️ ${bn}${bn} SELF-PUNISHMENT: Doubled Earth = stubbornness.`};return { active: true, isTriple: false, desc: descMap[ypBi] || `⚠️ ${bn}${bn} SELF-PUNISHMENT.` };}
-function ylCheckScandal(yp, saju) {if (!saju.hour) return { active: false, score: 0, desc: '' };const dm = saju.day.s;const hourGod = getTenGod(saju.hour.s, dm), ypGod = getTenGod(yp.s, dm);if (hourGod.k !== '偏財(Indirect Wealth)' || ypGod.k !== '偏財(Indirect Wealth)') return { active: false, score: 0, desc: '' };const { selfPunishBranches } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), hBi = BRANCH.findIndex(br => br.c === saju.hour.b.c);if (ypBi === hBi && selfPunishBranches.includes(ypBi)) {return { active: true, score: -2, desc: `🚨 SCANDAL ALERT (色難)! Hour Pillar + Indirect Wealth DOUBLED + Self-Punishment. High risk of scandal/gambling.` };}
+function ylCheckScandal(yp, saju) {if (!saju.hour) return { active: false, score: 0, desc: '' };const dm = saju.day.s;const hourGod = getTenGod(saju.hour.s, dm), ypGod = getTenGod(yp.s, dm);if (hourGod.k !== '偏財 Indirect Wealth' || ypGod.k !== '偏財 Indirect Wealth') return { active: false, score: 0, desc: '' };const { selfPunishBranches } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), hBi = BRANCH.findIndex(br => br.c === saju.hour.b.c);if (ypBi === hBi && selfPunishBranches.includes(ypBi)) {return { active: true, score: -2, desc: `🚨 SCANDAL ALERT (色難)! Hour Pillar + Indirect Wealth DOUBLED + Self-Punishment. High risk of scandal/gambling.` };}
 return { active: true, score: -2, desc: `⚠️ AFFAIR WARNING (色難): Indirect Wealth Echo on Hour Pillar. Temptation is a TRAP.` };}
 function ylCheckMissingYong(saju, gods, yongAttacked) {const els = {};[saju.year.s.e, saju.year.b.e, saju.month.s.e, saju.month.b.e, saju.day.s.e, saju.day.b.e].forEach(e => els[e] = true);if (saju.hour) { els[saju.hour.s.e] = true; els[saju.hour.b.e] = true; }
 if (els[gods.yong]) return { active: false, score: 0, desc: '' };let desc = `🛡️ NO SHIELD (用神不在): Beneficial Element (${ELEMENT[gods.yong].n}) MISSING! No defense when crisis hits.`;let score = 0;if (yongAttacked) { desc += ` AND this year attacks that absent element - DOUBLE DANGER!`; score = -2; }
@@ -2178,7 +2224,7 @@ score: 0,
 desc: '',
 overridden: true,
 overrideReason: `🔥 ${r.bureau.desc} Beneficial Element (${ELEMENT[gods.yong].n}) AMPLIFIED! Weak-Strong Clash Nullified → BREAKTHROUGH!`};}
-r.missingYong = ylCheckMissingYong(saju, gods, r.yongAttack.active);const score = Object.values(r).reduce((s, x) => s + (x.score || 0), 0);const rating = ylDetermineRating(r, score);let voidBreak = false, voidBreakDesc = '';try {const gm = calcGongmang(saju);const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (gm && gm.indices) {gm.indices.forEach(vi => {if (Math.abs(ypBi - vi) === 6) {voidBreak = true;voidBreakDesc = `🔓 ${yp.b.c} breaks Void (${BRANCH[vi].c})! Liberation year.`;}});}} catch(e) {}
+r.missingYong = ylCheckMissingYong(saju, gods, r.yongAttack.active);const score = Object.values(r).reduce((s, x) => s + (x.score || 0), 0);const rating = ylDetermineRating(r, score);let voidBreak = false, voidBreakDesc = '';try {const gm = calcGongmang(saju);const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (gm && gm.gm) {gm.gm.forEach(vi => {if (Math.abs(ypBi - vi) === 6) {voidBreak = true;voidBreakDesc = `🔓 ${yp.b.c} breaks Void (${BRANCH[vi].c})! Liberation year.`;}});}} catch(e) {}
 return {year, pillar: yp, god, state, score, rating,
 climateClash: r.climateClash.active, climateClashDesc: r.climateClash.desc,
 monthClash: r.monthClash.active, monthClashDesc: r.monthClash.desc,
@@ -2205,20 +2251,29 @@ pyunInDoShik: r.pyunInDoShik.active, pyunInDoShikDesc: r.pyunInDoShik.desc,
 wangShinChungBal: r.wangShinChungBal.active, wangShinChungBalDesc: r.wangShinChungBal.desc};}
 function analyzeLuckCross(saju, birthYear, gender, gods, targetYear, birthMonth, birthDay, birthHour) {const luck = calcLuck(saju, birthYear, gender, gods, birthMonth, birthDay, birthHour);const curAge = targetYear - birthYear;const curDaeun = luck.find(l => curAge >= l.startAge && curAge < l.endAge) || luck[0];const yearLuck = calcYearLuck(targetYear, saju, gods);const result = {daeun: curDaeun,
 saeun: yearLuck,
-analysis: []};const dEl = [curDaeun.s.e, curDaeun.b.e];const sEl = [yearLuck.pillar.s.e, yearLuck.pillar.b.e];const ganHap = [[0,5],[1,6],[2,7],[3,8],[4,9]];const dsi = STEM.indexOf(curDaeun.s), ssi = STEM.indexOf(yearLuck.pillar.s);for (let [a,b] of ganHap) {if ((dsi===a && ssi===b) || (dsi===b && ssi===a)) {result.analysis.push({type:'good', text:'Life Cycle-Annual Fortune stem harmony! Fortune flows smoothly.'});}}
-const dbi = BRANCH.findIndex(br => br.c === curDaeun.b.c), sbi = BRANCH.findIndex(br => br.c === yearLuck.pillar.b.c);if (Math.abs(dbi - sbi) === 6 || Math.abs(dbi - sbi) === 6) {result.analysis.push({type:'bad', text:'Life Cycle-Annual Fortune branch clash! Changes and challenges may arise.'});}
-const allBi = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) allBi.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));allBi.forEach((bi, idx) => {const positions = ['Year Branch','Month Branch','Day Branch','Hour Branch'];if (Math.abs(bi - sbi) === 6) {result.analysis.push({type:'warning', text:`Annual Fortune clashes with ${positions[idx]}! ${idx===2 ? 'Watch spouse or health!' : idx===0 ? 'Family elder matters possible.' : idx===1 ? 'Career or business changes possible.' : 'Children or junior matters possible.'}`});}});const DIRECTIONAL_BUREAU = [
-{branches: [2,3,4], element: 0, name: '寅卯辰(Tiger-Rabbit-Dragon) 木局 Eastern Wood'},
-{branches: [5,6,7], element: 1, name: '巳午未(Snake-Horse-Goat) 火局 Southern Fire'},
-{branches: [8,9,10], element: 3, name: '申酉戌(Monkey-Rooster-Dog) 金局 Western Metal'},
-{branches: [11,0,1], element: 4, name: '亥子丑(Pig-Rat-Ox) 水局 Northern Water'}
-];DIRECTIONAL_BUREAU.forEach(bureau => {const natalMatches = bureau.branches.filter(b => allBi.includes(b));const yearCompletes = bureau.branches.includes(sbi) && !allBi.includes(sbi);if (natalMatches.length >= 2 && yearCompletes) {const elNames = ['Wood','Fire','Earth','Metal','Water'];result.analysis.push({type: 'critical',
-text: `🔥🔥🔥 ${bureau.name} Bureau COMPLETED! ${elNames[bureau.element]} energy explosion!`});if (gods && bureau.element === gods.gi) {result.analysis.push({type: 'danger',
-text: `⚠️ Bureau result is UNFAVORABLE (忌神)! Health and wealth at extreme risk!`});result.bureauDanger = true;}}});const COMBINE_PAIRS = [[0,1,'earth'],[2,11,'wood'],[3,10,'fire'],[4,9,'metal'],[5,8,'water'],[6,7,'fire']];const elNameToIdx = {'wood':0,'fire':1,'earth':2,'metal':3,'water':4};allBi.forEach((bi, idx) => {COMBINE_PAIRS.forEach(([a, b, resultEl]) => {if ((bi === a && sbi === b) || (bi === b && sbi === a)) {const resultElIdx = elNameToIdx[resultEl];if (gods && resultElIdx === gods.gi) {const positions = ['Year','Month','Day(Spouse)','Hour(Children)'];result.analysis.push({type: 'warning',
-text: `⚠️ ${BRANCH[sbi].c}+${BRANCH[bi].c} combine → ${resultEl.toUpperCase()}(忌神)! ${positions[idx]} area affected.`});}}});});result.totalScore = curDaeun.score + yearLuck.score;result.totalRating = result.totalScore >= 4 ? 'excellent' :
+analysis: []};const dEl = [curDaeun.s.e, curDaeun.b.e];const sEl = [yearLuck.pillar.s.e, yearLuck.pillar.b.e];const ganHap = [[0,5],[1,6],[2,7],[3,8],[4,9]];const dsi = STEM.indexOf(curDaeun.s), ssi = STEM.indexOf(yearLuck.pillar.s);for (let [a,b] of ganHap) {if ((dsi===a && ssi===b) || (dsi===b && ssi===a)) {result.analysis.push({type:'good', text:'Life Cycle + Year: Heavenly Stem Harmony! Fortune flows smoothly.'});}}
+const dbi = BRANCH.indexOf(curDaeun.b), sbi = BRANCH.indexOf(yearLuck.pillar.b);if (Math.abs(dbi - sbi) === 6 || Math.abs(dbi - sbi) === 6) {result.analysis.push({type:'bad', text:'Life Cycle + Year: Branch Clash! Changes and challenges ahead.'});}
+const allBi = [BRANCH.indexOf(saju.year.b), BRANCH.indexOf(saju.month.b), BRANCH.indexOf(saju.day.b)];if (saju.hour) allBi.push(BRANCH.indexOf(saju.hour.b));allBi.forEach((bi, idx) => {const positions = ['Year Branch','Month Branch','Day Branch','Hour Branch'];if (Math.abs(bi - sbi) === 6) {const isWangjiClash = (bi === 0 && sbi === 6) || (bi === 6 && sbi === 0) ||
+(bi === 3 && sbi === 9) || (bi === 9 && sbi === 3);if (isWangjiClash) {const clashName = (bi === 0 || sbi === 0) ? '子午 Clash(子午冲)' : '卯酉 Clash(卯酉冲)';const healthWarning = (bi === 0 || sbi === 0)
+? 'Heart/cardiovascular(Fire) clashes with kidneys/reproductive(Water)!'
+: 'Liver(Wood) clashes with lungs/nerves(Metal)!';result.analysis.push({type: 'danger',
+text: `🚨 ${clashName} 발동! Cardinal directions in head-on collision. ${healthWarning} ${idx === 3 ? 'Hour Branch (children/later years) clash — surgery, accident, children issues, extra caution!' : idx === 2 ? 'Day Branch (spouse palace) clash — spouse health and marital turbulence possible!' : ''}`,});result.wangjiClash = true;} else {result.analysis.push({type:'warning', text:`세운이 ${positions[idx]}와 충! ${idx===2 ? 'Watch health and spouse matters!' : idx===0 ? 'Family elder matters may arise.' : idx===1 ? 'Career or business changes ahead.' : 'Children or junior matters may arise.'}`});}}
+if ((bi === 1 && sbi === 6) || (bi === 6 && sbi === 1)) {result.analysis.push({type: 'warning',
+text: `⚠️ 丑午 Grudge(怨嗔)! ${positions[idx]} and Year Luck form a Grudge/Spirit-Fire relation. Watch for emotional stress and mood swings.`});}});result.totalScore = curDaeun.score + yearLuck.score;result.totalRating = result.totalScore >= 4 ? 'excellent' :
 result.totalScore >= 2 ? 'good' :
 result.totalScore >= 0 ? 'neutral' :
-result.totalScore >= -2 ? 'caution' : 'difficult';return result;}
+result.totalScore >= -2 ? 'caution' : 'difficult';if (yearLuck.warnings && yearLuck.warnings.length > 0) {yearLuck.warnings.forEach(w => {result.analysis.push({type: 'danger', text: w});});}
+const tanghwaCheck = () => {const hasChu = allBi.includes(1);const hasO = allBi.includes(6);const hasIn = allBi.includes(2);const hasSa = allBi.includes(5);const hasChuOTanghwa = hasChu && hasO;const hasInSaTanghwa = hasIn && hasSa;const saeunBi = sbi;if (hasChuOTanghwa && saeunBi === 6) {result.analysis.push({type: 'danger',
+text: '⚠️ Double Spirit-Fire(雙湯火) warning! Chart 丑午 Fire doubled by Year 午. Emotional explosions and mental stress may peak. Anger management is critical!'});result.tanghwaWarning = true;}
+if (hasInSaTanghwa && saeunBi === 5) {result.analysis.push({type: 'danger',
+text: '⚠️ Double Spirit-Fire(雙湯火) warning! Chart 寅巳 Fire doubled by Year 巳. Watch for burns, fever, and medication side effects!'});result.tanghwaWarning = true;}
+if (hasChuOTanghwa && saeunBi === 5) {result.analysis.push({type: 'warning',
+text: '🔥 Spirit-Fire intensified! Year Fire energy agitates chart Spirit-Fire. Handle fire with care!'});}};tanghwaCheck();const selfPunishBranches = [4, 6, 9, 11];if (dbi === sbi && selfPunishBranches.includes(dbi)) {const branchNames = {4:'辰辰', 6:'午午', 9:'酉酉', 11:'亥亥'};const healthWarnings = {4: 'Spleen/stomach, digestive issues',
+6: 'Cardiovascular, stroke, mental explosion',
+9: 'Lung/respiratory issues, depression',
+11: 'Kidney/bladder issues, self-harm impulses'};result.analysis.push({type: 'danger',
+text: `🚨 Life Cycle + Year Self-Punishment(${branchNames[dbi]}Self-Punishment)! Self-attacking formation. ${healthWarnings[dbi]} Caution! Don't overextend, focus on self-care.`});result.daeunSaeunJahyung = true;}
+return result;}
 function analyzeDaeunDetail(daeun, saju, gods, startYear) {const dm = saju.day.s;const stemGod = getTenGod(daeun.s, dm);const stemAnalysis = {period: 'First Half',
 dominant: 'Stem',
 pillar: daeun.s.c,
@@ -2259,10 +2314,18 @@ const safeBest = months.filter(m => !m.climateClash && !m.wangClash);const best 
 : months.reduce((a, b) => a.score > b.score ? a : b);const worst = months.reduce((a, b) => a.score < b.score ? a : b);const wangClashMonths = months.filter(m => m.wangClash).map(m => m.month);return { months, best, worst, wangClashMonths };}
 function calcSinsal(saju) {const ss = [];const dmi = STEM.indexOf(saju.day.s);const ybi = BRANCH.findIndex(br => br.c === saju.year.b.c);const dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);const hbi = saju.hour ? BRANCH.findIndex(br => br.c === saju.hour.b.c) : -1;const brs = [ybi, mbi, dbi];if (hbi >= 0) brs.push(hbi);const ysi = STEM.indexOf(saju.year.s);const msi = STEM.indexOf(saju.month.s);const hsi = saju.hour ? STEM.indexOf(saju.hour.s) : -1;const guiren = {0:[1,7],1:[0,8],2:[11,9],3:[11,9],4:[1,7],5:[0,8],6:[7,1],7:[6,2],8:[5,3],9:[5,3]};if (guiren[dmi] && brs.some(b => guiren[dmi].includes(b))) ss.push({n:'天乙貴人(Heavenly Noble)',t:'good',d:'Supreme blessing! A guardian angel appears in every crisis. Official fortune and protection surround you.',i:'👼',lv:'최상'});const tiande = [9,8,7,6,5,4,3,2,1,0,9,8];if (mbi < 12 && (dmi === tiande[mbi] || brs.some(b => b === tiande[mbi]))) ss.push({n:'天德貴人(Heavens Virtue Noble)',t:'good',d:'Heavens virtue shines upon you! Living righteously multiplies your blessings tenfold.',i:'🌟',lv:'상'});const yuede = [2,6,2,6,4,8,4,8,0,6,0,6];if (mbi < 12 && dmi === yuede[mbi]) ss.push({n:'月德貴人(Moons Virtue Noble)',t:'good',d:'Moons blessing graces your path! Natural charisma draws trust and admiration. Official positions favor you.',i:'🌙',lv:'상'});const munchang = {0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};if (brs.includes(munchang[dmi])) ss.push({n:'文昌貴人(Scholar Star)',t:'good',d:'Brilliant scholarly mind! Exams, certifications, and academic pursuits bend to your will. Writing flows naturally.',i:'📚',lv:'상'});const xuetang = {0:11,1:6,2:2,3:9,4:2,5:9,6:5,7:0,8:8,9:3};if (brs.includes(xuetang[dmi])) ss.push({n:'學堂貴人(Academy Noble)',t:'good',d:'Scholars destiny! Research and education lead to greatness. Professorship and expertise await.',i:'🎓',lv:'상'});const jiangx = {0:0,1:9,2:6,3:3,4:0,5:9,6:6,7:3,8:0,9:9,10:6,11:3};if (brs.includes(jiangx[ybi])) ss.push({n:'將星(General Star)',t:'good',d:'Commanders spirit! Natural leadership draws followers. You are destined to lead.',i:'🎖️',lv:'상'});const jinyu = {0:4,1:5,2:7,3:8,4:7,5:8,6:10,7:11,8:1,9:2};if (brs.includes(jinyu[dmi])) ss.push({n:'金輿(Golden Carriage)',t:'good',d:'Supreme spouse fortune! Marriage unlocks your destiny. An ideal partner awaits.',i:'💍',lv:'상'});const fuxing = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};if (brs.includes(fuxing[dmi])) ss.push({n:'福星貴人(Fortune Noble)',t:'good',d:'Blessed chart! No worries about necessities. Lifetime abundance.',i:'🍀',lv:'상'});const anlu = {0:11,1:10,2:1,3:0,4:1,5:0,6:3,7:2,8:5,9:4};if (brs.includes(anlu[dmi])) ss.push({n:'暗祿(Hidden Fortune)',t:'good',d:'Hidden blessings flow! Invisible support guides you when you least expect it.',i:'🎁',lv:'Medium'});const jianlu = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};if (brs.includes(jianlu[dmi])) ss.push({n:'建祿(Prime)',t:'good',d:'Self-made type! Success through own efforts. Stable career.',i:'🏠',lv:'상'});const tianyi = [11,0,1,2,3,4,5,6,7,8,9,10];if (mbi < 12 && brs.includes(tianyi[mbi])) ss.push({n:'天醫星(Heavenly Doctor)',t:'good',d:'Medical calling! Doctors, nurses, pharmacists — healing professions bring great fortune.',i:'💊',lv:'Medium'});const yima = {0:2,1:11,2:8,3:5,4:2,5:11,6:8,7:5,8:2,9:11,10:8,11:5};if (brs.includes(yima[ybi])) ss.push({n:'驛馬(Traveling Horse)',t:'neutral',d:'Movement awakens fortune! Travel, relocation, overseas ventures — motion is your medicine.',i:'🐎',lv:'Medium'});const taohua = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};if (brs.includes(taohua[ybi])) ss.push({n:'桃花(Peach Blossom)',t:'neutral',d:'Irresistible charm! Magnetic attraction to opposite sex. Star quality — guard against wandering heart.',i:'🌸',lv:'Medium'});const huagai = {0:4,1:1,2:10,3:7,4:4,5:1,6:10,7:7,8:4,9:1,10:10,11:7};if (brs.includes(huagai[ybi])) ss.push({n:'華蓋(Canopy Star)',t:'neutral',d:'Artists soul! Music, art, and writing flow naturally. Spiritual and philosophical depths call to you.',i:'🎨',lv:'Medium'});const hongyan = {0:6,1:5,2:8,3:7,4:8,5:7,6:9,7:8,8:11,9:10};if (brs.includes(hongyan[dmi])) ss.push({n:'紅艶(Red Romance)',t:'neutral',d:'Sexy charm! Attractive to opposite sex. Entertainment aptitude, watch infidelity!',i:'💋',lv:'Medium'});const kuigang = [[6,4],[],[6,4],[],[6,10],[],[6,10],[],[],[]];if (kuigang[dmi] && kuigang[dmi].includes(dbi)) ss.push({n:'魁罡(Fierce Star)',t:'bad',d:'Fierce fire spirit! Charismatic leader potential — temper your autocratic tendencies.',i:'⚡',lv:'상'});const yangren = {0:3,1:2,2:6,3:5,4:6,5:5,6:9,7:8,8:0,9:11};if (dbi === yangren[dmi]) ss.push({n:'Sheep Blade (羊刃)',t:'bad',d:'Sharp blade energy! Decisive but sharp. Suits military, surgeons, lawyers.',i:'🗡️',lv:'상'});const baihu = [6,7,8,9,10,11,0,1,2,3,4,5];if (mbi < 12 && brs.includes(baihu[mbi])) ss.push({n:'白虎(White Tiger)',t:'bad',d:'Accident alert! However, professions involving blood (medicine, culinary) transform this into blessing.',i:'🐯',lv:'Medium'});const dayPillarStr = saju.day.s.c + saju.day.b.c;const whiteTigerDays = ['甲辰', '乙巳', '丙戌', '丁丑', '戊辰', '己未', '庚戌', '辛丑', '壬辰', '癸丑'];if (whiteTigerDays.includes(dayPillarStr)) {ss.push({n:'Day Pillar White Tiger (日柱白虎)',t:'bad',d:'White Tiger in your core pillar! Gentle normally, fierce when provoked. Blood-related events possible for self/spouse/children. Medical, religious, or healing professions transform this into blessing. For women: watch for difficult childbirth.',i:'🐅',lv:'High'});}
 if ([0,7].includes(dmi)) ss.push({n:'懸針殺(Hanging Needle)',t:'neutral',d:'Needle-sharp energy! Critical and perfectionist. Talent in acupuncture, sewing, precision work.',i:'📍',lv:'Low'});
-const jiesha = {0:5,1:2,2:11,3:8,4:5,5:2,6:11,7:8,8:5,9:2,10:11,11:8};if (brs.includes(jiesha[ybi])) ss.push({n:'劫殺(Robbery Star)',t:'bad',d:'Financial vulnerability! Guard against theft, fraud, bad investments. Never co-sign loans!',i:'💸',lv:'Medium'});const wangshen = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};if (brs.includes(wangshen[ybi]) && wangshen[ybi] !== taohua[ybi]) ss.push({n:'亡神(Disgrace Star)',t:'bad',d:'Reputation vulnerability! Guard social media, drinking occasions carefully.',i:'😰',lv:'Medium'});const yuanchen = [[7],[6],[5],[4],[3],[2],[1],[0],[11],[10],[9],[8]];if (yuanchen[ybi] && brs.some(b => yuanchen[ybi].includes(b))) ss.push({n:'怨嗔(Resentment Star)',t:'bad',d:'Love-hate bonds entangle you. Navigate close relationships with care.',i:'💔',lv:'Medium'});const guimen = [[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,0],[0,1],[1,2],[2,3],[3,4],[4,5]];if (guimen[ybi] && brs.some(b => guimen[ybi].includes(b))) ss.push({n:'鬼門關(Spirit Gate)',t:'neutral',d:'Highly intuitive and spiritually sensitive. You have a sixth sense for art and people. Meditation is your power source.',i:'☯︎',lv:'Medium'});if ([0,7].includes(dmi)) ss.push({n:'懸針(Needle Star)',t:'bad',d:'Needle-sharp energy! Critical perfectionist. Talent for acupuncture, precision crafts.',i:'📍',lv:'하'});const liuhai = [[7],[6],[5],[4],[3],[2],[1],[0],[11],[10],[9],[8]];if (liuhai[dbi] && brs.some(b => liuhai[dbi].includes(b) && b !== dbi)) ss.push({n:'六害(Six Harms)',t:'bad',d:'Vulnerability through close ones. Navigate spouse and sibling relationships carefully.',i:'⚠️',lv:'Medium'});const tianluodiwang = (dbi === 10 && [5,6].includes(mbi)) || (dbi === 11 && [9,10].includes(mbi));if (tianluodiwang) ss.push({n:'天羅地網(Heavens Net)',t:'bad',d:'Caught in heavens net. Guard against gossip, lawsuits. Feelings of entrapment may arise.',i:'🕸️',lv:'Medium'});const guluanM = [[0,2],[1,3],[2,5],[3,6],[4,5],[5,6],[6,8],[7,9],[8,11],[9,0]];const guluanF = [[1,3],[0,2],[3,6],[2,5],[3,6],[2,5],[7,9],[6,8],[9,0],[8,11]];const guluanCheck = GENDER === 'm' ? guluanM : guluanF;if (guluanCheck[dmi] && guluanCheck[dmi][1] === dbi) ss.push({n:'孤鸞(Lonely Swan)',t:'bad',d:'Solitary spirit dwells within. Late marriage or single tendencies. Solitude becomes your companion.',i:'🦢',lv:'하'});const sanzai = {5:[2,3,4], 9:[2,3,4], 1:[2,3,4],
-2:[8,9,10], 6:[8,9,10], 10:[8,9,10],
-8:[5,6,7], 0:[5,6,7], 4:[5,6,7],
-11:[11,0,1], 3:[11,0,1], 7:[11,0,1]};const curYear = new Date().getFullYear();const curYearBranch = (curYear - 4) % 12;if (sanzai[ybi] && sanzai[ybi].includes(curYearBranch)) ss.push({n:'三災(Three Calamities)',t:'bad',d:'Three Calamities period active! Exercise caution for 3 years. Avoid reckless expansion and major moves.',i:'🔥',lv:'Medium'});const panan = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};if (brs.includes(panan[dmi])) ss.push({n:'攀鞍(Climbing Saddle)',t:'good',d:'Good career luck! Promotion type in stable organizations. Suits corporations.',i:'💺',lv:'Medium'});const tianchu = {0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};if (brs.includes(tianchu[dmi])) ss.push({n:'天廚貴人(Heavenly Kitchen)',t:'good',d:'Blessed with food fortune! Never worry about hunger. Culinary talent awaits discovery.',i:'🍽️',lv:'Medium'});const tiansha = [[2,0],[3,1],[5,2],[6,3],[8,4],[9,5],[11,6],[0,7],[2,8],[3,9]];if (tiansha.some(ts => dbi === ts[0] && dmi === ts[1])) ss.push({n:'天赦日(Heavens Pardon)',t:'good',d:'天赦日(Heavens Pardon) Day! Misfortunes transform into blessings. Divine forgiveness surrounds you.',i:'🕊️',lv:'상'});return ss.length ? ss : [{n:'No Special Stars',t:'neutral',d:'No exceptional divine stars. A peacefully balanced chart brings steady fortune.',i:'☯︎',lv:'Medium'}];}
+const jiesha = {0:5,1:2,2:11,3:8,4:5,5:2,6:11,7:8,8:5,9:2,10:11,11:8};if (brs.includes(jiesha[ybi])) ss.push({n:'劫殺(Robbery Star)',t:'bad',d:'Financial vulnerability! Guard against theft, fraud, bad investments. Never co-sign loans!',i:'💸',lv:'Medium'});const wangshen = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};if (brs.includes(wangshen[ybi]) && wangshen[ybi] !== taohua[ybi]) ss.push({n:'亡神(Disgrace Star)',t:'bad',d:'Reputation vulnerability! Guard social media, drinking occasions carefully.',i:'😰',lv:'Medium'});const yuanchen = [[7],[6],[5],[4],[3],[2],[1],[0],[11],[10],[9],[8]];if (yuanchen[ybi] && brs.some(b => yuanchen[ybi].includes(b))) ss.push({n:'怨嗔(Resentment Star)',t:'bad',d:'Love-hate bonds entangle you. Navigate close relationships with care.',i:'💔',lv:'Medium'});const guimen = [[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,0],[0,1],[1,2],[2,3],[3,4],[4,5]];if (guimen[ybi] && brs.some(b => guimen[ybi].includes(b))) ss.push({n:'鬼門關(Spirit Gate)',t:'neutral',d:'Highly intuitive and spiritually sensitive. You have a sixth sense for art and people. Meditation is your power source.',i:'☯︎',lv:'Medium'});if ([0,7].includes(dmi)) ss.push({n:'懸針(Needle Star)',t:'bad',d:'Needle-sharp energy! Critical perfectionist. Talent for acupuncture, precision crafts.',i:'📍',lv:'하'});const liuhai = [[7],[6],[5],[4],[3],[2],[1],[0],[11],[10],[9],[8]];if (liuhai[dbi] && brs.some(b => liuhai[dbi].includes(b) && b !== dbi)) ss.push({n:'六害(Six Harms)',t:'bad',d:'Vulnerability through close ones. Navigate spouse and sibling relationships carefully.',i:'⚠️',lv:'Medium'});const tianluodiwang = (dbi === 10 && [5,6].includes(mbi)) || (dbi === 11 && [9,10].includes(mbi));if (tianluodiwang) ss.push({n:'天羅地網(Heavens Net)',t:'bad',d:'Caught in heavens net. Guard against gossip, lawsuits. Feelings of entrapment may arise.',i:'🕸️',lv:'Medium'});const guluanM = [[0,2],[1,3],[2,5],[3,6],[4,5],[5,6],[6,8],[7,9],[8,11],[9,0]];const guluanF = [[1,3],[0,2],[3,6],[2,5],[3,6],[2,5],[7,9],[6,8],[9,0],[8,11]];const guluanCheck = GENDER === 'm' ? guluanM : guluanF;if (guluanCheck[dmi] && guluanCheck[dmi][1] === dbi) ss.push({n:'孤鸞(Lonely Swan)',t:'bad',d:'Solitary spirit dwells within. Late marriage or single tendencies. Solitude becomes your companion.',i:'🦢',lv:'하'});const sanzai = {0:[2,3,4],
+1:[11,0,1],
+2:[8,9,10],
+3:[5,6,7],
+4:[2,3,4],
+5:[11,0,1],
+6:[8,9,10],
+7:[5,6,7],
+8:[2,3,4],
+9:[11,0,1],
+10:[8,9,10],
+11:[5,6,7]};const curYear = new Date().getFullYear();const curYearBranch = (curYear - 4) % 12;if (sanzai[ybi] && sanzai[ybi].includes(curYearBranch)) ss.push({n:'三災(Three Calamities)',t:'bad',d:'Three Calamities period active! Exercise caution for 3 years. Avoid reckless expansion and major moves.',i:'🔥',lv:'Medium'});const panan = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};if (brs.includes(panan[dmi])) ss.push({n:'攀鞍(Climbing Saddle)',t:'good',d:'Good career luck! Promotion type in stable organizations. Suits corporations.',i:'💺',lv:'Medium'});const tianchu = {0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};if (brs.includes(tianchu[dmi])) ss.push({n:'天廚貴人(Heavenly Kitchen)',t:'good',d:'Blessed with food fortune! Never worry about hunger. Culinary talent awaits discovery.',i:'🍽️',lv:'Medium'});const tiansha = [[2,0],[3,1],[5,2],[6,3],[8,4],[9,5],[11,6],[0,7],[2,8],[3,9]];if (tiansha.some(ts => dbi === ts[0] && dmi === ts[1])) ss.push({n:'天赦日(Heavens Pardon)',t:'good',d:'天赦日(Heavens Pardon) Day! Misfortunes transform into blessings. Divine forgiveness surrounds you.',i:'🕊️',lv:'상'});return ss.length ? ss : [{n:'No Special Stars',t:'neutral',d:'No exceptional divine stars. A peacefully balanced chart brings steady fortune.',i:'☯︎',lv:'Medium'}];}
 function calcInteractions(saju) {const res = [];const stems = [STEM.indexOf(saju.year.s), STEM.indexOf(saju.month.s), STEM.indexOf(saju.day.s)];const brs = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) { stems.push(STEM.indexOf(saju.hour.s)); brs.push(BRANCH.findIndex(br => br.c === saju.hour.b.c)); }
 const addedCombines = new Set();const stComb = [[0,5,'甲己 (Wood+Earth) combine to Earth'],[1,6,'乙庚 (Wood+Metal) combine to Metal'],[2,7,'丙辛 (Fire+Metal) combine to Water'],[3,8,'丁壬 (Fire+Water) combine to Wood'],[4,9,'戊癸 (Earth+Water) combine to Fire']];for (let [a,b,n] of stComb) {for (let i = 0; i < stems.length; i++) {for (let j = i+1; j < stems.length; j++) {if ((stems[i]===a && stems[j]===b) || (stems[i]===b && stems[j]===a)) {const key = `天合:${Math.min(a,b)}-${Math.max(a,b)}`;if (!addedCombines.has(key)) {addedCombines.add(key);res.push({t:'天合',c:`${STEM[a].c}+${STEM[b].c}`,m:n,d:'💫 Heavenly stems unite to create new energy! This harmony brings smooth relationships, good timing, and opportunities. A blessing in your chart.'});}}}}}
 const stClash = [
@@ -2305,12 +2368,12 @@ children: null};const godCount = {};const godPositions = {};const pillars = [
 {name: 'Year Pillar', pillar: saju.year},
 {name: 'Month', pillar: saju.month},
 {name: 'Day', pillar: saju.day},
-];if (saju.hour) pillars.push({name: 'Hour', pillar: saju.hour});pillars.forEach(p => {if (p.name === 'Day') return;const sGod = getTenGod(p.pillar.s, dm);const branchIdx = BRANCH.findIndex(br => br.c === p.pillar.b.c);const hiddenMain = HIDDEN_STEMS[branchIdx];const mainStem = hiddenMain && hiddenMain.length > 0 ? STEM[hiddenMain[hiddenMain.length - 1].stem] : null;const bGod = mainStem ? getTenGod(mainStem, dm) : null;[sGod, bGod].forEach(god => {if (god && god.k) {if (!godCount[god.k]) godCount[god.k] = 0;if (!godPositions[god.k]) godPositions[god.k] = [];godCount[god.k]++;godPositions[god.k].push(p.name);}});});const fatherGod = '偏財(Indirect Wealth)';const fatherCount = godCount[fatherGod] || 0;if (fatherCount >= 2) {result.father = {status: 'strong', desc: 'Deep bond with father. You receive paternal support and blessings.', icon: '👨‍👦'};} else if (fatherCount === 1) {result.father = {status: 'normal', desc: 'Normal relationship with father. Healthy distance works well.', icon: '👨'};} else {result.father = {status: 'weak', desc: 'Weak father bond or early separation possible.', icon: '👤'};}
-const motherCount = (godCount['正印(Direct Seal)'] || 0) + (godCount['偏印(Indirect Seal)'] || 0);if (motherCount >= 2) {result.mother = {status: 'strong', desc: 'Deep bond with mother. You receive abundant maternal love.', icon: '👩‍👦'};} else if (motherCount === 1) {result.mother = {status: 'normal', desc: 'Normal relationship with mother.', icon: '👩'};} else {result.mother = {status: 'weak', desc: 'Weak mother bond or early independence likely.', icon: '👤'};}
-const siblingCount = (godCount['比肩(Peer)'] || 0) + (godCount['劫財(Competitor)'] || 0);if (siblingCount >= 2) {result.sibling = {status: 'strong', desc: 'Many siblings or deep sibling bonds. Some competition possible.', icon: '👫'};} else if (siblingCount === 1) {result.sibling = {status: 'normal', desc: 'Average relationship with siblings.', icon: '🧑‍🤝‍🧑'};} else {result.sibling = {status: 'weak', desc: 'Few siblings or weak connection. Strong independence.', icon: '🧍'};}
-let spouseCount, spouseGods;if (gender === 'm') {spouseCount = (godCount['正財(Direct Wealth)'] || 0) + (godCount['偏財(Indirect Wealth)'] || 0);spouseGods = ['正財(Direct Wealth)', '偏財(Indirect Wealth)'];} else {spouseCount = (godCount['正官(Direct Officer)'] || 0) + (godCount['偏官(Challenger)'] || 0);spouseGods = ['正官(Direct Officer)', '偏官(Challenger)'];}
+];if (saju.hour) pillars.push({name: 'Hour', pillar: saju.hour});pillars.forEach(p => {if (p.name === 'Day') return;const sGod = getTenGod(p.pillar.s, dm);const branchIdx = BRANCH.findIndex(br => br.c === p.pillar.b.c);const hiddenMain = HIDDEN_STEMS[branchIdx];const mainStem = hiddenMain && hiddenMain.length > 0 ? STEM[hiddenMain[hiddenMain.length - 1].stem] : null;const bGod = mainStem ? getTenGod(mainStem, dm) : null;[sGod, bGod].forEach(god => {if (god && god.k) {if (!godCount[god.k]) godCount[god.k] = 0;if (!godPositions[god.k]) godPositions[god.k] = [];godCount[god.k]++;godPositions[god.k].push(p.name);}});});const fatherGod = '偏財 Indirect Wealth';const fatherCount = godCount[fatherGod] || 0;if (fatherCount >= 2) {result.father = {status: 'strong', desc: 'Deep bond with father. You receive paternal support and blessings.', icon: '👨‍👦'};} else if (fatherCount === 1) {result.father = {status: 'normal', desc: 'Normal relationship with father. Healthy distance works well.', icon: '👨'};} else {result.father = {status: 'weak', desc: 'Weak father bond or early separation possible.', icon: '👤'};}
+const motherCount = (godCount['正印 Direct Seal'] || 0) + (godCount['偏印 Indirect Seal'] || 0);if (motherCount >= 2) {result.mother = {status: 'strong', desc: 'Deep bond with mother. You receive abundant maternal love.', icon: '👩‍👦'};} else if (motherCount === 1) {result.mother = {status: 'normal', desc: 'Normal relationship with mother.', icon: '👩'};} else {result.mother = {status: 'weak', desc: 'Weak mother bond or early independence likely.', icon: '👤'};}
+const siblingCount = (godCount['比肩 Peer'] || 0) + (godCount['劫財 Competitor'] || 0);if (siblingCount >= 2) {result.sibling = {status: 'strong', desc: 'Many siblings or deep sibling bonds. Some competition possible.', icon: '👫'};} else if (siblingCount === 1) {result.sibling = {status: 'normal', desc: 'Average relationship with siblings.', icon: '🧑‍🤝‍🧑'};} else {result.sibling = {status: 'weak', desc: 'Few siblings or weak connection. Strong independence.', icon: '🧍'};}
+let spouseCount, spouseGods;if (gender === 'm') {spouseCount = (godCount['正財 Direct Wealth'] || 0) + (godCount['偏財 Indirect Wealth'] || 0);spouseGods = ['正財 Direct Wealth', '偏財 Indirect Wealth'];} else {spouseCount = (godCount['正官 Direct Officer'] || 0) + (godCount['偏官 Challenger'] || 0);spouseGods = ['正官 Direct Officer', '偏官 Challenger'];}
 const dayBranchIdx = BRANCH.findIndex(br => br.c === saju.day.b.c);const dayHiddenMain = HIDDEN_STEMS[dayBranchIdx];const dayMainStem = dayHiddenMain && dayHiddenMain.length > 0 ? STEM[dayHiddenMain[dayHiddenMain.length - 1].stem] : null;const spouseGod = dayMainStem ? getTenGod(dayMainStem, dm) : null;const spouseGodMatch = spouseGod && spouseGod.k && spouseGods.includes(spouseGod.k);if (spouseCount >= 2 && spouseGodMatch) {result.spouse = {status: 'excellent', desc: 'Excellent spouse fortune! You will meet a great partner.', icon: '💑'};} else if (spouseCount >= 1 || spouseGodMatch) {result.spouse = {status: 'good', desc: 'Good spouse fortune. Marriage brings stability.', icon: '💍'};} else {result.spouse = {status: 'normal', desc: 'Average spouse connection. Meeting later is fine.', icon: '💒'};}
-let childCount;if (gender === 'm') {childCount = (godCount['正官(Direct Officer)'] || 0) + (godCount['偏官(Challenger)'] || 0);} else {childCount = (godCount['食神(Eating God)'] || 0) + (godCount['傷官(Expressor)'] || 0);}
+let childCount;if (gender === 'm') {childCount = (godCount['正官 Direct Officer'] || 0) + (godCount['偏官 Challenger'] || 0);} else {childCount = (godCount['食神 Eating God'] || 0) + (godCount['傷官 Expressor'] || 0);}
 const hasHour = !!saju.hour;if (childCount >= 2) {result.children = {status: 'strong', desc: 'Excellent children fortune! Your children will make you proud.', icon: '👶👶'};} else if (childCount === 1) {result.children = {status: 'normal', desc: 'Normal children fortune. 1-2 children recommended.', icon: '👶'};} else {result.children = {status: 'weak', desc: 'Weak children bond or late arrival possible. Effort is essential.', icon: '🍼'};}
 return result;}
 function checkYongOverwhelmed(saju, gods) {const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year, saju.month, saju.day, saju.hour].forEach(p => {if (p?.s) elCount[p.s.e]++;if (p?.b) elCount[p.b.e]++;});const yongCount = elCount[gods.yong] || 0;const giCount = elCount[gods.gi] || 0;if (giCount >= 3 && yongCount <= 1 && giCount >= yongCount * 3) {return { active: true, score: -2, desc: `⚠️ Declining God Clashes Strong (衰神沖旺): Unfavorable Element (${ELEMENT[gods.gi].n}) ${giCount} vs Beneficial Element (${ELEMENT[gods.yong].n}) ${yongCount} → Good fortune gets overwhelmed!` };}
@@ -2409,7 +2472,7 @@ bodyPart: 'Legs, feet',
 relationM: 'Children, juniors',
 relationF: 'Children, juniors'}
 ];return gungwi.map((g, idx) => {if (!g.pillar) return {...g, analysis: 'No hour data', god: null, state: null};const god = idx !== 2 ? getTenGod(g.pillar.s, dm) : null;const state = getTwelveState(dm, g.pillar.b);let analysis = '';let rating = 'neutral';if (state.l >= 9) {analysis = 'Strong energy period! Active and dynamic time.';rating = 'good';} else if (state.l >= 6) {analysis = 'Stable energy. A smooth and fortunate period.';rating = 'good';} else if (state.l >= 3) {analysis = 'Moderate energy. A period requiring effort.';rating = 'neutral';} else {analysis = 'Weak energy period. Avoid overexertion.';rating = 'bad';}
-if (god) {if (['正官(Direct Officer)','正財(Direct Wealth)','正印(Direct Seal)'].includes(god.k)) {analysis += ` ${god.k} brings stability to this period.`;rating = 'good';} else if (['偏官(Challenger)','劫財(Competitor)'].includes(god.k)) {analysis += ` ${god.k} brings transformation and challenges to this period.`;}}
+if (god) {if (['正官 Direct Officer','正財 Direct Wealth','正印 Direct Seal'].includes(god.k)) {analysis += ` ${god.k} brings stability to this period.`;rating = 'good';} else if (['偏官 Challenger','劫財 Competitor'].includes(god.k)) {analysis += ` ${god.k} brings transformation and challenges to this period.`;}}
 let isCurrent = false;if (idx === 0 && curAge <= 15) isCurrent = true;else if (idx === 1 && curAge >= 16 && curAge <= 30) isCurrent = true;else if (idx === 2 && curAge >= 31 && curAge <= 45) isCurrent = true;else if (idx === 3 && curAge >= 46) isCurrent = true;return {...g,
 god,
 state,
@@ -2477,9 +2540,9 @@ const clashPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];for (let [a,b] of cla
 result.chungHaeso.push({clash: `${BRANCH[a].c}${BRANCH[b].c} Clash`,
 isResolved,
 reason: isResolved ? resolveReason : 'Active clash energy. Expect changes, conflicts, or restlessness. Stay flexible and avoid major decisions during turbulent times.'});}}
-const dm = saju.day.s;const godCounts = {};stems.forEach((s, idx) => {if (idx === 2) return;const god = getTenGod(s, dm);godCounts[god.k] = (godCounts[god.k] || 0) + 1;});if (godCounts['傷官(Expressor)'] && godCounts['正官(Direct Officer)']) {result.warnings.push({type: 'Officer Conflict (傷官見官)',
+const dm = saju.day.s;const godCounts = {};stems.forEach((s, idx) => {if (idx === 2) return;const god = getTenGod(s, dm);godCounts[god.k] = (godCounts[god.k] || 0) + 1;});if (godCounts['傷官 Expressor'] && godCounts['正官 Direct Officer']) {result.warnings.push({type: 'Officer Conflict (傷官見官)',
 desc: '⚡ Creative energy conflicts with authority. You may struggle in hierarchical environments. Embrace entrepreneurship, freelancing, or creative careers where you set your own rules!'});}
-if (godCounts['偏印(Indirect Seal)'] && godCounts['食神(Eating God)']) {result.warnings.push({type: 'Blocked Expression (梟神奪食)',
+if (godCounts['偏印 Indirect Seal'] && godCounts['食神 Eating God']) {result.warnings.push({type: 'Blocked Expression (梟神奪食)',
 desc: '🌫️ Your creative talents may feel suppressed. Dont let overthinking stop you from expressing yourself. Physical exercise and creative hobbies help release this blocked energy.'});}
 return result;}
 function getJijanggan(branch) {const bi = BRANCH.findIndex(br => br.c === branch.c);return HIDDEN_STEMS[bi] || [];}
@@ -2522,16 +2585,16 @@ function countElementsAdvanced(saju) {const ec = {wood:0, fire:0, earth:0, metal
 {pos:'Day Branch', b:saju.day.b}
 ];if (saju.hour) branches.push({pos:'Hour Branch', b:saju.hour.b});branches.forEach(br => {ec[br.b.e] += 1;details[br.b.e].push(`${br.b.c}(${br.pos}) 1.0`);});branches.forEach(br => {const bi = BRANCH.findIndex(x => x.c === br.b.c);const jj = HIDDEN_STEMS[bi] || [];jj.forEach(j => {const hiddenStem = STEM[j.stem];const ratio = j.days / 30;ec[hiddenStem.e] += ratio * 0.5;details[hiddenStem.e].push(`${hiddenStem.c}(${br.pos}藏) ${(ratio*0.5).toFixed(2)}`);});});return { counts: ec, details };}
 function countElements(saju) {const ec = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year, saju.month, saju.day, saju.hour].forEach(p => {if (!p) return;ec[p.s.e]++;ec[p.b.e]++;});return ec;}
-function genTodayFortune(saju, gods) {const now = new Date();const ty = now.getFullYear(), tm = now.getMonth() + 1, td = now.getDate();const dp = calcDayPillar(ty, tm, td);const dm = saju.day.s;const god = getTenGod(dp.s, dm);const state = getTwelveState(dm, dp.b);const godMeaning = {'比肩(Peer)': {r:3, l:'🥊 Competitive Day', d:'Today, similar energies surround you. Rivals may appear or you may assert your opinions strongly.<br><br><strong>💡 Tip:</strong> Focus on solo tasks today.'},
-'劫財(Competitor)': {r:2, l:'💸 Spending Alert', d:'Money tends to slip away today! Avoid impulse purchases or lending money to friends.<br><br><strong>💡 Tip:</strong> "Let me think about it tomorrow" is your magic spell!'},
-'食神(Eating God)': {r:4, l:'🍽️ Delightful Day', d:'Everything feels relaxed and pleasant! Great for good food and hobbies.<br><br><strong>💡 Tip:</strong> Enjoy your favorite meal and let inspiration flow.'},
-'傷官(Expressor)': {r:3, l:'🎤 Expression UP', d:'Words flow smoothly today! Presentations will go well. But watch out — you might want to challenge authority!<br><br><strong>💡 Tip:</strong> Think for 3 seconds before speaking.'},
-'偏財(Indirect Wealth)': {r:4, l:'💰 Unexpected Fortune', d:'Surprise money or great opportunities may come your way!<br><br><strong>💡 Tip:</strong> Get moving! Luck won\'t find you at home.'},
-'正財(Direct Wealth)': {r:4, l:'💵 Stable Day', d:'Financial matters go smoothly. Good for contracts and deals.<br><br><strong>💡 Tip:</strong> Great day to start saving.'},
-'偏官(Challenger)': {r:2, l:'😰 Tense Day', d:'Sudden tasks or pressure may arise. Unexpected work might drop on you.<br><br><strong>💡 Tip:</strong> Manage your energy. Don\'t overexert.'},
-'正官(Direct Officer)': {r:5, l:'🏆 Recognition Day', d:'Your best day! Your efforts may be recognized and praised.<br><br><strong>💡 Tip:</strong> Schedule important meetings today.'},
-'偏印(Indirect Seal)': {r:3, l:'📚 Solo Time', d:'You\'d rather be alone than in crowds. Perfect for study or reading.<br><br><strong>💡 Tip:</strong> How about reading a book at a quiet café?'},
-'正印(Direct Seal)': {r:4, l:'🤝 Supportive Day', d:'Good day to receive help from others! Ask if you need anything.<br><br><strong>💡 Tip:</strong> Great for paperwork and contracts.'}};const info = godMeaning[god.k] || {r:3, l:'☀️ Calm Day', d:'A peaceful day without major events.'};let bonus = '';if ([dp.s.e, dp.b.e].includes(gods.yong)) {info.r = Math.min(5, info.r + 1);bonus = '<div class="info-box good" style="margin-top:12px;"><p>✨ <strong>Lucky energy flows today!</strong> Things will go better than usual!</p></div>';} else if ([dp.s.e, dp.b.e].includes(gods.gi)) {info.r = Math.max(1, info.r - 1);bonus = '<div class="info-box warn" style="margin-top:12px;"><p>⚠️ <strong>Be cautious today!</strong> Postpone big decisions to tomorrow.</p></div>';}
+function genTodayFortune(saju, gods) {const now = new Date();const ty = now.getFullYear(), tm = now.getMonth() + 1, td = now.getDate();const dp = calcDayPillar(ty, tm, td);const dm = saju.day.s;const god = getTenGod(dp.s, dm);const state = getTwelveState(dm, dp.b);const godMeaning = {'比肩 Peer': {r:3, l:'🥊 Competitive Day', d:'Today, similar energies surround you. Rivals may appear or you may assert your opinions strongly.<br><br><strong>💡 Tip:</strong> Focus on solo tasks today.'},
+'劫財 Competitor': {r:2, l:'💸 Spending Alert', d:'Money tends to slip away today! Avoid impulse purchases or lending money to friends.<br><br><strong>💡 Tip:</strong> "Let me think about it tomorrow" is your magic spell!'},
+'食神 Eating God': {r:4, l:'🍽️ Delightful Day', d:'Everything feels relaxed and pleasant! Great for good food and hobbies.<br><br><strong>💡 Tip:</strong> Enjoy your favorite meal and let inspiration flow.'},
+'傷官 Expressor': {r:3, l:'🎤 Expression UP', d:'Words flow smoothly today! Presentations will go well. But watch out — you might want to challenge authority!<br><br><strong>💡 Tip:</strong> Think for 3 seconds before speaking.'},
+'偏財 Indirect Wealth': {r:4, l:'💰 Unexpected Fortune', d:'Surprise money or great opportunities may come your way!<br><br><strong>💡 Tip:</strong> Get moving! Luck won\'t find you at home.'},
+'正財 Direct Wealth': {r:4, l:'💵 Stable Day', d:'Financial matters go smoothly. Good for contracts and deals.<br><br><strong>💡 Tip:</strong> Great day to start saving.'},
+'偏官 Challenger': {r:2, l:'😰 Tense Day', d:'Sudden tasks or pressure may arise. Unexpected work might drop on you.<br><br><strong>💡 Tip:</strong> Manage your energy. Don\'t overexert.'},
+'正官 Direct Officer': {r:5, l:'🏆 Recognition Day', d:'Your best day! Your efforts may be recognized and praised.<br><br><strong>💡 Tip:</strong> Schedule important meetings today.'},
+'偏印 Indirect Seal': {r:3, l:'📚 Solo Time', d:'You\'d rather be alone than in crowds. Perfect for study or reading.<br><br><strong>💡 Tip:</strong> How about reading a book at a quiet café?'},
+'正印 Direct Seal': {r:4, l:'🤝 Supportive Day', d:'Good day to receive help from others! Ask if you need anything.<br><br><strong>💡 Tip:</strong> Great for paperwork and contracts.'}};const info = godMeaning[god.k] || {r:3, l:'☀️ Calm Day', d:'A peaceful day without major events.'};let bonus = '';if ([dp.s.e, dp.b.e].includes(gods.yong)) {info.r = Math.min(5, info.r + 1);bonus = '<div class="info-box good" style="margin-top:12px;"><p>✨ <strong>Lucky energy flows today!</strong> Things will go better than usual!</p></div>';} else if ([dp.s.e, dp.b.e].includes(gods.gi)) {info.r = Math.max(1, info.r - 1);bonus = '<div class="info-box warn" style="margin-top:12px;"><p>⚠️ <strong>Be cautious today!</strong> Postpone big decisions to tomorrow.</p></div>';}
 const goodH = [], badH = [];const hourNames = ['밤 11시~새벽 1시','새벽 1~3시','새벽 3~5시','아침 5~7시','아침 7~9시','오전 9~11시','낮 11시~오후 1시','오후 1~3시','오후 3~5시','저녁 5~7시','저녁 7~9시','밤 9~11시'];for (let i = 0; i < 12; i++) {const hEl = BRANCH[i].e;if (hEl === gods.yong) goodH.push(hourNames[i]);else if (hEl === gods.gi) badH.push(hourNames[i]);}
 return `
 <div class="info-box gold"><p><strong>📅 Month ${tm}, Day ${td} Today's Fortune</strong></p><p style="font-size:0.85rem;color:var(--gray);margin-top:5px;">Today's energy: ${dp.s.c}${dp.b.c} (${dp.b.m} Day)</p></div><div style="text-align:center;margin:15px 0;"><span style="font-size:2rem;">${'⭐'.repeat(info.r)}${'☆'.repeat(5-info.r)}</span></div><div class="info-box"><p><strong>${info.l}</strong></p><p style="margin-top:10px;line-height:1.8;">${info.d}</p></div>
@@ -3027,11 +3090,11 @@ ${hourGod ? '• Hour Stem ' + SAJU.hour.s.c + ': ' + hourGodDesc : '• Hour St
 • Day Branch ${SAJU.day.b.c} (${ELEMENT[SAJU.day.b.e].n}, ${dayBranchYang}): ${dayBranchGod.k} ← Spouse Palace
 ${SAJU.hour ? '• Hour Branch ' + SAJU.hour.b.c + ' (' + ELEMENT[SAJU.hour.b.e].n + ', ' + hourBranchYang + '): ' + hourBranchGod.k + ' ← Children Palace' : '• Hour Branch: Unknown'}
 【⚡ TEN GOD MAPPING (Day Master ${dm.c} ${ELEMENT[dm.e].n} based) - AI MUST USE THIS】
-• Peer/Competitor (比劫): ${ELEMENT[tenGodMap.peer].n} (${ELEMENT[tenGodMap.peer].c}) - Same element as Day Master
-• Output/Expression (食傷): ${ELEMENT[tenGodMap.output].n} (${ELEMENT[tenGodMap.output].c}) - Day Master generates this
-• Wealth (財星): ${ELEMENT[tenGodMap.wealth].n} (${ELEMENT[tenGodMap.wealth].c}) - Day Master controls this
-• Officer/Power (官星): ${ELEMENT[tenGodMap.officer].n} (${ELEMENT[tenGodMap.officer].c}) - Controls Day Master
-• Seal/Resource (印星): ${ELEMENT[tenGodMap.seal].n} (${ELEMENT[tenGodMap.seal].c}) - Generates Day Master
+• Peer/Competitor (比劫): ${ELEMENT[tenGodMap.peer].n} - Same element as Day Master
+• Output/Expression (食傷): ${ELEMENT[tenGodMap.output].n} - Day Master generates this
+• Wealth (財星): ${ELEMENT[tenGodMap.wealth].n} - Day Master controls this
+• Officer/Power (官星): ${ELEMENT[tenGodMap.officer].n} - Controls Day Master
+• Seal/Resource (印星): ${ELEMENT[tenGodMap.seal].n} - Generates Day Master
 【TWELVE LIFE STAGES (Based on Day Master)】
 • Year Branch ${SAJU.year.b.c}: ${yearState.k} (Energy ${yearState.l}/12)
 • Month Branch ${SAJU.month.b.c}: ${monthState.k} (Energy ${monthState.l}/12)
@@ -3180,7 +3243,7 @@ ${(() => {const yp = calcYearPillar(currentYear, 6, 1);const ypSi = STEM.indexOf
 if (STEM.indexOf(SAJU.year.s) === ypSi && BRANCH.findIndex(br => br.c === SAJU.year.b.c) === ypBi) {fuyin.push('🔄 YEAR PILLAR ECHO (伏吟): Grand reset of foundations. Family/ancestry matters highlighted.');}
 if (STEM.indexOf(SAJU.month.s) === ypSi && BRANCH.findIndex(br => br.c === SAJU.month.b.c) === ypBi) {fuyin.push('🔄 MONTH PILLAR ECHO (伏吟): Social/Career axis reset! Major job change, relocation, or life direction shift incoming. Do not resist - flow with the reset.');}
 if (STEM.indexOf(SAJU.day.s) === ypSi && BRANCH.findIndex(br => br.c === SAJU.day.b.c) === ypBi) {const str = calcStrength(SAJU);if (str.type === 'strong') {fuyin.push('⚠️ DAY PILLAR ECHO (伏吟): Your strong energy DOUBLES! Risk of overconfidence, ego conflicts, or health strain from excess. Channel power carefully - too much fire burns the house.');} else {fuyin.push('🔄 DAY PILLAR ECHO (伏吟): Your core identity energy is doubled. For weak charts, this can be empowering - but also exhausting. Rest frequently. Major self-transformation year.');}}
-if (SAJU.hour && STEM.indexOf(SAJU.hour.s) === ypSi && BRANCH.findIndex(br => br.c === SAJU.hour.b.c) === ypBi) {const hourGod = getTenGod(SAJU.hour.s, SAJU.day.s);if (hourGod.k === '偏財(Indirect Wealth)') {fuyin.push('🚨 HOUR PILLAR ECHO (伏吟) + INDIRECT WEALTH: Secret life axis DOUBLED! High risk of romantic scandal, gambling, or hidden expenses. This is NOT a creative opportunity - it is a TRAP. Stay home at night. Reject temptation.');} else if (hourGod.k === '正財(Direct Wealth)') {fuyin.push('⚠️ HOUR PILLAR ECHO (伏吟): Wealth in later years axis reset. Financial restructuring for retirement. Avoid risky investments.');} else if (['食神(Eating God)', '傷官(Expressor)'].includes(hourGod.k)) {fuyin.push('🔄 HOUR PILLAR ECHO (伏吟): Expression/creativity axis reset. Old projects end, new ones begin. Channel energy into creation, not conflict.');} else if (['偏官(Challenger)', '正官(Direct Officer)'].includes(hourGod.k)) {fuyin.push('🔄 HOUR PILLAR ECHO (伏吟): Children/authority axis reset. Changes in children\'s lives or your public role. Patience required.');} else {fuyin.push('🔄 HOUR PILLAR ECHO (伏吟): Later years axis reset. Significant shift in retirement plans, legacy, or children matters.');}}
+if (SAJU.hour && STEM.indexOf(SAJU.hour.s) === ypSi && BRANCH.findIndex(br => br.c === SAJU.hour.b.c) === ypBi) {const hourGod = getTenGod(SAJU.hour.s, SAJU.day.s);if (hourGod.k === '偏財 Indirect Wealth') {fuyin.push('🚨 HOUR PILLAR ECHO (伏吟) + INDIRECT WEALTH: Secret life axis DOUBLED! High risk of romantic scandal, gambling, or hidden expenses. This is NOT a creative opportunity - it is a TRAP. Stay home at night. Reject temptation.');} else if (hourGod.k === '正財 Direct Wealth') {fuyin.push('⚠️ HOUR PILLAR ECHO (伏吟): Wealth in later years axis reset. Financial restructuring for retirement. Avoid risky investments.');} else if (['食神 Eating God', '傷官 Expressor'].includes(hourGod.k)) {fuyin.push('🔄 HOUR PILLAR ECHO (伏吟): Expression/creativity axis reset. Old projects end, new ones begin. Channel energy into creation, not conflict.');} else if (['偏官 Challenger', '正官 Direct Officer'].includes(hourGod.k)) {fuyin.push('🔄 HOUR PILLAR ECHO (伏吟): Children/authority axis reset. Changes in children\'s lives or your public role. Patience required.');} else {fuyin.push('🔄 HOUR PILLAR ECHO (伏吟): Later years axis reset. Significant shift in retirement plans, legacy, or children matters.');}}
 if (curLuck && SAJU.hour) {const daeunMatch = STEM.indexOf(curLuck.s) === ypSi && BRANCH.findIndex(br => br.c === curLuck.b.c) === ypBi;const hourMatch = STEM.indexOf(SAJU.hour.s) === ypSi && BRANCH.findIndex(br => br.c === SAJU.hour.b.c) === ypBi;if (daeunMatch && hourMatch) {fuyin.push('🔥🔥🔥 TRIPLE ECHO! Life Cycle + Annual + Hour Pillar ALL MATCH (' + yp.s.c + yp.b.c + '). EXTREMELY RARE. Life-altering transformation. Health demands extra attention as energy triples.');}}
 return fuyin.length ? '• ' + fuyin.join('\n• ') : '';})()}
 【TODAY'S DAILY FORTUNE】
@@ -3649,7 +3712,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 • 陽(Yang) Branches: 子(Rat), 寅(Tiger), 辰(Dragon), 午(Horse), 申(Monkey), 戌(Dog) - Even index
 • 陰(Yin) Branches: 丑(Ox), 卯(Rabbit), 巳(Snake), 未(Goat), 酉(Rooster), 亥(Pig) - Odd index
 • Ten God Rule: Same Yin/Yang → 偏(Indirect), Different Yin/Yang → 正(Direct)
-• Example: 己(陰土) vs 卯(陰木) = Same Yin → 偏官(Challenger), NOT 正官(Direct Officer)
+• Example: 己(陰土) vs 卯(陰木) = Same Yin → 偏官 Challenger, NOT 正官 Direct Officer
 【INTERPRETATION PRIORITY】
 1. CRITICAL FEATURES section (if present) - Address these FIRST
 2. 득령/실령 status - Determines baseline strength

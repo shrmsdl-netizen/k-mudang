@@ -1565,45 +1565,133 @@ firstAgeExact: daeunStart.firstAgeExact,
 daysToTerm: daeunStart.daysToTerm,
 targetTerm: daeunStart.targetTerm,
 calculationMethod: daeunStart.calculationMethod};return periods;}
-function calcYearLuck(year, saju, gods) {const yp = calcYearPillar(year, 6, 1);const dm = saju.day.s;const god = getTenGod(yp.s, dm);const state = getTwelveState(dm, yp.b);let score = 0;let warnings = [];if ([yp.s.e, yp.b.e].includes(gods.yong)) score += 3;if ([yp.s.e, yp.b.e].includes(gods.hee)) score += 2;if ([yp.s.e, yp.b.e].includes(gods.gi)) score -= 3;if (state.l >= 10) score += 1;else if (state.l <= 3) score -= 1;const yearEls = [yp.s.e, yp.b.e];if (gods.yong === 'metal' && yearEls.includes('fire')) {score -= 3;warnings.push('⚠️ 화극금(火克金): 용신(金)이 세운의 火에 파괴됨');}
-if (gods.yong === 'fire' && yearEls.includes('water')) {score -= 3;warnings.push('⚠️ 수극화(水克火): 용신(火)이 세운의 水에 파괴됨');}
-if (gods.yong === 'wood' && yearEls.includes('metal')) {score -= 3;warnings.push('⚠️ 금극목(金克木): 용신(木)이 세운의 金에 파괴됨');}
-if (gods.yong === 'earth' && yearEls.includes('wood')) {score -= 3;warnings.push('⚠️ 목극토(木克土): 용신(土)이 세운의 木에 파괴됨');}
-if (gods.yong === 'water' && yearEls.includes('earth')) {score -= 3;warnings.push('⚠️ 토극수(土克水): 용신(水)이 세운의 土에 파괴됨');}
-const ec = countElements(saju);const fireCount = ec.fire || 0;if (fireCount >= 3 && yearEls.includes('fire')) {score -= 2;warnings.push('🔥 화염조토: 불바다 사주에 火 운이 와서 과열 위험');}
-const sajuBranches = [saju.year.b, saju.month.b, saju.day.b];if (saju.hour) sajuBranches.push(saju.hour.b);const sajuBranchIdxs = sajuBranches.map(b => BRANCH.indexOf(b));const yearBranchIdx = BRANCH.indexOf(yp.b);const wangjiClash = [
-{a: 0, b: 6, name: '자오충(子午沖)', desc: '수화상전! 심혈관 vs 신장/방광 건강 주의'},
-{a: 3, b: 9, name: '묘유충(卯酉沖)', desc: '금목교전! 간/담 vs 폐/대장 건강 주의'}
-];for (const clash of wangjiClash) {if (yearBranchIdx === clash.a && sajuBranchIdxs.includes(clash.b)) {score -= 3;const positions = sajuBranchIdxs.map((idx, i) => idx === clash.b ? ['년지','월지','일지','시지'][i] : null).filter(p => p);warnings.push(`⚡ ${clash.name}: 세운 ${BRANCH[clash.a].c}와 원국 ${positions.join('/')} ${BRANCH[clash.b].c} 충돌! ${clash.desc}`);}
-if (yearBranchIdx === clash.b && sajuBranchIdxs.includes(clash.a)) {score -= 3;const positions = sajuBranchIdxs.map((idx, i) => idx === clash.a ? ['년지','월지','일지','시지'][i] : null).filter(p => p);warnings.push(`⚡ ${clash.name}: 세운 ${BRANCH[clash.b].c}와 원국 ${positions.join('/')} ${BRANCH[clash.a].c} 충돌! ${clash.desc}`);}}
-const waterCount = ec.water || 0;const dmEl = dm.e;if (dmEl === 'fire' && waterCount >= 3 && (ec.fire || 0) <= 1) {if (yearEls.includes('water')) {score -= 2;warnings.push('💧 수다화식(水多火熄): 물이 불을 끄는 형국! 水 운에 건강/활력 저하 주의');}
-if (yearEls.includes('fire') || yearEls.includes('wood')) {score += 2;warnings.push('🔥 수다화식 사주에 火/木 운! 꺼져가던 불이 살아나는 좋은 시기');}}
-const baihuIlju = ['甲辰','乙未','丙戌','丁丑','戊辰','己未','庚戌','辛丑','壬辰','癸未'];const ilju = saju.day.s.c + saju.day.b.c;if (baihuIlju.includes(ilju) && yearEls.includes('fire')) {score -= 1;warnings.push('🐅 백호대살 일주에 火 운! 수술, 사고, 피 보는 일에 주의. 건강검진 필수');}
-const wangji = {0: '子', 3: '卯', 6: '午', 9: '酉'};const wangjiEl = {0: 'water', 3: 'wood', 6: 'fire', 9: 'metal'};const wangjiHealth = {0: '신장/방광 응급! 물난리 사주에 水 세운',
-3: '간/담 응급! 분노 폭발 주의',
-6: '심혈관/뇌출혈 응급! 불바다 사주에 火 세운 - 쓰러질 수 있음',
-9: '폐/호흡기 응급! 금속 중독 주의'};if (wangji[yearBranchIdx]) {const wangjiCount = sajuBranchIdxs.filter(b => b === yearBranchIdx).length;if (wangjiCount >= 2) {score -= 3;warnings.push(`🚨 왕지폭발(${wangji[yearBranchIdx]}×${wangjiCount+1}): ${wangjiHealth[yearBranchIdx]}`);}}
-const yongEl = gods.yong;const giEl = gods.gi;const yongCount = ec[yongEl] || 0;const giCount = ec[giEl] || 0;if (yearEls.includes(yongEl) && giCount >= 3 && yongCount <= 1) {score -= 2;const elKor = {wood:'木', fire:'火', earth:'土', metal:'金', water:'水'};warnings.push(`⚠️ 쇠신충왕(衰神沖旺): 용신(${elKor[yongEl]}) 유입이나 기신(${elKor[giEl]}) ${giCount}개에 압도됨. 기회가 와도 경쟁자/방해자가 가로챔. 확장 금지!`);}
-const elKor = {wood:'木', fire:'火', earth:'土', metal:'金', water:'水'};const elHealth = {wood: '간/담/눈/신경',
-fire: '심장/혈관/뇌',
-earth: '비장/위/소화기',
-metal: '폐/대장/피부',
-water: '신장/방광/생식기'};const keukRelation = {fire: 'metal',
-metal: 'wood',
-wood: 'earth',
-earth: 'water',
-water: 'fire'};for (const [attackEl, victimEl] of Object.entries(keukRelation)) {const victimCount = ec[victimEl] || 0;const attackCount = ec[attackEl] || 0;if (victimCount >= 4 && attackCount <= 1 && yearEls.includes(attackEl)) {score -= 2;warnings.push(`⚔️ 왕자충발(旺者沖發): ${elKor[attackEl]} 운이 태왕한 ${elKor[victimEl]}(${victimCount}개)를 공격하나 역습당함! ${elKor[attackEl]}가 ${elKor[victimEl]}에 삼켜짐. ${elHealth[attackEl]} 손상 주의!`);}}
-if ((sajuBranchIdxs.includes(0) && yearBranchIdx === 6) ||
-(sajuBranchIdxs.includes(6) && yearBranchIdx === 0)) {const waterPower = ec.water || 0;const firePower = ec.fire || 0;if (waterPower > firePower + 1) {warnings.push(`💧 자오충 승패: 水(${waterPower}개) > 火(${firePower}개) → 火가 꺼짐! ${elHealth.fire} 손상, 열정/의욕 저하 주의`);} else if (firePower > waterPower + 1) {warnings.push(`🔥 자오충 승패: 火(${firePower}개) > 水(${waterPower}개) → 水가 마름! ${elHealth.water} 손상, 신장/방광 주의`);} else {warnings.push(`⚡ 자오충 격전: 水(${waterPower}개) ≈ 火(${firePower}개) → 양쪽 모두 손상! 심혈관+신장 모두 주의`);}}
-if ((sajuBranchIdxs.includes(3) && yearBranchIdx === 9) ||
-(sajuBranchIdxs.includes(9) && yearBranchIdx === 3)) {const woodPower = ec.wood || 0;const metalPower = ec.metal || 0;if (metalPower > woodPower + 1) {warnings.push(`🪓 묘유충 승패: 金(${metalPower}개) > 木(${woodPower}개) → 木이 잘림! ${elHealth.wood} 손상, 간담/신경 주의`);} else if (woodPower > metalPower + 1) {warnings.push(`🌳 묘유충 승패: 木(${woodPower}개) > 金(${metalPower}개) → 도끼가 부러짐! ${elHealth.metal} 손상 대신 木의 반격`);} else {warnings.push(`⚡ 묘유충 격전: 木(${woodPower}개) ≈ 金(${metalPower}개) → 양쪽 모두 손상! 간담+폐 모두 주의`);}}
-return {year,
-pillar: yp,
-god,
-state,
-score,
-warnings,
-rating: score >= 3 ? 'great' : score >= 1 ? 'good' : score <= -2 ? 'bad' : 'neutral'};}
+
+const YEAR_LUCK_CONFIG = {stemCombineMap: [[0,5,'earth'],[1,6,'metal'],[2,7,'water'],[3,8,'wood'],[4,9,'fire']],
+branchCombineMap: [[0,1,'earth'],[2,11,'wood'],[3,10,'fire'],[4,9,'metal'],[5,8,'water'],[6,7,'fire']],
+harmPairs: [[0,7],[1,6],[2,5],[3,4],[8,11],[9,10]],
+selfPunishBranches: [4, 6, 9, 11],
+keMap: {wood:'earth', earth:'water', water:'fire', fire:'metal', metal:'wood'},
+samhapPatterns: [[2,6,10,'fire'],[8,0,4,'water'],[5,9,1,'metal'],[11,3,7,'wood']],
+yanginBranches: {'wood+':3,'wood-':2,'fire+':6,'fire-':5,'earth+':6,'earth-':5,
+'metal+':9,'metal-':8,'water+':0,'water-':11}};
+function ylCheckYongGi(yp, gods) {let score = 0;if ([yp.s.e, yp.b.e].includes(gods.yong)) score += 3;if ([yp.s.e, yp.b.e].includes(gods.hee)) score += 2;if ([yp.s.e, yp.b.e].includes(gods.gi)) score -= 3;return { score };}
+function ylCheckYongAttack(yp, gods) {const { keMap } = YEAR_LUCK_CONFIG;let active = false, desc = '', score = 0;[yp.s.e, yp.b.e].forEach(ye => {if (keMap[ye] === gods.yong) {active = true; score = -4;desc = `⚠️ 용신 공격! ${ELEMENT[ye].n} 이(가) ${ELEMENT[gods.yong].n} (${ye}克${gods.yong}). 을 파괴합니다. 보수적으로 운영하세요!`;}});return { active, desc, score };}
+function ylCheckRobWealth(yp, saju, gods, strength) {const god = getTenGod(yp.s, saju.day.s);const isPeer = ['비견', '겁재'].includes(god.k);if (strength.type === 'strong' && isPeer) {return { active: true, score: -3, desc: `⚔️ 군겁쟁재(群劫爭財)! 신강 사주에 비겁 운. 경쟁자가 재물을 빼앗습니다. 동업/보증 금지.` };}
+return { active: false, score: 0, desc: '' };}
+function ylCheckExpressorPeer(yp, saju, strength) {const god = getTenGod(yp.s, saju.day.s);const isPeer = ['비견', '겁재'].includes(god.k);try {const format = calcFormat(saju, strength);if (format.god && (format.god.includes('상관') || format.god.includes('상관')) && isPeer) {return { active: true, score: -2, desc: `⚠️ 상관+비겁 충돌(傷官+比劫): 소송·구설 위험! 창작·연구에만 에너지를 집중하세요.` };}} catch(e) {}
+return { active: false, score: 0, desc: '' };}
+function ylCheckClimateClash(yp, gods) {if (!gods.climate) return { active: false, score: 0, desc: '' };const yearEls = [yp.s.e, yp.b.e];const climate = gods.climate.type;if ((climate.includes('Dry') || climate.includes('Hot')) && yearEls.includes('fire')) {return { active: true, score: -(yearEls.filter(e => e === 'fire').length * 3), desc: '조열 사주에 火 운! 건강·재물 위험.' };}
+if ((climate.includes('Cold') || climate.includes('Extreme Cold')) && yearEls.includes('water')) {return { active: true, score: -(yearEls.filter(e => e === 'water').length * 3), desc: 'Water on Cold! Depression risk.' };}
+return { active: false, score: 0, desc: '' };}
+function ylCheckBureau(yp, saju) {const { samhapPatterns } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);const dayBi = BRANCH.findIndex(br => br.c === saju.day.b.c);const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), dayBi];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));for (const [a, b, c, el] of samhapPatterns) {if (ypBi === b && allBr.includes(a) && allBr.includes(c)) {return { active: true, score: 3, element: el, desc: `🔥 ${BRANCH[a].c}${BRANCH[b].c}${BRANCH[c].c} ${ELEMENT[el].n} 삼합국 성립! 충(冲) 무효화.` };}
+if ((ypBi === a || ypBi === c) && allBr.includes(b) && ((ypBi === a) ? allBr.includes(c) : allBr.includes(a))) {return { active: true, score: 3, element: el, desc: `🔥 ${BRANCH[a].c}${BRANCH[b].c}${BRANCH[c].c} ${ELEMENT[el].n} Bureau formed!` };}}
+const halfBureauPatterns = [
+{ pair: [2, 6], wangji: 6, element: 'fire', name: '寅午 Fire Half-Bureau' },
+{ pair: [6, 10], wangji: 6, element: 'fire', name: '午戌 Fire Half-Bureau' },
+{ pair: [8, 0], wangji: 0, element: 'water', name: '申子 Water Half-Bureau' },
+{ pair: [0, 4], wangji: 0, element: 'water', name: '子辰 Water Half-Bureau' },
+{ pair: [5, 9], wangji: 9, element: 'metal', name: '巳酉 Metal Half-Bureau' },
+{ pair: [9, 1], wangji: 9, element: 'metal', name: '酉丑 Metal Half-Bureau' },
+{ pair: [11, 3], wangji: 3, element: 'wood', name: '亥卯 Wood Half-Bureau' },
+{ pair: [3, 7], wangji: 3, element: 'wood', name: '卯未 Wood Half-Bureau' }
+];for (const hb of halfBureauPatterns) {if ((ypBi === hb.pair[0] && dayBi === hb.pair[1]) ||
+(ypBi === hb.pair[1] && dayBi === hb.pair[0])) {return {active: true,
+score: 2,
+element: hb.element,
+isHalfBureau: true,
+desc: `🔥 ${hb.name} formed (Year+Day)! ${ELEMENT[hb.element].n} energy AMPLIFIED!`};}}
+return { active: false, score: 0, element: null, desc: '' };}
+function ylCheckMonthClash(yp, saju, bureauFormed) {if (bureauFormed) return { active: false, score: 0, desc: '' };const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);if (Math.abs(ypBi - mbi) === 6) {const wang = [0, 3, 6, 9];const isWang = wang.includes(ypBi) && wang.includes(mbi);return { active: true, score: isWang ? -4 : -2, desc: `${yp.b.c}↔${saju.month.b.c} 충(冲)! 직장·사회생활 격변.` };}
+return { active: false, score: 0, desc: '' };}
+function ylCheckDayClash(yp, saju) {const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);if (Math.abs(ypBi - dbi) === 6) {return { active: true, desc: `${yp.b.c}↔${saju.day.b.c} 충(冲)이 일지(배우자궁/자기자신)를 공격!` };}
+return { active: false, desc: '' };}
+function ylCheckYanginClash(yp, saju) {const { yanginBranches } = YEAR_LUCK_CONFIG;const dm = saju.day.s, dmKey = dm.e + (dm.p ? '+' : '-');const yanginIdx = yanginBranches[dmKey];const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), dbi = BRANCH.findIndex(br => br.c === saju.day.b.c);if (dbi === yanginIdx && Math.abs(ypBi - dbi) === 6) {return { active: true, desc: `⚔️ 양인충(沖羊刃)! 고위험 고수익 - 수술 또는 횡재.` };}
+return { active: false, desc: '' };}
+function ylCheckTripleBranch(yp, saju) {const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));const cnt = allBr.filter(b => b === ypBi).length;if (cnt >= 1) {const clash = (ypBi + 6) % 12;if (allBr.includes(clash)) {return { active: true, target: yp.b, desc: `${yp.b.c} 기운 배가! ${BRANCH[clash].c} 압도됨 (${cnt + 1}:1 공격).` };}}
+return { active: false, target: null, desc: '' };}
+function ylCheckMissingBridge(yp, saju, gods) {const elCount = {};[saju.year.s.e, saju.year.b.e, saju.month.s.e, saju.month.b.e, saju.day.s.e, saju.day.b.e].forEach(e => elCount[e] = (elCount[e]||0)+1);if (saju.hour) { elCount[saju.hour.s.e] = (elCount[saju.hour.s.e]||0)+1; elCount[saju.hour.b.e] = (elCount[saju.hour.b.e]||0)+1; }
+if ((elCount['water']||0) >= 3 && gods.yong === 'fire' && !(elCount['wood']||0) && [yp.s.e, yp.b.e].includes('fire')) {return { active: true, desc: `🌊🔥 WATER-FIRE WAR without Bridge! No Wood to mediate. Remedy: Add Wood activities.` };}
+if ((elCount['metal']||0) >= 3 && gods.yong === 'fire' && !(elCount['earth']||0) && [yp.s.e, yp.b.e].includes('fire')) {return { active: true, desc: `⚔️🔥 METAL-FIRE WAR without Bridge! No Earth to mediate.` };}
+return { active: false, desc: '' };}
+function ylCheckStemCombine(yp, saju, gods) {const { stemCombineMap } = YEAR_LUCK_CONFIG;const ypSi = STEM.indexOf(yp.s);const allSi = [STEM.indexOf(saju.year.s), STEM.indexOf(saju.month.s), STEM.indexOf(saju.day.s)];if (saju.hour) allSi.push(STEM.indexOf(saju.hour.s));for (const [a, b, resEl] of stemCombineMap) {if (ypSi === a || ypSi === b) {const tgt = ypSi === a ? b : a;if (allSi.includes(tgt)) {const tgtStem = STEM[tgt], myGod = getTenGod(tgtStem, saju.day.s);const ypGod = getTenGod(yp.s, saju.day.s);let desc = `🔗 ${yp.s.c}+${tgtStem.c} 합(合) → ${ELEMENT[resEl].n}.`;let score = 0;const isPeer = ['비견', '겁재'].includes(ypGod.k);const isWealth = ['편재', '정재'].includes(myGod.k);const resultIsGi = resEl === gods.gi;const resultIsGwan = ['water', 'earth'].includes(resEl) &&
+((saju.day.s.e === 'fire' && resEl === 'water') ||
+(saju.day.s.e === 'wood' && resEl === 'metal'));if (isPeer && isWealth && resultIsGi) {desc = `⚠️ ${yp.s.c}+${tgtStem.c} 합(合) → ${ELEMENT[resEl].n} (BETRAYAL): Your helper (${ypGod.k}) meets your wealth (${myGod.k}) and transforms into PRESSURE. Trust no one with money this year. Reject partnership offers.`;score = -2;} else if (resultIsGi) {desc = `⚠️ ${yp.s.c}+${tgtStem.c} 합(合) → ${ELEMENT[resEl].n} (忌神): Combine creates unfavorable element. Hidden sabotage.`;score = -1;} else if (yp.s.e === gods.yong && ['식신', '상관'].includes(myGod.k)) {desc = `🔗 ${yp.s.c}+${tgtStem.c} 합(合) (羈絆): Promotion comes but freedom decreases. Golden handcuffs.`;score = 1;}
+return { active: true, from: yp.s, to: tgtStem, result: resEl, targetGod: myGod.k, desc, score };}}}
+return { active: false, from: null, to: null, result: null, targetGod: null, desc: '', score: 0 };}
+function ylCheckBranchCombine(yp, saju, gods, strength) {const { branchCombineMap } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));for (const [a, b, resEl] of branchCombineMap) {if (ypBi === a || ypBi === b) {const tgt = ypBi === a ? b : a;if (allBr.includes(tgt)) {const tgtBr = BRANCH[tgt];let desc = `🤝 ${yp.b.c}+${tgtBr.c} 합(合) → ${ELEMENT[resEl].n}.`;let score = 0;const isWeak = strength && strength.pct < 30;const combineIsGi = resEl === gods.gi;const combineIsYong = resEl === gods.yong;if (saju.hour && BRANCH.findIndex(br => br.c === saju.hour.b.c) === tgt) {if (isWeak && combineIsGi) {desc = `⚠️ ${yp.b.c}+${tgtBr.c} 합(合) → ${ELEMENT[resEl].n}! ⚠️ 신약 사주에 합이 기신을 강화! 말년/자녀 축에 압박. 신장/생식기 건강 주의.`;score = -2;} else if (combineIsYong) {desc = `🤝 ${yp.b.c}+${tgtBr.c} 합(合) → ${ELEMENT[resEl].n}! 시지에 용신 합화! 말년 기반 강화. 말년 기반 안정.`;score = 2;} else {desc = `🤝 ${yp.b.c}+${tgtBr.c} 합(合) → ${ELEMENT[resEl].n}! 시지 기운 강화.`;score = 1;}} else if (BRANCH.findIndex(br => br.c === saju.day.b.c) === tgt) {if (isWeak && combineIsGi) {desc = `⚠️ ${yp.b.c}+${tgtBr.c} 합(合) → ${ELEMENT[resEl].n}! 배우자궁이 기신으로 변화. 관계 스트레스.`;score = -1;} else {desc = `🤝 ${yp.b.c}+${tgtBr.c} 합(合) → ${ELEMENT[resEl].n}! 배우자궁 조화.`;score = 1;}}
+return { active: true, from: yp.b, to: tgtBr, result: resEl, desc, score };}}}
+return { active: false, from: null, to: null, result: null, desc: '', score: 0 };}
+function ylCheckSelfPunishment(yp, saju) {const { selfPunishBranches } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (!selfPunishBranches.includes(ypBi)) return { active: false, desc: '' };const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));const sameCount = allBr.filter(b => b === ypBi).length;if (sameCount < 1) return { active: false, desc: '' };const bn = yp.b.c;const totalCount = sameCount + 1;if (totalCount >= 3) {const tripleDescMap = {11: `🚨 ${bn}${bn}${bn} 삼중 자형(自刑): 극단적 水 에너지! 심각한 우울증 위험. 즉시 도움을 구하세요.`,
+6: `🌋 ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT: VOLCANIC Fire explosion! Extreme impulsiveness, burnout, heart/blood danger. CRITICAL health year.`,
+9: `⚠️ ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT: Obsessive Metal pressure! Respiratory/skin crisis.`,
+4: `⚠️ ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT: Crushing Earth weight! Digestive/immune collapse.`};return { active: true, isTriple: true, desc: tripleDescMap[ypBi] || `🚨 ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT. NUCLEAR EVENT!` };}
+const descMap = {11: `😔 ${bn}${bn} SELF-PUNISHMENT: Doubled Water = depression, overthinking.`,
+6: `🔥 ${bn}${bn} SELF-PUNISHMENT: Doubled Fire = impulsiveness, burnout.`,
+9: `⚠️ ${bn}${bn} SELF-PUNISHMENT: Doubled Metal = obsessive perfectionism.`,
+4: `⚠️ ${bn}${bn} SELF-PUNISHMENT: Doubled Earth = stubbornness.`};return { active: true, isTriple: false, desc: descMap[ypBi] || `⚠️ ${bn}${bn} SELF-PUNISHMENT.` };}
+function ylCheckScandal(yp, saju) {if (!saju.hour) return { active: false, score: 0, desc: '' };const dm = saju.day.s;const hourGod = getTenGod(saju.hour.s, dm), ypGod = getTenGod(yp.s, dm);if (hourGod.k !== '편재' || ypGod.k !== '편재') return { active: false, score: 0, desc: '' };const { selfPunishBranches } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), hBi = BRANCH.findIndex(br => br.c === saju.hour.b.c);if (ypBi === hBi && selfPunishBranches.includes(ypBi)) {return { active: true, score: -2, desc: `🚨 색난 경고(色難)! 시주+편재 중복+자형. 스캔들·도박 고위험.` };}
+return { active: true, score: -2, desc: `⚠️ AFFAIR WARNING (色難): Indirect Wealth Echo on Hour Pillar. Temptation is a TRAP.` };}
+function ylCheckMissingYong(saju, gods, yongAttacked) {const els = {};[saju.year.s.e, saju.year.b.e, saju.month.s.e, saju.month.b.e, saju.day.s.e, saju.day.b.e].forEach(e => els[e] = true);if (saju.hour) { els[saju.hour.s.e] = true; els[saju.hour.b.e] = true; }
+if (els[gods.yong]) return { active: false, score: 0, desc: '' };let desc = `🛡️ NO SHIELD (用神不在): Beneficial Element (${ELEMENT[gods.yong].n}) MISSING! No defense when crisis hits.`;let score = 0;if (yongAttacked) { desc += ` AND this year attacks that absent element - DOUBLE DANGER!`; score = -2; }
+return { active: true, desc, score };}
+function ylCheckHarmBetrayal(saju) {const { harmPairs } = YEAR_LUCK_CONFIG;const dBi = BRANCH.findIndex(br => br.c === saju.day.b.c), mBi = BRANCH.findIndex(br => br.c === saju.month.b.c);for (const [a, b] of harmPairs) {if ((mBi === a && dBi === b) || (mBi === b && dBi === a)) {if ((mBi === 3 && dBi === 4) || (mBi === 4 && dBi === 3)) {return { active: true, desc: `🗡️ 배신 위험(卯辰害): 월지가 일지를 해(害). 구설·배신으로 기반이 흔들릴 수 있음. 보증 절대 금지.` };}
+return { active: true, desc: `⚠️ HARM (六害): Close relationships face friction.` };}}
+return { active: false, desc: '' };}
+function ylDetermineRating(r, score) {if (r.wangShinChungBal && r.wangShinChungBal.active) return 'wang_shin_chung_bal';if (r.yongOverwhelmed && r.yongOverwhelmed.active) return 'yong_overwhelmed';if (r.pyunInDoShik && r.pyunInDoShik.active) return 'pyunin_doshik';if (r.bureau.active && r.yongGi.score > 0) return 'breakthrough';if (r.yongAttack.active) return 'yong_attacked';if (r.robWealth.active) return 'rob_wealth';if (r.yanginClash.active) return 'surgery_risk';if (r.dayClash.active && r.yongGi.score > 0) return 'volatile_wealth';if (r.monthClash.active && score > 0) return 'volatile';if (score >= 4) return 'great';if (score >= 1) return 'good';if (score <= -4) return 'danger';if (score <= -2) return 'bad';return 'neutral';}
+function calcYearLuck(year, saju, gods) {const yp = calcYearPillar(year, 6, 1);const dm = saju.day.s;const god = getTenGod(yp.s, dm);const state = getTwelveState(dm, yp.b);const strength = calcStrength(saju);const r = {yongGi: ylCheckYongGi(yp, gods),
+yongAttack: ylCheckYongAttack(yp, gods),
+robWealth: ylCheckRobWealth(yp, saju, gods, strength),
+expressorPeer: ylCheckExpressorPeer(yp, saju, strength),
+climateClash: ylCheckClimateClash(yp, gods),
+bureau: ylCheckBureau(yp, saju),
+monthClash: ylCheckMonthClash(yp, saju, false),
+dayClash: ylCheckDayClash(yp, saju),
+yanginClash: ylCheckYanginClash(yp, saju),
+tripleBranch: ylCheckTripleBranch(yp, saju),
+missingBridge: ylCheckMissingBridge(yp, saju, gods),
+stemCombine: ylCheckStemCombine(yp, saju, gods),
+branchCombine: ylCheckBranchCombine(yp, saju, gods, strength),
+selfPunishment: ylCheckSelfPunishment(yp, saju),
+scandal: ylCheckScandal(yp, saju),
+missingYong: ylCheckMissingYong(saju, gods, false),
+harmBetrayal: ylCheckHarmBetrayal(saju),
+yongOverwhelmed: checkYongOverwhelmed(saju, gods),
+pyunInDoShik: checkPyunInDoShik(saju, gods),
+wangShinChungBal: checkWangShinChungBal(yp, saju)};
+if (r.bureau.active) r.monthClash = { active: false, score: 0, desc: '' };
+if (r.bureau.active && r.bureau.element === gods.yong && r.yongOverwhelmed.active) {r.yongOverwhelmed = {active:false,score:0,desc:'',overridden:true,overrideReason:`🔥 ${r.bureau.desc} → 용신(${ELEMENT[gods.yong].k}) 증폭! 쇠신충왕 무효화 → 돌파!`};}
+r.missingYong = ylCheckMissingYong(saju, gods, r.yongAttack.active);
+const score = Object.values(r).reduce((s, x) => s + (x.score || 0), 0);
+const rating = ylDetermineRating(r, score);
+let voidBreak = false, voidBreakDesc = '';
+try {const gm = calcGongmang(saju);const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (gm && gm.indices) {gm.indices.forEach(vi => {if (Math.abs(ypBi - vi) === 6) {voidBreak = true;voidBreakDesc = `🔓 ${yp.b.c}가 공망(${BRANCH[vi].c})을 깨뜨림! 해방의 해.`;}});}} catch(e) {}
+let warnings = [];Object.values(r).forEach(chk => {if (chk.active && chk.desc) warnings.push(chk.desc);});
+if (voidBreak) warnings.push(voidBreakDesc);
+const yearEls = [yp.s.e, yp.b.e];const ec = countElements(saju);const yearBranchIdx = BRANCH.indexOf(yp.b);const sajuBranches = [saju.year.b, saju.month.b, saju.day.b];if (saju.hour) sajuBranches.push(saju.hour.b);const sajuBranchIdxs = sajuBranches.map(b => BRANCH.indexOf(b));
+const baihuIlju = ['甲辰','乙未','丙戌','丁丑','戊辰','己未','庚戌','辛丑','壬辰','癸未'];const ilju = saju.day.s.c + saju.day.b.c;if (baihuIlju.includes(ilju) && yearEls.includes('fire')) {warnings.push('🐅 백호대살 일주에 火 운! 수술, 사고, 피 보는 일에 주의. 건강검진 필수');}
+const elHealth = {wood:'간/담/눈/신경',fire:'심장/혈관/뇌',earth:'비장/위/소화기',metal:'폐/대장/피부',water:'신장/방광/생식기'};
+if ((sajuBranchIdxs.includes(0) && yearBranchIdx === 6) || (sajuBranchIdxs.includes(6) && yearBranchIdx === 0)) {const waterPower = ec.water || 0;const firePower = ec.fire || 0;if (waterPower > firePower + 1) {warnings.push(`💧 자오충 승패: 水(${waterPower}개) > 火(${firePower}개) → 火가 꺼짐! ${elHealth.fire} 손상, 열정/의욕 저하 주의`);} else if (firePower > waterPower + 1) {warnings.push(`🔥 자오충 승패: 火(${firePower}개) > 水(${waterPower}개) → 水가 마름! ${elHealth.water} 손상, 신장/방광 주의`);} else {warnings.push(`⚡ 자오충 격전: 水(${waterPower}개) ≈ 火(${firePower}개) → 양쪽 모두 손상! 심혈관+신장 모두 주의`);}}
+if ((sajuBranchIdxs.includes(3) && yearBranchIdx === 9) || (sajuBranchIdxs.includes(9) && yearBranchIdx === 3)) {const woodPower = ec.wood || 0;const metalPower = ec.metal || 0;if (metalPower > woodPower + 1) {warnings.push(`🪓 묘유충 승패: 金(${metalPower}개) > 木(${woodPower}개) → 木이 잘림! ${elHealth.wood} 손상, 간담/신경 주의`);} else if (woodPower > metalPower + 1) {warnings.push(`🌳 묘유충 승패: 木(${woodPower}개) > 金(${metalPower}개) → 도끼가 부러짐! ${elHealth.metal} 손상 대신 木의 반격`);} else {warnings.push(`⚡ 묘유충 격전: 木(${woodPower}개) ≈ 金(${metalPower}개) → 양쪽 모두 손상! 간담+폐 모두 주의`);}}
+return {year,pillar:yp,god,state,score,warnings,rating,
+climateClash:r.climateClash.active,climateClashDesc:r.climateClash.desc,
+monthClash:r.monthClash.active,monthClashDesc:r.monthClash.desc,
+bureauFormed:r.bureau.active,bureauDesc:r.bureau.desc,
+voidBreak,voidBreakDesc,
+dayClash:r.dayClash.active,dayClashDesc:r.dayClash.desc,
+yanginClash:r.yanginClash.active,yanginClashDesc:r.yanginClash.desc,
+tripleBranch:r.tripleBranch.active,tripleBranchDesc:r.tripleBranch.desc,
+stemCombine:r.stemCombine.active?r.stemCombine:null,
+branchCombine:r.branchCombine.active?r.branchCombine:null,
+selfPunishment:r.selfPunishment.active,selfPunishmentDesc:r.selfPunishment.desc,
+yongUnderAttack:r.yongAttack.active,yongAttackDesc:r.yongAttack.desc,
+robWealthThreat:r.robWealth.active,robWealthDesc:r.robWealth.desc,
+expressorPeerClash:r.expressorPeer.active,
+scandalWarning:r.scandal.active,
+missingYong:r.missingYong.active,
+harmBetrayalWarning:r.harmBetrayal.active,
+yongOverwhelmed:r.yongOverwhelmed.active,
+pyunInDoShik:r.pyunInDoShik.active,
+wangShinChungBal:r.wangShinChungBal.active};}
 function checkYongOverwhelmed(saju, gods) {const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year, saju.month, saju.day, saju.hour].forEach(p => {if (p?.s) elCount[p.s.e]++;if (p?.b) elCount[p.b.e]++;});const yongCount = elCount[gods.yong] || 0;const giCount = elCount[gods.gi] || 0;if (giCount >= 3 && yongCount <= 1 && giCount >= yongCount * 3) {return { active: true, score: -2, desc: `⚠️ 쇠신충왕(衰神沖旺): 기신(${ELEMENT[gods.gi].k}) ${giCount}개 vs 용신(${ELEMENT[gods.yong].k}) ${yongCount}개 → 용신이 와도 압도됨!` };}
 return { active: false, score: 0, desc: '' };}
 function checkPyunInDoShik(saju, gods) {const dm = saju.day.s;const monthBi = BRANCH.findIndex(b => b.c === saju.month.b.c);const shikShinEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 1) % 5];const pyunInEl = EL_ORDER[(EL_ORDER.indexOf(dm.e) + 4) % 5];if (saju.month.b.e !== shikShinEl) return { active: false, score: 0, desc: '' };const clashPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);let found = false, detail = '';branches.forEach(b => {if (b.e === pyunInEl) {const bi = BRANCH.findIndex(br => br.c === b.c);clashPairs.forEach(([a, c]) => {if ((bi === a && monthBi === c) || (bi === c && monthBi === a)) {found = true;detail = `${b.c}(편인)↔${saju.month.b.c}(식신)`;}});}});if (found) {return { active: true, score: -2, desc: `⚠️ 편인도식(偏印倒食): ${detail} 충 → 재능은 있으나 예민함 때문에 기회를 걷어차는 형국!` };}
@@ -1697,7 +1785,7 @@ const hasShangGuan = stemGods.some(g => g && g.k === '상관');const hasPyunGwan
 if (hasShangGuanHapSal) {ss.push({n:'상관합살(傷官合殺)',t:'good',d:'위기를 기회로 바꾸는 협상가 재능! 상관(언변/기술)이 편관(위험/적)을 합으로 제어해요. 로비스트, 협상가, 중재자, 해결사에 탁월해요.',i:'🤝',lv:'상'});}
 return ss.length ? ss : [{n:'특이신살 없음',t:'neutral',d:'특별한 신살이 없어요. 평온하고 안정적인 사주예요!',i:'☯︎',lv:'중'}];}
 function calcInteractions(saju) {const res = [];const stems = [STEM.indexOf(saju.year.s), STEM.indexOf(saju.month.s), STEM.indexOf(saju.day.s)];const brs = [BRANCH.indexOf(saju.year.b), BRANCH.indexOf(saju.month.b), BRANCH.indexOf(saju.day.b)];if (saju.hour) { stems.push(STEM.indexOf(saju.hour.s)); brs.push(BRANCH.indexOf(saju.hour.b)); }
-const stComb = [[0,5,'갑기합토'],[1,6,'을경합금'],[2,7,'병신합수'],[3,8,'정임합목'],[4,9,'무계합화']];const positions = ['년간','월간','일간','시간'];for (let [a,b,n] of stComb) {for (let i = 0; i < stems.length; i++) {for (let j = i+1; j < stems.length; j++) {if ((stems[i]===a && stems[j]===b) || (stems[i]===b && stems[j]===a)) {if (j - i === 1) {res.push({t:'天合',c:`${STEM[a].c}+${STEM[b].c}`,m:n,d:`${positions[i]}-${positions[j]} 인접합. 새로운 기운을 만들어요!`});} else {res.push({t:'氣絆',c:`${STEM[a].c}~${STEM[b].c}`,m:`${n}(기반)`,d:`${positions[i]}-${positions[j]} 원거리. 뜻은 있으나 합력이 약해요.`});}}}}}
+const addedCombines = new Set();const stComb = [[0,5,'갑기합토'],[1,6,'을경합금'],[2,7,'병신합수'],[3,8,'정임합목'],[4,9,'무계합화']];const positions = ['년간','월간','일간','시간'];for (let [a,b,n] of stComb) {for (let i = 0; i < stems.length; i++) {for (let j = i+1; j < stems.length; j++) {if ((stems[i]===a && stems[j]===b) || (stems[i]===b && stems[j]===a)) {const key = `天合:${Math.min(a,b)}-${Math.max(a,b)}`;if (!addedCombines.has(key)) {addedCombines.add(key);if (j - i === 1) {res.push({t:'天合',c:`${STEM[a].c}+${STEM[b].c}`,m:n,d:`${positions[i]}-${positions[j]} 인접합. 새로운 기운을 만들어요!`});} else {res.push({t:'氣絆',c:`${STEM[a].c}~${STEM[b].c}`,m:`${n}(기반)`,d:`${positions[i]}-${positions[j]} 원거리. 뜻은 있으나 합력이 약해요.`});}}}}}}
 const stClash = [
 [0,6,'갑경충','강한 결단력이지만 충돌이 많아요. 리더십과 권위의 갈등!'],
 [1,7,'을신충','내면의 갈등. 유연함과 강함이 부딪혀요.'],
