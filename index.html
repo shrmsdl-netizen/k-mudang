@@ -22,6 +22,7 @@
 <link rel="canonical" href="https://k-mudang.com/">
 <link rel="alternate" hreflang="ko" href="https://k-mudang.com/ko.html">
 <link rel="alternate" hreflang="en" href="https://k-mudang.com/en.html">
+<link rel="alternate" hreflang="ja" href="https://k-mudang.com/jp.html">
 <link rel="alternate" hreflang="x-default" href="https://k-mudang.com/">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -159,11 +160,11 @@ body{
   display:flex;
   gap:10px;
   justify-content:center;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
 }
 .lang-btn{
   flex:1;
-  min-width:100px;
+  min-width:90px;
   max-width:140px;
   padding:14px 12px;
   background:rgba(212,175,55,0.35);
@@ -262,7 +263,7 @@ body{
 @media(max-width:380px){
   .title{font-size:1.7rem;letter-spacing:4px;}
   .logo{font-size:3rem;}
-  .lang-btn{padding:10px 8px;min-width:85px;}
+  .lang-btn{padding:10px 8px;min-width:75px;}
   .top-section{padding-top:20px;}
   .tagline{font-size:0.7rem;}
   .tagline-highlight{font-size:1rem;}
@@ -291,8 +292,9 @@ body{
     <div class="card-title">Select Language</div>
     
     <div class="lang-buttons">
-      <a href="ko.html" class="lang-btn"><span class="lang-hanja">韓</span><span class="lang-label">한국어</span></a>
       <a href="en.html" class="lang-btn"><span class="lang-hanja">英</span><span class="lang-label">English</span></a>
+      <a href="ko.html" class="lang-btn"><span class="lang-hanja">韓</span><span class="lang-label">한국어</span></a>
+      <a href="jp.html" class="lang-btn"><span class="lang-hanja">日</span><span class="lang-label">日本語</span></a>
     </div>
   </div>
 </div>
