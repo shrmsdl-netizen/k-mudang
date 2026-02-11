@@ -651,7 +651,7 @@ PARTNER_SAJU = { year: pYearPillar, month: pMonthPillar, day: pDayPillar, hour: 
 PARTNER_STRENGTH = calcStrength(PARTNER_SAJU, pMonth);
 const pDmIdx = STEM.findIndex(s => s.c === PARTNER_SAJU.day.s.c);
 const pDm = STEM[pDmIdx];
-PARTNER_GODS = calcGods(PARTNER_SAJU, PARTNER_STRENGTH);
+PARTNER_GODS = fullAnalysis(PARTNER_SAJU, PARTNER_STRENGTH);
 MATCH_RESULT = analyzeMatchAdvanced(SAJU, GODS, STRENGTH, PARTNER_SAJU, PARTNER_GODS, PARTNER_STRENGTH, mode);
 const currentYear = new Date().getFullYear();
 MATCH_RESULT.yearlyRisks = analyzeYearlyRisks(SAJU, PARTNER_SAJU, currentYear, 5);
@@ -1970,6 +1970,56 @@ const CLIMATE_BALANCE/*調候*/ = {0: {0: {yong:'fire', sub:'wood', desc:'Winter
 function findByungYak(saju, strength) {const dm = saju.day.s;const dmi = STEM.indexOf(dm);const ec = countElements(saju);let byung = null, yak = null;let maxEl = null, maxCount = 0;for (let e of EL_ORDER) {if (ec[e] > maxCount && e !== dm.e) {maxCount = ec[e];maxEl = e;}}
 if (maxCount >= 3) {byung = maxEl;const kontrolIdx = (EL_ORDER.indexOf(maxEl) + 3) % 5;yak = EL_ORDER[kontrolIdx];}
 return { byung, yak, desc: byung ? `${ELEMENT[byung].k} is excessive - ${ELEMENT[yak].k} controls it` : null };}
+function fullAnalysis(saju, strength) {const dm = saju.day.s;const dmEl = dm.e;const dmi = STEM.indexOf(dm);const mbi = BRANCH.findIndex(br => br.c === saju.month.b.c);const samhap = analyzeSamhapBureau(saju);const climate = analyzeClimate(saju);let elCount = countElements(saju);if (samhap.complete) {elCount[samhap.element] = (elCount[samhap.element] || 0) + 2;} else if (samhap.partial) {elCount[samhap.element] = (elCount[samhap.element] || 0) + 1;}
+const EL = EL_ORDER;const dmIdx = EL.indexOf(dmEl);const peerEl = dmEl;const exprEl = EL[(dmIdx + 1) % 5];const wealthEl = EL[(dmIdx + 2) % 5];const officerEl = EL[(dmIdx + 3) % 5];const sealEl = EL[(dmIdx + 4) % 5];const str = strength || calcStrength(saju);const isWeak = str.type === 'weak';const isStrong = str.type === 'strong';const officerPower = (elCount[officerEl] || 0) +
+(samhap.element === officerEl ? (samhap.complete ? 3 : 1) : 0);const isOfficerStrong = officerPower >= 2;const wealthPower = elCount[wealthEl] || 0;const isWealthStrong = wealthPower >= 3;const sealPower = elCount[sealEl] || 0;const isSealStrong = sealPower >= 3;let yong, hee, gi;let yongReason = '';const peerPower = elCount[peerEl] || 0;const isVeryStrong = str.percent >= 90;let isFollower = false;let followerType = null;if (isVeryStrong && peerPower >= 6) {isFollower = true;followerType = 'Following Power';yong = peerEl;hee = sealEl;gi = officerEl;yongReason = `Follower Chart: Day Master at ${str.percent}%, extremely strong. Must follow the dominant force`;}
+else if (climate.type.includes('Extreme Cold') || climate.type.includes('Cold') || climate.type.includes('Damp')) {yong = 'fire';if (isOfficerStrong && sealEl === 'water') {hee = sealEl;gi = officerEl;yongReason = 'Climate Priority(Thaw)+Bridge: Cold-damp but Officer also strong, Water needed too';} else {hee = 'wood';gi = 'water';yongReason = 'Climate Priority(Thaw): Cold-damp chart needs Fire';}}
+else if (climate.type.includes('Extreme Dry') || climate.type.includes('Dry')) {yong = 'water';hee = 'metal';gi = 'fire';yongReason = 'Climate Priority(Moisten): Hot-dry chart needs Water';}
+else if (isWeak && isOfficerStrong) {yong = sealEl;hee = peerEl;gi = wealthEl;yongReason = 'Bridge God(Seal channels Officer): Strong Officer controlled via Seal';}
+else if (isWealthStrong && isWeak) {const pp = elCount[peerEl] || 0;if (pp <= 1) {yong = sealEl;hee = peerEl;yongReason = 'Illness-Medicine(Generate+Support): No Peers, Seal needed first';} else {yong = peerEl;hee = sealEl;yongReason = 'Illness-Medicine(Share Wealth): Excess Wealth, Peers needed';}
+gi = wealthEl;}
+else if (isStrong) {yong = exprEl;hee = wealthEl;gi = sealEl;yongReason = 'Suppress-Support(Drain): Strong Day Master, Expression drains excess';}
+else if (isWeak) {yong = sealEl;hee = peerEl;gi = officerEl;yongReason = 'Suppress-Support(Nurture): Weak Day Master, Seal provides support';}
+else {yong = exprEl;hee = wealthEl;gi = officerEl;yongReason = 'Suppress-Support(Drain): Balanced chart, Expression for flow';}
+if (samhap.complete && samhap.element === officerEl && yong !== sealEl) {yong = exprEl;yongReason += ` + Eating God Controls Officer(${samhap.name})`;}
+const johuData = CLIMATE_BALANCE[dmi] && CLIMATE_BALANCE[dmi][mbi];const yongCount = elCount[yong] || 0;let yongWarning = null;if (yongCount === 0) {yongWarning = `⚠️ Beneficial Element(${ELEMENT[yong].k}) absent in chart! Only effective when it arrives in Life Cycle`;} else if (yongCount === 1) {yongWarning = `⚠️ Beneficial Element(${ELEMENT[yong].k}) only 1 in chart. Dangerous if clashed or overcome`;}
+let sudaHwasik = null;const waterCount = elCount.water || 0;const fireCount = elCount.fire || 0;if (dmEl === 'fire' && waterCount >= 3 && fireCount <= 1) {sudaHwasik = 'Water Drowns Fire: Water overwhelms Fire. Prospers in Fire/Wood cycles, danger in Water/Metal cycles';}
+let hwadaGeumso = null;const metalCount = elCount.metal || 0;if (dmEl === 'metal' && fireCount >= 3 && metalCount <= 1) {hwadaGeumso = 'Fire Melts Metal: Fire overwhelms Metal. Prospers in Earth/Metal cycles, danger in Fire/Wood cycles';}
+let hwadaSuBin = null;if (yong === 'water' && fireCount >= 3 && waterCount <= 1) {hwadaSuBin = 'Fire Evaporates Water: Beneficial Element(Water) evaporates under Fire! Wealth/bonds enter but leave quickly. Lock assets in property/certifications';}
+let geumdaMokjeol = null;const woodCount = elCount.wood || 0;if (yong === 'wood' && metalCount >= 3 && woodCount <= 1) {geumdaMokjeol = 'Metal Chops Wood: Beneficial Element(Wood) cut by Metal! Even when Wood cycle arrives, effect is weakened. Water bridge needed';}
+let todaGeummae = null;const earthCount = elCount.earth || 0;if (yong === 'metal' && earthCount >= 4 && metalCount <= 1) {todaGeummae = 'Earth Buries Metal: Beneficial Element(Metal) buried under Earth! Too much support becomes poison. Wood needed to control Earth';}
+let mokdaHwasik = null;if (yong === 'fire' && woodCount >= 4 && fireCount <= 1) {mokdaHwasik = 'Wood Smothers Fire: Beneficial Element(Fire) smothered by Wood! Too much fuel prevents ignition. Prospers in mild Fire cycles';}
+let gunbiJaengjae = null;const peerPowerFinal = elCount[peerEl] || 0;const wealthPowerFinal = elCount[wealthEl] || 0;if (peerPowerFinal >= 4 && wealthPowerFinal <= 1) {gunbiJaengjae = 'Peers Rob Wealth: Peers overwhelming, Wealth scarce. Avoid partnerships, beware betrayal in money matters';}
+let jaedaSinyak = null;if (wealthPowerFinal >= 3 && str.pct <= 30) {jaedaSinyak = `Wealth Overwhelms Body: Wealth(${wealthPowerFinal}) excessive but Day Master too weak(${str.pct}%) to handle. Greed leads to health collapse. Lock wealth in fixed assets.`;}
+let sealExcess = isSealStrong && sealPower >= 3;
+const branches = [saju.year?.b, saju.month?.b, saju.day?.b, saju.hour?.b].filter(b => b);const brIdxs = branches.map(b => BRANCH.findIndex(br => br.c === b.c));let wangjiChung = null;if (brIdxs.includes(0) && brIdxs.includes(6)) {wangjiChung = 'Zi-Wu Clash: Water-Fire war! Cardiovascular vs Kidney/Bladder health warning';}
+else if (brIdxs.includes(3) && brIdxs.includes(9)) {wangjiChung = 'Mao-You Clash: Metal-Wood war! Liver/Gallbladder vs Lung/Colon health warning';}
+let mugeunWarning = null;const dmStemIdx = STEM.indexOf(dm);const dmElIdx = EL_ORDER.indexOf(dmEl);const sameElStems = [dmElIdx * 2, dmElIdx * 2 + 1];let hasRoot = false;for (const bi of brIdxs) {const jjg = HIDDEN_STEMS[bi];if (jjg) {for (const item of jjg) {if (sameElStems.includes(item.stem)) {hasRoot = true;break;}}}
+if (hasRoot) break;}
+if (!hasRoot) {mugeunWarning = `Rootless: Day Master ${dm.c}(${ELEMENT[dmEl].k}) has no root in branches. Appears strong but lacks real power. Gains strength only when Peer/Seal arrives in Life Cycle.`;}
+return {yong, hee, gi, yongReason,
+yongWarning,
+sudaHwasik,
+hwadaGeumso,
+hwadaSuBin,
+geumdaMokjeol,
+todaGeummae,
+mokdaHwasik,
+gunbiJaengjae,
+jaedaSinyak,
+wangjiChung,
+mugeunWarning,
+sealExcess,
+isFollower,
+followerType,
+johu: johuData?.yong || null,
+johuDesc: johuData?.desc || '',
+climate, samhap, elCount,
+officerPower, isOfficerStrong,
+wealthPower, isWealthStrong,
+type: str.type,
+byungYak: findByungYak(saju, str),
+sub: johuData?.sub || null};}
 function calcGods(saju, str, samhapResult) {const dm = saju.day.s;const dmi = STEM.indexOf(dm);const mbi = BRANCH.indexOf(saju.month.b);const season = SEASON[mbi];let yong, hee, gi, johu = null, johuDesc = '';let isFollower = false;let followerType = null;const climate = analyzeClimate(saju);const isHan = climate.type.includes('Cold') || climate.type.includes('Damp');const isJo = climate.type.includes('Dry');const johuData = CLIMATE_BALANCE[dmi] && CLIMATE_BALANCE[dmi][mbi];if (johuData) {johu = johuData.yong;johuDesc = johuData.desc;}
 const dmEl = dm.e;const sealEl = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 4) % 5];const peerEl = dmEl;const exprEl = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 1) % 5];const wealthEl = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 2) % 5];const officerEl = EL_ORDER[(EL_ORDER.indexOf(dmEl) + 3) % 5];const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year, saju.month, saju.day, saju.hour].forEach(p => {if (p && p.s) elCount[p.s.e]++;if (p && p.b) elCount[p.b.e]++;});const noRoot = !str.dayRoot && !str.hourRoot;if (str.pct < 10 && noRoot) {let maxEl = null, maxCount = 0;Object.entries(elCount).forEach(([el, cnt]) => {if (el !== dmEl && cnt > maxCount) {maxEl = el;maxCount = cnt;}});if (maxCount >= 4) {isFollower = true;if (maxEl === wealthEl) {followerType = '종재격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 1) % 5];gi = sealEl;} else if (maxEl === officerEl) {followerType = '종살격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 4) % 5];gi = dmEl;} else if (maxEl === exprEl) {followerType = '종아격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 1) % 5];gi = sealEl;} else {followerType = '종강격';yong = maxEl;hee = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 4) % 5];gi = EL_ORDER[(EL_ORDER.indexOf(maxEl) + 3) % 5];}johuDesc = `${followerType}: Extremely weak, follows dominant ${maxEl}`;}}
 if (!isFollower && str.type === 'strong') {yong = exprEl;hee = wealthEl;gi = sealEl;} else if (!isFollower && str.type === 'weak') {yong = sealEl;hee = peerEl;gi = officerEl;} else if (!isFollower) {yong = exprEl;hee = wealthEl;gi = officerEl;}
@@ -2799,7 +2849,7 @@ month: calcMonthPillar(adj.y, adj.m, adj.d, adj.h >= 0 ? adj.h : 12, 0),
 day: calcDayPillar(adj.y, adj.m, adj.d),
 hour: hourBranchIdx >= 0 ? calcHourPillar(calcDayPillar(adj.y, adj.m, adj.d).s, hourBranchIdx) : null};if (!SAJU.year || !SAJU.month || !SAJU.day) {toast('Chart calculation error. Please try again');return;}
 BIRTH_YEAR = y;BIRTH_MONTH = sm;BIRTH_DAY = sd;BIRTH_HOUR = hourVal >= 0 ? adj.h : 12;INPUT_YEAR = y;INPUT_MONTH = m;INPUT_DAY = d;INPUT_IS_LUNAR = false;INPUT_HOUR_INDEX = hourVal;CONVERTED_HOUR_INDEX = hourBranchIdx;TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'America/Los_Angeles', sy, sm, sd, realHour);ORIGINAL_DATE = {y: sy, m: sm, d: sd};CONVERTED_DATE = {y: adj.y, m: adj.m, d: adj.d};const str = calcStrength(SAJU);if (!str) { toast('Strength calculation error'); return; }
-STRENGTH = str;GODS = calcGods(SAJU, str);if (!GODS) { toast('Beneficial element calculation error'); return; }
+STRENGTH = str;GODS = fullAnalysis(SAJU, str);if (!GODS) { toast('Beneficial element calculation error'); return; }
 renderSaju(str);document.getElementById('saju-result').style.display = 'block';const infoDisplay = document.getElementById('my-info-display');if (infoDisplay) {infoDisplay.innerHTML = `<p style="color:var(--gold);">${SAJU.day.s.c}${SAJU.day.b.c}Day (${ELEMENT[SAJU.day.s.e].k})</p>`;}
 syncBirthDateToLottery(y, m, d);toast('The Celestial Mechanism has spoken.');} catch (error) {console.error('Fortune analysis error:', error);toast('Analysis error. Please check your input.');}}
 function renderSaju(str) {try {const pillars = ['hour','day','month','year'];const labels = ['Hour','Day','Month','Year'];document.getElementById('pillars').innerHTML = pillars.map((p, i) => {const pillar = SAJU[p];if (!pillar) return `<div class="pillar"><div class="pillar-label">${labels[i]}</div><div class="pillar-stem">-</div><div class="pillar-branch">-</div></div>`;const god = p !== 'day' ? getTenGod(pillar.s, SAJU.day.s) : null;return `<div class="pillar ${p === 'day' ? 'dm' : ''}"><div class="pillar-label">${labels[i]}</div><div class="pillar-stem el-${pillar.s.e}">${pillar.s.c}</div><div class="pillar-branch el-${pillar.b.e}">${pillar.b.c}</div><div class="pillar-sub">${pillar.s.k}${pillar.b.k}</div>
@@ -4129,7 +4179,7 @@ desc: '용신 ≠ 희신'
 yongsinTests.forEach((t, i) => {
 try {
 const str = calcStrength(t.saju);
-const gods = calcGods(t.saju, str);
+const gods = fullAnalysis(t.saju, str);
 const ok = t.check(gods);
 if(ok) pass++; else fail++;
 console.log(`${ok?'✅':'❌'} ${t.name}: ${t.desc} (용신=${gods.yong}, 희신=${gods.hee})`);
