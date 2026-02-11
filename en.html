@@ -632,7 +632,7 @@ return risks;
 
 function analyzeMatchWrapped() {
   if (!SAJU) { toast('First analyze your birth chart in [K-Fortune] tab'); return; }
-  showOracleLoading(['✦ Two pillars aligned before me...', '✦ Reading the threads of fate...', '✦ K-MUDANG sees the bond...'], function() { analyzeMatchCore(); });
+  showOracleLoading(['✦ Two pillars aligned before me...', '✦ K-MUDANG sees the bond...'], function() { analyzeMatchCore(); });
 }
 function analyzeMatchCore() {
 if (!SAJU) { toast('Please analyze your birth chart first!'); switchGame('saju'); return; }
@@ -2776,9 +2776,9 @@ function showOracleLoading(messages, callback) {
       setTimeout(function() {
         overlay.style.display = 'none';
         callback();
-      }, 400);
+      }, 200);
     }
-  }, 800);
+  }, 500);
 }
 
 function analyzeSaju() {
@@ -2786,7 +2786,7 @@ function analyzeSaju() {
   var m = document.getElementById('saju-month') && document.getElementById('saju-month').value;
   var d = document.getElementById('saju-day') && document.getElementById('saju-day').value;
   if (!y || !m || !d) { toast('Please enter your birth date'); return; }
-  showOracleLoading(['✦ Reading the Celestial Mechanism...', '✦ Searching for your pillars...', '✦ K-MUDANG prepares to speak...'], function() { analyzeSajuCore(); });
+  showOracleLoading(['✦ Reading the Celestial Mechanism...', '✦ K-MUDANG prepares to speak...'], function() { analyzeSajuCore(); });
 }
 function analyzeSajuCore() {try {const y = +document.getElementById('saju-year').value;const m = +document.getElementById('saju-month').value;const d = +document.getElementById('saju-day').value;const h = document.getElementById('saju-hour').value;const hourVal = h === '' ? -1 : +h;if (!y || !m || !d) { toast('Please enter your birth date'); return; }
 if (y < 1900 || y > 2100) { toast('Year must be between 1900-2100'); return; }

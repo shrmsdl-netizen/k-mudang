@@ -2200,9 +2200,9 @@ function showOracleLoading(messages, callback) {
       setTimeout(function() {
         overlay.style.display = 'none';
         callback();
-      }, 400);
+      }, 200);
     }
-  }, 800);
+  }, 500);
 }
 
 function analyzeSaju() {
@@ -2210,7 +2210,7 @@ function analyzeSaju() {
   var m = document.getElementById('birth-month').value;
   var d = document.getElementById('birth-day').value;
   if (!y || !m || !d) { toast('生年月日を入力してください'); return; }
-  showOracleLoading(['✦ 天機を読んでいる...', '✦ 汝の柱を探している...', '✦ K-ムーダンが語る準備をしている...'], function() { analyzeSajuCore(); });
+  showOracleLoading(['✦ 天機を読んでいる...', '✦ K-ムーダンが語る準備をしている...'], function() { analyzeSajuCore(); });
 }
 function analyzeSajuCore() {try {const y = +document.getElementById('birth-year').value;const m = +document.getElementById('birth-month').value;const d = +document.getElementById('birth-day').value;const h = +document.getElementById('birth-hour').value;if (!y || !m || !d) { toast('生年月日を入力してください'); return; }
 if (y < 1900 || y > 2100) { toast('年度は1900～2100の間で入力してください'); return; }
@@ -3147,7 +3147,7 @@ ${monthText}
 
 function analyzeMatchWrapped() {
   if (!SAJU) { toast('まず[四柱分析]で自分の四柱を分析してください'); return; }
-  showOracleLoading(['✦ 二つの柱を並べている...', '✦ 縁の糸を読んでいる...', '✦ K-ムーダンが二人の運命を見ている...'], function() { analyzeMatchCore(); });
+  showOracleLoading(['✦ 二つの柱を並べている...', '✦ K-ムーダンが二人の運命を見ている...'], function() { analyzeMatchCore(); });
 }
 function analyzeMatchCore() {try {if (!SAJU) { toast('まず[四柱分析]で自分の四柱を分析してください'); return; }
 let py = +document.getElementById('partner-year').value;let pm = +document.getElementById('partner-month').value;let pd = +document.getElementById('partner-day').value;const pH = +document.getElementById('partner-hour').value;const pGender = document.getElementById('partner-gender').value;const relType = document.getElementById('relationship-type')?.value || 'romance';if (!py || !pm || !pd) { toast('相手の生年月日を入力してください'); return; }

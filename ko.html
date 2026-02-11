@@ -2143,9 +2143,9 @@ function showOracleLoading(messages, callback) {
       setTimeout(function() {
         overlay.style.display = 'none';
         callback();
-      }, 400);
+      }, 200);
     }
-  }, 800);
+  }, 500);
 }
 
 function analyzeSaju() {
@@ -2153,7 +2153,7 @@ function analyzeSaju() {
   var m = document.getElementById('birth-month').value;
   var d = document.getElementById('birth-day').value;
   if (!y || !m || !d) { toast('생년월일을 입력하세요'); return; }
-  showOracleLoading(['✦ 천기를 읽고 있다...', '✦ 너의 기둥을 찾고 있다...', '✦ K-무당이 말할 준비를 하고 있다...'], function() { analyzeSajuCore(); });
+  showOracleLoading(['✦ 천기를 읽고 있다...', '✦ K-무당이 말할 준비를 하고 있다...'], function() { analyzeSajuCore(); });
 }
 function analyzeSajuCore() {try {const y = +document.getElementById('birth-year').value;const m = +document.getElementById('birth-month').value;const d = +document.getElementById('birth-day').value;const h = +document.getElementById('birth-hour').value;if (!y || !m || !d) { toast('생년월일을 입력하세요'); return; }
 if (y < 1900 || y > 2100) { toast('연도는 1900~2100 사이로 입력하세요'); return; }
@@ -3090,7 +3090,7 @@ ${monthText}
 
 function analyzeMatchWrapped() {
   if (!SAJU) { toast('먼저 [사주분석]에서 사주를 분석하세요'); return; }
-  showOracleLoading(['✦ 두 기둥을 나란히 세우고 있다...', '✦ 인연의 실을 읽고 있다...', '✦ K-무당이 두 사람의 운명을 본다...'], function() { analyzeMatchCore(); });
+  showOracleLoading(['✦ 두 기둥을 나란히 세우고 있다...', '✦ K-무당이 두 사람의 운명을 본다...'], function() { analyzeMatchCore(); });
 }
 function analyzeMatchCore() {try {if (!SAJU) { toast('먼저 [사주분석]에서 내 사주를 분석하세요'); return; }
 let py = +document.getElementById('partner-year').value;let pm = +document.getElementById('partner-month').value;let pd = +document.getElementById('partner-day').value;const pH = +document.getElementById('partner-hour').value;const pGender = document.getElementById('partner-gender').value;const relType = document.getElementById('relationship-type')?.value || 'romance';if (!py || !pm || !pd) { toast('상대방 생년월일을 입력하세요'); return; }
