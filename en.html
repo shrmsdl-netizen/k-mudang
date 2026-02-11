@@ -1607,11 +1607,11 @@ const daysInMonth = [31, (year % 4 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30,
 hour = hour - 0.5;if (hour < 0) {hour += 24;day -= 1;if (day < 1) {month -= 1;if (month < 1) { month = 12; year -= 1; }
 const daysInMonth = [31, (year % 4 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];day = daysInMonth[month - 1];}}
 return { y: year, m: month, d: day, h: Math.floor(hour) };}
-function getSolarTermTime(year, termIdx) {if (SOLAR_TERMS[year] && SOLAR_TERMS[year][termIdx]) {const t = SOLAR_TERMS[year][termIdx];return { m: term[0], d: term[1], h: term[2], n: term[3] };}
-const years = Object.keys(SOLAR_TERMS).map(Number).sort((a, b) => a - b);if (year < years[0]) {const t = SOLAR_TERMS[years[0]][termIdx];return t ? { m: t[0], d: t[1], h: t[2], n: t[3] } : { m: termIdx + 2, d: 5, h: 12, n: 0 };}
-if (year > years[years.length - 1]) {const t = SOLAR_TERMS[years[years.length - 1]][termIdx];return t ? { m: t[0], d: t[1], h: t[2], n: t[3] } : { m: termIdx + 2, d: 5, h: 12, n: 0 };}
-let closest = years[0];let minDiff = Math.abs(year - years[0]);for (const y of years) {if (Math.abs(year - y) < minDiff) {minDiff = Math.abs(year - y);closest = y;}}
-const t = SOLAR_TERMS[closest][termIdx];return t ? { m: t[0], d: t[1], h: t[2], n: t[3] } : { m: termIdx + 2, d: 5, h: 12, n: 0 };}
+function getSolarTermTime(year, termIndex) {let termData = SOLAR_TERMS[year];if (!termData) {const years = Object.keys(SOLAR_TERMS).map(Number).sort((a, b) => a - b);let closest = years[0];for (const y of years) {if (y <= year) closest = y;else break;}
+termData = SOLAR_TERMS[closest];}
+if (!termData || termIndex < 0 || termIndex >= termData.length) {const defaultDays = [4, 6, 5, 6, 6, 7, 8, 8, 8, 8, 7];return { m: termIndex + 2, d: defaultDays[termIndex] || 5, h: 0, n: 0 };}
+const term = termData[termIndex];if (Array.isArray(term)) {return { m: term[0], d: term[1], h: term[2], n: term[3] };}
+return term;}
 function isDateTimeGTE(m1, d1, h1, n1, m2, d2, h2, n2) {if (m1 !== m2) return m1 > m2;if (d1 !== d2) return d1 > d2;if (h1 !== h2) return h1 > h2;return n1 >= n2;}
 
 const SUMMER_TIME_PERIODS = [
@@ -1648,22 +1648,11 @@ summerTimeCorrected: TIME_CORRECTION_SETTINGS.useSummerTime && isInSummerTime(ye
 longitudeCorrected: TIME_CORRECTION_SETTINGS.useLongitude};}
 function hourToSiji(hour, minute) {const totalMinutes = hour * 60 + (minute || 0);if (totalMinutes >= 23 * 60 + 30) return 0;if (totalMinutes < 1 * 60 + 30) return 0;return Math.floor((totalMinutes - 90) / 120) + 1;}
 function isBeforeSolarTerm(year, month, day, hour, minute, termIndex) {const term = getSolarTermTime(year, termIndex);const currentTime = new Date(year, month - 1, day, hour || 0, minute || 0);const termTime = new Date(year, term.m - 1, term.d, term.h, term.n);return currentTime < termTime;}
-function calcYearPillar(y, m, d, h = 12) {if (!y || !m || !d || isNaN(y) || isNaN(m) || isNaN(d)) {console.error('calcYearPillar: Invalid input', {y, m, d, h});return { s: STEM[0], b: BRANCH[0] };}
-const ipchun = getSolarTermTime(y, 0);const hourMap = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22];const currentHour = h >= 0 ? hourMap[h] || 12 : 12;const currentMin = 0;let adjY = y;if (m < ipchun.m ||
-(m === ipchun.m && d < ipchun.d) ||
-(m === ipchun.m && d === ipchun.d && currentHour < ipchun.h) ||
-(m === ipchun.m && d === ipchun.d && currentHour === ipchun.h && currentMin < ipchun.n)) {adjY--;}
+function calcYearPillar(y, m, d, h, n) {let adjY = y;if (isBeforeSolarTerm(y, m, d, h || 0, n || 0, 0)) {adjY--;}
 const si = (adjY - 4) % 10;const bi = (adjY - 4) % 12;return { s: STEM[si < 0 ? si + 10 : si], b: BRANCH[bi < 0 ? bi + 12 : bi] };}
-function calcMonthPillar(y, m, d, h = 12) {const hourMap = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22];const currentHour = h >= 0 ? hourMap[h] || 12 : 12;const currentMin = 0;let termIdx, checkYear = y;if (m === 1) {const sohan = getSolarTermTime(y, 11);let isAfterSohan = false;if (d > sohan.d ||
-(d === sohan.d && currentHour > sohan.h) ||
-(d === sohan.d && currentHour === sohan.h && currentMin >= sohan.n)) {isAfterSohan = true;}
-if (!isAfterSohan) {const prevYearPillar = calcYearPillar(y - 1, 12, 15);const ysi = STEM.indexOf(prevYearPillar.s);const sajuMonth = 11;const msi = ((ysi % 5) * 2 + sajuMonth + 1) % 10;const mbi = 0;return { s: STEM[msi], b: BRANCH[mbi] };} else {const prevYearPillar = calcYearPillar(y - 1, 12, 15);const ysi = STEM.indexOf(prevYearPillar.s);const sajuMonth = 12;const msi = ((ysi % 5) * 2 + sajuMonth + 1) % 10;const mbi = 1;return { s: STEM[msi], b: BRANCH[mbi] };}}
-termIdx = m - 2;const term = getSolarTermTime(y, termIdx);let isAfterTerm = false;if (m > term.m ||
-(m === term.m && d > term.d) ||
-(m === term.m && d === term.d && currentHour > term.h) ||
-(m === term.m && d === term.d && currentHour === term.h && currentMin >= term.n)) {isAfterTerm = true;}
-let sajuMonth;if (isAfterTerm) {sajuMonth = m - 1;} else {sajuMonth = m - 2;}
-if (sajuMonth <= 0) sajuMonth += 12;const yp = calcYearPillar(y, m, d, h);const ysi = STEM.indexOf(yp.s);const msi = ((ysi % 5) * 2 + sajuMonth + 1) % 10;const mbi = (sajuMonth + 1) % 12;return { s: STEM[msi], b: BRANCH[mbi] };}
+function calcMonthPillar(y, m, d, h, n) {let solarMonth;let beforeTerm;if (m === 1) {const term = getSolarTermTime(y - 1, 11);const termTime = new Date(y, term.m - 1, term.d, term.h, term.n);const currentTime = new Date(y, m - 1, d, h || 0, n || 0);beforeTerm = currentTime < termTime;} else {const termIndex = m - 2;beforeTerm = isBeforeSolarTerm(y, m, d, h || 0, n || 0, termIndex);}
+if (m === 1) {if (beforeTerm) {solarMonth = 11;} else {solarMonth = 12;}} else if (m === 2) {if (beforeTerm) {solarMonth = 12;} else {solarMonth = 1;}} else {if (beforeTerm) {solarMonth = m - 2;} else {solarMonth = m - 1;}}
+const isBeforeLichun = isBeforeSolarTerm(y, m, d, h || 0, n || 0, 0);const yearForStem = isBeforeLichun ? y - 1 : y;const yearIdx = ((yearForStem - 4) % 60 + 60) % 60;const ysi = yearIdx % 10;const monthBranchIndex = (solarMonth + 1) % 12;const inMonthStem = ((ysi % 5) * 2 + 2) % 10;const msi = (inMonthStem + solarMonth - 1) % 10;return { s: STEM[msi], b: BRANCH[monthBranchIndex], solarMonth: solarMonth };}
 function calcDayPillar(y, m, d) {if (!y || !m || !d || isNaN(y) || isNaN(m) || isNaN(d)) {console.error('calcDayPillar: Invalid input', {y, m, d});return { s: STEM[0], b: BRANCH[0] };}
 const a = Math.floor((14 - m) / 12);const adjY = y + 4800 - a;const adjM = m + 12 * a - 3;const jdn = d + Math.floor((153 * adjM + 2) / 5) + 365 * adjY + Math.floor(adjY / 4) - Math.floor(adjY / 100) + Math.floor(adjY / 400) - 32045;const baseJdn = 2445731;const idx60 = ((jdn - baseJdn) % 60 + 60) % 60;const stemIdx = idx60 % 10;const branchIdx = idx60 % 12;if (isNaN(stemIdx) || isNaN(branchIdx)) {console.error('calcDayPillar: NaN result', {y, m, d, jdn, idx60, stemIdx, branchIdx});return { s: STEM[0], b: BRANCH[0] };}
 return { s: STEM[stemIdx], b: BRANCH[branchIdx] };}
@@ -2674,7 +2663,7 @@ function countElementsAdvanced(saju) {const ec = {wood:0, fire:0, earth:0, metal
 {pos:'Month Branch', b:saju.month.b},
 {pos:'Day Branch', b:saju.day.b}
 ];if (saju.hour) branches.push({pos:'Hour Branch', b:saju.hour.b});branches.forEach(br => {ec[br.b.e] += 1;details[br.b.e].push(`${br.b.c}(${br.pos}) 1.0`);});branches.forEach(br => {const bi = BRANCH.findIndex(x => x.c === br.b.c);const jj = HIDDEN_STEMS[bi] || [];jj.forEach(j => {const hiddenStem = STEM[j.stem];const ratio = j.days / 30;ec[hiddenStem.e] += ratio * 0.5;details[hiddenStem.e].push(`${hiddenStem.c}(${br.pos}藏) ${(ratio*0.5).toFixed(2)}`);});});return { counts: ec, details };}
-function countElements(saju) {const ec = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year?.s, saju.month?.s, saju.day?.s, saju.hour?.s].forEach(s => {if (s) ec[s.e] += 1;});[saju.year?.b, saju.month?.b, saju.day?.b, saju.hour?.b].forEach(b => {if (!b) return;ec[b.e] += 1;const bi = BRANCH.indexOf(b);const jj = JIJANGGAN[bi] || [];jj.forEach(j => {const hs = STEM[j.stem];ec[hs.e] += j.days / 30 * 0.5;});});return ec;}
+function countElements(saju) {const ec = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year?.s, saju.month?.s, saju.day?.s, saju.hour?.s].forEach(s => {if (s) ec[s.e] += 1;});[saju.year?.b, saju.month?.b, saju.day?.b, saju.hour?.b].forEach(b => {if (!b) return;ec[b.e] += 1;const bi = BRANCH.indexOf(b);const jj = HIDDEN_STEMS[bi] || [];jj.forEach(j => {const hs = STEM[j.stem];ec[hs.e] += j.days / 30 * 0.5;});});return ec;}
 function genTodayFortune(saju, gods) {const now = new Date();const ty = now.getFullYear(), tm = now.getMonth() + 1, td = now.getDate();const dp = calcDayPillar(ty, tm, td);const dm = saju.day.s;const god = getTenGod(dp.s, dm);const state = getTwelveState(dm, dp.b);const godMeaning = {'比肩 Peer': {r:3, l:'🥊 Competitive Day', d:'Today, similar energies surround you. Rivals may appear or you may assert your opinions strongly.<br><br><strong>💡 Tip:</strong> Focus on solo tasks today.'},
 '劫財 Competitor': {r:2, l:'💸 Spending Alert', d:'Money tends to slip away today! Avoid impulse purchases or lending money to friends.<br><br><strong>💡 Tip:</strong> "Let me think about it tomorrow" is your magic spell!'},
 '食神 Eating God': {r:4, l:'🍽️ Delightful Day', d:'Everything feels relaxed and pleasant! Great for good food and hobbies.<br><br><strong>💡 Tip:</strong> Enjoy your favorite meal and let inspiration flow.'},
@@ -2805,8 +2794,8 @@ if (m < 1 || m > 12) { toast('Month must be between 1-12'); return; }
 if (d < 1 || d > 31) { toast('Day must be between 1-31'); return; }
 let sy = y, sm = m, sd = d;const realHour = hourVal >= 0 ? (hourVal === 0 ? 0 : hourVal * 2) : -1;const adj = adjustTime(sy, sm, sd, realHour);if (!adj || !adj.y) { toast('Time adjustment error'); return; }
 let hourBranchIdx = -1;if (hourVal >= 0 && adj.h >= 0) {if (adj.h === 23 || adj.h === 0) hourBranchIdx = 0;else hourBranchIdx = Math.floor((adj.h + 1) / 2);if (hourBranchIdx > 11) hourBranchIdx = 0;}
-SAJU = {year: calcYearPillar(adj.y, adj.m, adj.d),
-month: calcMonthPillar(adj.y, adj.m, adj.d),
+SAJU = {year: calcYearPillar(adj.y, adj.m, adj.d, adj.h >= 0 ? adj.h : 12, 0),
+month: calcMonthPillar(adj.y, adj.m, adj.d, adj.h >= 0 ? adj.h : 12, 0),
 day: calcDayPillar(adj.y, adj.m, adj.d),
 hour: hourBranchIdx >= 0 ? calcHourPillar(calcDayPillar(adj.y, adj.m, adj.d).s, hourBranchIdx) : null};if (!SAJU.year || !SAJU.month || !SAJU.day) {toast('Chart calculation error. Please try again');return;}
 BIRTH_YEAR = y;BIRTH_MONTH = sm;BIRTH_DAY = sd;BIRTH_HOUR = hourVal >= 0 ? adj.h : 12;INPUT_YEAR = y;INPUT_MONTH = m;INPUT_DAY = d;INPUT_IS_LUNAR = false;INPUT_HOUR_INDEX = hourVal;CONVERTED_HOUR_INDEX = hourBranchIdx;TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'America/Los_Angeles', sy, sm, sd, realHour);ORIGINAL_DATE = {y: sy, m: sm, d: sd};CONVERTED_DATE = {y: adj.y, m: adj.m, d: adj.d};const str = calcStrength(SAJU);if (!str) { toast('Strength calculation error'); return; }
