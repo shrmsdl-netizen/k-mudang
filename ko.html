@@ -1265,7 +1265,7 @@ let wangjiJungcheop = null;const wangji = {0: '子', 3: '卯', 6: '午', 9: '酉
 let mugeunWarning = null;const dmStemIdx = STEM.indexOf(dm);const dmElIdx = EL_ORDER.indexOf(dmEl);const sameElStems = [dmElIdx * 2, dmElIdx * 2 + 1];let hasRoot = false;for (const bi of brIdxs) {const jjg = JIJANGGAN[bi];if (jjg) {for (const item of jjg) {if (sameElStems.includes(item.stem)) {hasRoot = true;break;}}}
 if (hasRoot) break;}
 if (!hasRoot) {const elNames = {wood: '목', fire: '화', earth: '토', metal: '금', water: '수'};mugeunWarning = `무근(無根): 일간 ${dm.c}(${elNames[dmEl]})이 지지에 뿌리 없음. 겉으로는 있어 보여도 실제 힘이 없습니다. 운에서 비겁/인성이 올 때 비로소 힘을 얻습니다.`;}
-let pyeoninDosik = null;const monthBi = BRANCH.indexOf(saju.month?.b);const dayBi = BRANCH.indexOf(saju.day?.b);const isMaoYouChung = (monthBi === 3 && dayBi === 9) || (monthBi === 9 && dayBi === 3);if (isMaoYouChung) {const monthBranchEl = BRANCH_EL[monthBi];const dayBranchEl = BRANCH_EL[dayBi];const dmElIdx = EL_ORDER.indexOf(dmEl);const siksinEl = EL_ORDER[(dmElIdx + 1) % 5];const pyeoninEl = EL_ORDER[(dmElIdx + 4) % 5];if ((monthBranchEl === siksinEl && dayBranchEl === pyeoninEl) ||
+let pyeoninDosik = null;const monthBi = BRANCH.indexOf(saju.month?.b);const dayBi = BRANCH.indexOf(saju.day?.b);const isMaoYouChung = (monthBi === 3 && dayBi === 9) || (monthBi === 9 && dayBi === 3);if (isMaoYouChung) {const monthBranchEl = BRANCH[monthBi].e;const dayBranchEl = BRANCH[dayBi].e;const dmElIdx = EL_ORDER.indexOf(dmEl);const siksinEl = EL_ORDER[(dmElIdx + 1) % 5];const pyeoninEl = EL_ORDER[(dmElIdx + 4) % 5];if ((monthBranchEl === siksinEl && dayBranchEl === pyeoninEl) ||
 (monthBranchEl === 'wood' && dayBranchEl === 'metal')) {pyeoninDosik = `편인도식(偏印倒食): 월지(식신)와 일지(편인)가 묘유충! 재능(밥그릇)이 깨진 형국. 일을 시작해도 중도에 엎어지거나, 예민함 때문에 기회를 걷어찰 수 있습니다. 꾸준함이 개운법입니다.`;}}
 return {yong, hee, gi, yongReason,
 yongWarning,
@@ -2103,7 +2103,7 @@ ${strongest[1] >= 4 ? `<div class="info-box" style="margin-top:12px;"><p><strong
 function runMatch() {if (!SAJU) { toast('먼저 내 사주를 분석해주세요!'); return; }
 let py = +document.getElementById('partner-year').value;let pm = +document.getElementById('partner-month').value;let pd = +document.getElementById('partner-day').value;const pH = +document.getElementById('partner-hour').value;if (!py || !pm || !pd) { toast('상대방 생년월일을 입력하세요'); return; }
 if (PARTNER_CALENDAR === 'lunar') {const conv = lunarToSolar(py, pm, pd);if (!conv || !conv.year) { toast('음력 변환 오류. 양력으로 시도하세요'); return; }py = conv.year; pm = conv.month; pd = conv.day;}
-const pDayPillar = calcDayPillar(py, pm, pd);let pHourPillar = null;if (pH >= 0) { pHourPillar = calcHourPillar(pDayPillar, pH); }
+const pDayPillar = calcDayPillar(py, pm, pd);let pHourPillar = null;if (pH >= 0) { pHourPillar = calcHourPillar(pDayPillar.s, pH); }
 const pSaju = {year: calcYearPillar(py, pm, pd),
 month: calcMonthPillar(py, pm, pd),
 day: pDayPillar,
@@ -3098,7 +3098,7 @@ if (PARTNER_CALENDAR === 'lunar') {const conv = lunarToSolar(py, pm, pd);if (!co
 if (py < 1900 || py > 2100) { toast('연도는 1900~2100 사이로 입력하세요'); return; }
 if (pm < 1 || pm > 12) { toast('월은 1~12 사이로 입력하세요'); return; }
 if (pd < 1 || pd > 31) { toast('일은 1~31 사이로 입력하세요'); return; }
-const pDayPillar = calcDayPillar(py, pm, pd);let pHourPillar = null;if (pH >= 0) { pHourPillar = calcHourPillar(pDayPillar, pH); }
+const pDayPillar = calcDayPillar(py, pm, pd);let pHourPillar = null;if (pH >= 0) { pHourPillar = calcHourPillar(pDayPillar.s, pH); }
 const pSaju = {year: calcYearPillar(py, pm, pd),
 month: calcMonthPillar(py, pm, pd),
 day: pDayPillar,

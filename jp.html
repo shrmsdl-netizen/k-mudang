@@ -1323,7 +1323,7 @@ let wangjiJungcheop = null;const wangji = {0: '子', 3: '卯', 6: '午', 9: '酉
 let mugeunWarning = null;const dmStemIdx = STEM.indexOf(dm);const dmElIdx = EL_ORDER.indexOf(dmEl);const sameElStems = [dmElIdx * 2, dmElIdx * 2 + 1];let hasRoot = false;for (const bi of brIdxs) {const jjg = JIJANGGAN[bi];if (jjg) {for (const item of jjg) {if (sameElStems.includes(item.stem)) {hasRoot = true;break;}}}
 if (hasRoot) break;}
 if (!hasRoot) {const elNames = {wood: '木', fire: '火', earth: '土', metal: '金', water: '水'};mugeunWarning = `無根: 日干 ${dm.c}(${elNames[dmEl]})が 地支に根なし。 表面上は力があるように見えても実際の力がありません。 運で比劫/印星が来てはじめて力を得ます。`;}
-let pyeoninDosik = null;const monthBi = BRANCH.indexOf(saju.month?.b);const dayBi = BRANCH.indexOf(saju.day?.b);const isMaoYouChung = (monthBi === 3 && dayBi === 9) || (monthBi === 9 && dayBi === 3);if (isMaoYouChung) {const monthBranchEl = BRANCH_EL[monthBi];const dayBranchEl = BRANCH_EL[dayBi];const dmElIdx = EL_ORDER.indexOf(dmEl);const siksinEl = EL_ORDER[(dmElIdx + 1) % 5];const pyeoninEl = EL_ORDER[(dmElIdx + 4) % 5];if ((monthBranchEl === siksinEl && dayBranchEl === pyeoninEl) ||
+let pyeoninDosik = null;const monthBi = BRANCH.indexOf(saju.month?.b);const dayBi = BRANCH.indexOf(saju.day?.b);const isMaoYouChung = (monthBi === 3 && dayBi === 9) || (monthBi === 9 && dayBi === 3);if (isMaoYouChung) {const monthBranchEl = BRANCH[monthBi].e;const dayBranchEl = BRANCH[dayBi].e;const dmElIdx = EL_ORDER.indexOf(dmEl);const siksinEl = EL_ORDER[(dmElIdx + 1) % 5];const pyeoninEl = EL_ORDER[(dmElIdx + 4) % 5];if ((monthBranchEl === siksinEl && dayBranchEl === pyeoninEl) ||
 (monthBranchEl === 'wood' && dayBranchEl === 'metal')) {pyeoninDosik = `偏印倒食: 月支(食神)と日支(偏印)が卯酉沖！ 才能（食い扶持）が壊れた形局。仕事を始めても途中で覆されたり、敏感さのために機会を蹴飛ばす可能性があります。着実さが開運法です。`;}}
 return {yong, hee, gi, yongReason,
 yongWarning,
@@ -2160,7 +2160,7 @@ ${strongest[1] >= 4 ? `<div class="info-box" style="margin-top:12px;"><p><strong
 function runMatch() {if (!SAJU) { toast('まず自分の四柱を分析してください！'); return; }
 let py = +document.getElementById('partner-year').value;let pm = +document.getElementById('partner-month').value;let pd = +document.getElementById('partner-day').value;const pH = +document.getElementById('partner-hour').value;if (!py || !pm || !pd) { toast('相手の生年月日を入力してください'); return; }
 if (PARTNER_CALENDAR === 'lunar') {const conv = lunarToSolar(py, pm, pd);if (!conv || !conv.year) { toast('旧暦変換エラー。新暦で試してください'); return; }py = conv.year; pm = conv.month; pd = conv.day;}
-const pDayPillar = calcDayPillar(py, pm, pd);let pHourPillar = null;if (pH >= 0) { pHourPillar = calcHourPillar(pDayPillar, pH); }
+const pDayPillar = calcDayPillar(py, pm, pd);let pHourPillar = null;if (pH >= 0) { pHourPillar = calcHourPillar(pDayPillar.s, pH); }
 const pSaju = {year: calcYearPillar(py, pm, pd),
 month: calcMonthPillar(py, pm, pd),
 day: pDayPillar,
@@ -3155,7 +3155,7 @@ if (PARTNER_CALENDAR === 'lunar') {const conv = lunarToSolar(py, pm, pd);if (!co
 if (py < 1900 || py > 2100) { toast('年度は1900～2100の間で入力してください'); return; }
 if (pm < 1 || pm > 12) { toast('月は1～12の間で入力してください'); return; }
 if (pd < 1 || pd > 31) { toast('日は1～31の間で入力してください'); return; }
-const pDayPillar = calcDayPillar(py, pm, pd);let pHourPillar = null;if (pH >= 0) { pHourPillar = calcHourPillar(pDayPillar, pH); }
+const pDayPillar = calcDayPillar(py, pm, pd);let pHourPillar = null;if (pH >= 0) { pHourPillar = calcHourPillar(pDayPillar.s, pH); }
 const pSaju = {year: calcYearPillar(py, pm, pd),
 month: calcMonthPillar(py, pm, pd),
 day: pDayPillar,

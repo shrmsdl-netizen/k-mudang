@@ -646,7 +646,7 @@ const pYearPillar = calcYearPillar(pYear, pMonth, pDay);
 const pMonthPillar = calcMonthPillar(pYear, pMonth, pDay);
 const pDayPillar = calcDayPillar(pYear, pMonth, pDay);
 let pHourPillar = null;
-if (pHour !== '' && pHour !== undefined) { const hourIdx = parseInt(pHour); pHourPillar = calcHourPillar(pDayPillar, hourIdx); }
+if (pHour !== '' && pHour !== undefined) { const hourIdx = parseInt(pHour); pHourPillar = calcHourPillar(pDayPillar.s, hourIdx); }
 PARTNER_SAJU = { year: pYearPillar, month: pMonthPillar, day: pDayPillar, hour: pHourPillar };
 PARTNER_STRENGTH = calcStrength(PARTNER_SAJU, pMonth);
 const pDmIdx = STEM.findIndex(s => s.c === PARTNER_SAJU.day.s.c);
@@ -1591,8 +1591,9 @@ function getTimezoneOffset(sourceTimezone, year, month, day, hour) {if (sourceTi
 const result = convertToKoreaTime(year, month, day, hour, sourceTimezone);return result.offset;}
 function adjustTime(y, m, d, h) {if (h < 0) return { y, m, d, h };const location = document.getElementById('birth-location')?.value || 'America/Los_Angeles';const converted = convertToKoreaTime(y, m, d, h, location);let year = converted.y;let month = converted.m;let day = converted.d;let hour = converted.h;if (location === 'Asia/Seoul') {const isDST = ((y >= 1948 && y <= 1951) || (y >= 1955 && y <= 1960) || (y >= 1987 && y <= 1988));if (isDST) {hour -= 1;if (hour < 0) {hour += 24;day -= 1;if (day < 1) {month -= 1;if (month < 1) { month = 12; year -= 1; }
 const daysInMonth = [31, (year % 4 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];day = daysInMonth[month - 1];}}}}
-if (hour >= 23 && !TIME_CORRECTION_SETTINGS.useYajasi) {day += 1;const lastDay = new Date(year, month, 0).getDate();if (day > lastDay) {day = 1;month++;if (month > 12) {month = 1;year++;}}}
-return { y: year, m: month, d: day, h: hour };}
+hour = hour - 0.5;if (hour < 0) {hour += 24;day -= 1;if (day < 1) {month -= 1;if (month < 1) { month = 12; year -= 1; }
+const daysInMonth = [31, (year % 4 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];day = daysInMonth[month - 1];}}
+return { y: year, m: month, d: day, h: Math.floor(hour) };}
 function getSolarTermTime(year, termIdx) {if (SOLAR_TERMS[year] && SOLAR_TERMS[year][termIdx]) {const t = SOLAR_TERMS[year][termIdx];return { m: t[0], d: t[1], h: t[2], n: t[3] };}
 const years = Object.keys(SOLAR_TERMS).map(Number).sort((a, b) => a - b);if (year < years[0]) {const t = SOLAR_TERMS[years[0]][termIdx];return t ? { m: t[0], d: t[1], h: t[2], n: t[3] } : { m: termIdx + 2, d: 5, h: 12, n: 0 };}
 if (year > years[years.length - 1]) {const t = SOLAR_TERMS[years[years.length - 1]][termIdx];return t ? { m: t[0], d: t[1], h: t[2], n: t[3] } : { m: termIdx + 2, d: 5, h: 12, n: 0 };}
@@ -2791,8 +2792,8 @@ if (m < 1 || m > 12) { toast('Month must be between 1-12'); return; }
 if (d < 1 || d > 31) { toast('Day must be between 1-31'); return; }
 let sy = y, sm = m, sd = d;const realHour = hourVal >= 0 ? (hourVal === 0 ? 0 : hourVal * 2) : -1;const adj = adjustTime(sy, sm, sd, realHour);if (!adj || !adj.y) { toast('Time adjustment error'); return; }
 let hourBranchIdx = -1;if (hourVal >= 0 && adj.h >= 0) {if (adj.h === 23 || adj.h === 0) hourBranchIdx = 0;else hourBranchIdx = Math.floor((adj.h + 1) / 2);if (hourBranchIdx > 11) hourBranchIdx = 0;}
-SAJU = {year: calcYearPillar(adj.y, adj.m, adj.d, hourBranchIdx),
-month: calcMonthPillar(adj.y, adj.m, adj.d, hourBranchIdx),
+SAJU = {year: calcYearPillar(adj.y, adj.m, adj.d),
+month: calcMonthPillar(adj.y, adj.m, adj.d),
 day: calcDayPillar(adj.y, adj.m, adj.d),
 hour: hourBranchIdx >= 0 ? calcHourPillar(calcDayPillar(adj.y, adj.m, adj.d).s, hourBranchIdx) : null};if (!SAJU.year || !SAJU.month || !SAJU.day) {toast('Chart calculation error. Please try again');return;}
 BIRTH_YEAR = y;BIRTH_MONTH = sm;BIRTH_DAY = sd;BIRTH_HOUR = hourVal >= 0 ? adj.h : 12;INPUT_YEAR = y;INPUT_MONTH = m;INPUT_DAY = d;INPUT_IS_LUNAR = false;INPUT_HOUR_INDEX = hourVal;CONVERTED_HOUR_INDEX = hourBranchIdx;TIMEZONE_OFFSET = getTimezoneOffset(document.getElementById('birth-location')?.value || 'America/Los_Angeles', sy, sm, sd, realHour);ORIGINAL_DATE = {y: sy, m: sm, d: sd};CONVERTED_DATE = {y: adj.y, m: adj.m, d: adj.d};const str = calcStrength(SAJU);if (!str) { toast('Strength calculation error'); return; }
