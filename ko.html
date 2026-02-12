@@ -3381,33 +3381,33 @@ const isExtremeComplement = isComplementary && myClimate.includes('극') && pCli
 if (isComplementary) {const johuScore = isExtremeComplement ? 15 : 12;analysis.johu.score = johuScore;analysis.johu.details.push({type:'excellent',title: isExtremeComplement ? '🌡️ 극한극조 천생연분!' : '🌡️ 조후 보완!',desc:`나는 ${myClimate}, 상대는 ${pClimate}. ${isExtremeComplement ? '극과 극이 만나 완벽한 조화!' : '서로 부족한 기운을 채워줘요!'}`,tip: isExtremeComplement ? '운명적으로 맺어진 최고의 궁합!' : '만나면 편안해지는 좋은 궁합!'});}
 else if (myClimate === pClimate || (myClimate.includes('한') && pClimate.includes('한')) || (myClimate.includes('조') && pClimate.includes('조'))) {analysis.johu.score = -3;analysis.johu.details.push({type:'caution',title:'🌡️ 조후 동일',desc:`둘 다 ${myClimate.includes('한') ? '寒(한)' : '燥(조)'} 계열이에요.`,tip:'같은 성향이라 환경 조절 필요!'});}
 }
-const mySinsal = calcSinsal(SAJU);const pSinsal = calcSinsal(pSaju);const myDohwa = mySinsal?.find(s => s.n === '도화살');const pDohwa = pSinsal?.find(s => s.n === '도화살');if (myDohwa && pDohwa) {analysis.sinsal.score = 5;analysis.sinsal.details.push({type: 'special',
+const mySinsal = calcSinsal(SAJU);const pSinsal = calcSinsal(pSaju);const myDohwa = mySinsal?.find(s => s.n && s.n.includes('도화'));const pDohwa = pSinsal?.find(s => s.n && s.n.includes('도화'));if (myDohwa && pDohwa) {analysis.sinsal.score = 5;analysis.sinsal.details.push({type: 'special',
 title: '🌸 쌍도화 커플!',
 desc: '둘 다 도화살 보유! 매력적인 커플이에요.',
 tip: '서로에 대한 끌림이 강해요. 질투도 강하니 신뢰가 중요!'});} else if (myDohwa || pDohwa) {analysis.sinsal.score = 3;analysis.sinsal.details.push({type: 'neutral',
 title: '🌸 도화살 있음',
 desc: `${myDohwa ? '나' : '상대'}에게 도화살이 있어요.`,
 tip: '한쪽이 더 매력적으로 보일 수 있어요. 눈길 조심!'});}
-const myYeokma = mySinsal?.find(s => s.n === '역마살');const pYeokma = pSinsal?.find(s => s.n === '역마살');if (myYeokma && pYeokma) {analysis.sinsal.score += 4;analysis.sinsal.details.push({type: 'good',
+const myYeokma = mySinsal?.find(s => s.n && s.n.includes('역마'));const pYeokma = pSinsal?.find(s => s.n && s.n.includes('역마'));if (myYeokma && pYeokma) {analysis.sinsal.score += 4;analysis.sinsal.details.push({type: 'good',
 title: '🐎 쌍역마 커플!',
 desc: '둘 다 역마살 보유! 움직임이 활발한 커플이에요.',
 tip: '함께 여행 다니면 금상첨화! 장거리 연애도 가능해요.'});} else if (myYeokma && !pYeokma || !myYeokma && pYeokma) {analysis.sinsal.score += 1;analysis.sinsal.details.push({type: 'neutral',
 title: '🐎 역마살 있음',
 desc: `${myYeokma ? '나' : '상대'}에게 역마살이 있어요.`,
 tip: '한쪽은 돌아다니고 한쪽은 기다리는 패턴. 이해가 필요해요.'});}
-const myHwagae = mySinsal?.find(s => s.n === '화개살');const pHwagae = pSinsal?.find(s => s.n === '화개살');if (myHwagae && pHwagae) {analysis.sinsal.score += 5;analysis.sinsal.details.push({type: 'special',
+const myHwagae = mySinsal?.find(s => s.n && s.n.includes('화개'));const pHwagae = pSinsal?.find(s => s.n && s.n.includes('화개'));if (myHwagae && pHwagae) {analysis.sinsal.score += 5;analysis.sinsal.details.push({type: 'special',
 title: '🎭 쌍화개 커플!',
 desc: '둘 다 화개살 보유! 예술적 감성이 통하는 커플이에요.',
 tip: '함께 문화생활, 종교활동 하면 행복해요. 고독도 이해해줘요.'});}
-const myGongmang = calcGongmang(SAJU);const pGongmang = calcGongmang(pSaju);if (myGongmang?.values?.includes(pDbIdx)) {analysis.gongmang.score = -8;analysis.gongmang.details.push({type: 'caution',
+const myGongmang = calcGongmang(SAJU);const pGongmang = calcGongmang(pSaju);if (myGongmang?.gm?.includes(pDbIdx)) {analysis.gongmang.score = -8;analysis.gongmang.details.push({type: 'caution',
 title: '🕳️ 상대가 내 공망에!',
 desc: '상대의 일지가 나의 공망 자리예요.',
 tip: '처음엔 끌리지만 점점 공허해질 수 있어요. 현실적 노력이 필요!'});}
-if (pGongmang?.values?.includes(myDbIdx)) {analysis.gongmang.score -= 6;analysis.gongmang.details.push({type: 'caution',
+if (pGongmang?.gm?.includes(myDbIdx)) {analysis.gongmang.score -= 6;analysis.gongmang.details.push({type: 'caution',
 title: '🕳️ 내가 상대의 공망에!',
 desc: '나의 일지가 상대의 공망 자리예요.',
 tip: '상대가 나를 허무하게 느낄 수 있어요. 존재감을 적극 어필!'});}
-if (myGongmang?.values && pGongmang?.values) {const commonGongmang = myGongmang.values.filter(v => pGongmang.values.includes(v));if (commonGongmang.length > 0) {analysis.gongmang.score += 5;analysis.gongmang.details.push({type: 'special',
+if (myGongmang?.gm && pGongmang?.gm) {const commonGongmang = myGongmang.gm.filter(v => pGongmang.gm.includes(v));if (commonGongmang.length > 0) {analysis.gongmang.score += 5;analysis.gongmang.details.push({type: 'special',
 title: '☯︎ 공망이 같음!',
 desc: '같은 공망을 공유해요. 같은 걸 허무하게 느끼는 동질감!',
 tip: '서로의 공허함을 이해해줄 수 있는 특별한 인연이에요.'});}}

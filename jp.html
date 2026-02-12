@@ -3456,15 +3456,15 @@ const myHwagae = mySinsal?.find(s => s.n === '華蓋殺');const pHwagae = pSinsa
 title: '🎭 双華蓋カップル！',
 desc: '二人とも華蓋殺保有！芸術的感性が通じるカップルです。',
 tip: '一緒に文化活動、宗教活動をすれば幸せです. 孤独も理解してくれます。'});}
-const myGongmang = calcGongmang(SAJU);const pGongmang = calcGongmang(pSaju);if (myGongmang?.values?.includes(pDbIdx)) {analysis.gongmang.score = -8;analysis.gongmang.details.push({type: 'caution',
+const myGongmang = calcGongmang(SAJU);const pGongmang = calcGongmang(pSaju);if (myGongmang?.gm?.includes(pDbIdx)) {analysis.gongmang.score = -8;analysis.gongmang.details.push({type: 'caution',
 title: '🕳️ 相手が私の空亡に！',
 desc: '相手の日支が私の空亡の位置です。',
 tip: '最初は惹かれますが徐々に空虚になる可能性があります。現実的な努力が必要！'});}
-if (pGongmang?.values?.includes(myDbIdx)) {analysis.gongmang.score -= 6;analysis.gongmang.details.push({type: 'caution',
+if (pGongmang?.gm?.includes(myDbIdx)) {analysis.gongmang.score -= 6;analysis.gongmang.details.push({type: 'caution',
 title: '🕳️ 私が相手の空亡に！',
 desc: '私の日支が相手の空亡の位置です。',
 tip: '相手が私を虚しく感じる可能性があります。存在感を積極的にアピール！'});}
-if (myGongmang?.values && pGongmang?.values) {const commonGongmang = myGongmang.values.filter(v => pGongmang.values.includes(v));if (commonGongmang.length > 0) {analysis.gongmang.score += 5;analysis.gongmang.details.push({type: 'special',
+if (myGongmang?.gm && pGongmang?.gm) {const commonGongmang = myGongmang.gm.filter(v => pGongmang.gm.includes(v));if (commonGongmang.length > 0) {analysis.gongmang.score += 5;analysis.gongmang.details.push({type: 'special',
 title: '☯︎ 空亡が同じ！',
 desc: '同じ空亡を共有。 同じ を虚しく感じる同質感！',
 tip: '互いの空虚さを理解してくれる特別な縁です。'});}}
