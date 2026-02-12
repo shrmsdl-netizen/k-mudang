@@ -204,6 +204,33 @@ const INTERACTION_METAPHOR_KR = {
 'water_earth': { name: '막히는 물', emoji: '💧⚡🌍', type: 'receive', desc: '상대의 단단함에 흐름이 막힘', advice: '돌아가는 지혜' },
 'metal_fire': { name: '녹는 금속', emoji: '⚙️⚡🔥', type: 'receive', desc: '상대의 열정에 변형됨', advice: '단련으로 받아들이기' }
 };
+const MATCH_CAT_NAMES = {ilgan:'☯︎ 일간 궁합',ilji:'💑 일지 궁합',samhap:'🌀 삼합/방합',napeum:'🎵 납음 궁합',yongsin:'⭐ 용신 궁합',jijanggan:'🤫 지장간 궁합',ddi:'🐾 띠 궁합',ilju:'👼 귀인 궁합',wonJinGuiMun:'⚠️ 원진/귀문',yukChin:'💞 육친 궁합',twelveState:'⚡ 12운성',strength:'⚖️ 신강/신약',johu:'🌡️ 조후용신',sinsal:'✨ 신살 궁합',gongmang:'🕳️ 공망 궁합'};
+const MATCH_THEME = {
+romance: { title_cn: '缘分符', title_kr: '인연 부적', icon: 'romance', main: '#C71585', border: '#8B0035', bg1: '#FFF0F5', bg2: '#FFE4E1', bg3: '#FFF5EE', blessing: '두 사람의 인연에 큰 복이 깃들기를', cta: '💕 우리의 궁합을 확인해보세요', btn: '💕 인연 부적 생성하기' },
+business: { title_cn: '合财符', title_kr: '합재 부적', icon: 'business', main: '#1565C0', border: '#0D47A1', bg1: '#E8F0FF', bg2: '#D0E0F8', bg3: '#F0F5FF', blessing: '두 사람의 사업에 큰 재물이 깃들기를', cta: '💼 비즈니스 궁합을 확인해보세요', btn: '💼 합재 부적 생성하기' },
+family: { title_cn: '家和符', title_kr: '가화 부적', icon: 'family', main: '#2E7D32', border: '#1B5E20', bg1: '#E8FFE8', bg2: '#D0F0D0', bg3: '#F0FFF0', blessing: '가정에 화목과 평안이 깃들기를', cta: '👨‍👩‍👧 가족 궁합을 확인해보세요', btn: '👨‍👩‍👧 가화 부적 생성하기' }
+};
+const MATCH_MANTRA = {
+gen_fwd:  { romance: { h: '缘生福至 百年好合', k: '인연이 복을 낳아 백년해로' }, business: { h: '生财有道 合力共赢', k: '재를 낳는 도를 얻어 함께 이기다' }, family: { h: '家生和气 福泽绵长', k: '가정에 화기가 생겨 복이 길다' } },
+gen_rev:  { romance: { h: '承恩共荣 琴瑟和鸣', k: '은혜를 받아 함께 번영하다' }, business: { h: '贵人相助 财源广进', k: '귀인의 도움으로 재원이 넓다' }, family: { h: '承恩孝悌 和乐融融', k: '은혜를 받들어 화락하다' } },
+ovr_fwd:  { romance: { h: '刚柔并济 相磨成器', k: '강유가 어울려 서로를 갈고닦다' }, business: { h: '竞而不争 相克成金', k: '견제가 혁신을 만들어 금이 된다' }, family: { h: '严中有爱 教化成才', k: '엄함 속에 사랑으로 재목이 된다' } },
+ovr_rev:  { romance: { h: '逆缘化福 患难与共', k: '역연이 복이 되어 환난을 함께' }, business: { h: '压力化金 逆势而上', k: '압력이 금이 되어 역세를 돌파하다' }, family: { h: '逆中有恩 磨砺成长', k: '역경 속에 은혜로 성장하다' } },
+same:     { romance: { h: '同心协力 并肩前行', k: '한마음으로 나란히 나아가다' }, business: { h: '同业合心 事半功倍', k: '같은 뜻으로 반의 노력으로 두 배의 성과' }, family: { h: '同根同气 血脉相连', k: '같은 뿌리에서 피가 이어지다' } }
+};
+const MATCH_BLESSING = {
+gen_fwd:  { romance: '서로를 아끼는 마음이 큰 복을 부르리니 백년해로하리라', business: '함께 키운 일이 큰 재물로 돌아오리라', family: '베푸는 정이 온 가정에 복을 채우리라' },
+gen_rev:  { romance: '받은 사랑을 되돌리면 인연이 더욱 깊어지리라', business: '귀인의 뜻을 받들면 앞길에 금빛이 펼쳐지리라', family: '윗사람의 은혜에 감사하면 만복이 오리라' },
+ovr_fwd:  { romance: '다름을 존중하면 사랑이 더 단단해지리라', business: '서로 날카로움이 최고의 결과를 만들리라', family: '엄한 가르침 뒤에 큰 사랑이 있으리라' },
+ovr_rev:  { romance: '시련을 함께 넘으면 어떤 파도도 두렵지 않으리라', business: '역경이 클수록 성공의 열매도 크리라', family: '인내로 이겨낸 시간이 가장 큰 재산이 되리라' },
+same:     { romance: '같은 마음이니 함께라면 무엇이든 이루리라', business: '뜻이 하나이니 천하를 얻으리라', family: '한 뿌리의 정이 대대로 이어지리라' }
+};
+const MATCH_REMEDY = {
+gen_fwd:  { romance: '매월 보름에 함께 소원을 빌면 인연이 깊어지리라', business: '분기마다 목표를 나누면 재물운이 트이리라', family: '명절에 정성을 다하면 가운이 융성하리라' },
+gen_rev:  { romance: '감사의 말을 아끼지 말면 사랑이 배로 돌아오리라', business: '귀인에게 먼저 연락하면 기회가 열리리라', family: '어른의 말씀에 귀 기울이면 복이 오리라' },
+ovr_fwd:  { romance: '다툼 후 먼저 손 내밀면 정이 더 깊어지리라', business: '의견 충돌 시 하루 쉬고 답하면 최선이 보이리라', family: '한 발 물러서면 두 발의 화합이 오리라' },
+ovr_rev:  { romance: '힘든 날 상대 곁을 지키면 천금의 신뢰를 얻으리라', business: '위기를 기회로 바꾸면 남들이 못 볼 길이 열리리라', family: '인내의 시간이 가장 큰 유산이 되리라' },
+same:     { romance: '새로운 것을 함께 배우면 권태를 이기리라', business: '역할을 나누면 같은 힘이 두 배가 되리라', family: '서로의 다른 점을 찾아 칭찬하면 화목하리라' }
+};
 const BRANCH_CLASH_V2 = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
 const SELF_PUNISHMENT_V2 = [[6,6],[9,9],[4,4],[11,11]];
 function analyzeYearlyRisksV2(mySaju, partnerSaju, startYear, years) {
@@ -1091,7 +1118,9 @@ const DIRECTIONAL = [
 { branches: [5, 9, 1], element: 'metal', name: '巳酉丑 금국' },
 { branches: [11, 3, 7], element: 'wood', name: '亥卯未 목국' }
 ];if (!directionalFormed) {THREE_HARMONY.forEach(th => {const hasCount = th.branches.filter(b => branchIndices.includes(b)).length;const hasCenter = branchIndices.includes(th.branches[1]);if (hasCount >= 2 && hasCenter) {if (th.element === peerEl) {const bonus = hasCount === 3 ? 7 : 4;score += bonus;factors.push({ l: '🔥 삼합', v: `${th.name} → 비겁 (+${bonus})`, p: true });} else if (th.element === sealEl) {const bonus = hasCount === 3 ? 5 : 3;score += bonus;factors.push({ l: '🔥 삼합', v: `${th.name} → 인성 (+${bonus})`, p: true });} else if (th.element === exprEl) {const penalty = hasCount === 3 ? 4 : 2;score -= penalty;factors.push({ l: '⚠️ 삼합', v: `${th.name} → 설기 (−${penalty})`, p: false });} else if (th.element === officerEl) {const penalty = hasCount === 3 ? 5 : 3;score -= penalty;factors.push({ l: '⚠️ 삼합', v: `${th.name} → 압박 (−${penalty})`, p: false });}}});}
-const ALL_CLASH = [[0,6,'자오충',3],[3,9,'묘유충',3],[1,7,'축미충',2],[2,8,'인신충',2],[4,10,'진술충',2],[5,11,'사해충',2]];for (const [a, b, name, penalty] of ALL_CLASH) {if (branchIndices.includes(a) && branchIndices.includes(b)) {score -= penalty;factors.push({ l: penalty === 3 ? '⚡ 왕지충' : '⚡ 충', v: `${name} (−${penalty})`, p: false });}}
+const ALL_CLASH = [[0,6,'자오충',3],[3,9,'묘유충',3],[1,7,'축미충',2],[2,8,'인신충',2],[4,10,'진술충',2],[5,11,'사해충',2]];const clashSet = new Set();for (const [a, b, name, penalty] of ALL_CLASH) {if (branchIndices.includes(a) && branchIndices.includes(b)) {score -= penalty;factors.push({ l: penalty === 3 ? '⚡ 왕지충' : '⚡ 충', v: `${name} (−${penalty})`, p: false });clashSet.add(`${Math.min(a,b)}-${Math.max(a,b)}`);}}
+const SIX_HARMONY = [[0,1,'earth','자축합토'],[2,11,'wood','인해합목'],[3,10,'fire','묘술합화'],[4,9,'metal','진유합금'],[5,8,'water','사신합수'],[6,7,'fire','오미합화']];const adjBrPairs = [[0,1],[1,2],[2,3]];for (const [ha, hb, resEl, hname] of SIX_HARMONY) {for (const [pi, pj] of adjBrPairs) {if (pi >= branchIndices.length || pj >= branchIndices.length) continue;const bi = branchIndices[pi], bj = branchIndices[pj];if ((bi === ha && bj === hb) || (bi === hb && bj === ha)) {const ck = `${Math.min(ha,hb)}-${Math.max(ha,hb)}`;if (clashSet.has(ck)) continue;let hapScore = 0;if (resEl === peerEl) { hapScore = 2; } else if (resEl === sealEl) { hapScore = 1.5; } else if (resEl === officerEl) { hapScore = -2; } else { hapScore = -1; }
+score += hapScore;factors.push({ l: '🤝 육합', v: `${hname} → ${ELEMENT[resEl].k} (${hapScore > 0 ? '+' : ''}${hapScore})`, p: hapScore > 0 });}}}
 let type = 'balanced';let extreme = null;if (score >= 15) { type = 'strong'; extreme = '극신강'; }
 else if (score >= 8) type = 'strong';else if (score >= 3) type = 'balanced';else if (score <= -5) { type = 'weak'; extreme = '극신약'; }
 else if (score <= 2) type = 'weak';if ((hasRealRoot.day || hasRealRoot.hour) && extreme === '극신약') {extreme = null;type = 'weak';factors.push({ l: '⚡ 뿌리보정', v: '극신약→신약', p: true });}
@@ -1237,15 +1266,20 @@ presentBranches};}}}
 return result;}
 function fullAnalysis(saju, strength) {const dm = saju.day.s;const dmEl = dm.e;const dmi = STEM.indexOf(dm);const mbi = BRANCH.indexOf(saju.month.b);const samhap = analyzeSamhapBureau(saju);const climate = analyzeClimate(saju);let elCount = countElements(saju);if (samhap.complete) {elCount[samhap.element] = (elCount[samhap.element] || 0) + 2;} else if (samhap.partial) {elCount[samhap.element] = (elCount[samhap.element] || 0) + 1;}
 const EL = EL_ORDER;const dmIdx = EL.indexOf(dmEl);const peerEl = dmEl;const exprEl = EL[(dmIdx + 1) % 5];const wealthEl = EL[(dmIdx + 2) % 5];const officerEl = EL[(dmIdx + 3) % 5];const sealEl = EL[(dmIdx + 4) % 5];const str = strength || calcStrength(saju);const isWeak = str.type === 'weak';const isStrong = str.type === 'strong';const officerPower = (elCount[officerEl] || 0) +
-(samhap.element === officerEl ? (samhap.complete ? 3 : 1) : 0);const isOfficerStrong = officerPower >= 2;const wealthPower = elCount[wealthEl] || 0;const isWealthStrong = wealthPower >= 3;const sealPower = elCount[sealEl] || 0;const isSealStrong = sealPower >= 3;let yong, hee, gi;let yongReason = '';const peerPower = elCount[peerEl] || 0;const isVeryStrong = str.percent >= 90;if (isVeryStrong && peerPower >= 6) {yong = peerEl;hee = sealEl;gi = officerEl;yongReason = `종격(從格): 일간 ${str.percent}%로 극신강. 강한 기운을 따라야 함`;}
-else if (climate.type.includes('극한') || climate.type.includes('한')) {yong = 'fire';if (isOfficerStrong && sealEl === 'water') {hee = sealEl;gi = officerEl;yongReason = '조후용신(해동)+통관: 한습하나 관살도 강해 수도 필요';} else {hee = 'wood';gi = 'water';yongReason = '조후용신(해동): 한습 사주로 火 필요';}}
-else if (climate.type.includes('극조') || climate.type.includes('조')) {yong = 'water';hee = 'metal';gi = 'fire';yongReason = '조후용신(윤택): 조열 사주로 水 필요';}
-else if (isWeak && isOfficerStrong) {yong = sealEl;hee = peerEl;gi = wealthEl;yongReason = '통관용신(살인상생): 관살이 강해 인성으로 통관';}
-else if (isWealthStrong && isWeak) {const peerPower = elCount[peerEl] || 0;if (peerPower <= 1) {yong = sealEl;hee = peerEl;yongReason = '병약용신(생비): 비겁 부재로 인성이 먼저 필요';} else {yong = peerEl;hee = sealEl;yongReason = '병약용신(분재): 재성 과다로 비겁 필요';}
+(samhap.element === officerEl ? (samhap.complete ? 3 : 1) : 0);const isOfficerStrong = officerPower >= 2;const wealthPower = elCount[wealthEl] || 0;const isWealthStrong = wealthPower >= 3;const sealPower = elCount[sealEl] || 0;const isSealStrong = sealPower >= 3;let yong, hee, gi;let yongReason = '';const peerPower = elCount[peerEl] || 0;const isVeryStrong = str.pct >= 90;let isJonggyeok = false;if (isVeryStrong && peerPower >= 6) {yong = peerEl;hee = sealEl;gi = officerEl;yongReason = `종격(從格): 일간 ${str.pct}%로 극신강. 강한 기운을 따라야 함`;isJonggyeok = true;}
+if (!isJonggyeok && str.pct <= 10 && !str.dayRoot && !str.hourRoot) {let maxDomEl = null, maxDomCnt = 0;for (const el of EL) {if (el !== dmEl && (elCount[el] || 0) > maxDomCnt) { maxDomCnt = elCount[el]; maxDomEl = el; }}
+if (maxDomCnt >= 4) {if (maxDomEl === wealthEl) { yong = wealthEl; hee = exprEl; gi = sealEl; yongReason = `종재격(從財格): 재성 지배(${maxDomCnt.toFixed(1)}). 일간 무근으로 재를 따름`; }
+else if (maxDomEl === officerEl) { yong = officerEl; hee = wealthEl; gi = peerEl; yongReason = `종살격(從殺格): 관살 지배(${maxDomCnt.toFixed(1)}). 일간 무근으로 관을 따름`; }
+else if (maxDomEl === exprEl) { yong = exprEl; hee = wealthEl; gi = sealEl; yongReason = `종아격(從兒格): 식상 지배(${maxDomCnt.toFixed(1)}). 일간 무근으로 식상을 따름`; }
+if (yong) isJonggyeok = true;}}
+if (!isJonggyeok && (climate.type.includes('극한') || climate.type.includes('한'))) {yong = 'fire';if (isOfficerStrong && sealEl === 'water') {hee = sealEl;gi = officerEl;yongReason = '조후용신(해동)+통관: 한습하나 관살도 강해 수도 필요';} else {hee = 'wood';gi = 'water';yongReason = '조후용신(해동): 한습 사주로 火 필요';}}
+else if (!isJonggyeok && (climate.type.includes('극조') || climate.type.includes('조'))) {yong = 'water';hee = 'metal';gi = 'fire';yongReason = '조후용신(윤택): 조열 사주로 水 필요';}
+else if (!isJonggyeok && isWeak && isOfficerStrong) {yong = sealEl;hee = peerEl;gi = wealthEl;yongReason = '통관용신(살인상생): 관살이 강해 인성으로 통관';}
+else if (!isJonggyeok && isWealthStrong && isWeak) {const peerPower = elCount[peerEl] || 0;if (peerPower <= 1) {yong = sealEl;hee = peerEl;yongReason = '병약용신(생비): 비겁 부재로 인성이 먼저 필요';} else {yong = peerEl;hee = sealEl;yongReason = '병약용신(분재): 재성 과다로 비겁 필요';}
 gi = wealthEl;}
-else if (isStrong) {yong = exprEl;hee = wealthEl;gi = sealEl;yongReason = '억부용신(설기): 신강하여 식상으로 설기';}
-else if (isWeak) {yong = sealEl;hee = peerEl;gi = officerEl;yongReason = '억부용신(부조): 신약하여 인성으로 생조';}
-else {yong = exprEl;hee = wealthEl;gi = officerEl;yongReason = '억부용신(설기): 중화 사주로 식상 설기';}
+else if (!isJonggyeok && isStrong) {yong = exprEl;hee = wealthEl;gi = sealEl;yongReason = '억부용신(설기): 신강하여 식상으로 설기';}
+else if (!isJonggyeok && isWeak) {yong = sealEl;hee = peerEl;gi = officerEl;yongReason = '억부용신(부조): 신약하여 인성으로 생조';}
+else if (!isJonggyeok) {yong = exprEl;hee = wealthEl;gi = officerEl;yongReason = '억부용신(설기): 중화 사주로 식상 설기';}
 if (samhap.complete && samhap.element === officerEl && yong !== sealEl) {yong = exprEl;yongReason += ` + 식신제살(${samhap.name})`;}
 const johuData = CLIMATE_BALANCE[dmi] && CLIMATE_BALANCE[dmi][mbi];const yongCount = elCount[yong] || 0;let yongWarning = null;if (yongCount === 0) {yongWarning = `⚠️ 용신(${ELEMENT[yong].k}) 원국 부재! 운에서 ${ELEMENT[yong].k}이 올 때만 효과 발휘`;} else if (yongCount === 1) {yongWarning = `⚠️ 용신(${ELEMENT[yong].k}) 원국에 1개뿐. 해당 글자가 충/극 받으면 위험`;}
 let sudaHwasik = null;const waterCount = elCount.water || 0;const fireCount = elCount.fire || 0;if (dmEl === 'fire' && waterCount >= 3 && fireCount <= 1) {sudaHwasik = '수다화식(水多火熄): 물이 불을 끄는 형국. 火/木 운에 발복, 水/金 운에 위험';}
@@ -1400,7 +1434,8 @@ if (biCount >= 2) {breakReasons.push('군겁쟁재(群劫爭財): 비겁이 많�
 return breakReasons;}
 function checkSpecialFormat(saju, strength) {if (!strength.extreme) return null;const dm = saju.day.s;const ec = countElements(saju);const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);const godCounts = {bigeop:0, sikSang:0, jae:0, gwan:0, in:0};allPillars.forEach(p => {const god = getTenGod(p.s, dm);if (['비견','겁재'].includes(god.k)) godCounts.bigeop++;if (['식신','상관'].includes(god.k)) godCounts.sikSang++;if (['편재','정재'].includes(god.k)) godCounts.jae++;if (['편관','정관'].includes(god.k)) godCounts.gwan++;if (['편인','정인'].includes(god.k)) godCounts.in++;});const ybi = saju.year ? BRANCH.findIndex(b => b.c === saju.year.b.c) : -1;const hasSikSangWithRoot = saju.year && ['상관','식신'].includes(getTenGod(saju.year.s, saju.day.s)?.k) &&
 (ybi === 5 || ybi === 6);if (strength.extreme === '극신강' && !hasSikSangWithRoot) {if (godCounts.bigeop >= 3) return FORMATS_SPECIAL.jongwang;if (godCounts.in >= 2 && godCounts.bigeop >= 2) return FORMATS_SPECIAL.jonggang;}
-if (strength.extreme === '극신약') {if (godCounts.sikSang >= 3) return FORMATS_SPECIAL.jonga;if (godCounts.jae >= 3) return FORMATS_SPECIAL.jongjae;if (godCounts.gwan >= 3) return FORMATS_SPECIAL.jongsal;}
+if (strength.extreme === '극신약') {if (godCounts.sikSang >= 3) return FORMATS_SPECIAL.jonga;if (godCounts.jae >= 3) return FORMATS_SPECIAL.jongjae;if (godCounts.gwan >= 3) return FORMATS_SPECIAL.jongsal;
+if (!strength.hourRoot && !strength.dayRoot) {const dmEl2 = dm.e;const exprEl2 = EL_ORDER[(EL_ORDER.indexOf(dmEl2) + 1) % 5];const wealthEl2 = EL_ORDER[(EL_ORDER.indexOf(dmEl2) + 2) % 5];const officerEl2 = EL_ORDER[(EL_ORDER.indexOf(dmEl2) + 3) % 5];if (godCounts.sikSang >= 2 && ec[exprEl2] >= 4) return FORMATS_SPECIAL.jonga;if (godCounts.jae >= 2 && ec[wealthEl2] >= 4) return FORMATS_SPECIAL.jongjae;if (godCounts.gwan >= 2 && ec[officerEl2] >= 4) return FORMATS_SPECIAL.jongsal;}}
 return null;}
 function checkYangInGeonRok(saju) {const dm = saju.day.s;const dsi = STEM.indexOf(dm);const mbi = BRANCH.indexOf(saju.month.b);const geonrokMap = {0:2, 1:3, 2:5, 3:6, 4:5, 5:6, 6:8, 7:9, 8:11, 9:0};const yanginMap = {0:3, 1:2, 2:6, 3:5, 4:6, 5:5, 6:9, 7:8, 8:0, 9:11};if (mbi === geonrokMap[dsi]) {return FORMATS_SPECIAL.geonrok;}
 const dbi = BRANCH.indexOf(saju.day.b);if (dbi === yanginMap[dsi]) {return {...FORMATS_SPECIAL.yangin, hasYangIn: true};}
@@ -3435,7 +3470,7 @@ ${totalScore >= 70 ? `
 `}
 <p style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.1);"><strong>☯︎ 궁합보다 중요한 건 서로를 향한 마음이에요.</strong><br>
 좋은 궁합도 노력 없이는 무너지고, 안 좋은 궁합도 사랑으로 극복됩니다.
-</p></div></div><div class="card" style="text-align:center;"><button class="btn" style="background:linear-gradient(135deg,#D4AF37,#B8860B);color:#1a1a2e;font-weight:700;" onclick="copyMatchForAI()">
+</p></div></div><div class="card" style="text-align:center;"><div id="match-talisman-preview" style="display:none;margin-bottom:15px;"><canvas id="match-talisman-canvas" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,0.3);"></canvas><div style="margin-top:15px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button onclick="downloadMatchTalisman()" style="padding:14px 28px;background:linear-gradient(135deg,#FF69B4,#C71585);color:#fff;border:none;border-radius:25px;font-weight:700;cursor:pointer;font-size:1rem;">이미지 저장</button><button onclick="shareMatchTalisman()" style="padding:14px 28px;background:rgba(255,255,255,0.1);color:#FF69B4;border:1px solid #FF69B4;border-radius:25px;font-weight:700;cursor:pointer;font-size:1rem;">공유하기</button></div><p style="font-size:0.8rem;color:#888;margin-top:12px;">부적을 상대방에게 보내보세요!</p></div><div id="match-talisman-btn-wrapper"><button class="btn" style="background:linear-gradient(135deg,#FF69B4,#C71585);margin-bottom:10px;" onclick="generateMatchTalisman()">궁합 부적 생성하기</button></div><div id="match-talisman-loading" style="display:none;text-align:center;padding:30px 0;"><div style="width:60px;height:60px;margin:0 auto 15px;border-radius:50%;background:conic-gradient(#C71585 0% 25%,#1565C0 25% 50%,#C71585 50% 75%,#1565C0 75% 100%);animation:spin 1s linear infinite;"></div><p id="match-talisman-loading-text" style="font-family:'Nanum Pen Script',cursive;font-size:1.3rem;color:var(--gold);">음양의 인연을 합하는 중...</p></div></div><div class="card" style="text-align:center;"><button class="btn" style="background:linear-gradient(135deg,#D4AF37,#B8860B);color:#1a1a2e;font-weight:700;" onclick="copyMatchForAI()">
 📋 AI에게 두 사람의 인연을 넘기기
 </button><p style="margin-top:15px;font-size:13px;color:var(--gold);opacity:0.9;line-height:1.8;">
 ✨ 정밀한 궁합 데이터와 AI의 심층 분석이 만나는<br><span style="color:var(--gold);font-weight:600;">현존하는 가장 완벽한 궁합 해석의 조합</span>입니다
@@ -3450,6 +3485,211 @@ myNapeum, pNapeum,
 myTwelveState, pTwelveState,
 mySinsal, pSinsal,
 myGongmang, pGongmang};} catch (error) {console.error('궁합 분석 오류:', error);toast('궁합 분석 중 오류가 발생했습니다.');}}
+var matchTalismanGenerated=false;var matchTalismanDataUrl=null;
+function getMantraKey(type){if(type==='generate')return 'gen_fwd';if(type==='support')return 'gen_rev';if(type==='control')return 'ovr_fwd';if(type==='receive')return 'ovr_rev';return 'same';}
+function drawMatchIcon(ctx,x,y,type,color){
+ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';
+ctx.font='bold 160px "Ma Shan Zheng",cursive';
+var hanja='合',hangul='(합)';
+if(type==='business'){hanja='財';hangul='(재)';}
+else if(type==='family'){hanja='和';hangul='(화)';}
+ctx.fillText(hanja,x,y);
+ctx.font='bold 60px "Nanum Pen Script",cursive';
+ctx.fillText(hangul,x,y+120);
+ctx.textBaseline='alphabetic';
+}
+async function generateMatchTalisman(){
+var loadingTexts={romance:'음양의 인연을 합하는 중...',business:'재물의 기운을 모으는 중...',family:'가화의 기운을 합하는 중...'};
+var relType0=document.getElementById('relationship-type')?.value||'romance';
+var loadEl=document.getElementById('match-talisman-loading');
+var loadTxt=document.getElementById('match-talisman-loading-text');
+if(loadEl){loadEl.style.display='block';if(loadTxt)loadTxt.textContent=loadingTexts[relType0]||loadingTexts.romance;}
+document.getElementById('match-talisman-btn-wrapper').style.display='none';
+await new Promise(function(r){setTimeout(r,80)});
+try{
+if(!window.MATCH_RESULT){toast('먼저 궁합을 분석하세요');if(loadEl)loadEl.style.display='none';document.getElementById('match-talisman-btn-wrapper').style.display='block';return;}
+var r=window.MATCH_RESULT,mySaju=r.mySaju,pSaju=r.pSaju;
+var relType=document.getElementById('relationship-type')?.value||'romance';
+var mt=MATCH_THEME[relType]||MATCH_THEME.romance;
+var myIlju=mySaju.day.s.c+mySaju.day.b.c,pIlju=pSaju.day.s.c+pSaju.day.b.c;
+var myArch=ARCHETYPE_60[myIlju]||{ko:'?',color:'#D4AF37',pko:''};
+var pArch=ARCHETYPE_60[pIlju]||{ko:'?',color:'#D4AF37',pko:''};
+var myAnimalKey=BRANCH_TO_ANIMAL[mySaju.day.b.c],pAnimalKey=BRANCH_TO_ANIMAL[pSaju.day.b.c];
+var myAnimalImg=animalImages[myAnimalKey],pAnimalImg=animalImages[pAnimalKey];
+var totalScore=r.totalScore,grade=r.grade;
+var interKey=mySaju.day.s.e+'_'+pSaju.day.s.e;
+var myToP=INTERACTION_METAPHOR_KR[interKey];
+var mantraKey=myToP?getMantraKey(myToP.type):'same';
+var mantra=MATCH_MANTRA[mantraKey]?MATCH_MANTRA[mantraKey][relType]:null;
+if(!mantra)mantra={h:'天作之合 福缘善庆',k:'하늘이 맺어준 인연에 복이 깃드리라'};
+var blessing=MATCH_BLESSING[mantraKey]?MATCH_BLESSING[mantraKey][relType]:'함께하는 길에 큰 복이 깃들리라';
+var remedy=MATCH_REMEDY[mantraKey]?MATCH_REMEDY[mantraKey][relType]:'서로를 아끼면 모든 일이 풀리리라';
+var currentYear=new Date().getFullYear();
+var chineseNums=['〇','一','二','三','四','五','六','七','八','九'];
+var yearChinese=String(currentYear).split('').map(function(d){return chineseNums[parseInt(d)]}).join('');
+await document.fonts.ready;
+await document.fonts.load('bold 220px "Nanum Pen Script"');
+await document.fonts.load('bold 160px "Ma Shan Zheng"');
+await document.fonts.load('bold 140px "Ma Shan Zheng"');
+await document.fonts.load('bold 128px "Ma Shan Zheng"');
+await document.fonts.load('bold 120px "Ma Shan Zheng"');
+await document.fonts.load('bold 104px "Ma Shan Zheng"');
+await document.fonts.load('bold 96px "Ma Shan Zheng"');
+await document.fonts.load('bold 88px "Ma Shan Zheng"');
+await document.fonts.load('bold 72px "Ma Shan Zheng"');
+await document.fonts.load('64px "Ma Shan Zheng"');
+await document.fonts.load('56px "Ma Shan Zheng"');
+await document.fonts.load('48px "Ma Shan Zheng"');
+await document.fonts.load('44px "Ma Shan Zheng"');
+await document.fonts.load('40px "Ma Shan Zheng"');
+await document.fonts.load('36px "Ma Shan Zheng"');
+await document.fonts.load('32px "Ma Shan Zheng"');
+await document.fonts.load('24px "Ma Shan Zheng"');
+var _TH='가각감강같개거걷검겉게겨견결경계고과관광괴교권귀금기길깊깨꽃꾼꿰끗끝끼나난날남낭내냉냥너녀년념노논는늘능니다단달닭대더덕도독돌돼두드든따뚫뜨뜻띠라란랑략러럼려력로록롭뢰룡루룬른를리린립마만말망매맨맹머면명모목무묵물미민믿밀바받발밝밤배백뱀벽변별보복본봉부불붉비빛사상새생서석설섬성세소속솔쇠수순술숨숭스습시신실심십쌓아안알앞액야약얀양어언없에엔여열영예오온와완외요용우운움웅워원월위유윤융으은을음응의이인일임잇있자작잠장재적전정조족존좇주중쥐지직진질짜차착찰창챙처척천철청최추춘충취치칙침카칼케큰타탕태택터테토통투트티파평포폭폰표푸품풍하학한할함합해행혀혁현협형혜호혼화황회휴흙희흰히';
+await document.fonts.load('bold 220px "Nanum Pen Script"',_TH);
+await document.fonts.load('bold 104px "Nanum Pen Script"',_TH);
+await document.fonts.load('bold 96px "Nanum Pen Script"',_TH);
+await document.fonts.load('bold 88px "Nanum Pen Script"',_TH);
+await document.fonts.load('88px "Nanum Pen Script"',_TH);
+await document.fonts.load('bold 84px "Nanum Pen Script"',_TH);
+await document.fonts.load('84px "Nanum Pen Script"',_TH);
+await document.fonts.load('bold 80px "Nanum Pen Script"',_TH);
+await document.fonts.load('80px "Nanum Pen Script"',_TH);
+await document.fonts.load('bold 76px "Nanum Pen Script"',_TH);
+await document.fonts.load('bold 72px "Nanum Pen Script"',_TH);
+await document.fonts.load('72px "Nanum Pen Script"',_TH);
+await document.fonts.load('68px "Nanum Pen Script"',_TH);
+await document.fonts.load('64px "Nanum Pen Script"',_TH);
+await document.fonts.load('bold 80px "Nanum Pen Script"',_TH);
+await document.fonts.load('bold 60px "Nanum Pen Script"',_TH);
+await document.fonts.load('60px "Nanum Pen Script"',_TH);
+await document.fonts.load('56px "Nanum Pen Script"',_TH);
+await document.fonts.load('52px "Nanum Pen Script"',_TH);
+await document.fonts.load('48px "Nanum Pen Script"',_TH);
+await document.fonts.load('44px "Nanum Pen Script"',_TH);
+await document.fonts.load('40px "Nanum Pen Script"',_TH);
+await document.fonts.load('36px "Nanum Pen Script"',_TH);
+await document.fonts.load('32px "Nanum Pen Script"',_TH);
+await document.fonts.load('24px "Nanum Pen Script"',_TH);
+var canvas=document.getElementById('match-talisman-canvas');
+if(!canvas){toast('캔버스 오류');return;}
+var ctx=canvas.getContext('2d');
+var W=2160,H=3840;canvas.width=W;canvas.height=H;
+var bgGrad=ctx.createLinearGradient(0,0,0,H);
+bgGrad.addColorStop(0,mt.bg1);bgGrad.addColorStop(0.5,mt.bg2);bgGrad.addColorStop(1,mt.bg3);
+ctx.fillStyle=bgGrad;ctx.fillRect(0,0,W,H);
+drawHanjiTexture(ctx,W,H);
+ctx.strokeStyle=mt.border;ctx.lineWidth=12;ctx.strokeRect(80,80,W-160,H-160);
+ctx.strokeStyle=mt.main;ctx.lineWidth=4;ctx.strokeRect(110,110,W-220,H-220);
+drawCornerOrnamentsHD(ctx,W,H,{main:mt.main});
+drawTaegeukHD(ctx,W/2,280,110,{main:mt.border});
+ctx.textAlign='center';
+var curY=530;
+ctx.fillStyle=mt.border;ctx.font='bold 140px "Ma Shan Zheng",cursive';
+ctx.fillText(yearChinese+' '+mt.title_cn,W/2,curY);
+curY+=90;
+ctx.fillStyle=mt.border;ctx.font='80px "Nanum Pen Script",cursive';
+ctx.fillText(currentYear+'년 '+mt.title_kr,W/2,curY);
+curY+=120;
+ctx.fillStyle=mt.main;ctx.font='bold 120px "Ma Shan Zheng",cursive';
+ctx.fillText(mantra.h,W/2,curY);
+curY+=85;
+ctx.fillStyle=mt.border;ctx.font='72px "Nanum Pen Script",cursive';
+ctx.fillText(mantra.k,W/2,curY);
+curY+=100;
+var aSize=560,gap=300,lx=W/2-gap/2-aSize,rx=W/2+gap/2,ay=curY;
+function drawABox(img,arch,x,y){
+var bc=(arch.color==='#FFFFFF')?'#D4D4D4':(arch.color||'#D4AF37');
+ctx.fillStyle='rgba(255,255,255,0.7)';
+ctx.beginPath();ctx.roundRect(x,y,aSize,aSize,20);ctx.fill();
+ctx.strokeStyle=bc;ctx.lineWidth=8;
+ctx.beginPath();ctx.roundRect(x+4,y+4,aSize-8,aSize-8,20);ctx.stroke();
+if(img&&img.complete&&img.naturalWidth>0){var safe=true;try{var tc=document.createElement('canvas');tc.width=1;tc.height=1;tc.getContext('2d').drawImage(img,0,0,1,1);tc.toDataURL();}catch(e){safe=false;}if(safe){ctx.save();ctx.beginPath();ctx.roundRect(x+8,y+8,aSize-16,aSize-16,16);ctx.clip();ctx.drawImage(img,x+8,y+8,aSize-16,aSize-16);ctx.restore();}}}
+drawABox(myAnimalImg,myArch,lx,ay);drawABox(pAnimalImg,pArch,rx,ay);
+drawMatchIcon(ctx,W/2,ay+aSize/2-20,mt.icon,mt.main);
+curY=ay+aSize+90;
+ctx.textAlign='center';
+ctx.font='bold 104px "Nanum Pen Script",cursive';
+if(myArch.color==='#FFFFFF'){ctx.strokeStyle='rgba(75,55,40,0.7)';ctx.lineWidth=7;ctx.lineJoin='round';ctx.strokeText(myArch.ko,lx+aSize/2,curY);}
+ctx.fillStyle=myArch.color;ctx.fillText(myArch.ko,lx+aSize/2,curY);
+if(pArch.color==='#FFFFFF'){ctx.strokeStyle='rgba(75,55,40,0.7)';ctx.lineWidth=7;ctx.lineJoin='round';ctx.strokeText(pArch.ko,rx+aSize/2,curY);}
+ctx.fillStyle=pArch.color;ctx.fillText(pArch.ko,rx+aSize/2,curY);
+curY+=80;
+ctx.fillStyle='rgba(75,55,40,0.55)';ctx.font='84px "Nanum Pen Script",cursive';
+if(myArch.pko)ctx.fillText(myArch.pko,lx+aSize/2,curY);
+if(pArch.pko)ctx.fillText(pArch.pko,rx+aSize/2,curY);
+curY+=200;
+ctx.fillStyle=mt.border;ctx.font='bold 160px "Ma Shan Zheng",cursive';
+ctx.fillText(myIlju+' × '+pIlju,W/2,curY);
+curY+=200;
+ctx.fillStyle=mt.main;ctx.font='bold 220px "Nanum Pen Script",cursive';
+ctx.fillText(totalScore+'점',W/2,curY);
+curY+=100;
+ctx.fillStyle=mt.border;ctx.font='bold 96px "Nanum Pen Script",cursive';
+ctx.fillText(grade,W/2,curY);
+curY+=70;
+var barW=1000,barH=40,barX=(W-barW)/2;
+ctx.fillStyle='rgba(0,0,0,0.12)';
+ctx.beginPath();ctx.roundRect(barX,curY,barW,barH,20);ctx.fill();
+var fc=totalScore>=80?mt.main:totalScore>=60?'#9c27b0':totalScore>=40?'#ff9800':'#f44336';
+ctx.fillStyle=fc;
+ctx.beginPath();ctx.roundRect(barX,curY,barW*totalScore/100,barH,20);ctx.fill();
+curY+=130;
+if(myToP){
+ctx.fillStyle='rgba(75,55,40,0.9)';ctx.font='bold 80px "Nanum Pen Script",cursive';
+ctx.fillText(myToP.emoji+' '+myToP.name,W/2,curY);
+curY+=85;
+ctx.fillStyle='rgba(75,55,40,0.6)';ctx.font='68px "Nanum Pen Script",cursive';
+ctx.fillText(myToP.desc,W/2,curY);
+curY+=110;}
+var keywords=[];
+if(r.analysis){var cats=Object.keys(r.analysis);cats.forEach(function(cat){var a=r.analysis[cat];if(a&&typeof a.score==='number'&&a.score>0){keywords.push({cat:cat,name:MATCH_CAT_NAMES[cat]||cat,score:a.score});}});keywords.sort(function(a,b){return b.score-a.score});}
+if(keywords.length>=3){
+curY+=30;
+ctx.fillStyle=mt.border;ctx.font='bold 80px "Nanum Pen Script",cursive';
+ctx.fillText('✨ 궁합 키워드',W/2,curY);
+curY+=100;
+ctx.font='72px "Nanum Pen Script",cursive';ctx.fillStyle='rgba(75,55,40,0.8)';
+var topK=keywords.slice(0,3);
+for(var ki=0;ki<topK.length;ki++){ctx.fillText(topK[ki].name+' (+'+topK[ki].score+'점)',W/2,curY);curY+=90;}}
+curY+=70;
+ctx.fillStyle=mt.main;ctx.font='bold 84px "Nanum Pen Script",cursive';
+ctx.fillText(blessing,W/2,curY);
+curY+=110;
+ctx.fillStyle=mt.border;ctx.font='bold 80px "Nanum Pen Script",cursive';
+ctx.fillText(remedy,W/2,curY);
+curY+=100;
+var bottomY=H-400;
+ctx.fillStyle=mt.main;ctx.font='bold 88px "Nanum Pen Script",cursive';
+ctx.fillText(mt.blessing,W/2,bottomY-60);
+ctx.fillStyle=mt.border;ctx.font='72px "Nanum Pen Script",cursive';
+ctx.fillText('☯︎ k-mudang.com',W/2,bottomY+40);
+ctx.fillStyle='rgba(75,55,40,0.5)';ctx.font='60px "Nanum Pen Script",cursive';
+ctx.fillText(mt.cta,W/2,bottomY+120);
+matchTalismanGenerated=true;
+try{matchTalismanDataUrl=canvas.toDataURL('image/jpeg',0.88);}catch(e){console.warn('Match toDataURL failed:',e.message);matchTalismanDataUrl=null;}
+document.getElementById('match-talisman-preview').style.display='block';
+document.getElementById('match-talisman-btn-wrapper').style.display='none';
+if(document.getElementById('match-talisman-loading'))document.getElementById('match-talisman-loading').style.display='none';
+}catch(e){console.error('generateMatchTalisman error:',e);toast('부적 생성 중 오류: '+e.message);if(document.getElementById('match-talisman-loading'))document.getElementById('match-talisman-loading').style.display='none';document.getElementById('match-talisman-btn-wrapper').style.display='block';}}
+function downloadMatchTalisman(){
+if(!matchTalismanGenerated){generateMatchTalisman();return;}
+if(!matchTalismanDataUrl){toast('로컬 파일에서는 저장이 제한됩니다. 서버에서 이용하세요');return;}
+var link=document.createElement('a');link.download='K-MUDANG_궁합부적.jpg';link.href=matchTalismanDataUrl;link.click();toast('📥 부적 이미지가 저장되었습니다!');}
+function shareMatchTalisman(){
+if(!matchTalismanGenerated){generateMatchTalisman();return;}
+if(!matchTalismanDataUrl){toast('로컬 파일에서는 공유가 제한됩니다. 서버에서 이용하세요');return;}
+var canvas=document.getElementById('match-talisman-canvas');
+if(navigator.share&&navigator.canShare){
+canvas.toBlob(async function(blob){
+var relType=document.getElementById('relationship-type')?.value||'romance';
+var file=new File([blob],'K-MUDANG_궁합부적.png',{type:'image/png'});
+var shareData={title:'K-MUDANG '+(MATCH_THEME[relType]||MATCH_THEME.romance).title_kr,text:'우리의 궁합을 확인해보세요! ☯ k-mudang.com',files:[file]};
+if(navigator.canShare(shareData)){try{await navigator.share(shareData);}catch(e){}}
+else{downloadMatchTalisman();}
+},'image/png');
+}else{downloadMatchTalisman();}}
+
 function copyMatchForAI() {const relType = document.getElementById('relationship-type')?.value || 'romance';if (!window.MATCH_RESULT) { toast('먼저 궁합을 분석하세요'); return; }
 const r = window.MATCH_RESULT;
 const charInfo = window.MATCH_CHAR_RESULT || {};
