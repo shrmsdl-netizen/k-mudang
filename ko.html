@@ -716,6 +716,8 @@ const animalKey = BRANCH_TO_ANIMAL[dayBranch];
 const animalImg = animalImages[animalKey];
 const archImg = ARCHETYPE_60[iljuKey];
 if (animalImg && animalImg.complete && animalImg.naturalWidth > 0) {
+var _safe=true;try{var _tc=document.createElement('canvas');_tc.width=1;_tc.height=1;_tc.getContext('2d').drawImage(animalImg,0,0,1,1);_tc.toDataURL();}catch(e){_safe=false;}
+if(_safe){
 const boxX = 200, boxY = 2140, boxW = W - 400, boxH = 560;
 const imgSize = boxH;
 const imgX = boxX + boxW - imgSize;
@@ -734,7 +736,7 @@ ctx.lineWidth = borderW;
 ctx.beginPath();
 ctx.roundRect(imgX + borderW/2, imgY + borderW/2, imgSize - borderW, imgSize - borderW, borderRadius);
 ctx.stroke();
-}
+}}
 ctx.textAlign = 'left';ctx.font = '64px "Nanum Pen Script", cursive';const yongsinEl = ELEMENT[GODS.yong];const huisinEl = ELEMENT[GODS.hee];const gisinEl = ELEMENT[GODS.gi];ctx.fillStyle = '#CC0000';ctx.font = '80px "Ma Shan Zheng", cursive'; ctx.fillText('用神', 300, 2280);ctx.font = '80px "Nanum Pen Script", cursive';ctx.fillText('(용신)', 520, 2280);ctx.font = '64px "Nanum Pen Script", cursive';ctx.fillStyle = theme.main;ctx.font = '80px "Nanum Pen Script", cursive';ctx.fillText(`${yongsinEl.k} ${theme.emoji}`, 900, 2280);ctx.fillStyle = '#006600';ctx.font = '80px "Ma Shan Zheng", cursive'; ctx.fillText('喜神', 300, 2400);ctx.font = '80px "Nanum Pen Script", cursive';ctx.fillText('(희신)', 520, 2400);ctx.font = '64px "Nanum Pen Script", cursive';ctx.fillStyle = theme.main;ctx.font = '80px "Nanum Pen Script", cursive';ctx.fillText(`${huisinEl.k}`, 900, 2400);ctx.fillStyle = '#666666';ctx.font = '80px "Ma Shan Zheng", cursive'; ctx.fillText('忌神', 300, 2520);ctx.font = '80px "Nanum Pen Script", cursive';ctx.fillText('(기신)', 520, 2520);ctx.font = '64px "Nanum Pen Script", cursive';ctx.fillStyle = '#888';ctx.font = '80px "Nanum Pen Script", cursive';ctx.fillText(`${gisinEl.k}`, 900, 2520);ctx.fillStyle = theme.border;ctx.font = '80px "Ma Shan Zheng", cursive'; ctx.fillText('身强弱', 300, 2640);ctx.font = '80px "Nanum Pen Script", cursive';ctx.fillText('(신강약)', 580, 2640);ctx.font = '64px "Nanum Pen Script", cursive';ctx.fillStyle = theme.main;const strType = STRENGTH ? (STRENGTH.type === 'strong' ? '신강' : STRENGTH.type === 'weak' ? '신약' : '중화') : '?';const strPct = STRENGTH ? STRENGTH.pct + '%' : '';ctx.font = '80px "Nanum Pen Script", cursive';ctx.fillText(`${strType} ${strPct}`, 900, 2640);ctx.textAlign = 'center';ctx.fillStyle = theme.border;ctx.font = '72px "Nanum Pen Script", cursive';ctx.fillText(`─── ${currentYear}년 ${yearColor} ${yearAnimal}띠 해 ───`, W/2, 2820);let bestMonth = '?', worstMonth = '?';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU, GODS);if (monthlyLuck && monthlyLuck.best) bestMonth = monthlyLuck.best.month;if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;} catch(e) {}
 ctx.font = '80px "Nanum Pen Script", cursive';ctx.fillStyle = '#006600';ctx.fillText(`✨ 최고의 달: ${bestMonth}월`, W/2 - 360, 2940);ctx.fillStyle = '#CC0000';ctx.font = '80px "Nanum Pen Script", cursive';ctx.fillText(`⚠️ 주의할 달: ${worstMonth}월`, W/2 + 360, 2940);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 3060);ctx.lineTo(W-300, 3060);ctx.stroke();
 const archetype = ARCHETYPE_60[iljuKey];

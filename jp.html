@@ -767,6 +767,8 @@ const animalKey = BRANCH_TO_ANIMAL[dayBranch];
 const animalImg = animalImages[animalKey];
 const archImg = ARCHETYPE_60[iljuKey];
 if (animalImg && animalImg.complete && animalImg.naturalWidth > 0) {
+var _safe=true;try{var _tc=document.createElement('canvas');_tc.width=1;_tc.height=1;_tc.getContext('2d').drawImage(animalImg,0,0,1,1);_tc.toDataURL();}catch(e){_safe=false;}
+if(_safe){
 const boxX = 200, boxY = 2140, boxW = W - 400, boxH = 560;
 const imgSize = boxH;
 const imgX = boxX + boxW - imgSize;
@@ -785,8 +787,8 @@ ctx.lineWidth = borderW;
 ctx.beginPath();
 ctx.roundRect(imgX + borderW/2, imgY + borderW/2, imgSize - borderW, imgSize - borderW, borderRadius);
 ctx.stroke();
-}
-ctx.textAlign = 'left';ctx.font = '56px "Zen Kurenaido", serif';const yongsinEl = ELEMENT[GODS.yong];const huisinEl = ELEMENT[GODS.hee];const gisinEl = ELEMENT[GODS.gi];ctx.fillStyle = '#CC0000';ctx.font = '80px "Ma Shan Zheng", cursive';ctx.fillText('用神', 300, 2280);ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText('(ようしん)', 520, 2280);ctx.font = '56px "Zen Kurenaido", serif';ctx.fillStyle = theme.main;ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText(`${yongsinEl.k} ${theme.emoji}`, 900, 2280);ctx.fillStyle = '#006600';ctx.font = '80px "Ma Shan Zheng", cursive';ctx.fillText('喜神', 300, 2400);ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText('(きしん)', 520, 2400);ctx.font = '56px "Zen Kurenaido", serif';ctx.fillStyle = theme.main;ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText(`${huisinEl.k}`, 900, 2400);ctx.fillStyle = '#666666';ctx.font = '80px "Ma Shan Zheng", cursive';ctx.fillText('忌神', 300, 2520);ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText('(きしん)', 520, 2520);ctx.font = '56px "Zen Kurenaido", serif';ctx.fillStyle = '#888';ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText(`${gisinEl.k}`, 900, 2520);ctx.fillStyle = theme.border;ctx.font = '80px "Ma Shan Zheng", cursive';ctx.fillText('身強弱', 300, 2640);ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText('(強弱)', 580, 2640);ctx.font = '56px "Zen Kurenaido", serif';ctx.fillStyle = theme.main;const strType = STRENGTH ? (STRENGTH.type === 'strong' ? '身強' : STRENGTH.type === 'weak' ? '身弱' : '中和') : '?';const strPct = STRENGTH ? STRENGTH.pct + '%' : '';ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText(`${strType} ${strPct}`, 900, 2640);ctx.textAlign = 'center';ctx.fillStyle = theme.border;ctx.font = '64px "Zen Kurenaido", serif';ctx.fillText(`─── ${currentYear}年 ${yearColor} ${yearAnimal}干支年 ───`, W/2, 2820);let bestMonth = '?', worstMonth = '?';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU, GODS);if (monthlyLuck && monthlyLuck.best) bestMonth = monthlyLuck.best.month;if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;} catch(e) {}
+}}
+ctx.textAlign = 'left';ctx.font = '56px "Zen Kurenaido", serif';const yongsinEl = ELEMENT[GODS.yong];const huisinEl = ELEMENT[GODS.hee];const gisinEl = ELEMENT[GODS.gi];ctx.fillStyle = '#CC0000';ctx.font = '80px "Ma Shan Zheng", cursive';ctx.fillText('用神', 300, 2280);ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText('(ようしん)', 520, 2280);ctx.font = '56px "Zen Kurenaido", serif';ctx.fillStyle = theme.main;ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText(`${yongsinEl.k} ${theme.emoji}`, 900, 2280);ctx.fillStyle = '#006600';ctx.font = '80px "Ma Shan Zheng", cursive';ctx.fillText('喜神', 300, 2400);ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText('(きしん)', 520, 2400);ctx.font = '56px "Zen Kurenaido", serif';ctx.fillStyle = theme.main;ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText(`${huisinEl.k}`, 900, 2400);ctx.fillStyle = '#666666';ctx.font = '80px "Ma Shan Zheng", cursive';ctx.fillText('忌神', 300, 2520);ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText('(いみがみ)', 520, 2520);ctx.font = '56px "Zen Kurenaido", serif';ctx.fillStyle = '#888';ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText(`${gisinEl.k}`, 900, 2520);ctx.fillStyle = theme.border;ctx.font = '80px "Ma Shan Zheng", cursive';ctx.fillText('身強弱', 300, 2640);ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText('(しんきょうじゃく)', 580, 2640);ctx.font = '56px "Zen Kurenaido", serif';ctx.fillStyle = theme.main;const strType = STRENGTH ? (STRENGTH.type === 'strong' ? '身強' : STRENGTH.type === 'weak' ? '身弱' : '中和') : '?';const strPct = STRENGTH ? STRENGTH.pct + '%' : '';ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText(`${strType} ${strPct}`, 900, 2640);ctx.textAlign = 'center';ctx.fillStyle = theme.border;ctx.font = '64px "Zen Kurenaido", serif';ctx.fillText(`─── ${currentYear}年 ${yearColor} ${yearAnimal}干支年 ───`, W/2, 2820);let bestMonth = '?', worstMonth = '?';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU, GODS);if (monthlyLuck && monthlyLuck.best) bestMonth = monthlyLuck.best.month;if (monthlyLuck && monthlyLuck.worst) worstMonth = monthlyLuck.worst.month;} catch(e) {}
 ctx.font = '72px "Zen Kurenaido", serif';ctx.fillStyle = '#006600';ctx.fillText(`✨ 最高の月: ${bestMonth}月`, W/2 - 360, 2940);ctx.fillStyle = '#CC0000';ctx.font = '72px "Zen Kurenaido", serif';ctx.fillText(`⚠️ 注意の月: ${worstMonth}月`, W/2 + 360, 2940);ctx.strokeStyle = theme.border;ctx.lineWidth = 4;ctx.beginPath();ctx.moveTo(300, 3060);ctx.lineTo(W-300, 3060);ctx.stroke();
 const archetype = ARCHETYPE_60[iljuKey];
 const animalBranch = dayBranch;
@@ -2302,7 +2304,7 @@ ${ttAnalysis.tougan.length ? ttAnalysis.tougan.map(t => `
 `).join('') : '<p style="color:var(--gray);font-size:0.9rem;">透干した支蔵干がありません。</p>'}
 </div></div>
 `;document.getElementById('gods').innerHTML = `
-<div class="god yong"><div class="god-title">用神(ようじん)</div><div class="god-element el-${GODS.yong}">${ELEMENT[GODS.yong].c}</div><div class="god-name">${ELEMENT[GODS.yong].k} - ${ELEMENT[GODS.yong].n}</div></div><div class="god hee"><div class="god-title">喜神(きじん)</div><div class="god-element el-${GODS.hee}">${ELEMENT[GODS.hee].c}</div><div class="god-name">${ELEMENT[GODS.hee].k} - ${ELEMENT[GODS.hee].n}</div></div><div class="god gi"><div class="god-title">忌神(きじん)</div><div class="god-element el-${GODS.gi}">${ELEMENT[GODS.gi].c}</div><div class="god-name">${ELEMENT[GODS.gi].k} - ${ELEMENT[GODS.gi].n}</div></div>
+<div class="god yong"><div class="god-title">用神(ようじん)</div><div class="god-element el-${GODS.yong}">${ELEMENT[GODS.yong].c}</div><div class="god-name">${ELEMENT[GODS.yong].k} - ${ELEMENT[GODS.yong].n}</div></div><div class="god hee"><div class="god-title">喜神(きしん)</div><div class="god-element el-${GODS.hee}">${ELEMENT[GODS.hee].c}</div><div class="god-name">${ELEMENT[GODS.hee].k} - ${ELEMENT[GODS.hee].n}</div></div><div class="god gi"><div class="god-title">忌神(いみがみ)</div><div class="god-element el-${GODS.gi}">${ELEMENT[GODS.gi].c}</div><div class="god-name">${ELEMENT[GODS.gi].k} - ${ELEMENT[GODS.gi].n}</div></div>
 `;let godsDetailHtml = `<div class="info-box gold"><p>${ELEMENT[GODS.yong].n} 気が あなたに幸運をもたらします。</p></div>`;if (GODS.johu) {godsDetailHtml += `
 <div class="info-box" style="margin-top:10px;"><p><strong>🌡️ 調候 分析</strong></p><p style="margin-top:8px;font-size:0.9rem;">${GODS.johuDesc || '季節に合った調候用神が適用されました。'}</p>
 ${GODS.sub ? `<p style="margin-top:5px;font-size:0.85rem;color:var(--gray);">補助用神: ${ELEMENT[GODS.sub].k}(${ELEMENT[GODS.sub].c})</p>` : ''}
@@ -2663,8 +2665,8 @@ ${canBeJonggeok ? '• 特記事項: ' + str.extreme + ' 四柱 (従格の可能
 【用神/喜神/忌神】 ⭐ 核心 (必ず 解釈に反映）
 ┌─────────────────────────────────────────────────┐
 │ 用神(ようじん): ${ELEMENT[GODS.yong].k} - 最も必要な五行 │
-│ 喜神(きじん): ${ELEMENT[GODS.hee].k} - 用神を助ける五行 │
-│ 忌神(きじん): ${ELEMENT[GODS.gi].k} - 避けるべき五行 │
+│ 喜神(きしん): ${ELEMENT[GODS.hee].k} - 用神を助ける五行 │
+│ 忌神(いみがみ): ${ELEMENT[GODS.gi].k} - 避けるべき五行 │
 │ 閑神(かんじん): ${ELEMENT[hansinEl].k} - 忌神を助ける五行 │
 └─────────────────────────────────────────────────┘
 ${GODS.yongReason ? '• 判断根拠: ' + GODS.yongReason : ''}
@@ -3706,10 +3708,12 @@ ctx.font='72px "Zen Kurenaido",serif';ctx.fillStyle='rgba(75,55,40,0.8)';
 var topK=keywords.slice(0,3);
 for(var ki=0;ki<topK.length;ki++){ctx.fillText(topK[ki].name+' (+'+topK[ki].score+'点)',W/2,curY);curY+=90;}}
 curY+=70;
-ctx.fillStyle=mt.main;ctx.font='bold 72px "Zen Kurenaido",serif';
+ctx.fillStyle=mt.main;var bFs=72;ctx.font='bold '+bFs+'px "Zen Kurenaido",serif';
+var _mxW=W-240;while(bFs>44&&ctx.measureText(blessing).width>_mxW){bFs-=4;ctx.font='bold '+bFs+'px "Zen Kurenaido",serif';}
 ctx.fillText(blessing,W/2,curY);
 curY+=140;
-ctx.fillStyle=mt.border;ctx.font='bold 68px "Zen Kurenaido",serif';
+ctx.fillStyle=mt.border;var rFs=68;ctx.font='bold '+rFs+'px "Zen Kurenaido",serif';
+while(rFs>40&&ctx.measureText(remedy).width>_mxW){rFs-=4;ctx.font='bold '+rFs+'px "Zen Kurenaido",serif';}
 ctx.fillText(remedy,W/2,curY);
 curY+=100;
 var bottomY=H-380;
