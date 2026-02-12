@@ -206,6 +206,33 @@ const INTERACTION_METAPHOR_KR = {
 };
 const BRANCH_CLASH_V2 = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
 const SELF_PUNISHMENT_V2 = [[6,6],[9,9],[4,4],[11,11]];
+const MATCH_CAT_NAMES = {ilgan:'☯︎ 日干相性',ilji:'💑 日支相性',samhap:'🌀 三合/方合',napeum:'🎵 納音相性',yongsin:'⭐ 用神相性',jijanggan:'🤫 支藏干相性',ddi:'🐾 干支相性',ilju:'👼 貴人相性',wonJinGuiMun:'⚠️ 怨嗔/鬼門',yukChin:'💞 六親相性',twelveState:'⚡ 十二運星',strength:'⚖️ 身強/身弱',johu:'🌡️ 調候用神',sinsal:'✨ 神殺相性',gongmang:'🕳️ 空亡相性'};
+const MATCH_THEME = {
+romance: { title_cn: '缘分符', title_kr: '縁結びの符', icon: 'romance', main: '#C71585', border: '#8B0035', bg1: '#FFF0F5', bg2: '#FFE4E1', bg3: '#FFF5EE', blessing: '二人の縁に大きな福が宿りますように', cta: '💕 相性を確認してみましょう', btn: '💕 縁結びの符を生成する' },
+business: { title_cn: '合财符', title_kr: '合財の符', icon: 'business', main: '#1565C0', border: '#0D47A1', bg1: '#E8F0FF', bg2: '#D0E0F8', bg3: '#F0F5FF', blessing: '二人の事業に大きな財が宿りますように', cta: '💼 ビジネス相性を確認してみましょう', btn: '💼 合財の符を生成する' },
+family: { title_cn: '家和符', title_kr: '家和の符', icon: 'family', main: '#2E7D32', border: '#1B5E20', bg1: '#E8FFE8', bg2: '#D0F0D0', bg3: '#F0FFF0', blessing: '一家に調和と福が満ちますように', cta: '👨‍👩‍👧 家族の相性を確認してみましょう', btn: '👨‍👩‍👧 家和の符を生成する' }
+};
+const MATCH_MANTRA = {
+gen_fwd:  { romance: { h: '缘生福至 百年好合', k: '縁が福を生み百年の調和' }, business: { h: '生财有道 合力共赢', k: '財を生む道を得て共に勝つ' }, family: { h: '家生和气 福泽绵长', k: '家に和気が生じ福が長く続く' } },
+gen_rev:  { romance: { h: '承恩共荣 琴瑟和鸣', k: '恩を受け共に栄える' }, business: { h: '贵人相助 财源广进', k: '貴人の助けで財源が広がる' }, family: { h: '承恩孝悌 和乐融融', k: '恩を受け継ぎ和楽が満ちる' } },
+ovr_fwd:  { romance: { h: '刚柔并济 相磨成器', k: '剛柔合わせ互いを磨く' }, business: { h: '竞而不争 相克成金', k: '競い合いが革新を生み金となる' }, family: { h: '严中有爱 教化成才', k: '厳しさの中に愛があり才となる' } },
+ovr_rev:  { romance: { h: '逆缘化福 患难与共', k: '逆縁が福となり苦難を共にする' }, business: { h: '压力化金 逆势而上', k: '圧力が金となり逆境を突破する' }, family: { h: '逆中有恩 磨砺成长', k: '逆境の中に恩があり成長する' } },
+same:     { romance: { h: '同心协力 并肩前行', k: '心を一つに肩を並べて進む' }, business: { h: '同业合心 事半功倍', k: '同じ志で半分の力で倍の成果' }, family: { h: '同根同气 血脉相连', k: '同じ根から血が繋がる' } }
+};
+const MATCH_BLESSING = {
+gen_fwd:  { romance: '互いを慈しむ心が大きな福を呼び百年の縁となるでしょう', business: '共に育てた事業が大きな財として戻るでしょう', family: '施す情が家中に福を満たすでしょう' },
+gen_rev:  { romance: '受けた愛を返せば縁がさらに深まるでしょう', business: '貴人の意を受ければ前途に金色が広がるでしょう', family: '目上の恩に感謝すれば万福が訪れるでしょう' },
+ovr_fwd:  { romance: '違いを尊重すれば愛がより堅くなるでしょう', business: '互いの鋭さが最高の結果を生むでしょう', family: '厳しい教えの後に大きな愛があるでしょう' },
+ovr_rev:  { romance: '試練を共に越えればどんな波も恐くないでしょう', business: '逆境が大きいほど成功の実も大きいでしょう', family: '忍耐で乗り越えた時間が最大の財産となるでしょう' },
+same:     { romance: '同じ心であれば共にいれば何でも成せるでしょう', business: '志が一つであれば天下を得るでしょう', family: '一つの根の情が代々受け継がれるでしょう' }
+};
+const MATCH_REMEDY = {
+gen_fwd:  { romance: '毎月の満月に共に願をかければ縁が深まるでしょう', business: '四半期ごとに目標を分かち合えば財運が開くでしょう', family: '祝日に真心を尽くせば家運が隆盛するでしょう' },
+gen_rev:  { romance: '感謝の言葉を惜しまなければ愛が倍になるでしょう', business: '貴人に先に連絡すれば機会が開くでしょう', family: '年長者の言葉に耳を傾ければ福が訪れるでしょう' },
+ovr_fwd:  { romance: '争いの後に先に手を差し伸べれば情が深まるでしょう', business: '意見の衝突時は一日置いて答えれば最善が見えるでしょう', family: '一歩引けば二歩の和合が訪れるでしょう' },
+ovr_rev:  { romance: '辛い日に相手のそばを守れば千金の信頼を得るでしょう', business: '危機を機会に変えれば他が見えない道が開くでしょう', family: '忍耐の時間が最大の遺産となるでしょう' },
+same:     { romance: '新しいことを共に学べば倦怠を乗り越えるでしょう', business: '役割を分ければ同じ力が倍になるでしょう', family: '互いの違いを見つけ褒めれば和睦するでしょう' }
+};
 function analyzeYearlyRisksV2(mySaju, partnerSaju, startYear, years) {
 const risks = [];
 for (let year = startYear; year < startYear + years; year++) {
@@ -1149,7 +1176,9 @@ const DIRECTIONAL = [
 { branches: [5, 9, 1], element: 'metal', name: '巳酉丑 金局' },
 { branches: [11, 3, 7], element: 'wood', name: '亥卯未 木局' }
 ];if (!directionalFormed) {THREE_HARMONY.forEach(th => {const hasCount = th.branches.filter(b => branchIndices.includes(b)).length;const hasCenter = branchIndices.includes(th.branches[1]);if (hasCount >= 2 && hasCenter) {if (th.element === peerEl) {const bonus = hasCount === 3 ? 7 : 4;score += bonus;factors.push({ l: '🔥 三合', v: `${th.name} → 比劫 (+${bonus})`, p: true });} else if (th.element === sealEl) {const bonus = hasCount === 3 ? 5 : 3;score += bonus;factors.push({ l: '🔥 三合', v: `${th.name} → 印星 (+${bonus})`, p: true });} else if (th.element === exprEl) {const penalty = hasCount === 3 ? 4 : 2;score -= penalty;factors.push({ l: '⚠️ 三合', v: `${th.name} → 洩気 (−${penalty})`, p: false });} else if (th.element === officerEl) {const penalty = hasCount === 3 ? 5 : 3;score -= penalty;factors.push({ l: '⚠️ 三合', v: `${th.name} → 圧迫 (−${penalty})`, p: false });}}});}
-const ALL_CLASH = [[0,6,'子午冲',3],[3,9,'卯酉沖',3],[1,7,'丑未沖',2],[2,8,'寅申沖',2],[4,10,'辰戌沖',2],[5,11,'巳亥沖',2]];for (const [a, b, name, penalty] of ALL_CLASH) {if (branchIndices.includes(a) && branchIndices.includes(b)) {score -= penalty;factors.push({ l: penalty === 3 ? '⚡ 旺支沖' : '⚡ 沖', v: `${name} (−${penalty})`, p: false });}}
+const ALL_CLASH = [[0,6,'子午冲',3],[3,9,'卯酉沖',3],[1,7,'丑未沖',2],[2,8,'寅申沖',2],[4,10,'辰戌沖',2],[5,11,'巳亥沖',2]];const clashSet = new Set();for (const [a, b, name, penalty] of ALL_CLASH) {if (branchIndices.includes(a) && branchIndices.includes(b)) {score -= penalty;factors.push({ l: penalty === 3 ? '⚡ 旺支沖' : '⚡ 沖', v: `${name} (−${penalty})`, p: false });clashSet.add(`${Math.min(a,b)}-${Math.max(a,b)}`);}}
+const SIX_HARMONY = [[0,1,'earth','子丑合土'],[2,11,'wood','寅亥合木'],[3,10,'fire','卯戌合火'],[4,9,'metal','辰酉合金'],[5,8,'water','巳申合水'],[6,7,'fire','午未合火']];const adjBrPairs = [[0,1],[1,2],[2,3]];for (const [ha, hb, resEl, hname] of SIX_HARMONY) {for (const [pi, pj] of adjBrPairs) {if (pi >= branchIndices.length || pj >= branchIndices.length) continue;const bi = branchIndices[pi], bj = branchIndices[pj];if ((bi === ha && bj === hb) || (bi === hb && bj === ha)) {const ck = `${Math.min(ha,hb)}-${Math.max(ha,hb)}`;if (clashSet.has(ck)) continue;let hapScore = 0;if (resEl === peerEl) { hapScore = 2; } else if (resEl === sealEl) { hapScore = 1.5; } else if (resEl === officerEl) { hapScore = -2; } else { hapScore = -1; }
+score += hapScore;factors.push({ l: '🤝 六合', v: `${hname} → ${ELEMENT[resEl].k} (${hapScore > 0 ? '+' : ''}${hapScore})`, p: hapScore > 0 });}}}
 let type = 'balanced';let extreme = null;if (score >= 15) { type = 'strong'; extreme = '極身強'; }
 else if (score >= 8) type = 'strong';else if (score >= 3) type = 'balanced';else if (score <= -5) { type = 'weak'; extreme = '極身弱'; }
 else if (score <= 2) type = 'weak';if ((hasRealRoot.day || hasRealRoot.hour) && extreme === '極身弱') {extreme = null;type = 'weak';factors.push({ l: '⚡ 根補正', v: '極身弱→身弱', p: true });}
@@ -1295,15 +1324,20 @@ presentBranches};}}}
 return result;}
 function fullAnalysis(saju, strength) {const dm = saju.day.s;const dmEl = dm.e;const dmi = STEM.indexOf(dm);const mbi = BRANCH.indexOf(saju.month.b);const samhap = analyzeSamhapBureau(saju);const climate = analyzeClimate(saju);let elCount = countElements(saju);if (samhap.complete) {elCount[samhap.element] = (elCount[samhap.element] || 0) + 2;} else if (samhap.partial) {elCount[samhap.element] = (elCount[samhap.element] || 0) + 1;}
 const EL = EL_ORDER;const dmIdx = EL.indexOf(dmEl);const peerEl = dmEl;const exprEl = EL[(dmIdx + 1) % 5];const wealthEl = EL[(dmIdx + 2) % 5];const officerEl = EL[(dmIdx + 3) % 5];const sealEl = EL[(dmIdx + 4) % 5];const str = strength || calcStrength(saju);const isWeak = str.type === 'weak';const isStrong = str.type === 'strong';const officerPower = (elCount[officerEl] || 0) +
-(samhap.element === officerEl ? (samhap.complete ? 3 : 1) : 0);const isOfficerStrong = officerPower >= 2;const wealthPower = elCount[wealthEl] || 0;const isWealthStrong = wealthPower >= 3;const sealPower = elCount[sealEl] || 0;const isSealStrong = sealPower >= 3;let yong, hee, gi;let yongReason = '';const peerPower = elCount[peerEl] || 0;const isVeryStrong = str.percent >= 90;if (isVeryStrong && peerPower >= 6) {yong = peerEl;hee = sealEl;gi = officerEl;yongReason = `従格: 日干 ${str.percent}%で極身強。強い気に従うべき`;}
-else if (climate.type.includes('極寒') || climate.type.includes('寒')) {yong = 'fire';if (isOfficerStrong && sealEl === 'water') {hee = sealEl;gi = officerEl;yongReason = '調候用神(解凍)+通関: 寒湿だが官殺も強い可能性あり';} else {hee = 'wood';gi = 'water';yongReason = '調候用神(解凍): 寒湿四柱で火必要';}}
-else if (climate.type.includes('極燥') || climate.type.includes('燥')) {yong = 'water';hee = 'metal';gi = 'fire';yongReason = '調候用神(潤沢): 燥熱 四柱で水が必要';}
-else if (isWeak && isOfficerStrong) {yong = sealEl;hee = peerEl;gi = wealthEl;yongReason = '通関用神(殺印相生): 官殺が強く印星で通関';}
-else if (isWealthStrong && isWeak) {const peerPower = elCount[peerEl] || 0;if (peerPower <= 1) {yong = sealEl;hee = peerEl;yongReason = '病弱用神(生比): 比劫不在で印星がまず必要';} else {yong = peerEl;hee = sealEl;yongReason = '病弱用神(分財): 財星過多で比劫必要';}
+(samhap.element === officerEl ? (samhap.complete ? 3 : 1) : 0);const isOfficerStrong = officerPower >= 2;const wealthPower = elCount[wealthEl] || 0;const isWealthStrong = wealthPower >= 3;const sealPower = elCount[sealEl] || 0;const isSealStrong = sealPower >= 3;let yong, hee, gi;let yongReason = '';const peerPower = elCount[peerEl] || 0;const isVeryStrong = str.pct >= 90;let isJonggyeok = false;if (isVeryStrong && peerPower >= 6) {yong = peerEl;hee = sealEl;gi = officerEl;yongReason = `従格: 日干 ${str.pct}%で極身強。強い気に従うべき`;isJonggyeok = true;}
+if (!isJonggyeok && str.pct <= 10 && !str.dayRoot && !str.hourRoot) {let maxDomEl = null, maxDomCnt = 0;for (const el of EL) {if (el !== dmEl && (elCount[el] || 0) > maxDomCnt) { maxDomCnt = elCount[el]; maxDomEl = el; }}
+if (maxDomCnt >= 4) {if (maxDomEl === wealthEl) { yong = wealthEl; hee = exprEl; gi = sealEl; yongReason = `従財格: 財星支配(${maxDomCnt.toFixed(1)})。日干無根で財に従う`; }
+else if (maxDomEl === officerEl) { yong = officerEl; hee = wealthEl; gi = peerEl; yongReason = `従殺格: 官殺支配(${maxDomCnt.toFixed(1)})。日干無根で官に従う`; }
+else if (maxDomEl === exprEl) { yong = exprEl; hee = wealthEl; gi = sealEl; yongReason = `従児格: 食傷支配(${maxDomCnt.toFixed(1)})。日干無根で食傷に従う`; }
+if (yong) isJonggyeok = true;}}
+if (!isJonggyeok && (climate.type.includes('極寒') || climate.type.includes('寒'))) {yong = 'fire';if (isOfficerStrong && sealEl === 'water') {hee = sealEl;gi = officerEl;yongReason = '調候用神(解凍)+通関: 寒湿だが官殺も強い可能性あり';} else {hee = 'wood';gi = 'water';yongReason = '調候用神(解凍): 寒湿四柱で火必要';}}
+else if (!isJonggyeok && (climate.type.includes('極燥') || climate.type.includes('燥'))) {yong = 'water';hee = 'metal';gi = 'fire';yongReason = '調候用神(潤沢): 燥熱 四柱で水が必要';}
+else if (!isJonggyeok && isWeak && isOfficerStrong) {yong = sealEl;hee = peerEl;gi = wealthEl;yongReason = '通関用神(殺印相生): 官殺が強く印星で通関';}
+else if (!isJonggyeok && isWealthStrong && isWeak) {const peerPower = elCount[peerEl] || 0;if (peerPower <= 1) {yong = sealEl;hee = peerEl;yongReason = '病弱用神(生比): 比劫不在で印星がまず必要';} else {yong = peerEl;hee = sealEl;yongReason = '病弱用神(分財): 財星過多で比劫必要';}
 gi = wealthEl;}
-else if (isStrong) {yong = exprEl;hee = wealthEl;gi = sealEl;yongReason = '抑扶用神(洩気): 身強で食傷にて洩気';}
-else if (isWeak) {yong = sealEl;hee = peerEl;gi = officerEl;yongReason = '抑扶用神(扶助): 身弱で印星にて生助';}
-else {yong = exprEl;hee = wealthEl;gi = officerEl;yongReason = '抑扶用神(洩気): 中和四柱で食傷洩気';}
+else if (!isJonggyeok && isStrong) {yong = exprEl;hee = wealthEl;gi = sealEl;yongReason = '抑扶用神(洩気): 身強で食傷にて洩気';}
+else if (!isJonggyeok && isWeak) {yong = sealEl;hee = peerEl;gi = officerEl;yongReason = '抑扶用神(扶助): 身弱で印星にて生助';}
+else if (!isJonggyeok) {yong = exprEl;hee = wealthEl;gi = officerEl;yongReason = '抑扶用神(洩気): 中和四柱で食傷洩気';}
 if (samhap.complete && samhap.element === officerEl && yong !== sealEl) {yong = exprEl;yongReason += ` + 食神制殺(${samhap.name})`;}
 const johuData = CLIMATE_BALANCE[dmi] && CLIMATE_BALANCE[dmi][mbi];const yongCount = elCount[yong] || 0;let yongWarning = null;if (yongCount === 0) {yongWarning = `⚠️ 用神(${ELEMENT[yong].k}) 原局 不在! 運で${ELEMENT[yong].k}が が来た時のみ効果発揮`;} else if (yongCount === 1) {yongWarning = `⚠️ 用神(${ELEMENT[yong].k}) 原局に 1個のみ。該当文字が沖/克を受けると 危険`;}
 let sudaHwasik = null;const waterCount = elCount.water || 0;const fireCount = elCount.fire || 0;if (dmEl === 'fire' && waterCount >= 3 && fireCount <= 1) {sudaHwasik = '水多火熄: 水が火を消す形局. 火/木運に発福、水/金運に危険';}
@@ -1464,7 +1498,8 @@ function checkWangShinChungBal(yp, saju) {const elCount = {wood:0, fire:0, earth
 return { active: false, score: 0, desc: '' };}
 function checkSpecialFormat(saju, strength) {if (!strength.extreme) return null;const dm = saju.day.s;const ec = countElements(saju);const allPillars = [saju.year, saju.month, saju.day, saju.hour].filter(p => p);const godCounts = {bigeop:0, sikSang:0, jae:0, gwan:0, in:0};allPillars.forEach(p => {const god = getTenGod(p.s, dm);if (['比肩','劫財'].includes(god.c)) godCounts.bigeop++;if (['食神','傷官'].includes(god.c)) godCounts.sikSang++;if (['偏財','正財'].includes(god.c)) godCounts.jae++;if (['偏官','正官'].includes(god.c)) godCounts.gwan++;if (['偏印','正印'].includes(god.c)) godCounts.in++;});const ybi = saju.year ? BRANCH.findIndex(b => b.c === saju.year.b.c) : -1;const hasSikSangWithRoot = saju.year && ['傷官','食神'].includes(getTenGod(saju.year.s, saju.day.s)?.c) &&
 (ybi === 5 || ybi === 6);if (strength.extreme === '極身強' && !hasSikSangWithRoot) {if (godCounts.bigeop >= 3) return FORMATS_SPECIAL.jongwang;if (godCounts.in >= 2 && godCounts.bigeop >= 2) return FORMATS_SPECIAL.jonggang;}
-if (strength.extreme === '極身弱') {if (godCounts.sikSang >= 3) return FORMATS_SPECIAL.jonga;if (godCounts.jae >= 3) return FORMATS_SPECIAL.jongjae;if (godCounts.gwan >= 3) return FORMATS_SPECIAL.jongsal;}
+if (strength.extreme === '極身弱') {if (godCounts.sikSang >= 3) return FORMATS_SPECIAL.jonga;if (godCounts.jae >= 3) return FORMATS_SPECIAL.jongjae;if (godCounts.gwan >= 3) return FORMATS_SPECIAL.jongsal;
+if (!strength.hourRoot && !strength.dayRoot) {const dmEl2 = dm.e;const exprEl2 = EL_ORDER[(EL_ORDER.indexOf(dmEl2) + 1) % 5];const wealthEl2 = EL_ORDER[(EL_ORDER.indexOf(dmEl2) + 2) % 5];const officerEl2 = EL_ORDER[(EL_ORDER.indexOf(dmEl2) + 3) % 5];if (godCounts.sikSang >= 2 && ec[exprEl2] >= 4) return FORMATS_SPECIAL.jonga;if (godCounts.jae >= 2 && ec[wealthEl2] >= 4) return FORMATS_SPECIAL.jongjae;if (godCounts.gwan >= 2 && ec[officerEl2] >= 4) return FORMATS_SPECIAL.jongsal;}}
 return null;}
 function checkYangInGeonRok(saju) {const dm = saju.day.s;const dsi = STEM.indexOf(dm);const mbi = BRANCH.indexOf(saju.month.b);const geonrokMap = {0:2, 1:3, 2:5, 3:6, 4:5, 5:6, 6:8, 7:9, 8:11, 9:0};const yanginMap = {0:3, 1:2, 2:6, 3:5, 4:6, 5:5, 6:9, 7:8, 8:0, 9:11};if (mbi === geonrokMap[dsi]) {return FORMATS_SPECIAL.geonrok;}
 const dbi = BRANCH.indexOf(saju.day.b);if (dbi === yanginMap[dsi]) {return {...FORMATS_SPECIAL.yangin, hasYangIn: true};}
@@ -3492,7 +3527,7 @@ ${totalScore >= 70 ? `
 `}
 <p style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.1);"><strong>☯︎ 相性より大事なのは互いを想う心です。</strong><br>
 良い 相性も努力なしには崩れ、 悪い相性も愛で克服できます。
-</p></div></div><div class="card" style="text-align:center;"><button class="btn" style="background:linear-gradient(135deg,#D4AF37,#B8860B);color:#1a1a2e;font-weight:700;" onclick="copyMatchForAI()">
+<div class="card" style="text-align:center;"><div id="match-talisman-preview" style="display:none;margin-bottom:15px;"><canvas id="match-talisman-canvas" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,0.3);"></canvas><div style="margin-top:15px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button onclick="downloadMatchTalisman()" style="padding:14px 28px;background:linear-gradient(135deg,#FF69B4,#C71585);color:#fff;border:none;border-radius:25px;font-weight:700;cursor:pointer;font-size:1rem;">画像を保存</button><button onclick="shareMatchTalisman()" style="padding:14px 28px;background:rgba(255,255,255,0.1);color:#FF69B4;border:1px solid #FF69B4;border-radius:25px;font-weight:700;cursor:pointer;font-size:1rem;">シェア</button></div><p style="font-size:0.8rem;color:#888;margin-top:12px;">相手にお守りを送りましょう！</p></div><div id="match-talisman-btn-wrapper"><button class="btn" style="background:linear-gradient(135deg,#FF69B4,#C71585);margin-bottom:10px;" onclick="generateMatchTalisman()">相性お守りを生成する</button></div><div id="match-talisman-loading" style="display:none;text-align:center;padding:30px 0;"><img src="taegeuk-icon.png" alt="☯" style="height:60px;width:60px;margin:0 auto 15px;display:block;opacity:0.7;animation:spin 3s linear infinite;filter:drop-shadow(0 0 30px rgba(212,175,55,0.8));"><p id="match-talisman-loading-text" style="font-family:'Zen Kurenaido',serif;font-size:1.3rem;color:var(--gold);">陰陽の縁を結んでいます...</p></div></div></p></div></div><div class="card" style="text-align:center;"><button class="btn" style="background:linear-gradient(135deg,#D4AF37,#B8860B);color:#1a1a2e;font-weight:700;" onclick="copyMatchForAI()">
 📋 AIに二人の縁を渡す
 </button><p style="margin-top:15px;font-size:14px;color:var(--gold);opacity:0.9;line-height:1.8;">
 ✨ 精密な相性データとAIの深層分析が出会う<br><span style="color:var(--gold);font-weight:600;">現存する最も完璧な相性解釈の組み合わせ</span>です
@@ -3507,6 +3542,206 @@ myNapeum, pNapeum,
 myTwelveState, pTwelveState,
 mySinsal, pSinsal,
 myGongmang, pGongmang};} catch (error) {console.error('相性 分析 エラー:', error);toast('相性 分析 中 エラーが発生しました。');}}
+var matchTalismanGenerated=false;var matchTalismanDataUrl=null;
+function getMantraKey(type){if(type==='generate')return 'gen_fwd';if(type==='support')return 'gen_rev';if(type==='control')return 'ovr_fwd';if(type==='receive')return 'ovr_rev';return 'same';}
+function drawMatchIcon(ctx,x,y,type,color){
+ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';
+ctx.font='bold 160px "Ma Shan Zheng",cursive';
+var hanja='合';
+if(type==='business'){hanja='財';}
+else if(type==='family'){hanja='和';}
+ctx.fillText(hanja,x,y);
+ctx.textBaseline='alphabetic';
+}
+async function generateMatchTalisman(){
+var loadingTexts={romance:'陰陽の縁を結んでいます...',business:'財の気を集めています...',family:'家和の気を合わせています...'};
+var relType0=document.getElementById('relationship-type')?.value||'romance';
+var loadEl=document.getElementById('match-talisman-loading');
+var loadTxt=document.getElementById('match-talisman-loading-text');
+if(loadEl){loadEl.style.display='block';if(loadTxt)loadTxt.textContent=loadingTexts[relType0]||loadingTexts.romance;}
+document.getElementById('match-talisman-btn-wrapper').style.display='none';
+await new Promise(function(r){setTimeout(r,80)});
+try{
+if(!window.MATCH_RESULT){toast('まず相性を分析してください');if(loadEl)loadEl.style.display='none';document.getElementById('match-talisman-btn-wrapper').style.display='block';return;}
+var r=window.MATCH_RESULT,mySaju=r.mySaju,pSaju=r.pSaju;
+var relType=document.getElementById('relationship-type')?.value||'romance';
+var mt=MATCH_THEME[relType]||MATCH_THEME.romance;
+var myIlju=mySaju.day.s.c+mySaju.day.b.c,pIlju=pSaju.day.s.c+pSaju.day.b.c;
+var myArch=ARCHETYPE_60[myIlju]||{ko:'?',color:'#D4AF37',pko:''};
+var pArch=ARCHETYPE_60[pIlju]||{ko:'?',color:'#D4AF37',pko:''};
+var myAnimalKey=BRANCH_TO_ANIMAL[mySaju.day.b.c],pAnimalKey=BRANCH_TO_ANIMAL[pSaju.day.b.c];
+var myAnimalImg=animalImages[myAnimalKey],pAnimalImg=animalImages[pAnimalKey];
+var totalScore=r.totalScore,grade=r.grade;
+var interKey=mySaju.day.s.e+'_'+pSaju.day.s.e;
+var myToP=INTERACTION_METAPHOR_KR[interKey];
+var mantraKey=myToP?getMantraKey(myToP.type):'same';
+var mantra=MATCH_MANTRA[mantraKey]?MATCH_MANTRA[mantraKey][relType]:null;
+if(!mantra)mantra={h:'天作之合 福缘善庆',k:'天が結んだ縁に福が宿る'};
+var blessing=MATCH_BLESSING[mantraKey]?MATCH_BLESSING[mantraKey][relType]:'共に歩む道に大きな福が宿るでしょう';
+var remedy=MATCH_REMEDY[mantraKey]?MATCH_REMEDY[mantraKey][relType]:'互いを慈しめば全てがうまくいくでしょう';
+var currentYear=new Date().getFullYear();
+var chineseNums=['〇','一','二','三','四','五','六','七','八','九'];
+var yearChinese=String(currentYear).split('').map(function(d){return chineseNums[parseInt(d)]}).join('');
+await document.fonts.ready;
+await document.fonts.load('bold 220px "Zen Kurenaido"');
+await document.fonts.load('bold 160px "Ma Shan Zheng"');
+await document.fonts.load('bold 140px "Ma Shan Zheng"');
+await document.fonts.load('bold 128px "Ma Shan Zheng"');
+await document.fonts.load('bold 120px "Ma Shan Zheng"');
+await document.fonts.load('bold 104px "Ma Shan Zheng"');
+await document.fonts.load('bold 96px "Ma Shan Zheng"');
+await document.fonts.load('bold 88px "Ma Shan Zheng"');
+await document.fonts.load('bold 72px "Ma Shan Zheng"');
+await document.fonts.load('64px "Ma Shan Zheng"');
+await document.fonts.load('56px "Ma Shan Zheng"');
+await document.fonts.load('48px "Ma Shan Zheng"');
+await document.fonts.load('44px "Ma Shan Zheng"');
+await document.fonts.load('40px "Ma Shan Zheng"');
+await document.fonts.load('36px "Ma Shan Zheng"');
+await document.fonts.load('32px "Ma Shan Zheng"');
+await document.fonts.load('24px "Ma Shan Zheng"');
+var _TH='あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン一二三四五六七八九十百千万円年月日人大小中上下左右金木水火土生死心体力気合和福縁結愛家財運命星神仏';
+await document.fonts.load('bold 220px "Zen Kurenaido"',_TH);
+await document.fonts.load('bold 104px "Zen Kurenaido"',_TH);
+await document.fonts.load('bold 96px "Zen Kurenaido"',_TH);
+await document.fonts.load('bold 88px "Zen Kurenaido"',_TH);
+await document.fonts.load('88px "Zen Kurenaido"',_TH);
+await document.fonts.load('bold 84px "Zen Kurenaido"',_TH);
+await document.fonts.load('84px "Zen Kurenaido"',_TH);
+await document.fonts.load('bold 80px "Zen Kurenaido"',_TH);
+await document.fonts.load('80px "Zen Kurenaido"',_TH);
+await document.fonts.load('bold 72px "Zen Kurenaido"',_TH);
+await document.fonts.load('72px "Zen Kurenaido"',_TH);
+await document.fonts.load('68px "Zen Kurenaido"',_TH);
+await document.fonts.load('64px "Zen Kurenaido"',_TH);
+await document.fonts.load('bold 60px "Zen Kurenaido"',_TH);
+await document.fonts.load('60px "Zen Kurenaido"',_TH);
+await document.fonts.load('56px "Zen Kurenaido"',_TH);
+await document.fonts.load('52px "Zen Kurenaido"',_TH);
+await document.fonts.load('48px "Zen Kurenaido"',_TH);
+await document.fonts.load('44px "Zen Kurenaido"',_TH);
+await document.fonts.load('40px "Zen Kurenaido"',_TH);
+await document.fonts.load('36px "Zen Kurenaido"',_TH);
+await document.fonts.load('32px "Zen Kurenaido"',_TH);
+await document.fonts.load('24px "Zen Kurenaido"',_TH);
+var canvas=document.getElementById('match-talisman-canvas');
+if(!canvas){toast('キャンバスエラー');return;}
+var ctx=canvas.getContext('2d');
+var W=2160,H=3840;canvas.width=W;canvas.height=H;
+var bgGrad=ctx.createLinearGradient(0,0,0,H);
+bgGrad.addColorStop(0,mt.bg1);bgGrad.addColorStop(0.5,mt.bg2);bgGrad.addColorStop(1,mt.bg3);
+ctx.fillStyle=bgGrad;ctx.fillRect(0,0,W,H);
+drawHanjiTexture(ctx,W,H);
+ctx.strokeStyle=mt.border;ctx.lineWidth=12;ctx.strokeRect(80,80,W-160,H-160);
+ctx.strokeStyle=mt.main;ctx.lineWidth=4;ctx.strokeRect(110,110,W-220,H-220);
+drawCornerOrnamentsHD(ctx,W,H,{main:mt.main});
+drawTaegeukHD(ctx,W/2,280,110,{main:mt.border});
+ctx.textAlign='center';
+var curY=530;
+ctx.fillStyle=mt.border;ctx.font='bold 140px "Ma Shan Zheng",cursive';
+ctx.fillText(yearChinese+' '+mt.title_cn,W/2,curY);
+curY+=90;
+ctx.fillStyle=mt.border;ctx.font='80px "Zen Kurenaido",serif';
+ctx.fillText(currentYear+'年 '+mt.title_kr,W/2,curY);
+curY+=120;
+ctx.fillStyle=mt.main;ctx.font='bold 120px "Ma Shan Zheng",cursive';
+ctx.fillText(mantra.h,W/2,curY);
+curY+=85;
+ctx.fillStyle=mt.border;ctx.font='72px "Zen Kurenaido",serif';
+ctx.fillText(mantra.k,W/2,curY);
+curY+=100;
+var aSize=560,gap=300,lx=W/2-gap/2-aSize,rx=W/2+gap/2,ay=curY;
+function drawABox(img,arch,x,y){
+var bc=(arch.color==='#FFFFFF')?'#D4D4D4':(arch.color||'#D4AF37');
+ctx.fillStyle='rgba(255,255,255,0.7)';
+ctx.beginPath();ctx.roundRect(x,y,aSize,aSize,20);ctx.fill();
+ctx.strokeStyle=bc;ctx.lineWidth=8;
+ctx.beginPath();ctx.roundRect(x+4,y+4,aSize-8,aSize-8,20);ctx.stroke();
+if(img&&img.complete&&img.naturalWidth>0){var safe=true;try{var tc=document.createElement('canvas');tc.width=1;tc.height=1;tc.getContext('2d').drawImage(img,0,0,1,1);tc.toDataURL();}catch(e){safe=false;}if(safe){ctx.save();ctx.beginPath();ctx.roundRect(x+8,y+8,aSize-16,aSize-16,16);ctx.clip();ctx.drawImage(img,x+8,y+8,aSize-16,aSize-16);ctx.restore();}}}
+drawABox(myAnimalImg,myArch,lx,ay);drawABox(pAnimalImg,pArch,rx,ay);
+drawMatchIcon(ctx,W/2,ay+aSize/2-20,mt.icon,mt.main);
+curY=ay+aSize+90;
+ctx.textAlign='center';
+ctx.font='bold 104px "Zen Kurenaido",serif';
+if(myArch.color==='#FFFFFF'){ctx.strokeStyle='rgba(75,55,40,0.7)';ctx.lineWidth=7;ctx.lineJoin='round';ctx.strokeText(myArch.ko,lx+aSize/2,curY);}
+ctx.fillStyle=myArch.color;ctx.fillText(myArch.ko,lx+aSize/2,curY);
+if(pArch.color==='#FFFFFF'){ctx.strokeStyle='rgba(75,55,40,0.7)';ctx.lineWidth=7;ctx.lineJoin='round';ctx.strokeText(pArch.ko,rx+aSize/2,curY);}
+ctx.fillStyle=pArch.color;ctx.fillText(pArch.ko,rx+aSize/2,curY);
+curY+=80;
+ctx.fillStyle='rgba(75,55,40,0.55)';ctx.font='60px "Zen Kurenaido",serif';
+if(myArch.pko)ctx.fillText(myArch.pko,lx+aSize/2,curY);
+if(pArch.pko)ctx.fillText(pArch.pko,rx+aSize/2,curY);
+curY+=270;
+ctx.fillStyle=mt.border;ctx.font='bold 160px "Ma Shan Zheng",cursive';
+ctx.fillText(myIlju+' × '+pIlju,W/2,curY);
+curY+=260;
+ctx.fillStyle=mt.main;ctx.font='bold 220px "Zen Kurenaido",serif';
+ctx.fillText(totalScore+'点',W/2,curY);
+curY+=100;
+ctx.fillStyle=mt.border;ctx.font='bold 96px "Zen Kurenaido",serif';
+ctx.fillText(grade,W/2,curY);
+curY+=70;
+var barW=1000,barH=40,barX=(W-barW)/2;
+ctx.fillStyle='rgba(0,0,0,0.12)';
+ctx.beginPath();ctx.roundRect(barX,curY,barW,barH,20);ctx.fill();
+var fc=totalScore>=80?mt.main:totalScore>=60?'#9c27b0':totalScore>=40?'#ff9800':'#f44336';
+ctx.fillStyle=fc;
+ctx.beginPath();ctx.roundRect(barX,curY,barW*totalScore/100,barH,20);ctx.fill();
+curY+=130;
+if(myToP){
+ctx.fillStyle='rgba(75,55,40,0.9)';ctx.font='bold 80px "Zen Kurenaido",serif';
+ctx.fillText(myToP.emoji+' '+myToP.name,W/2,curY);
+curY+=85;
+ctx.fillStyle='rgba(75,55,40,0.6)';ctx.font='68px "Zen Kurenaido",serif';
+ctx.fillText(myToP.desc,W/2,curY);
+curY+=110;}
+var keywords=[];
+if(r.analysis){var cats=Object.keys(r.analysis);cats.forEach(function(cat){var a=r.analysis[cat];if(a&&typeof a.score==='number'&&a.score>0){keywords.push({cat:cat,name:MATCH_CAT_NAMES[cat]||cat,score:a.score});}});keywords.sort(function(a,b){return b.score-a.score});}
+if(keywords.length>=3){
+curY+=30;
+ctx.fillStyle=mt.border;ctx.font='bold 80px "Zen Kurenaido",serif';
+ctx.fillText('✨ 相性キーワード',W/2,curY);
+curY+=100;
+ctx.font='72px "Zen Kurenaido",serif';ctx.fillStyle='rgba(75,55,40,0.8)';
+var topK=keywords.slice(0,3);
+for(var ki=0;ki<topK.length;ki++){ctx.fillText(topK[ki].name+' (+'+topK[ki].score+'点)',W/2,curY);curY+=90;}}
+curY+=70;
+ctx.fillStyle=mt.main;ctx.font='bold 84px "Zen Kurenaido",serif';
+ctx.fillText(blessing,W/2,curY);
+curY+=110;
+ctx.fillStyle=mt.border;ctx.font='bold 80px "Zen Kurenaido",serif';
+ctx.fillText(remedy,W/2,curY);
+curY+=100;
+var bottomY=H-500;
+ctx.fillStyle=mt.main;ctx.font='bold 88px "Zen Kurenaido",serif';
+ctx.fillText(mt.blessing,W/2,bottomY-60);
+ctx.fillStyle=mt.border;ctx.font='72px "Zen Kurenaido",serif';
+ctx.fillText('☯︎ k-mudang.com',W/2,bottomY+40);
+ctx.fillStyle='rgba(75,55,40,0.5)';ctx.font='60px "Zen Kurenaido",serif';
+ctx.fillText(mt.cta,W/2,bottomY+120);
+matchTalismanGenerated=true;
+try{matchTalismanDataUrl=canvas.toDataURL('image/jpeg',0.88);}catch(e){console.warn('Match toDataURL failed:',e.message);matchTalismanDataUrl=null;}
+document.getElementById('match-talisman-preview').style.display='block';
+document.getElementById('match-talisman-btn-wrapper').style.display='none';
+if(document.getElementById('match-talisman-loading'))document.getElementById('match-talisman-loading').style.display='none';
+}catch(e){console.error('generateMatchTalisman error:',e);toast('お守り生成エラー: '+e.message);if(document.getElementById('match-talisman-loading'))document.getElementById('match-talisman-loading').style.display='none';document.getElementById('match-talisman-btn-wrapper').style.display='block';}}
+function downloadMatchTalisman(){
+if(!matchTalismanGenerated){generateMatchTalisman();return;}
+if(!matchTalismanDataUrl){toast('ローカルファイルでは保存が制限されます。サーバーをご利用ください');return;}
+var link=document.createElement('a');link.download='K-MUDANG_相性お守り.jpg';link.href=matchTalismanDataUrl;link.click();toast('📥 お守り画像が保存されました！');}
+function shareMatchTalisman(){
+if(!matchTalismanGenerated){generateMatchTalisman();return;}
+if(!matchTalismanDataUrl){toast('ローカルファイルでは共有が制限されます。サーバーをご利用ください');return;}
+var canvas=document.getElementById('match-talisman-canvas');
+if(navigator.share&&navigator.canShare){
+canvas.toBlob(async function(blob){
+var relType=document.getElementById('relationship-type')?.value||'romance';
+var file=new File([blob],'K-MUDANG_相性お守り.png',{type:'image/png'});
+var shareData={title:'K-MUDANG '+(MATCH_THEME[relType]||MATCH_THEME.romance).title_kr,text:'私たちの相性を確認してみてください！ ☯ k-mudang.com',files:[file]};
+if(navigator.canShare(shareData)){try{await navigator.share(shareData);}catch(e){}}
+else{downloadMatchTalisman();}
+},'image/png');
+}else{downloadMatchTalisman();}}
 function copyMatchForAI() {const relType = document.getElementById('relationship-type')?.value || 'romance';if (!window.MATCH_RESULT) { toast('まず相性を分析してください'); return; }
 const r = window.MATCH_RESULT;
 const charInfo = window.MATCH_CHAR_RESULT || {};
