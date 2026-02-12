@@ -994,16 +994,16 @@ drawCornerOrnamentsHD(ctx,W,H,{main:mt.main});
 drawTaegeukHD(ctx,W/2,280,110,{main:mt.border});
 ctx.textAlign='center';
 var curY=530;
-ctx.fillStyle=mt.border;ctx.font='bold 140px "Ma Shan Zheng",cursive';
+ctx.fillStyle=mt.border;ctx.font='bold 160px "Ma Shan Zheng",cursive';
 ctx.fillText(yearChinese+' '+mt.title_cn,W/2,curY);
 curY+=90;
-ctx.fillStyle=mt.border;ctx.font='80px "Nanum Pen Script",cursive';
+ctx.fillStyle=mt.border;ctx.font='96px "Nanum Pen Script",cursive';
 ctx.fillText(currentYear+' '+mt.title_kr,W/2,curY);
 curY+=120;
-ctx.fillStyle=mt.main;ctx.font='bold 120px "Ma Shan Zheng",cursive';
+ctx.fillStyle=mt.main;ctx.font='bold 140px "Ma Shan Zheng",cursive';
 ctx.fillText(mantra.h,W/2,curY);
 curY+=85;
-ctx.fillStyle=mt.border;ctx.font='72px "Nanum Pen Script",cursive';
+ctx.fillStyle=mt.border;ctx.font='84px "Nanum Pen Script",cursive';
 ctx.fillText(mantra.k,W/2,curY);
 curY+=100;
 var aSize=560,gap=300,lx=W/2-gap/2-aSize,rx=W/2+gap/2,ay=curY;
@@ -1016,24 +1016,24 @@ ctx.beginPath();ctx.roundRect(x+4,y+4,aSize-8,aSize-8,20);ctx.stroke();
 if(img&&img.complete&&img.naturalWidth>0){var safe=true;try{var tc=document.createElement('canvas');tc.width=1;tc.height=1;tc.getContext('2d').drawImage(img,0,0,1,1);tc.toDataURL();}catch(e){safe=false;}if(safe){ctx.save();ctx.beginPath();ctx.roundRect(x+8,y+8,aSize-16,aSize-16,16);ctx.clip();ctx.drawImage(img,x+8,y+8,aSize-16,aSize-16);ctx.restore();}}}
 drawABox(myAnimalImg,myArch,lx,ay);drawABox(pAnimalImg,pArch,rx,ay);
 drawMatchIcon(ctx,W/2,ay+aSize/2-20,mt.icon,mt.main);
-curY=ay+aSize+90;
+curY=ay+aSize+110;
 ctx.textAlign='center';
-ctx.font='bold 104px "Nanum Pen Script",cursive';
+ctx.font='bold 120px "Nanum Pen Script",cursive';
 if(myArch.color==='#FFFFFF'){ctx.strokeStyle='rgba(75,55,40,0.7)';ctx.lineWidth=7;ctx.lineJoin='round';ctx.strokeText(myArch.en,lx+aSize/2,curY);}
 ctx.fillStyle=myArch.color;ctx.fillText(myArch.en,lx+aSize/2,curY);
 if(pArch.color==='#FFFFFF'){ctx.strokeStyle='rgba(75,55,40,0.7)';ctx.lineWidth=7;ctx.lineJoin='round';ctx.strokeText(pArch.en,rx+aSize/2,curY);}
 ctx.fillStyle=pArch.color;ctx.fillText(pArch.en,rx+aSize/2,curY);
-curY+=80;
-ctx.fillStyle='rgba(75,55,40,0.55)';ctx.font='84px "Nanum Pen Script",cursive';
+curY+=100;
+ctx.fillStyle='rgba(75,55,40,0.55)';ctx.font='96px "Nanum Pen Script",cursive';
 if(myArch.pen)ctx.fillText(myArch.pen,lx+aSize/2,curY);
 if(pArch.pen)ctx.fillText(pArch.pen,rx+aSize/2,curY);
-curY+=200;
+curY+=220;
 ctx.fillStyle=mt.border;ctx.font='bold 160px "Ma Shan Zheng",cursive';
 ctx.fillText(myIlju+' × '+pIlju,W/2,curY);
-curY+=200;
+curY+=220;
 ctx.fillStyle=mt.main;ctx.font='bold 220px "Nanum Pen Script",cursive';
-ctx.fillText(totalScore+'pts',W/2,curY);
-curY+=100;
+ctx.fillText(totalScore+'/100',W/2,curY);
+curY+=160;
 ctx.fillStyle=mt.border;ctx.font='bold 96px "Nanum Pen Script",cursive';
 ctx.fillText(grade,W/2,curY);
 curY+=70;
@@ -1060,15 +1060,17 @@ ctx.fillText('✨ Compatibility Keywords',W/2,curY);
 curY+=100;
 ctx.font='72px "Nanum Pen Script",cursive';ctx.fillStyle='rgba(75,55,40,0.8)';
 var topK=keywords.slice(0,3);
-for(var ki=0;ki<topK.length;ki++){ctx.fillText(topK[ki].name+' (+'+topK[ki].score+'pts)',W/2,curY);curY+=90;}}
+for(var ki=0;ki<topK.length;ki++){ctx.fillText(topK[ki].name+' (+'+topK[ki].score+')',W/2,curY);curY+=90;}}
 curY+=70;
-ctx.fillStyle=mt.main;ctx.font='bold 84px "Nanum Pen Script",cursive';
+ctx.fillStyle=mt.main;var bFs=96;ctx.font='bold '+bFs+'px "Nanum Pen Script",cursive';
+var _mxW=W-240;while(bFs>56&&ctx.measureText(blessing).width>_mxW){bFs-=4;ctx.font='bold '+bFs+'px "Nanum Pen Script",cursive';}
 ctx.fillText(blessing,W/2,curY);
-curY+=110;
-ctx.fillStyle=mt.border;ctx.font='bold 80px "Nanum Pen Script",cursive';
+curY+=130;
+ctx.fillStyle=mt.border;var rFs=88;ctx.font='bold '+rFs+'px "Nanum Pen Script",cursive';
+while(rFs>52&&ctx.measureText(remedy).width>_mxW){rFs-=4;ctx.font='bold '+rFs+'px "Nanum Pen Script",cursive';}
 ctx.fillText(remedy,W/2,curY);
 curY+=100;
-var bottomY=H-400;
+var bottomY=H-350;
 ctx.fillStyle=mt.main;ctx.font='bold 88px "Nanum Pen Script",cursive';
 ctx.fillText(mt.blessing,W/2,bottomY-60);
 ctx.fillStyle=mt.border;ctx.font='72px "Nanum Pen Script",cursive';
