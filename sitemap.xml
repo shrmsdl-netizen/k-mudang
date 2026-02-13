@@ -2,6 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
+  <!-- ==================== Main Pages ==================== -->
+  
   <!-- Landing Page -->
   <url>
     <loc>https://k-mudang.com/</loc>
@@ -32,4 +34,493 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://k-mudang.com/en.html"/>
   </url>
 
+  <!-- ==================== Archetype Pages (60 + Index) ==================== -->
+  
+  <!-- Archetype Index -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blue Rat -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-rat.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blue Ox -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-ox.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Tiger -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-tiger.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Rabbit -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-rabbit.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Dragon -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-dragon.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Snake -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-snake.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Horse -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-horse.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Sheep -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-sheep.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Monkey -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-monkey.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Rooster -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-rooster.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blue Dog -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-dog.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blue Pig -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-pig.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Rat -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-rat.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Ox -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-ox.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Tiger -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-tiger.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Rabbit -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-rabbit.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Dragon -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-dragon.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Snake -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-snake.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Horse -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-horse.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Sheep -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-sheep.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blue Monkey -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-monkey.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blue Rooster -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-rooster.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Dog -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-dog.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Pig -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-pig.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Rat -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-rat.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Ox -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-ox.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Tiger -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-tiger.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Rabbit -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-rabbit.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Dragon -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-dragon.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Snake -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-snake.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blue Horse -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-horse.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blue Sheep -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-sheep.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Monkey -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-monkey.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Rooster -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-rooster.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Dog -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-dog.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Pig -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-pig.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Rat -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-rat.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Ox -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-ox.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Tiger -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-tiger.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Rabbit -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-rabbit.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blue Dragon -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-dragon.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blue Snake -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-snake.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Horse -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-horse.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Sheep -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-sheep.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Monkey -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-monkey.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Rooster -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-rooster.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Dog -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-dog.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Pig -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-pig.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Rat -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-rat.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Ox -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-ox.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blue Tiger -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-tiger.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blue Rabbit -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/blue-rabbit.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Dragon -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-dragon.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Red Snake -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/red-snake.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Horse -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-horse.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Golden Sheep -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/golden-sheep.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Monkey -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-monkey.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- White Rooster -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/white-rooster.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Dog -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-dog.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Black Pig -->
+  <url>
+    <loc>https://k-mudang.com/archetype-pages/black-pig.html</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
