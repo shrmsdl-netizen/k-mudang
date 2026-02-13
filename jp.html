@@ -910,7 +910,7 @@ function setCalendar(c) {CALENDAR = c;document.querySelectorAll('[data-cal]').fo
 function setPartnerCalendar(c) {PARTNER_CALENDAR = c;document.querySelectorAll('[data-pcal]').forEach(b => b.classList.toggle('on', b.dataset.pcal === c));}
 function updateTimeSettings() {TIME_CORRECTION_SETTINGS.useSummerTime = document.getElementById('opt-summertime')?.checked ?? true;TIME_CORRECTION_SETTINGS.useLongitude = document.getElementById('opt-longitude')?.checked ?? true;TIME_CORRECTION_SETTINGS.useYajasi = document.getElementById('opt-yajasi')?.checked ?? false;updateLngLabel();}
 function changeCity(city) {SELECTED_CITY = city;updateLngLabel();}
-function updateLngLabel() {const corr = getLongitudeCorrection();const sign = corr >= 0 ? '+' : '';const lbl = document.getElementById('lng-label');if (lbl) lbl.textContent = '経度補正 (' + SELECTED_CITY + ' ' + sign + corr + '分)';}
+function updateLngLabel() {const corr = -getLongitudeCorrection();const sign = corr >= 0 ? '+' : '';const lbl = document.getElementById('lng-label');if (lbl) lbl.textContent = '経度補正 (' + SELECTED_CITY + ' ' + sign + corr + '分)';}
 function switchTab(name) {if(name==='lotto'){const btn=document.getElementById('btn-saju-lotto');const info=document.getElementById('saju-lotto-info');if(btn&&info){if(GODS){btn.disabled=false;btn.style.opacity='1';info.textContent='✨ 用神: '+ELEMENT[GODS.yong].k+' · 喜神: '+ELEMENT[GODS.hee].k;}else{btn.disabled=true;btn.style.opacity='0.5';info.textContent='💡 まず四柱タブで分析してください';}}}document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));document.querySelectorAll('.top-nav button').forEach(b => b.classList.remove('active'));document.querySelectorAll('.tab-footer').forEach(f => f.classList.remove('active'));document.getElementById('tab-' + name)?.classList.add('active');document.getElementById('footer-' + name)?.classList.add('active');if (typeof event !== 'undefined' && event?.currentTarget) event.currentTarget.classList.add('active'); else document.querySelector(`.top-nav button[onclick*="'${name}'"]`)?.classList.add('active');}
 function showFortune(type) {document.querySelectorAll('#fortune-tabs .sub-tab').forEach(t => t.classList.remove('on'));event.currentTarget.classList.add('on');renderFortune(type);}
 function showDaeunTab(tabName) {document.querySelectorAll('#daeun-tabs .sub-tab').forEach(t => t.classList.remove('on'));event.currentTarget.classList.add('on');document.querySelectorAll('.daeun-panel').forEach(p => p.style.display = 'none');const targetPanel = document.getElementById('daeun-' + tabName);if (targetPanel) {targetPanel.style.display = 'block';}}
@@ -962,7 +962,7 @@ const JP_CITIES = {
 let SELECTED_CITY = '東京';
 function getLongitudeCorrection() {
 const lng = JP_CITIES[SELECTED_CITY] || 139.69;
-return Math.round((lng - 135) * 4);
+return Math.round((135 - lng) * 4);
 }
 function getLngCorrStr(city) {const lng=JP_CITIES[city]||139.69;const corr=Math.round((lng-135)*4);const sign=corr>=0?'+':'';return sign+corr+'分';}
 const LONGITUDE_CORRECTION = getLongitudeCorrection();let TIME_CORRECTION_SETTINGS = {useSummerTime: true,
@@ -2612,7 +2612,7 @@ const hansinEl = elOrder[(elOrder.indexOf(GODS.gi) + 4) % 5];const HOUR_LABELS =
 '亥の刻(亥時, 21:30～23:29)'
 ];const inputHourLabel = (BIRTH_HOUR !== null && BIRTH_HOUR >= 0 && BIRTH_HOUR < 12) ? HOUR_LABELS[BIRTH_HOUR] : '時間不明';const actualBranchChar = SAJU.hour?.b?.c || '';const inputBranchChars = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];const inputBranchChar = (BIRTH_HOUR !== null && BIRTH_HOUR >= 0) ? inputBranchChars[BIRTH_HOUR] : '';const hourLabel = (actualBranchChar && inputBranchChar && inputBranchChar !== actualBranchChar) ? `${inputHourLabel} → 補正後 ${actualBranchChar}時` : inputHourLabel;let birthDateText;if (CALENDAR === 'lunar' && ORIGINAL_LUNAR_YEAR) {birthDateText = `${BIRTH_YEAR}年${BIRTH_MONTH}月${BIRTH_DAY}日 ${hourLabel} (陽暦) ← 陰暦${ORIGINAL_LUNAR_MONTH}月${ORIGINAL_LUNAR_DAY}日変換`;} else {birthDateText = `${BIRTH_YEAR}年${BIRTH_MONTH}月${BIRTH_DAY}日 ${hourLabel} (陽暦)`;}
 const correctionInfo = [];if (TIME_CORRECTION_SETTINGS.useSummerTime && isInSummerTime(BIRTH_YEAR, BIRTH_MONTH, BIRTH_DAY, 12, 0)) {correctionInfo.push('サマータイム-1時干適用済み');}
-if (TIME_CORRECTION_SETTINGS.useLongitude) {const corr = getLongitudeCorrection();const sign = corr >= 0 ? '+' : '';correctionInfo.push('経度補正 ' + sign + corr + '分適用 (' + SELECTED_CITY + ')');}
+if (TIME_CORRECTION_SETTINGS.useLongitude) {const corr = -getLongitudeCorrection();const sign = corr >= 0 ? '+' : '';correctionInfo.push('経度補正 ' + sign + corr + '分適用 (' + SELECTED_CITY + ')');}
 if (TIME_CORRECTION_SETTINGS.useYajasi) {correctionInfo.push('夜子時方式');} else {correctionInfo.push('早子時方式');}
 const correctionText = correctionInfo.length > 0 ? `\n• 時間補正: ${correctionInfo.join(', ')}` : '';let text = `===== 四柱八字 分析 結果 =====
 【基本情報】
