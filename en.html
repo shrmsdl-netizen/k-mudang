@@ -143,7 +143,7 @@ const INTERACTION_METAPHOR = {
 'water_wood': { name: 'Rain on Forest', nameK: '비 내리는 숲', emoji: '🌧️→🌲', type: 'generate', desc: 'You nourish their growth.', advice: 'Consistent support creates success.' },
 'wood_earth': { name: 'Roots Breaking Ground', nameK: '뿌리가 땅을 갈라', emoji: '🌳⚡🌍', type: 'control', desc: 'You challenge their foundations.', advice: 'Use influence to help them evolve, not dominate.' },
 'earth_water': { name: 'Sponge', nameK: '스펀지', emoji: '🧽💧', type: 'control', desc: 'You absorb their emotional energy.', advice: 'Be their harbor, but remember to wring yourself out.' },
-'water_fire': { name: 'Extinguisher', nameK: '불 끄는 물', emoji: '💧🚫🔥', type: 'control', desc: 'You cool their intensity.', advice: 'Balance cooling with space for their passion.' },
+'water_fire': { name: 'Cooling Force', nameK: '불 끄는 물', emoji: '💧🚫🔥', type: 'control', desc: 'You cool their intensity.', advice: 'Balance cooling with space for their passion.' },
 'fire_metal': { name: 'The Forge', nameK: '용광로', emoji: '🔥🔨⚙️', type: 'control', desc: 'Your heat transforms them.', advice: 'Know when transformation becomes destruction.' },
 'metal_wood': { name: 'Axe and Tree', nameK: '도끼와 나무', emoji: '🪓🌳', type: 'control', desc: 'Your precision cuts their growth.', advice: 'Prune with purpose, never cut without reason.' },
 'wood_wood': { name: 'Forest Alliance', nameK: '숲의 동맹', emoji: '🌲🌲', type: 'same', desc: 'Kindred spirits growing together.', advice: 'Support growth without blocking light.' },
@@ -209,7 +209,7 @@ display.innerHTML = '<div style="display:grid;grid-template-columns:auto 1fr;gap
 }
 const BRANCH_CLASH_V2 = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
 const SELF_PUNISHMENT_V2 = [[6,6],[9,9],[4,4],[11,11]];
-const MATCH_CAT_NAMES = {ilgan:'☯︎ Day Master',ilji:'💑 Day Branch',samhap:'🌀 Trigram/Direction',napeum:'🎵 Naeum',yongsin:'⭐ Favorable God',jijanggan:'🤫 Hidden Stems',ddi:'🐾 Zodiac',ilju:'👼 Noble Star',wonJinGuiMun:'⚠️ Grudge/Ghost Gate',yukChin:'💞 Six Relations',twelveState:'⚡ 12 States',strength:'⚖️ Strong/Weak',johu:'🌡️ Climate God',sinsal:'✨ Spirit Stars',gongmang:'🕳️ Void'};
+const MATCH_CAT_NAMES = {ilgan:'☯︎ Day Master',ilji:'💑 Day Branch',samhap:'🌀 Trigram/Direction',napeum:'🎵 Soul Sound',yongsin:'⭐ Favorable God',jijanggan:'🤫 Hidden Stems',ddi:'🐾 Zodiac',ilju:'👼 Noble Star',wonJinGuiMun:'⚠️ Grudge/Ghost Gate',yukChin:'💞 Six Relations',twelveState:'⚡ 12 States',strength:'⚖️ Strong/Weak',johu:'🌡️ Climate God',sinsal:'✨ Spirit Stars',gongmang:'🕳️ Void'};
 const MATCH_THEME = {
 romance: { title_cn: '缘分符', title_kr: 'Love Talisman', icon: 'romance', main: '#C71585', border: '#8B0035', bg1: '#FFF0F5', bg2: '#FFE4E1', bg3: '#FFF5EE', blessing: 'May great fortune bless your bond', cta: '💕 Check your compatibility', btn: '💕 Generate Love Talisman' },
 business: { title_cn: '合财符', title_kr: 'Wealth Talisman', icon: 'business', main: '#1565C0', border: '#0D47A1', bg1: '#E8F0FF', bg2: '#D0E0F8', bg3: '#F0F5FF', blessing: 'May prosperity flow through your partnership', cta: '💼 Check business compatibility', btn: '💼 Generate Wealth Talisman' },
@@ -258,7 +258,7 @@ return risks;
 }
 function analyzeMatchAdvanced(mySaju, myGods, myStrength, partnerSaju, partnerGods, partnerStrength, mode) {
 const result = { score: 0, categories: {}, yearlyRisks: [] };
-let totalScore = 50;
+let totalScore = 40;
 const analysis = {
 ilgan: { score: 0, details: [] },
 ilji: { score: 0, details: [] },
@@ -359,7 +359,7 @@ const myIn = sh.branches.includes(myDbIdx);
 const pIn = sh.branches.includes(pDbIdx);
 const uniqueCount = sh.branches.filter(b => allBrSet.has(b)).length;
 if ((myIn || pIn) && uniqueCount >= 3) {
-analysis.samhap.score = 12;
+analysis.samhap.score = 8;
 analysis.samhap.details.push({type: 'good', title: '🌀 Three Harmony Bond!', desc: sh.name+' ('+sh.element+' Frame) — You both belong to the same cosmic team!', advice: 'With shared goals, you become an unstoppable duo!'});
 break;
 }}
@@ -367,7 +367,7 @@ for (const bh of DIRECTIONAL_HARMONY) {
 const myIn = bh.branches.includes(myDbIdx);
 const pIn = bh.branches.includes(pDbIdx);
 if (myIn && pIn && myDbIdx !== pDbIdx) {
-analysis.samhap.score += 8;
+analysis.samhap.score += 5;
 analysis.samhap.details.push({type: 'good', title: '🧭 Directional Harmony!', desc: bh.name+' — You both look in the same direction.', advice: 'Shared values mean fewer conflicts.'});
 break;
 }}
@@ -384,10 +384,10 @@ analysis.wonJinGuiMun.details.push({type: 'caution', title: '😤 Resentment Bon
 const myNapeum = calcNapeum(mySaju.day.s, mySaju.day.b);
 const pNapeum = calcNapeum(partnerSaju.day.s, partnerSaju.day.b);
 if (myNapeum.name === pNapeum.name) {
-analysis.napeum.score = 15;
+analysis.napeum.score = 10;
 analysis.napeum.details.push({type: 'excellent', title: '🎵 Identical Soul Sound!', desc: 'Both "'+myNapeum.name+'"! Your soul frequencies match perfectly.', advice: 'You understand each other without words.'});
 } else if (myNapeum.element === pNapeum.element) {
-analysis.napeum.score = 8;
+analysis.napeum.score = 5;
 analysis.napeum.details.push({type: 'good', title: '🎶 Same Soul Element', desc: 'Both '+(ELEMENT[myNapeum.element]?.k||myNapeum.element)+' type! Basic wavelengths align.', advice: 'Emotional resonance comes naturally.'});
 } else {
 const myNEl = EL_ORDER.indexOf(myNapeum.element);
@@ -395,23 +395,37 @@ const pNEl = EL_ORDER.indexOf(pNapeum.element);
 if ((myNEl+1)%5===pNEl || (pNEl+1)%5===myNEl) {
 analysis.napeum.score = 5;
 analysis.napeum.details.push({type: 'good', title: '🎼 Soul Sound Generates', desc: myNapeum.name+' and '+pNapeum.name+' nurture each other.', advice: 'Natural harmony flows between you.'});
-}}
+} else {
+const clashPairs = [[0,2],[2,0],[1,3],[3,1],[2,4],[4,2],[3,0],[0,3],[4,1],[1,4]];
+const isClash = clashPairs.some(p => p[0]===myNEl && p[1]===pNEl);
+if (isClash) {
+analysis.napeum.score = -4;
+analysis.napeum.details.push({type: 'caution', title: '⚠️ Soul Sound Clash', desc: myNapeum.name+' and '+pNapeum.name+' clash with each other.', advice: 'Your emotional wavelengths differ. Understanding requires effort.'});
+}
+}
+}
 /* === 6. YONGSIN — Beneficial God Match === */
 const pElMap = {};
 EL_ORDER.forEach(e => pElMap[e] = 0);
 [partnerSaju.year, partnerSaju.month, partnerSaju.day].forEach(p => { if(p&&p.s) pElMap[p.s.e]++; if(p&&p.b) pElMap[p.b.e]++; });
-if (pElMap[myGods.yong] >= 2) {
-analysis.yongsin.score = 15;
+if (pElMap[myGods.yong] >= 3) {
+analysis.yongsin.score = 10;
+analysis.yongsin.details.push({type: 'excellent', title: '⭐ Partner Overflows with Your Beneficial Element!', desc: 'Exceptionally rich in your Beneficial Element!', tip: 'An incredibly powerful benefactor for your destiny!'});
+} else if (pElMap[myGods.yong] >= 2) {
+analysis.yongsin.score = 5;
 analysis.yongsin.details.push({type: 'excellent', title: '⭐ Partner IS Your Beneficial God!', desc: 'Partner\'s chart is rich in your Beneficial Element ('+ELEMENT[myGods.yong].k+')!', advice: 'Meeting them boosts your fortune — a true benefactor!'});
 } else if (pElMap[myGods.yong] >= 1) {
-analysis.yongsin.score = 8;
+analysis.yongsin.score = 2;
 analysis.yongsin.details.push({type: 'good', title: '✨ Beneficial Element Present', desc: 'Partner has your Beneficial Element ('+ELEMENT[myGods.yong].k+').', advice: 'Being together recharges your energy.'});
+} else {
+analysis.yongsin.score = -3;
+analysis.yongsin.details.push({type: 'caution', title: '⚠️ No Beneficial Element in Partner', desc: 'Partner lacks your Beneficial Element entirely.', advice: 'No elemental compensation. Other bonds may fill this gap.'});
 }
 const myElMap = {};
 EL_ORDER.forEach(e => myElMap[e] = 0);
 [mySaju.year, mySaju.month, mySaju.day, mySaju.hour].forEach(p => { if(p&&p.s) myElMap[p.s.e]++; if(p&&p.b) myElMap[p.b.e]++; });
 if (myElMap[partnerGods.yong] >= 2) {
-analysis.yongsin.score += 10;
+analysis.yongsin.score += 5;
 analysis.yongsin.details.push({type: 'good', title: '💫 You ARE Their Beneficial God!', desc: 'Your chart is rich in partner\'s Beneficial Element ('+ELEMENT[partnerGods.yong].k+')!', advice: 'You are their benefactor!'});
 }
 if (pElMap[myGods.gi] >= 2) {
@@ -447,11 +461,11 @@ break;
 /* === 9. ILJU — Day Pillar Noble Person === */
 const guiin = {0:[1,7],1:[0,8],2:[11,9],3:[11,9],4:[1,7],5:[3,5],6:[2,6],7:[5,11],8:[3,5],9:[3,5]};
 if (guiin[myDmIdx]?.includes(pDbIdx)) {
-analysis.ilju.score = 10;
+analysis.ilju.score = 7;
 analysis.ilju.details.push({type: 'excellent', title: '👼 Heavenly Noble Person!', desc: 'Your partner occupies your Heavenly Noble position!', advice: 'A destined helper who appears when you need them most.'});
 }
 if (guiin[pDmIdx]?.includes(myDbIdx)) {
-analysis.ilju.score += 8;
+analysis.ilju.score += 5;
 analysis.ilju.details.push({type: 'good', title: '👼 You Are Their Noble Person', desc: 'You occupy your partner\'s Heavenly Noble position!', advice: 'You bring luck and fortune to your partner.'});
 }
 /* === 10. WONJIN/GUIMUN Full === */
@@ -482,31 +496,43 @@ if (partnerGodToMe) {
 const godE = partnerGodToMe.e;
 if (['Direct Wealth','Indirect Wealth'].includes(godE)) {
 if (GENDER === 'm') {
-analysis.yukChin.score = 12;
+analysis.yukChin.score = 8;
 analysis.yukChin.details.push({type: 'excellent', title: '💍 Partner Is Your Wealth Star', desc: 'Partner is your '+godE+'! For men, Wealth Star represents the wife.', advice: 'A fated spouse bond. Marriage also boosts wealth fortune!'});
 } else {
-analysis.yukChin.score = 5;
-analysis.yukChin.details.push({type: 'good', title: '💰 Partner Is Your Wealth Star', desc: 'Partner is your '+godE+'. Together, financial fortune improves.', advice: 'A good financial partner.'});
+analysis.yukChin.score = 3;
+analysis.yukChin.details.push({type: 'neutral', title: '💰 Partner Is Your Wealth Star', desc: 'Partner is your '+godE+'. Together, financial fortune improves.', advice: 'A good financial partner.'});
 }}
 else if (['Direct Officer','Challenger'].includes(godE)) {
 if (GENDER === 'f') {
-analysis.yukChin.score = 12;
+analysis.yukChin.score = 8;
 analysis.yukChin.details.push({type: 'excellent', title: '👔 Partner Is Your Officer Star', desc: 'Partner is your '+godE+'! For women, Officer Star represents the husband.', advice: 'A fated spouse bond. Marriage also boosts social fortune!'});
 } else {
-analysis.yukChin.score = 3;
+analysis.yukChin.score = 2;
 analysis.yukChin.details.push({type: 'neutral', title: '👔 Partner Is Your Officer Star', desc: 'Partner is your '+godE+'. They may try to control you.', advice: 'A power imbalance can form. Maintain equality!'});
 }}
-else if (['Peer','Competitor'].includes(godE)) {
-analysis.yukChin.score = 5;
+else if (godE === 'Peer') {
+analysis.yukChin.score = 2;
 analysis.yukChin.details.push({type: 'good', title: '🤝 Partner Is Your Peer', desc: 'Partner is your '+godE+'. An equal, friend-like bond!', advice: 'Some rivalry, but you grow together as allies.'});
 }
-else if (['Eating God','Expressor'].includes(godE)) {
-analysis.yukChin.score = 4;
+else if (godE === 'Competitor') {
+analysis.yukChin.score = -3;
+analysis.yukChin.details.push({type: 'caution', title: '⚔️ Partner Is Your Competitor (劫財)', desc: 'Competition and conflict arise easily.', advice: 'Clashes over resources and opportunities. Respect each other\'s territory!'});
+}
+else if (godE === 'Eating God') {
+analysis.yukChin.score = 3;
 analysis.yukChin.details.push({type: 'good', title: '🎨 Partner Is Your Expressor', desc: 'Partner is your '+godE+'. You nurture and inspire them!', advice: 'Seeing them sparks your creative drive. Great creative partners.'});
 }
-else if (['Direct Seal','Indirect Seal'].includes(godE)) {
-analysis.yukChin.score = 6;
+else if (godE === 'Expressor') {
+analysis.yukChin.score = 0;
+analysis.yukChin.details.push({type: 'neutral', title: '🌊 Partner Is Your Expressor (傷官)', desc: 'Stimulating but can be excessive.', advice: 'Expression may go overboard. Be careful not to hurt each other.'});
+}
+else if (godE === 'Direct Seal') {
+analysis.yukChin.score = 4;
 analysis.yukChin.details.push({type: 'good', title: '📚 Partner Is Your Seal Star', desc: 'Partner is your '+godE+'. They care for and protect you!', advice: 'A comforting, nurturing presence — like a guardian.'});
+}
+else if (godE === 'Indirect Seal') {
+analysis.yukChin.score = 1;
+analysis.yukChin.details.push({type: 'neutral', title: '🔮 Partner Is Your Indirect Seal (偏印)', desc: 'Offers unique perspectives but can feel stifling.', advice: 'May feel confining at times, but provides unique insights.'});
 }}
 /* === 12. TWELVE STATES === */
 const myTwelveState = getTwelveState(myDm, mySaju.day.b);
@@ -518,16 +544,16 @@ const pHigh = highEnergy.some(h => pTwelveState.k.startsWith(h));
 const myLow = lowEnergy.some(l => myTwelveState.k.startsWith(l));
 const pLow = lowEnergy.some(l => pTwelveState.k.startsWith(l));
 if (myHigh && pHigh) {
-analysis.twelveState.score = 8;
+analysis.twelveState.score = 5;
 analysis.twelveState.details.push({type: 'good', title: '⚡ High-Energy Couple!', desc: 'Both have strong Twelve States! (You: '+myTwelveState.k+', Partner: '+pTwelveState.k+')', advice: 'An active duo! Challenge together for explosive synergy!'});
 } else if (myHigh && pLow) {
-analysis.twelveState.score = 5;
+analysis.twelveState.score = 3;
 analysis.twelveState.details.push({type: 'neutral', title: '🔋 Complementary Energy', desc: 'You\'re high-energy ('+myTwelveState.k+'), partner is calm ('+pTwelveState.k+').', advice: 'You lead, they balance — a well-calibrated partnership!'});
 } else if (myLow && pHigh) {
-analysis.twelveState.score = 5;
+analysis.twelveState.score = 3;
 analysis.twelveState.details.push({type: 'neutral', title: '🔋 Complementary Energy', desc: 'You\'re calm ('+myTwelveState.k+'), partner is high-energy ('+pTwelveState.k+').', advice: 'They lead — just make sure to voice your opinions too!'});
 } else if (myLow && pLow) {
-analysis.twelveState.score = 0;
+analysis.twelveState.score = -2;
 analysis.twelveState.details.push({type: 'caution', title: '🌙 Quiet Couple', desc: 'Both have low energy states (You: '+myTwelveState.k+', Partner: '+pTwelveState.k+').', advice: 'Lean on each other, but find external sources of motivation!'});
 }
 /* === 13. STRENGTH === */
@@ -535,19 +561,19 @@ const myStr = calcStrength(mySaju);
 const myStrType = myStr.type;
 const pStrType = partnerStrength.type;
 if (myStrType==='strong'&&pStrType==='weak') {
-analysis.strength.score = 7;
+analysis.strength.score = 5;
 analysis.strength.details.push({type: 'good', title: '⚖️ Strong-Weak Complement', desc: 'You are Strong ('+myStr.pct+'%), partner is Weak ('+partnerStrength.pct+'%).', advice: 'You protect, they adapt — a perfect combination!'});
 } else if (myStrType==='weak'&&pStrType==='strong') {
-analysis.strength.score = 7;
+analysis.strength.score = 5;
 analysis.strength.details.push({type: 'good', title: '⚖️ Weak-Strong Complement', desc: 'You are Weak ('+myStr.pct+'%), partner is Strong ('+partnerStrength.pct+'%).', advice: 'They protect you. Rely on them, but don\'t become dependent!'});
 } else if (myStrType==='strong'&&pStrType==='strong') {
-analysis.strength.score = 3;
+analysis.strength.score = -2;
 analysis.strength.details.push({type: 'caution', title: '💪 Both Strong!', desc: 'Both are Strong! (You: '+myStr.pct+'%, Partner: '+partnerStrength.pct+'%)', advice: 'Power struggles may arise. Compromise and respect are essential!'});
 } else if (myStrType==='weak'&&pStrType==='weak') {
-analysis.strength.score = 2;
+analysis.strength.score = -2;
 analysis.strength.details.push({type: 'caution', title: '🤝 Both Weak', desc: 'Both are Weak (You: '+myStr.pct+'%, Partner: '+partnerStrength.pct+'%).', advice: 'Mutual support is wonderful, but you both need a pillar when exhausted.'});
 } else {
-analysis.strength.score = 5;
+analysis.strength.score = 3;
 analysis.strength.details.push({type: 'neutral', title: '☯︎ Balanced Strength', desc: 'Similar strength levels (You: '+myStr.pct+'%, Partner: '+partnerStrength.pct+'%).', advice: 'Great foundation for an equal relationship!'});
 }
 /* === 14. JOHU — Climate Harmony === */
@@ -802,7 +828,7 @@ Follow all rules above, plus:
 • Strength: ` + (STRENGTH?.pct || '?') + `% (` + (STRENGTH?.type === 'strong' ? 'STRONG' : STRENGTH?.type === 'weak' ? 'WEAK' : 'BALANCED') + `)
 • 用神: ` + (myGods?.yong ? ELEMENT[myGods.yong].n : '?') + ` | 忌神: ` + (myGods?.gi ? ELEMENT[myGods.gi].n : '?') + `
 • Spouse Palace: ` + mySaju.day.b.c + ` (` + mySaju.day.b.k + `)
-• Napeum (納音): ` + (result.myNapeum?.name || '?') + ` (` + (result.myNapeum?.elementK || '?') + `)
+• Soul Sound (納音): ` + (result.myNapeum?.name || '?') + ` (` + (result.myNapeum?.elementK || '?') + `)
 • Energy (十二運星): ` + (result.myTwelveState?.k || '?') + ` (` + (result.myTwelveState?.l || '?') + `/12)
 • Climate: ` + (myGods?.climate?.type || '?') + `
 【PARTNER'S FORTUNE CHART】
@@ -815,7 +841,7 @@ Follow all rules above, plus:
 • Strength: ` + (PARTNER_STRENGTH?.pct || '?') + `% (` + (PARTNER_STRENGTH?.type === 'strong' ? 'STRONG' : PARTNER_STRENGTH?.type === 'weak' ? 'WEAK' : 'BALANCED') + `)
 • 用神: ` + (partnerGods?.yong ? ELEMENT[partnerGods.yong].n : '?') + ` | 忌神: ` + (partnerGods?.gi ? ELEMENT[partnerGods.gi].n : '?') + `
 • Spouse Palace: ` + partnerSaju.day.b.c + ` (` + partnerSaju.day.b.k + `)
-• Napeum (納音): ` + (result.partnerNapeum?.name || '?') + ` (` + (result.partnerNapeum?.elementK || '?') + `)
+• Soul Sound (納音): ` + (result.partnerNapeum?.name || '?') + ` (` + (result.partnerNapeum?.elementK || '?') + `)
 • Energy (十二運星): ` + (result.partnerTwelveState?.k || '?') + ` (` + (result.partnerTwelveState?.l || '?') + `/12)
 • Climate: ` + (partnerGods?.climate?.type || '?') + `
 【SPOUSE STAR CROSS-ANALYSIS】 ⚠️ ATTRACTION
