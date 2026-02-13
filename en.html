@@ -614,11 +614,11 @@ const mySS = calcSinsal(mySaju); const pSS = calcSinsal(partnerSaju);
 const myDohwa = mySS?.find(s=>s.n&&s.n.includes('桃花'));
 const pDohwa = pSS?.find(s=>s.n&&s.n.includes('桃花'));
 if (myDohwa&&pDohwa) { analysis.sinsal.score=5; analysis.sinsal.details.push({type:'special',title:'🌸 Double Peach Blossom Couple!',desc:'Both have Peach Blossom! A magnetically attractive couple.',advice:'Strong mutual attraction. Trust is essential — guard against jealousy!'}); }
-else if (myDohwa||pDohwa) { analysis.sinsal.score=3; analysis.sinsal.details.push({type:'neutral',title:'🌸 Peach Blossom Present',desc:(myDohwa?'You':'Partner')+' has Peach Blossom charm.',advice:'One side may attract more attention. Keep eyes on each other!'}); }
+else if (myDohwa||pDohwa) { analysis.sinsal.score=0; analysis.sinsal.details.push({type:'neutral',title:'🌸 Peach Blossom Present',desc:(myDohwa?'You':'Partner')+' has Peach Blossom charm.',advice:'One side may attract more attention. Keep eyes on each other!'}); }
 const myYM = mySS?.find(s=>s.n&&s.n.includes('驛馬'));
 const pYM = pSS?.find(s=>s.n&&s.n.includes('驛馬'));
 if (myYM&&pYM) { analysis.sinsal.score+=4; analysis.sinsal.details.push({type:'good',title:'🐎 Double Traveling Horse!',desc:'Both have Traveling Horse! An active, mobile couple.',advice:'Travel together for best results! Long-distance works too.'}); }
-else if (myYM&&!pYM||!myYM&&pYM) { analysis.sinsal.score+=1; analysis.sinsal.details.push({type:'neutral',title:'🐎 Traveling Horse Present',desc:(myYM?'You':'Partner')+' has Traveling Horse.',advice:'One travels, one waits. Understanding is needed.'}); }
+else if (myYM&&!pYM||!myYM&&pYM) { analysis.sinsal.score+=-1; analysis.sinsal.details.push({type:'neutral',title:'🐎 Traveling Horse Present',desc:(myYM?'You':'Partner')+' has Traveling Horse.',advice:'One travels, one waits. Understanding is needed.'}); }
 const myHG = mySS?.find(s=>s.n&&s.n.includes('華蓋'));
 const pHG = pSS?.find(s=>s.n&&s.n.includes('華蓋'));
 if (myHG&&pHG) { analysis.sinsal.score+=5; analysis.sinsal.details.push({type:'special',title:'🎭 Double Canopy Couple!',desc:'Both have Canopy Star! Artistic souls that resonate together.',advice:'Cultural activities and spiritual practices bring joy. You understand each other\'s solitude.'}); }
