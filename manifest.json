@@ -1,0 +1,47 @@
+{
+  "name": "K-MUDANG | 사주·궁합·부적",
+  "short_name": "K-MUDANG",
+  "description": "60갑자 사주 분석 · 궁합 · 부적 생성. 오행의 흐름 속에 당신의 이야기가 적힌다.",
+  "start_url": "/ko.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a1a2e",
+  "theme_color": "#FDD835",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "ogimage.png",
+      "sizes": "1200x630",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["lifestyle", "entertainment"],
+  "share_target": {
+    "action": "/ko.html",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

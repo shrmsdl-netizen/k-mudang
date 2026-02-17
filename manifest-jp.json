@@ -1,0 +1,38 @@
+{
+  "name": "K-MUDANG | 四柱推命 · 護符 · 相性",
+  "short_name": "K-MUDANG",
+  "description": "六十甲子 四柱推命分析 · 相性 · 護符生成。五行の流れの中に、あなたの物語が刻まれる。",
+  "start_url": "/jp.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a1a2e",
+  "theme_color": "#FDD835",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["lifestyle", "entertainment"],
+  "screenshots": [
+    {
+      "src": "ogimage.png",
+      "sizes": "1200x630",
+      "type": "image/png"
+    }
+  ]
+}
