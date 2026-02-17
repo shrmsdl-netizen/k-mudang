@@ -311,8 +311,7 @@ gtag('config', 'G-044J002H6P');</script><meta name="viewport" content="width=dev
                 ✨ 精密な命理データとAIの深層分析が出会う<br><span style="color:var(--gold);font-weight:600;">現存する最も完璧な四柱推命解釈の組み合わせ</span>です
             </p><p style="margin-top:10px;font-size:12px;color:#aaa;line-height:1.7;text-align:center;">
                 古典命理の複雑な数式は一寸の狂いもなく計算し、<br>
-                その結果を世界最高峰のAIがあなただけのために解釈します。<br><span style="color:var(--gold);opacity:0.9;">専門家の洞察と技術の正確性、両方を手にしてください。</span></p></div></div><!-- この結果をシェア -->
-<div class="card" style="background:linear-gradient(145deg,rgba(253,216,53,0.1),rgba(253,216,53,0.03));border-color:rgba(253,216,53,0.4);margin-top:15px;"><h3>🔗 この結果をシェア</h3><p style="font-size:12px;color:var(--gray);margin-bottom:12px;">リンク一つで四柱分析結果をすぐにシェアできます</p><button class="btn gold" onclick="shareSajuLink()" style="margin-bottom:8px;">🔗 シェアリンクをコピー</button><div style="display:flex;gap:8px;"><button class="btn outline" onclick="shareSajuLine()" style="flex:1;font-size:13px;">💚 LINEでシェア</button><button class="btn outline" onclick="openChatGPT()" style="flex:1;font-size:13px;">🤖 ChatGPTで分析</button></div></div><!-- 吉日選択カード -->
+                その結果を世界最高峰のAIがあなただけのために解釈します。<br><span style="color:var(--gold);opacity:0.9;">専門家の洞察と技術の正確性、両方を手にしてください。</span></p></div></div><!-- 吉日選択カード -->
 <div class="card" id="taekil-card" style="display:none;background:linear-gradient(145deg,rgba(253,216,53,0.08),rgba(253,216,53,0.02));border-color:rgba(253,216,53,0.35);"><h3>📅 吉日選び</h3><p style="font-size:12px;color:var(--gray);margin-bottom:12px;">用神に基づいて最も縁起の良い日を探します</p><div class="toggle-btns" style="margin-bottom:12px;"><button class="toggle-btn on" onclick="selectTaekilPurpose('wedding',this)">💒 結婚</button><button class="toggle-btn" onclick="selectTaekilPurpose('move',this)">🏠 引越し</button><button class="toggle-btn" onclick="selectTaekilPurpose('open',this)">🏪 開業</button><button class="toggle-btn" onclick="selectTaekilPurpose('exam',this)">📝 受験</button></div><div style="display:flex;gap:10px;font-size:10px;margin-bottom:10px;flex-wrap:wrap;"><span>🟡 大吉</span><span>🟢 吉</span><span>⬜ 普通</span><span>🔴 凶</span><span>⛔ 大凶</span></div><div id="taekil-calendar"></div><div id="taekil-top3"></div></div></div><!-- ========================================
      Tab 3: 相性
      ======================================== --><div id="tab-match" class="tab"><div class="card"><h3>💑 相性 分析</h3><p style="font-size:12px;color:var(--gray);margin-bottom:15px;">
@@ -3382,6 +3381,20 @@ ${monthText}
 8. 総合アドバイス
 - ⭐ 用神/喜神/忌神活用の具体的方法（色、方位、職業、人間関係）
 - この四柱の核心メッセージ一行要約
+
+【多年度歳運(歲運)・月運 — PHASE 3】
+選択年度: ${(() => { const sel = document.getElementById('target-year-select'); return sel ? sel.value : currentYear; })()}年
+歳運干支(歲運干支): ${(() => { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const yp = calcYearPillar(yr, 6, 1); const sg = getTenGod(yp.s, dm); const bg = getTenGod({e: yp.b.e, y: BRANCH.findIndex(b=>b.c===yp.b.c)%2===0}, dm); return yp.s.c + yp.b.c + ' [天干:' + (sg?sg.k:'?') + '/地支:' + (bg?bg.k:'?') + ']'; })()}
+用神(用神)関係: ${(() => { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const yp = calcYearPillar(yr, 6, 1); const isY = [yp.s.e, yp.b.e].includes(GODS.yong); const isH = [yp.s.e, yp.b.e].includes(GODS.hee); const isG = [yp.s.e, yp.b.e].includes(GODS.gi); return isY ? '✅ 用神年（最吉）' : isG ? '❌ 忌神年（注意）' : isH ? '🟡 喜神年（吉）' : '⬜ 中立'; })()}
+月別要約 スコア凡例(用神+2, 喜神+1, 忌神-2)(1〜12月): ${(() => { try { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const ml = getYearlyMonthLuck(yr, SAJU, GODS); const ratingMark = {good:'🟢', neutral:'⬜', bad:'🔴'}; return ml.months.map(m => m.pillar.s.c + m.pillar.b.c + '(' + (ratingMark[m.rating]||'⬜') + 'スコア:' + m.score + ')').join(' '); } catch(e) { return '計算不可'; } })()}
+
+【十大運(大運)スコア一覧 — PHASE 4】
+${(() => { try { const scores = luck.map(l => { const isG = [l.s.e, l.b.e].includes(GODS.yong) || [l.s.e, l.b.e].includes(GODS.hee); const isBad = [l.s.e, l.b.e].includes(GODS.gi); const mark = isG ? '🟢' : isBad ? '🔴' : '⬜'; return l.s.c + l.b.c + '(' + l.startAge + '〜' + l.endAge + '歳)' + mark; }); return scores.join(' → '); } catch(e) { return '計算不可'; } })()}
+現在の大運: ${curLuck ? curLuck.s.c + curLuck.b.c + ' (' + curLuck.startAge + '〜' + curLuck.endAge + '歳)' : '未計算'}
+
+【吉日(擇日)TOP3 — PHASE 5（用神基準）】
+${(() => { try { const today2 = new Date(); const days2 = []; for (let mo = 0; mo <= 1; mo++) { const base = new Date(today2.getFullYear(), today2.getMonth() + mo, 1); const y2 = base.getFullYear(), mIdx = base.getMonth(); const lastDay = new Date(y2, mIdx + 1, 0).getDate(); for (let d = 1; d <= lastDay; d++) { const dt = new Date(y2, mIdx, d); if (dt < new Date(today2.getFullYear(), today2.getMonth(), today2.getDate())) continue; const res = calcAuspiciousScore(y2, mIdx + 1, d, _taekilPurpose); days2.push({y: y2, m: mIdx + 1, d, ...res}); } } const top3 = days2.filter(d => d.grade === 'best' || d.grade === 'good').sort((a,b) => b.score - a.score).slice(0, 3); const purposeMap = {wedding:'結婚', move:'引越し', open:'開業', exam:'受験'}; if (!top3.length) return '推奨日なし'; return '目的: ' + (purposeMap[_taekilPurpose] || _taekilPurpose) + '\n' + top3.map((d, i) => (i+1) + '位: ' + d.y + '/' + d.m + '/' + d.d + ' ' + d.dp.s.c + d.dp.b.c + ' (スコア:' + d.score + '/5 ' + (d.grade==='best'?'🟡大吉':'🟢吉日') + ') 理由: ' + (d.reasons && d.reasons.good ? d.reasons.good.slice(0,2).join(', ') : '-')).join('\n'); } catch(e) { return '計算不可'; } })()}
+
 ===== ⚠️ AI必須指針 - 必ず遵守 ⚠️ =====
 【提供されたデータ使用 - 直接計算禁止】
 1. 十神マッピング表が事前に計算されています。これを使用してください。どの五行がどの十神か直接計算しないでください。
