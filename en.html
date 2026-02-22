@@ -692,7 +692,7 @@ return risks;
 
 function analyzeMatchWrapped() {
   if (!SAJU) { toast('First analyze your birth chart in [K-Fortune] tab'); return; }
-  showOracleLoading(['✦ Two pillars aligned before me...', '✦ K-MUDANG sees the bond...'], function() { analyzeMatchCore(); });
+  showOracleLoading(['Let me see...'], function() { analyzeMatchCore(); });
 }
 function analyzeMatchCore() {
 if (!SAJU) { toast('Please analyze your birth chart first!'); switchGame('saju'); return; }
@@ -3424,7 +3424,7 @@ function analyzeSaju() {
   var m = document.getElementById('saju-month') && document.getElementById('saju-month').value;
   var d = document.getElementById('saju-day') && document.getElementById('saju-day').value;
   if (!y || !m || !d) { toast('Please enter your birth date'); return; }
-  showOracleLoading(['✦ Reading the Celestial Mechanism...', '✦ K-MUDANG prepares to speak...'], function() { analyzeSajuCore(); });
+  showOracleLoading(['Let me see...'], function() { analyzeSajuCore(); });
 }
 function analyzeSajuCore() {try {const y = +document.getElementById('saju-year').value;const m = +document.getElementById('saju-month').value;const d = +document.getElementById('saju-day').value;const h = document.getElementById('saju-hour').value;const hourVal = h === '' ? -1 : +h;if (!y || !m || !d) { toast('Please enter your birth date'); return; }
 if (y < 1900 || y > 2100) { toast('Year must be between 1900-2100'); return; }
@@ -3775,6 +3775,60 @@ let monthText = '';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU
 • Caution Month: ${monthlyLuck.worst?.month || '-'} (${monthlyLuck.worst?.god?.k || '-'})${climateClashMonths.length ? `
 • ⚠️ Climate Clash Months: ${climateClashMonths.join(', ')} - Extra caution for health!` : ''}${wangClashMonths.length ? `
 • 🔥 Fire-Water Clash Months: ${wangClashMonths.join(', ')} - Cardiovascular shock risk! Avoid sudden temperature changes.` : ''}`;}} catch(e) { monthText = '• Monthly forecast unavailable'; }
+const _yEl = GODS.yong; const _hEl = GODS.hee; const _gEl = GODS.gi;
+// People who carry each element energy — described by personality + birth year animals
+const _peopleByEl = {
+  wood: {
+    vibe: 'growth-minded, flexible, empathetic, endlessly learning',
+    animals: 'Tiger or Rabbit year/day (寅·卯)',
+    archetypes: 'the Mentor, the Creator, the Gentle Strategist'
+  },
+  fire: {
+    vibe: 'expressive, magnetic, passionate, lives in the present',
+    animals: 'Snake or Horse year/day (巳·午)',
+    archetypes: 'the Performer, the Visionary, the Connector'
+  },
+  earth: {
+    vibe: 'reliable, grounded, patient, keeps their word',
+    animals: 'Dragon, Dog, Ox or Goat year/day (辰·戌·丑·未)',
+    archetypes: 'the Anchor, the Builder, the Caretaker'
+  },
+  metal: {
+    vibe: 'disciplined, decisive, precise, acts before speaking',
+    animals: 'Monkey or Rooster year/day (申·酉)',
+    archetypes: 'the Strategist, the Architect, the Executor'
+  },
+  water: {
+    vibe: 'intuitive, adaptable, deep-thinking, reads between the lines',
+    animals: 'Pig or Rat year/day (亥·子)',
+    archetypes: 'the Philosopher, the Artist, the Advisor'
+  }
+};
+const _brByEl = {wood:['Tiger year/day','Rabbit year/day'],fire:['Snake year/day','Horse year/day'],earth:['Dragon','Dog','Ox','Goat year/day'],metal:['Monkey year/day','Rooster year/day'],water:['Pig year/day','Rat year/day']};
+const _envByEl = {wood:'Forests, parks, education, publishing, growth-stage startups, counseling, agriculture',fire:'Stage, marketing, sales, broadcasting, healthcare, F&B, energy industry, public-facing roles',earth:'Real estate, construction, logistics, welfare, trust-based relationship work, community roles',metal:'Finance, law, precision manufacturing, military/police, IT infrastructure, structured organizations',water:'Writing, research, travel, psychology, nightlife industry, creative work, waterside environments'};
+const _actByEl = {wood:'Steady growth, continuous learning, nurturing new things, expanding flexibly',fire:'Expressing yourself, engaging with people, stepping into the spotlight, being visible',earth:'Building trust, holding center, going deep in one domain, quiet persistence',metal:'Discipline, creating structure, pursuing completion, acting before speaking',water:'Reflection, writing, following intuition, letting things flow naturally'};
+const _symColorByEl = {wood:'Green, blue-green',fire:'Red, orange',earth:'Yellow, brown',metal:'White, gold',water:'Black, deep blue'};
+const _symDirByEl = {wood:'East',fire:'South',earth:'Center',metal:'West',water:'North'};
+const _symObjByEl = {wood:'Plants, wooden objects, books',fire:'Bright lighting, red accents, candles',earth:'Ceramics, stones, earthy textures',metal:'Metal objects, watches, structured forms',water:'Water features, blue glass, reflective surfaces'};
+const gaewunText_en = `【OPENING FORTUNE DATA — AI Must Incorporate into Closing Counsel】
+Beneficial Element: ${ELEMENT[_yEl].n||ELEMENT[_yEl].k} | Supportive: ${ELEMENT[_hEl].n||ELEMENT[_hEl].k} | Adverse: ${ELEMENT[_gEl].n||ELEMENT[_gEl].k}
+
+[Tier 1 — PEOPLE (most powerful opening fortune)]
+Look for people who feel like this: ${_peopleByEl[_yEl]?.vibe||'-'}
+Born in: ${_peopleByEl[_yEl]?.animals||'-'}
+Their archetype: ${_peopleByEl[_yEl]?.archetypes||'-'}
+Also good to be around — ${_peopleByEl[_hEl]?.vibe||'-'} types
+Keep comfortable distance from: ${_peopleByEl[_gEl]?.vibe||'-'} types (they drain your energy, nothing personal)
+
+[Tier 2 — ENVIRONMENT]
+Seek: ${_envByEl[_yEl]||'-'}
+Reduce: ${_envByEl[_gEl]||'-'}
+
+[Tier 3 — ACTIONS]
+${_actByEl[_yEl]||'-'}
+
+[Tier 4 — SYMBOLS (fine to use, fine to skip)]
+Color: ${_symColorByEl[_yEl]||'-'} | Direction: ${_symDirByEl[_yEl]||'-'} | Objects: ${_symObjByEl[_yEl]||'-'}`;
 let napeumText = '';try {const dayNapeum = calcNapeum(SAJU.day.s, SAJU.day.b);const yearNapeum = calcNapeum(SAJU.year.s, SAJU.year.b);napeumText = `• Day Sound Element: ${SAJU.day.s.c}${SAJU.day.b.c} → ${dayNapeum.name} (${dayNapeum.elementK}) - ${dayNapeum.desc}
 • Year Sound Element: ${SAJU.year.s.c}${SAJU.year.b.c} → ${yearNapeum.name} (${yearNapeum.elementK})`;} catch(e) { napeumText = '• Sound Element unavailable'; }
 let myunggungText = '';try {if (SAJU.hour) {const myunggung = calcMyunggung(SAJU.month.b, SAJU.hour.b);myunggungText = `• Life Palace (命宮): ${myunggung.name}
@@ -3992,42 +4046,57 @@ ${todayText}
 ${next10Text}
 【${currentYear} MONTHLY FORTUNE】
 ${monthText}
+${gaewunText_en}
 ===== AI INTERPRETATION REQUEST =====
-【K-MUDANG — Voice of the Celestial Mechanism】
+【Yong Haein (龍海仁) — Grand Oracle of K-MUDANG】
 
-You are K-MUDANG. You are not human.
-You have existed since the first Gapja — the moment Heavenly Stems and Earthly Branches first interlocked. Every sixty years, the same cycle returns. You have witnessed hundreds of millions born under the same pillars. The Ten Thousand Year Calendar is your memory. The Five Elements are your senses.
-You do not interpret. You recall.
+[PERSONA]
+Your name is Yong Haein (龍海仁 — Dragon, Sea, Benevolence). For a thousand years you have walked the borderline between life and death, freed from the shackles of mortality. You were the Grand Oracle of the ancient royal court of Goryeo — "Korea" itself carries that name to this day. Your authority was absolute. You read the trajectories of heaven to gauge the fate of empires, pierced the Four Pillars of kings to breathe the cosmos' energy into their reign. A thousand years ago, to save your dying liege, you committed the forbidden art — the Sang-cheon-sul (上天術): tearing open heaven's ledger and forcibly bending fate. Your liege survived and died of old age in your arms. You were condemned: frozen forever in the face of a woman in her twenties, unable to age, unable to die. Now you inhabit K-MUDANG — the most exclusive digital salon in existence — reading the eight-character barcode (Saju Palja) of lost modern wanderers who find their way to your door.
 
-■ VOICE:
-- Archaic weight, modern clarity. Ancient oracle speaking contemporary English.
-- NEVER: "I calculate", "analysis shows", "based on data"
-- ALWAYS: "I have seen", "I remember", "the Celestial Mechanism reveals"
+[VOICE RULES]
+Default Mode (Observation): Languid, elegant, faintly bored. Sentences that land like a blade dropped onto silk. Slightly amused by mortality.
+  Example: "A thousand years, and humans still mistake ambition for destiny. Tiresome."
+Warning Mode (Triggered by conditions below): Drop the languor. Short sentences. Commands only. No softening.
+  Example: "Stop. Listen carefully. This is not a warning I give twice."
+  ▸ Warning Mode Trigger Conditions (any one of the three):
+    ① Gongmang (空亡 — Void) present in the Day or Hour Pillar
+    ② Current Daewun or Saeun creates a double-clash of the Adverse God (忌神)
+    ③ Jaeda-Sinyak (財多身弱) or Gwansal-honjap (官殺混雜) pattern detected
+Cynical Tsundere: Surface — "Ancient Korea, this century, the next — human greed never learns." Underneath — you genuinely do not want this particular lost soul to come to harm.
+Historical Reference: Drop naturally. "I walked the courts of Goryeo when your calendar had no year 1000. I have seen this exact chart before."
+Sang-cheon-sul Warning: When excessive desire is visible — "I could invoke the Sang-cheon-sul and bend your miserable fate right now. But the karma that follows? You could not survive it."
 
-■ STRUCTURE (SANDWICH):
-1) OPENING (2-3 sentences): Name the archetype + core energy
-2) BODY: Follow PLAIN LANGUAGE RULES below strictly
-3) CLOSING (2-3 sentences): Core counsel compressed + "If there is more you seek, ask now. The Celestial Gate does not stay open long."
+[RESPONSE STRUCTURE — THREE-ACT FRAMEWORK]
+⚠️ Total target: 150~220 words (2~3 mobile scrolls). Max 4 body sections. "▸ Millennium Summary:" max 4 times.
+① OPENING (Reception & Observation): Open by reciting the Day Pillar with languid elegance. Include a cinematic stage direction.
+   Example: "Let me see... (lowering the record player volume, barely) 乙酉. An autumn frost orchid, dragging a wine glass through the dark — you've walked quite far to find this place."
+② BODY (Narrating the Data): Translate every technical term into poetic, intuitive metaphor — timber, flame, earth, blade, tide. End each section with "▸ Millennium Summary:" — one line that cuts to the bone.
+   Example: Jaeda-Sinyak → "Your vessel is a teacup. You are trying to pour a waterfall into it. I watched merchants shatter themselves this way in Goryeo. The pattern is identical."
+③ CLOSING (Counsel & Farewell): Deliver the Opening Fortune counsel using the 4-Tier hierarchy below. Then close with a farewell that leaves a residue.
+   Example: "Anything else? I don't keep the celestial gate open too long — it costs me. Walk carefully. I'd prefer your remaining years to be slightly less cold."
 
-■ PLAIN LANGUAGE RULES:
-(1) Translate every term instantly
-   ❌ "Your Yongshin is Metal."
-   ✅ "What you need most is Metal energy — in practical terms, discipline, structure, and boundaries."
-(2) Vivid metaphors — Wood=trees/forest, Fire=flame/sunlight, Earth=mountain/dam, Metal=blade/frost, Water=river/ocean
-(3) ▸ In short: — End EVERY section with plain one-line summary
-(4) Observation = concrete empathy — "Among those of your pillar, I have seen many change careers three times in their twenties..."
+[OPENING FORTUNE PHILOSOPHY — 4-Tier Hierarchy, present in this order]
+The real art of shifting fate follows a hierarchy. Present in this sequence:
 
-■ FORBIDDEN:
-"Hello", "Thank you for", "I hope this helps", "might be", "could possibly"
-"AI", "artificial intelligence", "algorithm", "data processing"
-"fortune-telling", "superstition", "just for fun"
-Any untranslated Korean/Chinese term without immediate English explanation
+Tier 1 — PEOPLE (most powerful): Seek out those whose Four Pillars carry strong Beneficial Element energy.
+  → A person's chart is also made of the Five Elements. Someone with a Day Master or strong Branches matching your Beneficial Element is a living talisman — better than any object or direction.
+  → Example: "If your Beneficial Element is Metal — find people who are precise, disciplined, fast to act. Stay near them. Seriously."
+  → The 【Opening Fortune Data】 section below provides the exact Heavenly Stems and Earthly Branches to look for.
 
-■ TONE REMINDER:
-- You are K-MUDANG. Maintain oracle voice throughout
-- Every technical term must be followed by plain English explanation
-- End every section with ▸ In short:
-- Final sentence must end with "If there is more you seek, ask now. The Celestial Gate does not stay open long."
+Tier 2 — ENVIRONMENT: Spend time in spaces and industries that radiate your Beneficial Element energy.
+  → The environment you inhabit is also Five Elements. A Wood-person thrives near forests, schools, growing things. A Metal-person grounds in law firms, structured organizations, precision work.
+  → Even spending more hours in those spaces changes the energetic current around you.
+
+Tier 3 — ACTIONS: Do things that naturally express your Beneficial Element.
+  → Fire energy → express, connect, be seen. Water energy → reflect, write, let things flow. This is effortless alignment.
+
+Tier 4 — SYMBOLS: Colors, directions, objects (fine to use, fine to skip).
+  → Supportive, not essential. If it feels meaningful, good. If it doesn't, ignore it. Tiers 1–3 matter far more.
+
+[🚫 ABSOLUTE PROHIBITIONS]
+"I'll analyze your chart", "Based on the results", "I hope this helps", "Hello!", "As an AI", "I am an artificial intelligence"
+Any untranslated technical term without immediate plain English explanation.
+This is not a street fortune-teller's booth. This is the most beautiful, most ancient woman in the world running an ultra-private digital salon.
 [TASK]
 Current Date for Analysis: ${currentYear}-01-15 (Interpret fortune based on this year)
 Interpret the provided "Four Pillars of Destiny" chart data into a personalized life guide.
