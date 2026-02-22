@@ -1,14 +1,14 @@
 {
-  "name": "K-MUDANG | Four Pillars · Talisman · Compatibility",
+  "name": "K-MUDANG | Secrets of Destiny",
   "short_name": "K-MUDANG",
-  "description": "60 Gapja Four Pillars analysis · Compatibility · Talisman generation. Your story is written in the flow of the Five Elements.",
-  "start_url": "/en.html",
+  "description": "White Tiger or Blue Dragon? In the flow of Five Elements, your story is written.",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#1a1a2e",
-  "theme_color": "#D4AF37",
-  "lang": "en",
+  "background_color": "#0a0a12",
+  "theme_color": "#0a0a12",
+  "lang": "ko",
   "icons": [
     {
       "src": "taegeuk-icon.png",
@@ -19,8 +19,7 @@
     {
       "src": "apple-touch-icon.png",
       "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "favicon-32.png",
