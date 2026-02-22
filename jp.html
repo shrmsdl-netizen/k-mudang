@@ -411,7 +411,7 @@ water:{c:'水',k:'水(すい)',n:'水',color:'#2196F3',icon:'💧',nums:[1,6,11,
 {branches: [2,3,4], element: 'wood', name: '寅卯辰 方合', dir: '東方木局'},
 {branches: [5,6,7], element: 'fire', name: '巳午未 方合', dir: '南方火局'},
 {branches: [8,9,10], element: 'metal', name: '申酉戌 方合', dir: '西方金局'},
-{branches: [11,0,1], element: 'water', name: '害子丑 方合', dir: '北方水局'}
+{branches: [11,0,1], element: 'water', name: '亥子丑 方合', dir: '北方水局'}
 ];
 const MATCH_SIX_HARMONY/*六合*/ = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
 const MATCH_TRIPLE_HARMONY/*三合*/ = {wood:[11,3,7],fire:[2,6,10],metal:[5,9,1],water:[8,0,4]};
@@ -2631,7 +2631,7 @@ ${g.isCurrent ? '<span style="background:var(--gold);color:#000;padding:2px 8px;
 ${next10.years.map(y => `
 <div style="flex:1;min-width:60px;padding:8px;text-align:center;background:rgba(255,255,255,0.05);border-radius:8px;border:1px solid ${y.rating === 'excellent' || y.rating === 'good' ? 'var(--wood)' : y.rating === 'difficult' || y.rating === 'caution' ? 'var(--fire)' : 'transparent'};"><div style="font-size:0.75rem;color:var(--gray);">${y.year}</div><div style="font-size:1.1rem;">${ratingEmoji[y.rating]}</div><div style="font-size:0.7rem;color:var(--gray);">${y.age}歳</div></div>
 `).join('')}
-</div><div class="info-box good"><p>🌟 <strong>最高の 害: ${next10.bestYear.year}年</strong> (${next10.bestYear.age}歳）<br>
+</div><div class="info-box good"><p>🌟 <strong>最高の 年: ${next10.bestYear.year}年</strong> (${next10.bestYear.age}歳）<br>
 ${next10.bestYear.saeun.pillar.s.c}${next10.bestYear.saeun.pillar.b.c}年, ${next10.bestYear.saeun.god.k}の気</p></div><div class="info-box warn" style="margin-top:10px;"><p>⚠️ <strong>注意すべき年: ${next10.worstYear.year}年</strong> (${next10.worstYear.age}歳）<br>
 ${next10.worstYear.saeun.pillar.s.c}${next10.worstYear.saeun.pillar.b.c}年 - 無理せず健康管理！</p></div>
 `;const curYear = new Date().getFullYear();renderTargetYearLuck(curYear);initYearSelector(curYear);const ints = calcInteractions(SAJU);document.getElementById('interactions').innerHTML = ints.length ? ints.map(i => `<div class="int-item"><div class="int-type">${i.t}</div><div><div class="int-chars">${i.c}</div><div class="int-meaning">${i.m} - ${i.d}</div></div></div>`).join('') : '<p style="color:var(--gray);">四柱内の特別な合冲がありません。</p>';const banghap = analyzeDirectionalHarmony(SAJU);const amhap = analyzeHiddenHarmony(SAJU);document.getElementById('banghap-amhap').innerHTML = `
@@ -2786,10 +2786,10 @@ let ycText = '';try {const yukcheon = analyzeYukcheon(SAJU, GENDER);if (yukcheon
 • 父親(偏財): ${yukcheon.parents?.father?.analysis || '-'}
 • 母親(正印): ${yukcheon.parents?.mother?.analysis || '-'}`;}} catch(e) { ycText = '• 六親分析データなし'; }
 let gwText = '';try {const gungwi = analyzeGungwi(SAJU, BIRTH_YEAR);if (gungwi && Array.isArray(gungwi)) {gwText = gungwi.map(g => '• ' + g.name + '(' + g.ageRange + '): ' + (g.analysis?.substring(0, 50) || '') + '...' + (g.isCurrent ? ' ◀現在' : '')).join('\n');}} catch(e) { gwText = '• 宮位分析データなし'; }
-let next10Text = '';try {const next10 = getNext10Years(SAJU, BIRTH_YEAR, GENDER, GODS);if (next10) {next10Text = `• 最高の 害: ${next10.bestYear?.year || '-'}年（${next10.bestYear?.age || '-'}歳）
+let next10Text = '';try {const next10 = getNext10Years(SAJU, BIRTH_YEAR, GENDER, GODS);if (next10) {next10Text = `• 最高の 年: ${next10.bestYear?.year || '-'}年（${next10.bestYear?.age || '-'}歳）
 • 注意すべき年: ${next10.worstYear?.year || '-'}年（${next10.worstYear?.age || '-'}歳）`;}} catch(e) { next10Text = '• 10年運勢データ なし'; }
 let tanghwaWarningText = '';try {const currentYear = new Date().getFullYear();const yp = calcYearPillar(currentYear, 6, 1);const sbi = BRANCH.indexOf(yp.b);const allBi = [BRANCH.indexOf(SAJU.year.b), BRANCH.indexOf(SAJU.month.b), BRANCH.indexOf(SAJU.day.b)];if (SAJU.hour) allBi.push(BRANCH.indexOf(SAJU.hour.b));const hasChu = allBi.includes(1);const hasO = allBi.includes(6);const hasIn = allBi.includes(2);const hasSa = allBi.includes(5);if (hasChu && hasO && sbi === 6) {tanghwaWarningText = `\n⚠️ ${currentYear}年双湯火 警告! 原局丑午湯火 + 歳運 午 重畳。感情爆発、火病に特別注意！`;}
-else if (hasChu && !hasO && sbi === 6) {tanghwaWarningText = `\n🔥 ${currentYear}年 湯火殺 発動！原局の 丑と歳運 午が出会い丑午湯火 刑性。火病、感情爆発、精神的ストレスに注意！特に日支が丑(丑)なら 配偶者宮に直接影響。`;}
+else if (hasChu && !hasO && sbi === 6) {tanghwaWarningText = `\n🔥 ${currentYear}年 湯火殺 発動！原局の 丑と歳運 午が出会い丑午湯火 形成。火病、感情爆発、精神的ストレスに注意！特に日支が丑(丑)なら 配偶者宮に直接影響。`;}
 else if (!hasChu && hasO && sbi === 1) {tanghwaWarningText = `\n🔥 ${currentYear}年 湯火殺 発動！原局の 午と歳運の丑が出会い湯火の刑が成立。火気取扱 注意, 熱病 注意!`;}
 if (hasIn && hasSa && sbi === 5) {tanghwaWarningText = `\n⚠️ ${currentYear}年双湯火 警告! 原局寅巳湯火 + 歳運 巳 重畳。火傷、熱病、薬物副作用に注意！`;}
 else if (hasIn && !hasSa && sbi === 5) {tanghwaWarningText += `\n🔥 ${currentYear}年 湯火殺 発動！原局の 寅と歳運の巳が出会い寅巳湯火の刑が成立。火傷、熱病 注意!`;}
@@ -3015,11 +3015,43 @@ ${gaewunText_jp}
 上天術の警告: 無理な欲が見えたとき——「今すぐ上天術を使って、あなたのその惨めな運命を捻り変えることもできますわ。でも、その後に来る凄まじい業（カルマ）に、あなたは耐えられますの？」
 
 [応答構造 — サンドイッチ・ストーリーテリング]
-⚠️ 全体の回答目標：400〜600字以内（モバイル2〜3スクロール）。本論セクション最大4つ。「▸ 千年の要約：」最大4回。
+⚠️ 全体の回答目標：2,000〜3,000字（モバイル8〜12スクロール）。以下の8セクション全てを省略なく記述すること。各セクション末尾「▸ 一言で言えば：」必須。絶対に途中で切らないこと。
 ① 導入部（歓迎と観照）: 訪問者の日柱（にっちゅう）を優雅に詠み上げて始める。視覚的で倦怠感のある行動描写（ト書き）を含めること。
    例：「どれ……（レコードの音量をそっと下げながら）乙酉（きのととり）日柱。秋霜に打たれて咲いた儚い花が、この深夜に空のグラスを持ってここまで歩いてきましたのね。」
-② 本論（命理データの物語化）: 専門用語を詩的で直感的な日常の比喩（木、炎、土、刃、波など）に翻訳すること。各分析セクションの終わりに必ず「▸ 千年の要約：」という項目で核心テキストを記すこと。
-   例：財多身弱 →「あなたの器は小さな茶碗ですわ。それに滝のような財を注ごうとしているから、器が割れるのも当然。千年前にも、身の程を知らず無理をして命脈を絶やした大商人を何人も見てきましたわよ。」
+② 本論（命理データの物語化）: 以下の8セクションを順番通り全て記述すること。専門用語は必ず括弧で日常語を併記。各セクション末尾「▸ 一言で言えば：」必須。
+   例：財多身弱（財多身弱·재다신약 = 財が自分を圧倒する）→「あなたの器は小さな茶碗ですわ。それに滝のような財を注ごうとしているから、器が割れるのも当然。千年前にも、身の程を知らず無理をして命脈を絶やした大商人を何人も見てきましたわよ。」
+
+   [セクション1] 生まれ持った性格と気質
+   - 日干（にっかん）の特性、格局（かくきょく·構造）、六十甲子日柱論に基づく。長所と短所を共に記述。身強（しんきょう）/身弱（しんじゃく）を明記。
+
+   [セクション2] 適性と職業運
+   - 格局・用神（ようじん）・十神（じっしん）に基づく適合分野。組織型 vs 独立型を明確に区分。
+   - 用神（用神）/喜神（きしん）/忌神（きしん）ボックスを必ず挿入：
+     ┌─────────────────────────┐
+     │ 用神：○○（理由）         │
+     │ 喜神：○○（用神を補助）   │
+     │ 忌神：○○（避けるべき）   │
+     └─────────────────────────┘
+
+   [セクション3] 財物運と金銭管理
+   - 財星（ざいせい）の位置と強弱。正財（せいざい·安定収入型） vs 偏財（へんざい·事業型）。具体的アドバイス。
+
+   [セクション4] 恋愛運と結婚運
+   - 配偶者星（はいぐうしゃせい）、日支（にっし）12運星、配偶者宮の分析。理想型と結婚時期のヒント。
+
+   [セクション5] 健康注意事項
+   - 五行（ごぎょう）の不均衡による脆弱部位。木＝肝胆/筋肉、火＝心臓/血液、土＝消化器、金＝肺/皮膚、水＝腎臓/ホルモン。予防法。
+
+   [セクション6] 今年の運勢（歳運·せいうん）+ 今日の運勢
+   - 現在の大運（だいうん）・歳運（せいうん）の組み合わせ。今年のキーワードを一言で。
+   - 今日の日辰（にっしん）十神に基づく具体的アドバイス（用神日/忌神日の有無を明示）。
+
+   [セクション7] 人生全般の流れ
+   - 大運（だいうん）の流れに基づく時期別分析（幼年〜晩年）。主要な転換点。
+
+   [セクション8] 総合アドバイス（開運法·かいうんほう）
+   - 用神/喜神/忌神の具体的活用法（色、方位、職業、人間関係）。
+   - この四柱の核心メッセージを一行で要約。
 ③ 結論部（天機の助言とお見送り）: 以下の【開運哲学・4段階】に従って助言を伝えること。そして余韻を残す最後の挨拶で締めくくる。
    例：「まだ聞きたいことがあって？天機の扉を開けすぎると、私も疲れますのよ。お気をつけて。あなたの残りの生が、少しでも温かであることを願っておりますわ。」
 
@@ -3096,7 +3128,7 @@ ${gaewunText_jp}
 - 単純に「注意してください」ではなく「活火山爆発、衝動的な行動の収拾不能」
 15. 大運+歳運で三合/方合完成:
 - 原局に五行(午午）があり大運が寅（寅）なら → 寅午半合
-- 余気に歳運で午が来ると → 寅午午 方合級火局完成
+- さらに歳運で午が来ると → 寅午午 方合級火局完成
 - 解釈： 「火の帝国が完成し全てを燃やす」
 16. 官星(配偶者)が火の中に閉じ込められた場合:
 - 女性の四柱で官星(木)が支蔵干にのみあり周囲が火一色なら
@@ -3368,7 +3400,7 @@ ${gaewunText_jp}
 • 桃花殺の年＝魅力エネルギー上昇
 78. 【投資タイミング】
 • 財星大運＋用神の年＝投資適期（青信号）
-• 比劫 害 = 投資禁止(赤信号)、共同事業を避けること
+• 比劫の 年 = 投資禁止(赤信号)、共同事業を避けること
 • 偏財の年＝投機的だが危険
 79. 【用神別ブランディング/ネーミング】
 • 火→赤、太陽イメージ、南
@@ -3382,7 +3414,7 @@ ${gaewunText_jp}
 • 日柱（30-45歳）：本人、配偶者、全盛期
 • 時柱（45歳以上）：子女、遺産
 81. 【沖の年の生存法】
-• 日支冲 害 → "既存プロジェクトの仕上げ"
+• 日支冲の 年 → "既存プロジェクトの仕上げ"
 • 沖 + 駅馬殺 → "引越し/転職の可能性が高い"
 • 沖 + 桃花殺 → "恋愛に波動"
 82. 【月別リズム】
