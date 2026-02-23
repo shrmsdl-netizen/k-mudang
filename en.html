@@ -2588,7 +2588,7 @@ let todaGeummae = null;const earthCount = elCount.earth || 0;if (yong === 'metal
 let mokdaHwasik = null;if (yong === 'fire' && woodCount >= 4 && fireCount <= 1) {mokdaHwasik = 'Wood Smothers Fire: Beneficial Element(Fire) smothered by Wood! Too much fuel prevents ignition. Prospers in mild Fire cycles';}
 let gunbiJaengjae = null;const peerPowerFinal = elCount[peerEl] || 0;const wealthPowerFinal = elCount[wealthEl] || 0;if (peerPowerFinal >= 4 && wealthPowerFinal <= 1) {gunbiJaengjae = 'Peers Rob Wealth: Peers overwhelming, Wealth scarce. Avoid partnerships, beware betrayal in money matters';}
 let jaedaSinyak = null;if (wealthPowerFinal >= 3 && str.pct <= 30) {jaedaSinyak = `Wealth Overwhelms Body: Wealth(${wealthPowerFinal}) excessive but Day Master too weak(${str.pct}%) to handle. Greed leads to health collapse. Lock wealth in fixed assets.`;}
-let sealExcess = isSealStrong && sealPower >= 3;
+let sealExcess = sealPower >= 3 && str.type !== 'weak';
 const branches = [saju.year?.b, saju.month?.b, saju.day?.b, saju.hour?.b].filter(b => b);const brIdxs = branches.map(b => BRANCH.findIndex(br => br.c === b.c));let wangjiChung = null;if (brIdxs.includes(0) && brIdxs.includes(6)) {wangjiChung = 'Zi-Wu Clash: Water-Fire war! Cardiovascular vs Kidney/Bladder health warning';}
 else if (brIdxs.includes(3) && brIdxs.includes(9)) {wangjiChung = 'Mao-You Clash: Metal-Wood war! Liver/Gallbladder vs Lung/Colon health warning';}
 let mugeunWarning = null;const dmStemIdx = STEM.indexOf(dm);const dmElIdx = EL_ORDER.indexOf(dmEl);const sameElStems = [dmElIdx * 2, dmElIdx * 2 + 1];let hasRoot = false;for (const bi of brIdxs) {const jjg = JIJANGGAN[bi];if (jjg) {for (const item of jjg) {if (sameElStems.includes(item.stem)) {hasRoot = true;break;}}}
@@ -3920,7 +3920,7 @@ return ELEMENT[el].c + '(' + ELEMENT[el].k + ')';}).join(', ');})()}
 【DAY MASTER STRENGTH】
 • Strength: ${str.pct}% (${str.type === 'strong' ? 'STRONG Body' : str.type === 'weak' ? 'WEAK Body' : 'BALANCED'})
 ${str.extreme ? '• Special Note: ' + (str.extreme === 'Extreme Strong' ? 'Extremely Strong' : 'Extremely Weak') + ' chart (Possible Special Format)' : ''}
-${(() => {let rootInfo = '';if (str.dayRoot || str.hourRoot) {rootInfo = '• ⚡ REAL ROOTS (Hidden Stems based): ';if (str.dayRoot) rootInfo += 'Day Branch has Peer/Seal in hidden stems. ';if (str.hourRoot) rootInfo += 'Hour Branch has Peer/Seal in hidden stems. ';rootInfo += 'Hidden resilience - not helpless despite low percentage.';} else if (str.type === 'weak') {rootInfo = '• ⚠️ NO REAL ROOTS: Day Master lacks Peer/Seal in branch hidden stems. Flexible but needs external support.';}
+${(() => {let rootInfo = '';if (str.type === 'weak' && (str.dayRoot || str.hourRoot)) {rootInfo = '• ⚡ REAL ROOTS (Hidden Stems based): ';if (str.dayRoot) rootInfo += 'Day Branch has Peer/Seal in hidden stems. ';if (str.hourRoot) rootInfo += 'Hour Branch has Peer/Seal in hidden stems. ';rootInfo += 'Hidden resilience - not helpless despite low percentage.';} else if (str.type === 'weak') {rootInfo = '• ⚠️ NO REAL ROOTS: Day Master lacks Peer/Seal in branch hidden stems. Flexible but needs external support.';}
 return rootInfo;})()}
 ${(() => {if (str.disabledSeals?.length || str.disabledPeers?.length) {const disabled = [];if (str.disabledSeals?.length) {str.disabledSeals.forEach(si => disabled.push(STEM[si].c + '(Seal)'));}
 if (str.disabledPeers?.length) {str.disabledPeers.forEach(si => disabled.push(STEM[si].c + '(Peer)'));}

@@ -1612,7 +1612,7 @@ let todaGeummae = null;const earthCount = elCount.earth || 0;if (yong === 'metal
 let mokdaHwasik = null;if (yong === 'fire' && woodCount >= 4 && fireCount <= 1) {mokdaHwasik = '목다화식(木多火熄): 용신(火)이 木에 덮여 꺼질 위험! 나무가 너무 많아 불이 타지 못함. 약한 火운에 발복';}
 let gunbiJaengjae = null;const peerPowerFinal = elCount[peerEl] || 0;const wealthPowerFinal = elCount[wealthEl] || 0;if (peerPowerFinal >= 4 && wealthPowerFinal <= 1) {gunbiJaengjae = '군비쟁재(群比爭財): 비겁 태왕, 재성 약함. 동업 금지, 돈거래 시 배신 주의';}
 let jaedaSinyak = null;if (wealthPowerFinal >= 3 && str.pct <= 30) {jaedaSinyak = `재다신약(財多身弱): 재성(돈) ${Math.floor(wealthPowerFinal)}개로 과다하나 일간이 약해(${str.pct}%) 감당 못함. 돈 욕심 부리면 건강을 잃습니다. 부동산/자격증 형태로 묶어두세요.`;}
-let sealExcess = isSealStrong && sealPower >= 3;
+let sealExcess = sealPower >= 3 && str.type !== 'weak';
 let wangjiChung = null;const branches = [saju.year?.b, saju.month?.b, saju.day?.b, saju.hour?.b].filter(b => b);const brIdxs = branches.map(b => BRANCH.indexOf(b));if (brIdxs.includes(0) && brIdxs.includes(6)) {wangjiChung = '자오충(子午沖): 수화상전(水火相戰)! 심혈관 vs 신장/방광 건강 주의';}
 else if (brIdxs.includes(3) && brIdxs.includes(9)) {wangjiChung = '묘유충(卯酉沖): 금목상전(金木相戰)! 간/담 vs 폐/대장 건강 주의';}
 let wangjiJungcheop = null;const wangji = {0: '子', 3: '卯', 6: '午', 9: '酉'};const wangjiHealth = {0: {name: '수', health: '신장/방광/생식기 극위험. 부종, 냉증 주의'},
@@ -2957,7 +2957,6 @@ water: '⚠️ 수(水) 부재 건강경고: 신장/방광/생식기/뼈 취약.
 【신강/신약】
 • 일간 강도: ${str.pct}% (${str.type === 'strong' ? '신강' : str.type === 'weak' ? '신약' : '중화'})
 ${canBeJonggeok ? '• 특이사항: ' + str.extreme + ' 사주 (종격 가능성)' : (str.extreme ? '• 특이사항: ' + str.extreme + ' 사주' : '')}
-${(() => {let rootInfo = '';if (str.dayRoot || str.hourRoot) {rootInfo = '• ⚡ 실근(實根) 있음: ';if (str.dayRoot) rootInfo += '일지 지장간에 비겁/인성 뿌리 확인. ';if (str.hourRoot) rootInfo += '시지 지장간에 비겁/인성 뿌리 확인. ';rootInfo += '수치는 낮아도 숨은 힘 있음. 운이 오면 강하게 발동.';} else if (str.type === 'weak') {rootInfo = '• ⚠️ 무근(無根) 확인: 지지 지장간에 비겁/인성 없음. 외부 지원이 와야 비로소 힘을 씀.';}return rootInfo;})()}
 ${(() => {if (str.disabledSeals?.length || str.disabledPeers?.length) {const disabled = [];if (str.disabledSeals?.length) {str.disabledSeals.forEach(si => disabled.push(STEM[si].c + '(인성)'));}if (str.disabledPeers?.length) {str.disabledPeers.forEach(si => disabled.push(STEM[si].c + '(비겁)'));}return '• 🔗 천간합 무력화: ' + disabled.join(', ') + ' 가 합거(合去)되어 일간을 도울 수 없음.';}return '';})()}
 【용신/희신/기신】 ⭐ 핵심 (반드시 해석에 반영)
 ┌─────────────────────────────────────────────────┐

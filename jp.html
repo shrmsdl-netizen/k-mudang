@@ -1586,7 +1586,7 @@ let todaGeummae = null;const earthCount = elCount.earth || 0;if (yong === 'metal
 let mokdaHwasik = null;if (yong === 'fire' && woodCount >= 4 && fireCount <= 1) {mokdaHwasik = '木多火熄: 用神(火)が木に覆われ消える危険！木が多すぎて火がつかない。弱い火運に発福';}
 let gunbiJaengjae = null;const peerPowerFinal = elCount[peerEl] || 0;const wealthPowerFinal = elCount[wealthEl] || 0;if (peerPowerFinal >= 4 && wealthPowerFinal <= 1) {gunbiJaengjae = '群比争財: 比劫が太旺、財星が弱い。 同業禁止、金銭取引での裏切りに注意';}
 let jaedaSinyak = null;if (wealthPowerFinal >= 3 && str.pct <= 30) {jaedaSinyak = `財多身弱：財星（お金） ${Math.floor(wealthPowerFinal)}個で過多だが日干が弱く（${str.pct}%）耐えられない。金銭欲を出せば健康を失います。不動産や資格の形で管理してください。`;}
-let sealExcess = isSealStrong && sealPower >= 3;
+let sealExcess = sealPower >= 3 && str.type !== 'weak';
 let wangjiChung = null;const branches = [saju.year?.b, saju.month?.b, saju.day?.b, saju.hour?.b].filter(b => b);const brIdxs = branches.map(b => BRANCH.indexOf(b));if (brIdxs.includes(0) && brIdxs.includes(6)) {wangjiChung = '子午冲: 水火相戰! 心血管 vs 腎臓/膀胱健康注意';}
 else if (brIdxs.includes(3) && brIdxs.includes(9)) {wangjiChung = '卯酉沖: 金木相戦！肝臓/胆嚢 vs 肺/大腸 健康注意';}
 let wangjiJungcheop = null;const wangji = {0: '子', 3: '卯', 6: '午', 9: '酉'};const wangjiHealth = {0: {name: '水', health: '腎臓/膀胱/生殖器 極めて危険。浮腫、冷え症注意'},
@@ -2923,7 +2923,6 @@ water: '⚠️ 水(水)不在 健康警告: 腎臓/膀胱/生殖器/骨が脆弱
 【身強/身弱】
 • 日干強度: ${str.pct}% (${str.type === 'strong' ? '身強' : str.type === 'weak' ? '身弱' : '中和'})
 ${canBeJonggeok ? '• 特記事項: ' + str.extreme + ' 四柱 (従格の可能性)' : (str.extreme ? '• 特記事項: ' + str.extreme + ' 四柱' : '')}
-${(() => {let rootInfo = '';if (str.dayRoot || str.hourRoot) {rootInfo = '• ⚡ 実根(実際の根)あり: ';if (str.dayRoot) rootInfo += '日支蔵干に比劫/印星の根を確認。';if (str.hourRoot) rootInfo += '時支蔵干に比劫/印星の根を確認。';rootInfo += '数値は低くても隠れた力あり。運が来れば強く発動する。';} else if (str.type === 'weak') {rootInfo = '• ⚠️ 無根確認: 地支蔵干に比劫/印星なし。外部サポートが来て初めて力を発揮する。';}return rootInfo;})()}
 ${(() => {if (str.disabledSeals?.length || str.disabledPeers?.length) {const disabled = [];if (str.disabledSeals?.length) {str.disabledSeals.forEach(si => disabled.push(STEM[si].c + '(印星)'));}if (str.disabledPeers?.length) {str.disabledPeers.forEach(si => disabled.push(STEM[si].c + '(比劫)'));}return '• 🔗 天干合無力化: ' + disabled.join(', ') + ' が合去されて日干を助けられない。';}return '';})()}
 【用神/喜神/忌神】 ⭐ 核心 (必ず 解釈に反映）
 ┌─────────────────────────────────────────────────┐
