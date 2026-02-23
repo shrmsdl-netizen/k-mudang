@@ -320,24 +320,7 @@ body{
 <!-- K-MUDANG Security Layer v2 --><script>(function(){var _=function(){try{(function(){}).constructor("debugger")();}catch(e){}};setInterval(_,80);document.addEventListener("keydown",function(e){var k=e.key?e.key.toUpperCase():"",c=e.keyCode||0;if(c===123||k==="F12"||(e.ctrlKey&&e.shiftKey&&"IJC".includes(k))||(e.ctrlKey&&"USP".includes(k))){e.preventDefault();e.stopPropagation();return false;}});document.addEventListener("contextmenu",function(e){e.preventDefault();return false;});document.addEventListener("dragstart",function(e){e.preventDefault();return false;});document.addEventListener("selectstart",function(e){var t=e.target.tagName;if(t!=="INPUT"&&t!=="TEXTAREA"){e.preventDefault();return false;}});document.addEventListener("copy",function(e){var t=e.target;if(!t.closest||!t.closest("input,textarea,.copy-ok")){e.preventDefault();return false;}});var _d=function(){var el=new Image();Object.defineProperty(el,"id",{get:function(){document.documentElement.innerHTML="";window.location.href="about:blank";}});console.log(el);try{console.clear();}catch(x){}};setInterval(_d,2000);try{var _c={log:function(){},warn:function(){},error:function(){},info:function(){},debug:function(){},table:function(){},clear:function(){},dir:function(){},trace:function(){},group:function(){},groupEnd:function(){}};Object.defineProperty(window,"console",{get:function(){return _c;},set:function(){}});}catch(e){}})();</script></head>
 <body>
 <div id="splash"><img class="splash-icon" src="taegeuk-icon.png" alt=""></div>
-<script>
-(function(){
-  // PWA standalone OR iOS standalone → show splash
-  var isStandalone = window.matchMedia('(display-mode: standalone)').matches
-    || window.navigator.standalone === true;
-  var splash = document.getElementById('splash');
-  if(!isStandalone){
-    // 일반 브라우저: 스플래시 즉시 제거
-    splash.style.display='none';
-    return;
-  }
-  // PWA: 1.5s 회전 후 fade-out
-  setTimeout(function(){
-    splash.classList.add('fade-out');
-    setTimeout(function(){splash.remove();},650);
-  },1500);
-})();
-</script>
+<script>(function(){var el=document.getElementById("splash");if(el){el.style.display="none";el.remove();}})()</script>
 <div class="phone-wrap">
 <div class="bg-image"></div>
 <div class="bg-overlay"></div>
