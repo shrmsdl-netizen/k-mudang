@@ -290,7 +290,7 @@ gtag('config', 'G-044J002H6P');</script><meta name="viewport" content="width=dev
 <!-- ★ Force preload Ma Shan Zheng for Canvas ★ -->
 <link rel="preload" href="https://fonts.gstatic.com/s/mashanzheng/v10/NaPecZTRCLxvwo41b4gvzkXaRME.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:'Ma Shan Zheng';font-style:normal;font-weight:400;font-display:block;src:url(https://fonts.gstatic.com/s/mashanzheng/v10/NaPecZTRCLxvwo41b4gvzkXaRME.woff2) format('woff2');unicode-range:U+0000-FFFF}.font-preload{font-family:'Ma Shan Zheng',cursive;position:absolute;left:-9999px;visibility:hidden}</style>
-<style>#splash{position:fixed;inset:0;background:#ffffff;display:flex;align-items:center;justify-content:center;z-index:99999;opacity:1;transition:opacity 0.6s ease;}#splash.fade-out{opacity:0;pointer-events:none;}.splash-icon-pwa{width:130px;height:130px;animation:splashSpinPWA 1.1s linear infinite;transform-origin:center center;}@keyframes splashSpinPWA{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}</style></head><body ><div id="splash"><img class="splash-icon-pwa" src="taegeuk-icon.png" alt=""></div><script>(function(){var s=window.matchMedia("(display-mode:standalone)").matches||window.navigator.standalone===true;var el=document.getElementById("splash");if(!s){el.style.display="none";return;}setTimeout(function(){el.classList.add("fade-out");setTimeout(function(){el.remove();},650);},1500);})()</script><span class="font-preload">符開運</span><!-- ウォーターマーク背景 --><div class="watermark"><img src="jp-mudang.png" alt="" onerror="this.parentElement.style.display='none'"></div><!-- ========================================
+<style>#splash{position:fixed;inset:0;background:#ffffff;display:flex;align-items:center;justify-content:center;z-index:99999;opacity:1;transition:opacity 0.6s ease;}#splash.fade-out{opacity:0;pointer-events:none;}.splash-icon-pwa{width:130px;height:130px;animation:splashSpinPWA 1.1s linear infinite;transform-origin:center center;}@keyframes splashSpinPWA{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}</style></head><body ><div id="splash"><img class="splash-icon-pwa" src="taegeuk-icon.png" alt=""></div><script>(function(){var s=window.matchMedia("(display-mode:standalone)").matches||window.navigator.standalone===true;var el=document.getElementById("splash");if(!s){el.style.display="none";return;}el.style.opacity="0";el.style.pointerEvents="none";window.addEventListener("load",function(){setTimeout(function(){el.remove();},100);});})();</script><span class="font-preload">符開運</span><!-- ウォーターマーク背景 --><div class="watermark"><img src="jp-mudang.png" alt="" onerror="this.parentElement.style.display='none'"></div><!-- ========================================
      八卦装飾（四方）
      ======================================== --><div class="bagua tl">☰</div><div class="bagua tr">☷</div><div class="bagua bl">☵</div><div class="bagua br">☲</div><!-- ========================================
      Capture Card (Hidden)
@@ -1040,6 +1040,10 @@ function calcAuspiciousScore(y, m, d, purpose) {
     const bi = BRANCH.indexOf(dp.b), dayBi = BRANCH.indexOf(SAJU.day.b);
     if (bi >= 0 && dayBi >= 0 && YUKHAP.some(p => p.includes(bi) && p.includes(dayBi))) {
       score += 1; reasons.good.push('六合');
+    }
+    const SAMHAP_HALF = [[8,0],[0,4],[8,4],[5,9],[9,1],[5,1],[2,6],[6,10],[2,10],[11,3],[3,7],[11,7]];
+    if (bi >= 0 && dayBi >= 0 && SAMHAP_HALF.some(p => p.includes(bi) && p.includes(dayBi))) {
+      score += 1; reasons.good.push('三合半合');
     }
   }
   if (purpose === 'open' && SAJU) {
@@ -1954,11 +1958,11 @@ function ylCheckBranchCombine(yp, saju, gods, strength) {const { branchCombineMa
 return { active: true, from: yp.b, to: tgtBr, result: resEl, desc, score };}}}
 return { active: false, from: null, to: null, result: null, desc: '', score: 0 };}
 function ylCheckSelfPunishment(yp, saju) {const { selfPunishBranches } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (!selfPunishBranches.includes(ypBi)) return { active: false, desc: '' };const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));const sameCount = allBr.filter(b => b === ypBi).length;if (sameCount < 1) return { active: false, desc: '' };const bn = yp.b.c;const totalCount = sameCount + 1;if (totalCount >= 3) {const tripleDescMap = {11: `🚨 ${bn}${bn}${bn} 三重自刑：極端な水エネルギー！深刻なうつ病の危険。即座に助けを求めてください。`,
-6: `🌋 ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT: VOLCANIC Fire explosion! Extreme impulsiveness, burnout, heart/blood danger. CRITICAL health year.`,
+6: `🌋 ${bn}${bn}${bn} 三重自刑(さんじゅうじけい) — 火エネルギー火山爆発！極度の衝動・燃え尽き・心血管危機。極限の自己管理が必須。`,
 9: `⚠️ ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT: Obsessive Metal pressure! Respiratory/skin crisis.`,
 4: `⚠️ ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT: Crushing Earth weight! Digestive/immune collapse.`};return { active: true, isTriple: true, desc: tripleDescMap[ypBi] || `🚨 ${bn}${bn}${bn} TRIPLE SELF-PUNISHMENT. NUCLEAR EVENT!` };}
 const descMap = {11: `😔 ${bn}${bn} SELF-PUNISHMENT: Doubled Water = depression, overthinking.`,
-6: `🔥 ${bn}${bn} SELF-PUNISHMENT: Doubled Fire = impulsiveness, burnout.`,
+6: `🔥 ${bn}${bn} 午午自刑(ごごじけい) — 火の二重自刑：衝動的行動・燃え尽き注意！心血管過負荷に要注意。`,
 9: `⚠️ ${bn}${bn} SELF-PUNISHMENT: Doubled Metal = obsessive perfectionism.`,
 4: `⚠️ ${bn}${bn} SELF-PUNISHMENT: Doubled Earth = stubbornness.`};return { active: true, isTriple: false, desc: descMap[ypBi] || `⚠️ ${bn}${bn} SELF-PUNISHMENT.` };}
 function ylCheckScandal(yp, saju) {if (!saju.hour) return { active: false, score: 0, desc: '' };const dm = saju.day.s;const hourGod = getTenGod(saju.hour.s, dm), ypGod = getTenGod(yp.s, dm);if (hourGod.c !== '偏財' || ypGod.c !== '偏財') return { active: false, score: 0, desc: '' };const { selfPunishBranches } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c), hBi = BRANCH.findIndex(br => br.c === saju.hour.b.c);if (ypBi === hBi && selfPunishBranches.includes(ypBi)) {return { active: true, score: -2, desc: `🚨 色難警告！時柱+偏財重複+自刑。スキャンダル・賭博高リスク。` };}
@@ -2308,8 +2312,8 @@ result: ELEMENT[sh.result].k,
 desc: hasCount === 3 ?
 `完全な${sh.name}成立！${ELEMENT[sh.result].k}の気が強いです。` :
 hasCenter ?
-`${branchChars} 半合。旺支(${BRANCH[sh.branches[1]].c})があり力があります。` :
-`${branchChars} 半合ですが旺支がなく力が弱いです。`});}}
+`${branchChars} 半合。旺支(${BRANCH[sh.branches[1]].c})があり力があります。${(GODS && sh.element === GODS.gi) ? '\n⚠️ [忌神強化警告] 三合完成の歳運(巳·申·亥·寅等)で忌神x10倍発動！健康·財運の集中管理。' : ''}` :
+`${branchChars} 半合ですが旺支がなく力が弱いです。${(GODS && sh.element === GODS.gi) ? ' ⚠️ 完成時に忌神強化注意' : ''}`});}}
 const clashPairs = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];for (let [a,b] of clashPairs) {if (brs.includes(a) && brs.includes(b)) {let isResolved = false;let resolveReason = '';const hapPairs = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];for (let [ha, hb] of hapPairs) {if ((brs.includes(a) && (brs.includes(ha) && a === hb) || (brs.includes(hb) && a === ha)) ||
 (brs.includes(b) && (brs.includes(ha) && b === hb) || (brs.includes(hb) && b === ha))) {isResolved = true;resolveReason = '合(合)があり沖が緩和される';}}
 result.chungHaeso.push({clash: `${BRANCH[a].c}${BRANCH[b].c}沖`,
