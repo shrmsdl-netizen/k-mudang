@@ -2708,7 +2708,7 @@ lv: 'Excellent',
 god: '食神制殺',
 type: 'special',
 siksinJesal: true};}
-const breakReasons = isFormatBroken(saju, finalGod);const formatKey = finalGod.replace(' ', '(') + ')';const f = FORMATS_INNER[formatKey] || FORMATS_INNER['正官 Direct Officer'];return {...f,
+const breakReasons = isFormatBroken(saju, finalGod);const f = FORMATS_INNER[finalGod] || FORMATS_INNER['正官 Direct Officer'];return {...f,
 god: finalGod,
 type: 'inner',
 broken: breakReasons.length > 0,
@@ -4568,7 +4568,7 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 【ANNUAL FORTUNE & MONTHLY LUCK (歲運·月運) — PHASE 3】
 Selected Year: ${(() => { const sel = document.getElementById('target-year-select'); return sel ? sel.value : currentYear; })()}
 Year Pillar (年柱): ${(() => { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const yp = calcYearPillar(yr, 6, 1); const sg = getTenGod(yp.s, dm); const bg = getTenGod({e: yp.b.e, y: BRANCH.findIndex(b=>b.c===yp.b.c)%2===0}, dm); return yp.s.c + yp.b.c + ' [Heavenly Stem (天干):' + (sg?sg.e:'?') + '/Earthly Branch (地支):' + (bg?bg.e:'?') + ']'; })()}
-Beneficial Element (用神) Relation: ${(() => { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const yp = calcYearPillar(yr, 6, 1); const isY = [yp.s.e, yp.b.e].includes(GODS.yong); const isH = [yp.s.e, yp.b.e].includes(GODS.hee); const isG = [yp.s.e, yp.b.e].includes(GODS.gi); return isY ? '✅ Beneficial Year (用神年·Best)' : isG ? '❌ Harmful Year (忌神年·Caution)' : isH ? '🟡 Favorable Year (喜神年)' : '⬜ Neutral'; })()}
+Beneficial Element (用神) Relation: ${(() => { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const yp = calcYearPillar(yr, 6, 1); const isY = [yp.s.e, yp.b.e].includes(GODS.yong); const isH = [yp.s.e, yp.b.e].includes(GODS.hee); const isG = [yp.s.e, yp.b.e].includes(GODS.gi); const yl = calcYearLuck(yr, SAJU, GODS); const isOverwhelmed = yl.rating === 'yong_overwhelmed'; if (isY && isOverwhelmed) return '⚠️ Beneficial Year BUT Overwhelmed (用神年·衰神沖旺) - Beneficial element exists but overpowered by Unfavorable. Caution overrides opportunity.'; return isY ? '✅ Beneficial Year (用神年·Best)' : isG ? '❌ Harmful Year (忌神年·Caution)' : isH ? '🟡 Favorable Year (喜神年)' : '⬜ Neutral'; })()}
 Monthly Summary — Jan~Dec (score: 用神+2, 喜神+1, 忌神-2): ${(() => { try { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const ml = getYearlyMonthLuck(yr, SAJU, GODS); const ratingMark = {good:'🟢', neutral:'⬜', bad:'🔴'}; return ml.months.map(m => m.pillar.s.c + m.pillar.b.c + '(' + (ratingMark[m.rating]||'⬜') + 'score:' + m.score + ')').join(' '); } catch(e) { return 'N/A'; } })()}
 
 【LIFE CYCLE (大運) SCORE ARRAY — PHASE 4】
