@@ -308,8 +308,8 @@ gtag('config', 'G-044J002H6P');</script><meta name="viewport" content="width=dev
                     ℹ️ 夜子時: 23:00~00:00を当日として処理 (チェック解除時は翌日)
                 </p></div></details><button class="btn" onclick="analyzeSaju()"><img src="taegeuk-icon.png" alt="☯" style="height:16px;width:16px;vertical-align:middle;margin-right:4px;"> 天機を問う</button><p style="font-size:0.95rem;color:#D4AF37;margin-top:12px;text-align:center;line-height:1.6;font-weight:600;">
             天機が降りれば、AIが解き明かす</p><p style="font-size:0.8rem;color:#888;margin-top:6px;text-align:center;">
-            <strong style="color:#4285F4;">Gemini</strong> · <strong style="color:#10A37F;">ChatGPT</strong> · <strong style="color:#D4AF37;">Claude</strong> に結果を渡してください
-        </p></div><!-- 四柱 結果 領域 --><div id="saju-result" style="display:none;"><!-- AI 빠른 전달 배너 --><div id="ai-quick-banner" style="background:linear-gradient(135deg,rgba(212,175,55,0.18),rgba(156,39,176,0.12));border:1.5px solid rgba(212,175,55,0.5);border-radius:14px;padding:16px 18px;margin-bottom:16px;text-align:center;"><p style="font-size:13px;color:#ccc;margin-bottom:10px;line-height:1.7;">📋 分析が完成しました！ボタンを押してコピー後<br><strong style="color:var(--gold);">Claude · ChatGPT · Gemini</strong> AIに貼り付けると<br>詳細な解釈を得られます。</p><button class="btn" onclick="copySajuForAI()" style="background:linear-gradient(135deg,#D4AF37,#B8860B);color:#1a1a2e;font-weight:700;font-size:15px;padding:14px 28px;border-radius:50px;box-shadow:0 0 20px rgba(212,175,55,0.35);"><img src="taegeuk-icon.png" alt="☯" style="height:16px;width:16px;vertical-align:middle;margin-right:6px;">AIに四柱を渡す</button></div><!-- 四柱 原局 --><div class="card"><h3>📜 四柱原局</h3><div class="pillars" id="pillars"></div><div id="twelve-states"></div><div class="strength-box" id="strength-box"></div></div><!-- 納音/命宮/胎元 (NEW) --><div class="card"><h3>🎵 納音 · 命宮 · 胎元</h3><div id="napeum-myunggung"></div></div><!-- 支蔵干分析 (NEW) --><div class="card"><h3>🔍 支藏干分析</h3><div id="jijanggan-analysis"></div></div><!-- 通根/透干 分析 (NEW) --><div class="card"><h3>🌳 通根 · 透干</h3><div id="tonggeun-analysis"></div></div><!-- 用神/喜神/忌神 --><div class="card"><h3>🎯 用神 · 喜神 · 忌神</h3><div class="gods" id="gods"></div><div id="gods-detail"></div><div id="johu-detail"></div></div><!-- 六親分析 (NEW) --><div class="card"><h3>👨‍👩‍👧‍👦 六親分析</h3><div id="yukcheon-analysis"></div></div><!-- 格局 --><div class="card"><h3>📐 格局</h3><div id="format"></div></div><!-- 六十甲子 日柱論 --><div class="card"><h3>🎴 六十甲子 日柱論</h3><div id="ilju"></div></div><!-- 宮位分析 (NEW) --><div class="card"><h3>🏛️ 宮位分析</h3><div id="gungwi-analysis"></div></div><!-- 十二運星完全分析 (NEW) --><div class="card"><h3>🔄 十二運星 完全分析</h3><div id="twelve-states-full"></div></div><!-- 大運統合タブ --><div class="card"><h3>🌊 大運 · 運勢</h3><div class="sub-tabs" id="daeun-tabs" style="flex-wrap:wrap;"><button class="sub-tab on" onclick="showDaeunTab('timeline')">大運表</button><button class="sub-tab" onclick="showDaeunTab('gyoungi')">交運期</button><button class="sub-tab" onclick="showDaeunTab('tenyears')">10年</button><button class="sub-tab" onclick="showDaeunTab('monthly')">月運</button><button class="sub-tab" onclick="showDaeunTab('detail')">詳細</button></div><div id="daeun-tab-content"><div id="daeun-timeline" class="daeun-panel"><div id="luck-heatmap"></div><div id="luck-meta"></div><div class="luck-timeline" id="luck-timeline"></div></div><div id="daeun-gyoungi" class="daeun-panel" style="display:none;"><div id="gyoungi-analysis"></div></div><div id="daeun-tenyears" class="daeun-panel" style="display:none;"><div id="ten-years-luck"></div></div><div id="daeun-monthly" class="daeun-panel" style="display:none;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;"><span style="color:var(--gold);font-size:13px;font-weight:700;">📅 年度選択</span><select id="target-year-select" onchange="renderTargetYearLuck(+this.value)" style="padding:8px 12px;background:#2a2a3d;border:1px solid var(--gold);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;cursor:pointer;"></select></div><div id="year-luck-summary"></div><div id="monthly-luck"></div></div><div id="daeun-detail" class="daeun-panel" style="display:none;"><div id="luck-detail"></div></div></div></div><!-- 通変 --><div class="card"><h3><img src="taegeuk-icon.png" alt="☯" style="height:18px;width:18px;vertical-align:middle;margin-right:4px;"> 通変</h3><div class="sub-tabs" id="fortune-tabs"><button class="sub-tab on" onclick="showFortune('total')">総運</button><button class="sub-tab" onclick="showFortune('today')">今日</button><button class="sub-tab" onclick="showFortune('year')">年運</button><button class="sub-tab" onclick="showFortune('career')">職業</button><button class="sub-tab" onclick="showFortune('love')">恋愛</button><button class="sub-tab" onclick="showFortune('wealth')">財運</button><button class="sub-tab" onclick="showFortune('health')">健康</button></div><div id="fortune-content"></div></div><!-- 合冲刑破害 --><div class="card"><h3>💫 合冲刑破害</h3><div id="interactions"></div></div><!-- 方合/暗合 分析 (NEW) --><div class="card"><h3>🌀 方合 · 暗合</h3><div id="banghap-amhap"></div></div><!-- 合冲 高級 分析 (NEW) --><div class="card"><h3>⚗️ 合化/冲解消分析</h3><div id="advanced-interactions"></div></div><!-- 空亡 --><div class="card"><h3>🕳️ 空亡</h3><div id="gongmang"></div></div><!-- 空亡解消分析 (NEW) --><div class="card"><h3>🔓 空亡解消分析</h3><div id="gongmang-haeso"></div></div><!-- 神殺 --><div class="card"><h3>⭐ 神殺</h3><div class="sinsal-grid" id="sinsal"></div></div><!-- 神殺 位置別 分析 (NEW) --><div class="card"><h3>📍 神殺 位置別解釈</h3><div id="sinsal-position"></div></div><!-- AI 総合 解釈 (NEW) --><div class="card" style="background:linear-gradient(145deg, rgba(156,39,176,0.15), rgba(103,58,183,0.08)); border-color:rgba(156,39,176,0.3);"><h3>🧠 AI総合解釈</h3><div id="ai-interpretation"></div><p style="margin-top:15px;font-size:14px;color:#9C27B0;opacity:0.9;line-height:1.8;text-align:center;">
+            <strong style="color:#D4AF37;">Claude</strong> · <strong style="color:#10A37F;">ChatGPT</strong> · <strong style="color:#4285F4;">Gemini</strong> に結果を渡してください
+        </p></div><!-- 四柱 結果 領域 --><div id="saju-result" style="display:none;"><!-- AI 빠른 전달 배너 --><div id="ai-quick-banner" style="background:linear-gradient(135deg,rgba(212,175,55,0.18),rgba(156,39,176,0.12));border:1.5px solid rgba(212,175,55,0.5);border-radius:14px;padding:16px 18px;margin-bottom:16px;text-align:center;"><p style="font-size:13px;color:#ccc;margin-bottom:10px;line-height:1.7;">📋 分析が完成しました！ボタンを押してコピー後<br><strong style="color:#D4AF37;">Claude</strong> · <strong style="color:#10A37F;">ChatGPT</strong> · <strong style="color:#4285F4;">Gemini</strong> AIに貼り付けると<br>詳細な解釈を得られます。</p><button class="btn" onclick="copySajuForAI()" style="background:linear-gradient(135deg,#D4AF37,#B8860B);color:#1a1a2e;font-weight:700;font-size:15px;padding:14px 28px;border-radius:50px;box-shadow:0 0 20px rgba(212,175,55,0.35);"><img src="taegeuk-icon.png" alt="☯" style="height:16px;width:16px;vertical-align:middle;margin-right:6px;">AIに四柱を渡す</button></div><!-- 四柱 原局 --><div class="card"><h3>📜 四柱原局</h3><div class="pillars" id="pillars"></div><div id="twelve-states"></div><div class="strength-box" id="strength-box"></div></div><!-- 納音/命宮/胎元 (NEW) --><div class="card"><h3>🎵 納音 · 命宮 · 胎元</h3><div id="napeum-myunggung"></div></div><!-- 支蔵干分析 (NEW) --><div class="card"><h3>🔍 支藏干分析</h3><div id="jijanggan-analysis"></div></div><!-- 通根/透干 分析 (NEW) --><div class="card"><h3>🌳 通根 · 透干</h3><div id="tonggeun-analysis"></div></div><!-- 用神/喜神/忌神 --><div class="card"><h3>🎯 用神 · 喜神 · 忌神</h3><div class="gods" id="gods"></div><div id="gods-detail"></div><div id="johu-detail"></div></div><!-- 六親分析 (NEW) --><div class="card"><h3>👨‍👩‍👧‍👦 六親分析</h3><div id="yukcheon-analysis"></div></div><!-- 格局 --><div class="card"><h3>📐 格局</h3><div id="format"></div></div><!-- 六十甲子 日柱論 --><div class="card"><h3>🎴 六十甲子 日柱論</h3><div id="ilju"></div></div><!-- 宮位分析 (NEW) --><div class="card"><h3>🏛️ 宮位分析</h3><div id="gungwi-analysis"></div></div><!-- 十二運星完全分析 (NEW) --><div class="card"><h3>🔄 十二運星 完全分析</h3><div id="twelve-states-full"></div></div><!-- 大運統合タブ --><div class="card"><h3>🌊 大運 · 運勢</h3><div class="sub-tabs" id="daeun-tabs" style="flex-wrap:wrap;"><button class="sub-tab on" onclick="showDaeunTab('timeline')">大運表</button><button class="sub-tab" onclick="showDaeunTab('gyoungi')">交運期</button><button class="sub-tab" onclick="showDaeunTab('tenyears')">10年</button><button class="sub-tab" onclick="showDaeunTab('monthly')">月運</button><button class="sub-tab" onclick="showDaeunTab('detail')">詳細</button></div><div id="daeun-tab-content"><div id="daeun-timeline" class="daeun-panel"><div id="luck-heatmap"></div><div id="luck-meta"></div><div class="luck-timeline" id="luck-timeline"></div></div><div id="daeun-gyoungi" class="daeun-panel" style="display:none;"><div id="gyoungi-analysis"></div></div><div id="daeun-tenyears" class="daeun-panel" style="display:none;"><div id="ten-years-luck"></div></div><div id="daeun-monthly" class="daeun-panel" style="display:none;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;"><span style="color:var(--gold);font-size:13px;font-weight:700;">📅 年度選択</span><select id="target-year-select" onchange="renderTargetYearLuck(+this.value)" style="padding:8px 12px;background:#2a2a3d;border:1px solid var(--gold);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;cursor:pointer;"></select></div><div id="year-luck-summary"></div><div id="monthly-luck"></div></div><div id="daeun-detail" class="daeun-panel" style="display:none;"><div id="luck-detail"></div></div></div></div><!-- 通変 --><div class="card"><h3><img src="taegeuk-icon.png" alt="☯" style="height:18px;width:18px;vertical-align:middle;margin-right:4px;"> 通変</h3><div class="sub-tabs" id="fortune-tabs"><button class="sub-tab on" onclick="showFortune('total')">総運</button><button class="sub-tab" onclick="showFortune('today')">今日</button><button class="sub-tab" onclick="showFortune('year')">年運</button><button class="sub-tab" onclick="showFortune('career')">職業</button><button class="sub-tab" onclick="showFortune('love')">恋愛</button><button class="sub-tab" onclick="showFortune('wealth')">財運</button><button class="sub-tab" onclick="showFortune('health')">健康</button></div><div id="fortune-content"></div></div><!-- 合冲刑破害 --><div class="card"><h3>💫 合冲刑破害</h3><div id="interactions"></div></div><!-- 方合/暗合 分析 (NEW) --><div class="card"><h3>🌀 方合 · 暗合</h3><div id="banghap-amhap"></div></div><!-- 合冲 高級 分析 (NEW) --><div class="card"><h3>⚗️ 合化/冲解消分析</h3><div id="advanced-interactions"></div></div><!-- 空亡 --><div class="card"><h3>🕳️ 空亡</h3><div id="gongmang"></div></div><!-- 空亡解消分析 (NEW) --><div class="card"><h3>🔓 空亡解消分析</h3><div id="gongmang-haeso"></div></div><!-- 神殺 --><div class="card"><h3>⭐ 神殺</h3><div class="sinsal-grid" id="sinsal"></div></div><!-- 神殺 位置別 分析 (NEW) --><div class="card"><h3>📍 神殺 位置別解釈</h3><div id="sinsal-position"></div></div><!-- AI 総合 解釈 (NEW) --><div class="card" style="background:linear-gradient(145deg, rgba(156,39,176,0.15), rgba(103,58,183,0.08)); border-color:rgba(156,39,176,0.3);"><h3>🧠 AI総合解釈</h3><div id="ai-interpretation"></div><p style="margin-top:15px;font-size:14px;color:#9C27B0;opacity:0.9;line-height:1.8;text-align:center;">
                 ✨ 精密な命理データとAIの深層分析が出会う<br><span style="color:var(--gold);font-weight:600;">現存する最も完璧な四柱推命解釈の組み合わせ</span>です
             </p><p style="margin-top:10px;font-size:12px;color:#aaa;line-height:1.7;text-align:center;">
                 古典命理の複雑な数式は一寸の狂いもなく計算し、<br>
@@ -1034,19 +1034,32 @@ function calcAuspiciousScore(y, m, d, purpose) {
   const SHIPAK = ['甲辰','乙巳','壬申','庚辰','戊戌','癸亥','甲申','壬子','庚午','丁亥'];
   if (SHIPAK.includes(dp.s.c + dp.b.c)) { score = -99; reasons.bad.push('⛔十悪大敗日'); }
   if (purpose === 'wedding' && SAJU) {
-    const YUKHAP = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
     const bi = BRANCH.indexOf(dp.b), dayBi = BRANCH.indexOf(SAJU.day.b);
-    if (bi >= 0 && dayBi >= 0 && YUKHAP.some(p => p.includes(bi) && p.includes(dayBi))) {
+    const hapCheck = (pairs, a, b) => a >= 0 && b >= 0 && a !== b && pairs.some(p => (p[0]===a&&p[1]===b)||(p[1]===a&&p[0]===b));
+    const YUKHAP = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
+    if (hapCheck(YUKHAP, bi, dayBi)) {
       score += 1; reasons.good.push('六合');
     }
     const SAMHAP_HALF = [[8,0],[0,4],[8,4],[5,9],[9,1],[5,1],[2,6],[6,10],[2,10],[11,3],[3,7],[11,7]];
-    if (bi >= 0 && dayBi >= 0 && SAMHAP_HALF.some(p => p.includes(bi) && p.includes(dayBi))) {
+    if (hapCheck(SAMHAP_HALF, bi, dayBi)) {
       score += 1; reasons.good.push('三合半合');
     }
+  }
+  if (purpose === 'move') {
+    try {
+      const lunarDay = solarToLunar(y, m, d)?.day;
+      if ([9,10,19,20,29,30].includes(lunarDay)) { score += 2; reasons.good.push('손없는날'); }
+    } catch(e) {}
   }
   if (purpose === 'open' && SAJU) {
     const state = getTwelveState(SAJU.day.s, dp.b);
     if (['건록','제왕'].includes(state.k)) { score += 1; reasons.good.push(state.k); }
+  }
+  if (purpose === 'exam' && SAJU) {
+    const god = getTenGod(dp.s, SAJU.day.s);
+    if (god && ['indirectSeal','directSeal'].includes(god.k)) { score += 1; reasons.good.push('印星日（学問）'); }
+    const state = getTwelveState(SAJU.day.s, dp.b);
+    if (['장생','관대','건록','제왕'].includes(state.k)) { score += 1; reasons.good.push(state.k + '日'); }
   }
   const grade = score === -99 ? 'worst' : score >= 3 ? 'best' : score >= 1 ? 'good' : score === 0 ? 'neutral' : 'bad';
   return { score, grade, dp, reasons };
@@ -1169,6 +1182,23 @@ if (isLeap && leapMonth === lm) {totalDays += getLunarMonthDays(ly, lm);}
 totalDays += ld - 1;const resultDate = new Date(baseDate.getTime() + totalDays * 24 * 60 * 60 * 1000);return {year: resultDate.getFullYear(),
 month: resultDate.getMonth() + 1,
 day: resultDate.getDate()};}
+function solarToLunar(sy, sm, sd) {
+  try {
+    const target = new Date(sy, sm-1, sd).getTime();
+    for (let ly = sy-1; ly <= sy+1; ly++) {
+      for (let lm = 1; lm <= 12; lm++) {
+        const days = getLunarMonthDays(ly, lm) || 30;
+        for (let ld = 1; ld <= days; ld++) {
+          const s = lunarToSolar(ly, lm, ld);
+          if (s && new Date(s.year, s.month-1, s.day).getTime() === target) {
+            return {year: ly, month: lm, day: ld};
+          }
+        }
+      }
+    }
+  } catch(e) {}
+  return null;
+}
 function getLunarYearDays(year) {const idx = year - LUNAR_START;if (idx < 0 || idx >= LUNAR_DATA.length) return 365;let sum = 0;const data = LUNAR_DATA[idx];for (let i = 1; i <= 12; i++) {sum += getLunarMonthDays(year, i);}
 const leapMonth = getLeapMonth(year);if (leapMonth > 0) {sum += getLeapMonthDays(year);}
 return sum;}
@@ -2076,14 +2106,14 @@ score: cross.totalScore,
 daeun: cross.daeun,
 saeun: cross.saeun});}
 const bestYear = years.reduce((a, b) => a.score > b.score ? a : b);const worstYear = years.reduce((a, b) => a.score < b.score ? a : b);return { years, bestYear, worstYear };}
-function calcMonthLuck(year, month, saju, gods) {const mp = calcMonthPillar(year, month, 15);const dm = saju.day.s;const god = getTenGod(mp.s, dm);let score = 0;let climateClash = false;if ([mp.s.e, mp.b.e].includes(gods.yong)) score += 2;if ([mp.s.e, mp.b.e].includes(gods.hee)) score += 1;if ([mp.s.e, mp.b.e].includes(gods.gi)) score -= 2;if (gods.climate) {const monthEls = [mp.s.e, mp.b.e];if ((gods.climate.type.includes('乾燥') || gods.climate.type.includes('極乾燥') || gods.climate.type.includes('Dry') || gods.climate.type.includes('Extreme Dry')) && monthEls.filter(e => e === 'fire').length >= 1) {score -= 3;climateClash = true;}if ((gods.climate.type.includes('寒冷') || gods.climate.type.includes('極寒') || gods.climate.type.includes('Cold') || gods.climate.type.includes('Extreme Cold')) && monthEls.filter(e => e === 'water').length >= 1) {score -= 3;climateClash = true;}}return {month,
+function calcMonthLuck(year, month, saju, gods) {const mp = calcMonthPillar(year, month, 15);const dm = saju.day.s;const god = getTenGod(mp.s, dm);let score = 0;let climateClash = false;if ([mp.s.e, mp.b.e].includes(gods.yong)) score += 2;if ([mp.s.e, mp.b.e].includes(gods.hee)) score += 1;if ([mp.s.e, mp.b.e].includes(gods.gi)) score -= 2;if (gods.climate) {const monthEls = [mp.s.e, mp.b.e];const monthHasYongHee = monthEls.includes(gods.yong) || monthEls.includes(gods.hee);if (!monthHasYongHee && (gods.climate.type.includes('乾燥') || gods.climate.type.includes('極乾燥') || gods.climate.type.includes('Dry') || gods.climate.type.includes('Extreme Dry')) && monthEls.filter(e => e === 'fire').length >= 1) {score -= 3;climateClash = true;}if (!monthHasYongHee && (gods.climate.type.includes('寒冷') || gods.climate.type.includes('極寒') || gods.climate.type.includes('Cold') || gods.climate.type.includes('Extreme Cold')) && monthEls.filter(e => e === 'water').length >= 1) {score -= 3;climateClash = true;}}return {month,
 pillar: mp,
 god,
 score,
 climateClash,
 rating: score >= 2 ? 'good' : score <= -2 ? 'bad' : 'neutral'};}
 function getYearlyMonthLuck(year, saju, gods) {const months = [];const mbi = BRANCH.indexOf(saju.month.b);for (let m = 1; m <= 12; m++) {const monthData = calcMonthLuck(year, m, saju, gods);const monthBi = BRANCH.findIndex(br => br.c === monthData.pillar.b.c);const isWangClash = Math.abs(monthBi - mbi) === 6;if (isWangClash && gods.climate && (gods.climate.type.includes('乾燥') || gods.climate.type.includes('極乾燥') || gods.climate.type.includes('Dry') || gods.climate.type.includes('Extreme Dry'))) {if (monthData.pillar.b.e === 'water') {monthData.score -= 3;monthData.wangClash = true;monthData.wangClashDesc = '火水衝突！心臓・血管に要注意。';}} months.push(monthData);}
-const safeBest = months.filter(m => !m.climateClash && !m.wangClash);const best = safeBest.length > 0 ? safeBest.reduce((a, b) => a.score > b.score ? a : b) : months.reduce((a, b) => a.score > b.score ? a : b);const worst = months.reduce((a, b) => a.score < b.score ? a : b);return { months, best, worst };}
+const safeBest = months.filter(m => !m.climateClash && !m.wangClash);const best = safeBest.length > 0 ? safeBest.reduce((a, b) => a.score > b.score ? a : b) : months.reduce((a, b) => a.score > b.score ? a : b);const worst = months.reduce((a, b) => a.score < b.score ? a : b);const wangClashMonths = months.filter(m => m.wangClash).map(m => m.month);return { months, best, worst, wangClashMonths };}
 function calcSinsal(saju) {const ss = [];const dmi = STEM.indexOf(saju.day.s);const ybi = BRANCH.indexOf(saju.year.b);const dbi = BRANCH.indexOf(saju.day.b);const mbi = BRANCH.indexOf(saju.month.b);const hbi = saju.hour ? BRANCH.indexOf(saju.hour.b) : -1;const brs = [ybi, mbi, dbi];if (hbi >= 0) brs.push(hbi);const ysi = STEM.indexOf(saju.year.s);const msi = STEM.indexOf(saju.month.s);const hsi = saju.hour ? STEM.indexOf(saju.hour.s) : -1;const guiren = {0:[1,7],1:[0,8],2:[11,9],3:[11,9],4:[1,7],5:[0,8],6:[7,1],7:[6,2],8:[5,3],9:[5,3]};if (guiren[dmi] && brs.some(b => guiren[dmi].includes(b))) ss.push({n:'天乙貴人',t:'good',d:'最高の吉神！危機には必ず貴人が現れる。官職運、試験運が良く危険を避けられます。',i:'👼',lv:'最上'});const tiande = [9,8,7,6,5,4,3,2,1,0,9,8];if (mbi < 12 && (dmi === tiande[mbi] || brs.some(b => b === tiande[mbi]))) ss.push({n:'天徳貴人',t:'good',d:'天の徳があります！善良に生きれば福が来ます。凶事も吉に変わります。',i:'🌟',lv:'上'});const yuede = [2,6,2,6,4,8,4,8,0,6,0,6];if (mbi < 12 && dmi === yuede[mbi]) ss.push({n:'月徳貴人',t:'good',d:'月の徳があります！人気が高く人々に信頼される。公職に有利です。',i:'🌙',lv:'上'});const munchang = {0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};if (brs.includes(munchang[dmi])) ss.push({n:'文昌貴人',t:'good',d:'勉強の頭脳最高！試験運、資格運、学位運が良いです。文章力も優れています。',i:'📚',lv:'上'});const xuetang = {0:11,1:6,2:2,3:9,4:2,5:9,6:5,7:0,8:8,9:3};if (brs.includes(xuetang[dmi])) ss.push({n:'学堂貴人',t:'good',d:'学者気質！研究、教育分野で成功。教授、博士、専門家にぴったり！',i:'🎓',lv:'上'});const jiangx = {0:0,1:9,2:6,3:3,4:0,5:9,6:6,7:3,8:0,9:9,10:6,11:3};if (brs.includes(jiangx[ybi])) ss.push({n:'将星',t:'good',d:'将軍の気質！リーダーシップに優れ、人がついてくる。組織の長になれる可能性があります。',i:'🎖️',lv:'上'});const jinyu = {0:4,1:5,2:7,3:8,4:7,5:8,6:10,7:11,8:1,9:2};if (brs.includes(jinyu[dmi])) ss.push({n:'金輿',t:'good',d:'配偶者福最高！ 結婚すれば運が開け、良い伴侶に出会えます。',i:'💍',lv:'上'});const fuxing = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};if (brs.includes(fuxing[dmi])) ss.push({n:'福星貴人',t:'good',d:'福が多い四柱！衣食住の心配なく一生食べていける福があります。',i:'🍀',lv:'上'});const anlu = {0:11,1:10,2:1,3:0,4:1,5:0,6:3,7:2,8:5,9:4};if (brs.includes(anlu[dmi])) ss.push({n:'暗祿',t:'good',d:'隠れた福があります！目に見えないところで助けを受けます。',i:'🎁',lv:'中'});const jianlu = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};if (brs.includes(jianlu[dmi])) ss.push({n:'建禄',t:'good',d:'叩き上げ型（自力成家）！自ら立ち上がって成功するタイプ。職業が安定しています。',i:'🏠',lv:'上'});const tianyi = [11,0,1,2,3,4,5,6,7,8,9,10];if (mbi < 12 && brs.includes(tianyi[mbi])) ss.push({n:'天醫星',t:'good',d:'医療適性！医師、看護師、薬剤師にぴったり。健康関連の職業が大吉！',i:'💊',lv:'中'});const yima = {0:2,1:11,2:8,3:5,4:2,5:11,6:8,7:5,8:2,9:11,10:8,11:5};if (brs.includes(yima[ybi])) ss.push({n:'駅馬殺',t:'neutral',d:'動いてこそ運が開ける！旅行、出張、引越、海外赴任...じっとしていたら息苦しいです。',i:'🐎',lv:'中'});const taohua = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};if (brs.includes(taohua[ybi])) ss.push({n:'桃花殺',t:'neutral',d:'魅力爆発！ 異性に人気がある。芸能人気質！ただし浮気に注意。',i:'🌸',lv:'中'});const huagai = {0:4,1:1,2:10,3:7,4:4,5:1,6:10,7:7,8:4,9:1,10:10,11:7};if (brs.includes(huagai[ybi])) ss.push({n:'華蓋殺',t:'neutral',d:'芸術家気質！音楽、絵、文章の才能。宗教、哲学に関心が高い。',i:'🎨',lv:'中'});const hongyan = {0:6,1:5,2:8,3:7,4:8,5:7,6:9,7:8,8:11,9:10};if (brs.includes(hongyan[dmi])) ss.push({n:'紅艶殺',t:'neutral',d:'セクシーな魅力！異性を惹きつける力があります。芸能界適性、浮気に注意！',i:'💋',lv:'中'});const kuigang = [[6,4],[],[6,4],[],[6,10],[],[6,10],[],[],[]];if (kuigang[dmi] && kuigang[dmi].includes(dbi)) ss.push({n:'魁罡殺',t:'bad',d:'性格が火のよう！カリスマありリーダーの資質、ただし独断的になる可能性があります。',i:'⚡',lv:'上'});const yangren = {0:3,1:2,2:6,3:5,4:6,5:5,6:9,7:8,8:0,9:11};if (dbi === yangren[dmi]) ss.push({n:'羊刃殺',t:'bad',d:'刃のような気運！決断力があるが鋭い。軍人、外交、法曹人に適合。',i:'🗡️',lv:'上'});const baihu = [6,7,8,9,10,11,0,1,2,3,4,5];if (mbi < 12 && brs.includes(baihu[mbi])) ss.push({n:'白虎殺',t:'bad',d:'事故、手術に注意！ただし医療人、料理人など血を見る職業はむしろ良いです。',i:'🐯',lv:'中'});const baihuDaeSal = [
 [0, 4],
 [1, 7],
@@ -3450,6 +3480,94 @@ ${gaewunText_jp}
 • 忌神五行の月＝防御モード
 • 解釈時に有利な月を具体的に明示してください
 • 総合アドバイスで用神/喜神/忌神それぞれの活用法を具体的に提示してください。
+83. 【合沖同時発生（合沖相戰）】
+• 三合＋六沖が共存 → 内部戦争モード
+• 「外部圧力(合) vs 個人防衛(沖)」→ 批判的思考が武器
+84. 【欠如十神戦略】
+• 食傷=0: 「ストレス内在化。創作/運動で発散必須」
+• 財星=0: 「蓄積より流れ。スキル→お金がついてくる」
+• 官星=0: 「ルール嫌い。自律的キャリア必須」
+• 印星=0: 「親に頼れない。独学が安全網」
+85. 【方合エネルギー】
+• 亥子丑(北方水): キャリア柔軟性 x10
+• 寅卯辰(東方木): 成長/拡大 x10
+• 巳午未(南方火): 名誉/情熱 x10
+• 申酉戌(西方金): 精密/権威 x10
+86. 【極強/極弱 逆転原理】
+• 日干強度 < 10% → 従格検討
+• 日干強度 > 85% → 極強検討
+• 通常の「弱者強化/強者抑制」ロジックが逆転
+87. 【配偶者宮分析】
+• 日支 = 配偶者宮
+• 年柱/月柱と沖 → 早期恋愛困難
+• 合 → 支持的な結婚エネルギー
+• 墓 → 「支配される配偶者」または晩婚
+88. 【歳運倍増効果】
+• 歳運が三合完成 → 大当たりの年
+• 歳運が日支沖 → 配偶者/自我変化
+• 歳運 = 日支(エコー) → アイデンティティ危機の年
+89. 【人生周期別キャリアタイミング】
+• 財星大運(20-30代) → 起業最適期
+• 官星大運(30-40代) → 昇進最適期
+• 印星大運(40-50代) → 教育/コンサルティング最適期
+90. 【五行別健康マッピング】
+• 木 = 肝臓、目、腱、怒り
+• 火 = 心臓、血液、不安
+• 土 = 脾臓、胃、心配
+• 金 = 肺、皮膚、悲しみ
+• 水 = 腎臓、骨、恐れ
+91. 【恋愛/結婚タイミング】
+• 男性: 財星歳運 = 恋愛チャンス
+• 女性: 官星歳運 = 恋愛チャンス
+• 桃花殺の年 = 魅力エネルギー上昇
+92. 【投資タイミング】
+• 財星大運 + 有利な歳運 = 青信号
+• 劫財の年 = 赤信号、共同事業回避
+• 偏財の年 = 投機的だがリスクあり
+93. 【用神別ネーミング/ブランディング】
+• 火 → 赤、太陽イメージ、南
+• 水 → 青/黒、波、北
+• 木 → 緑、植物、東
+• 金 → 白/金色、円形、西
+• 土 → 黄/茶色、四角形、中央
+94. 【人生段階別解釈】
+• 年柱(0-15): 祖先、幼少期
+• 月柱(15-30): 両親、学業
+• 日柱(30-45): 自己、配偶者、絶頂期
+• 時柱(45+): 子供、遺産
+95. 【沖歳運サバイバル戦略】
+• 日支沖 → 「現在のプロジェクト完了」
+• 沖 + 驛馬殺 → 「引越しまたは転職可能性」
+• 沖 + 桃花殺 → 「恋愛波乱」
+96. 【月別リズム活用】
+• 用神五行月 = 推し進める時
+• 忌神五行月 = 防御モード
+• 有利な月の具体的明示必須
+97. 【用神/喜神/忌神 必須明示】 ⭐ 核心
+• 必ず以下の形式で明示してください:
+┌─────────────────────────────────────────┐
+│ 用神: ○○ - 最も必要な五行 │
+│ 喜神: ○○ - 用神を助ける五行 │
+│ 忌神: ○○ - 日干を害する五行 │
+│ 閑神: ○○ - 中立五行 │
+└─────────────────────────────────────────┘
+• 7番総合アドバイスで具体的活用法提示:
+→ 色、方向、職業、関係、季節
+
+【AIエラーパターン注意事項】
+1. ❌ 地支十神無視 - 地支にも十神があります
+2. ❌ 季節強弱混同 - 提供された得令/失令セクション確認(事前計算済)
+3. ❌ 大運誤解釈 - 提供された[天干/地支]十神ラベルをそのまま使用
+4. ❌ 陰陽混同 - 甲丙戊庚壬=陽、乙丁己辛癸=陰
+5. ❌ 偏財/正財未区別 - 提供された全ラベル確認
+6. ❌ 月令無視 - 月支十神が強弱判断の核心
+
+【解釈優先順位】
+1. 合(三合/六合/方合)を最初に確認 - すべてを変える
+2. 季節強弱(得令/失令) - 強弱基本判断
+3. 大運 + 歳運十神 - 現在の人生テーマ
+4. 地支十神 - 隠れた強い影響
+5. その他要素(神殺、空亡等)
 [分析依頼事項]
 上記の四柱八字情報を基に以下をそれぞれ詳細に記述形式で 解釈してください:
 1. 生まれ持った性格と気質
@@ -3488,7 +3606,7 @@ ${gaewunText_jp}
 選択年度: ${(() => { const sel = document.getElementById('target-year-select'); return sel ? sel.value : currentYear; })()}年
 歳運干支(歲運干支): ${(() => { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const yp = calcYearPillar(yr, 6, 1); const sg = getTenGod(yp.s, dm); const bg = getTenGod({e: yp.b.e, y: BRANCH.findIndex(b=>b.c===yp.b.c)%2===0}, dm); return yp.s.c + yp.b.c + ' [天干:' + (sg?sg.k:'?') + '/地支:' + (bg?bg.k:'?') + ']'; })()}
 用神(用神)関係: ${(() => { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const yp = calcYearPillar(yr, 6, 1); const isY = [yp.s.e, yp.b.e].includes(GODS.yong); const isH = [yp.s.e, yp.b.e].includes(GODS.hee); const isG = [yp.s.e, yp.b.e].includes(GODS.gi); return isY ? '✅ 用神年（最吉）' : isG ? '❌ 忌神年（注意）' : isH ? '🟡 喜神年（吉）' : '⬜ 中立'; })()}
-月別要約 スコア凡例(用神+2, 喜神+1, 忌神-2)(1〜12月): ${(() => { try { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const ml = getYearlyMonthLuck(yr, SAJU, GODS); const ratingMark = {good:'🟢', neutral:'⬜', bad:'🔴'}; return ml.months.map(m => m.pillar.s.c + m.pillar.b.c + '(' + (ratingMark[m.rating]||'⬜') + 'スコア:' + m.score + ')').join(' '); } catch(e) { return '計算不可'; } })()}
+月別要約 スコア凡例(用神+2, 喜神+1, 忌神-2)(1〜12月): ${(() => { try { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const ml = getYearlyMonthLuck(yr, SAJU, GODS); const ratingMark = {good:'🟢', neutral:'⬜', bad:'🔴'}; const base = ml.months.map(m => m.pillar.s.c + m.pillar.b.c + '(' + (ratingMark[m.rating]||'⬜') + 'スコア:' + m.score + ')').join(' '); const cc = ml.months.filter(m=>m.climateClash).map(m=>m.month); const wc = ml.wangClashMonths||[]; const warn = [cc.length ? '⚠️ 気候衝突月: ' + cc.join(',') + '月 健康注意' : '', wc.length ? '🔥 旺衝突月: ' + wc.join(',') + '月 心血管注意' : ''].filter(Boolean).join(' | '); return base + (warn ? ' | ' + warn : ''); } catch(e) { return '計算不可'; } })()}
 
 【十大運(大運)スコア一覧 — PHASE 4】
 ${(() => { try { const scores = luck.map(l => { const isG = [l.s.e, l.b.e].includes(GODS.yong) || [l.s.e, l.b.e].includes(GODS.hee); const isBad = [l.s.e, l.b.e].includes(GODS.gi); const mark = isG ? '🟢' : isBad ? '🔴' : '⬜'; return l.s.c + l.b.c + '(' + l.startAge + '〜' + l.endAge + '歳)' + mark; }); return scores.join(' → '); } catch(e) { return '計算不可'; } })()}
@@ -3516,7 +3634,7 @@ ${(() => { try { const today2 = new Date(); const days2 = []; for (let mo = 0; m
 3. 大運+歳運十神 - 現在の人生テーマ
 4. 地支十神 - 隠された影響力
 5. 残りの要素
-`;safeClipboard(text, '📋 コピー完了！GeminiやChatGPTに貼り付けてください');} catch(err) {console.error('コピーエラー:', err);toast('コピー中にエラーが発生しました');}}
+`;safeClipboard(text, '📋 コピー完了！Claude · ChatGPT · Geminiに貼り付けてください');} catch(err) {console.error('コピーエラー:', err);toast('コピー中にエラーが発生しました');}}
 
 function analyzeMatchWrapped() {
   if (!SAJU) { toast('まず[四柱分析]で自分の四柱を分析してください'); return; }
@@ -4377,7 +4495,7 @@ text += `
 - 必ず注意すべき点
 - 一行要約：「この縁の核心 メッセージ"
 `;
-safeClipboard(text, '📋 コピー完了！GeminiやChatGPTに貼り付けてください');
+safeClipboard(text, '📋 コピー完了！Claude · ChatGPT · Geminiに貼り付けてください');
 }
 function openShareModal() {if (!currentNumbers.length) { toast('まず番号を生成してください'); return; }
 document.getElementById('share-balls').innerHTML = currentNumbers.map(n => createBall(n, true)).join('');document.getElementById('share-modal').classList.add('active');}

@@ -308,8 +308,8 @@ gtag('config', 'G-044J002H6P');</script><meta name="viewport" content="width=dev
                     ℹ️ 야자시: 23:00~00:00을 당일로 처리 (체크 해제 시 익일)
                 </p></div></details><button class="btn" onclick="analyzeSaju()"><img src="taegeuk-icon.png" alt="☯" style="height:16px;width:16px;vertical-align:middle;margin-right:4px;"> 천기를 묻다</button><p style="font-size:0.95rem;color:#D4AF37;margin-top:12px;text-align:center;line-height:1.6;font-weight:600;">
             천기가 내려오면, AI가 풀어드립니다</p><p style="font-size:0.8rem;color:#888;margin-top:6px;text-align:center;">
-            <strong style="color:#4285F4;">Gemini</strong> · <strong style="color:#10A37F;">ChatGPT</strong> · <strong style="color:#D4AF37;">Claude</strong> 에 결과를 넘기세요
-        </p></div><!-- 사주 결과 영역 --><div id="saju-result" style="display:none;"><!-- AI 빠른 전달 배너 (결과 최상단) --><div id="ai-quick-banner" style="background:linear-gradient(135deg,rgba(212,175,55,0.18),rgba(156,39,176,0.12));border:1.5px solid rgba(212,175,55,0.5);border-radius:14px;padding:16px 18px;margin-bottom:16px;text-align:center;"><p style="font-size:13px;color:#ccc;margin-bottom:10px;line-height:1.7;">📋 분석이 완성되었습니다! 버튼을 눌러 복사 후<br><strong style="color:var(--gold);">Claude · ChatGPT · Gemini</strong> AI에 붙여넣으면<br>심층 해석을 받을 수 있습니다.</p><button class="btn" onclick="copySajuForAI()" style="background:linear-gradient(135deg,#D4AF37,#B8860B);color:#1a1a2e;font-weight:700;font-size:15px;padding:14px 28px;border-radius:50px;box-shadow:0 0 20px rgba(212,175,55,0.35);"><img src="taegeuk-icon.png" alt="☯" style="height:16px;width:16px;vertical-align:middle;margin-right:6px;">AI에게 내 사주 넘기기</button></div><!-- 사주 원국 --><div class="card"><h3>📜 사주 원국</h3><div class="pillars" id="pillars"></div><div id="twelve-states"></div><div class="strength-box" id="strength-box"></div></div><!-- 납음/명궁/태원 (NEW) --><div class="card"><h3>🎵 납음 · 명궁 · 태원</h3><div id="napeum-myunggung"></div></div><!-- 지장간 분석 (NEW) --><div class="card"><h3>🔍 지장간 분석</h3><div id="jijanggan-analysis"></div></div><!-- 통근/투간 분석 (NEW) --><div class="card"><h3>🌳 통근 · 투간</h3><div id="tonggeun-analysis"></div></div><!-- 용신/희신/기신 --><div class="card"><h3>🎯 용신 · 희신 · 기신</h3><div class="gods" id="gods"></div><div id="gods-detail"></div><div id="johu-detail"></div></div><!-- 육친 분석 (NEW) --><div class="card"><h3>👨‍👩‍👧‍👦 육친(六親) 분석</h3><div id="yukcheon-analysis"></div></div><!-- 격국 --><div class="card"><h3>📐 격국</h3><div id="format"></div></div><!-- 60갑자 일주론 --><div class="card"><h3>🎴 60갑자 일주론</h3><div id="ilju"></div></div><!-- 궁위 분석 (NEW) --><div class="card"><h3>🏛️ 궁위(宮位) 분석</h3><div id="gungwi-analysis"></div></div><!-- 12운성 완전 분석 (NEW) --><div class="card"><h3>🔄 12운성 완전 분석</h3><div id="twelve-states-full"></div></div><!-- 대운 통합 탭 --><div class="card"><h3>🌊 대운 · 운세</h3><div class="sub-tabs" id="daeun-tabs" style="flex-wrap:wrap;"><button class="sub-tab on" onclick="showDaeunTab('timeline')">대운표</button><button class="sub-tab" onclick="showDaeunTab('gyoungi')">교운기</button><button class="sub-tab" onclick="showDaeunTab('tenyears')">10년</button><button class="sub-tab" onclick="showDaeunTab('monthly')">월운</button><button class="sub-tab" onclick="showDaeunTab('detail')">상세</button></div><div id="daeun-tab-content"><div id="daeun-timeline" class="daeun-panel"><div id="luck-heatmap"></div><div id="luck-meta"></div><div class="luck-timeline" id="luck-timeline"></div></div><div id="daeun-gyoungi" class="daeun-panel" style="display:none;"><div id="gyoungi-analysis"></div></div><div id="daeun-tenyears" class="daeun-panel" style="display:none;"><div id="ten-years-luck"></div></div><div id="daeun-monthly" class="daeun-panel" style="display:none;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;"><span style="color:var(--gold);font-size:13px;font-weight:700;">📅 조회 연도</span><select id="target-year-select" onchange="renderTargetYearLuck(+this.value)" style="padding:8px 12px;background:#2a2a3d;border:1px solid var(--gold);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;cursor:pointer;"></select></div><div id="year-luck-summary"></div><div id="monthly-luck"></div></div><div id="daeun-detail" class="daeun-panel" style="display:none;"><div id="luck-detail"></div></div></div></div><!-- 통변 --><div class="card"><h3><img src="taegeuk-icon.png" alt="☯" style="height:18px;width:18px;vertical-align:middle;margin-right:4px;"> 통변</h3><div class="sub-tabs" id="fortune-tabs"><button class="sub-tab on" onclick="showFortune('total')">총운</button><button class="sub-tab" onclick="showFortune('today')">오늘</button><button class="sub-tab" onclick="showFortune('year')">연운</button><button class="sub-tab" onclick="showFortune('career')">직업</button><button class="sub-tab" onclick="showFortune('love')">연애</button><button class="sub-tab" onclick="showFortune('wealth')">재물</button><button class="sub-tab" onclick="showFortune('health')">건강</button></div><div id="fortune-content"></div></div><!-- 합충형파해 --><div class="card"><h3>💫 합충형파해</h3><div id="interactions"></div></div><!-- 방합/암합 분석 (NEW) --><div class="card"><h3>🌀 방합 · 암합</h3><div id="banghap-amhap"></div></div><!-- 합충 고급 분석 (NEW) --><div class="card"><h3>⚗️ 합화/충해소 분석</h3><div id="advanced-interactions"></div></div><!-- 공망 --><div class="card"><h3>🕳️ 공망</h3><div id="gongmang"></div></div><!-- 공망 해소 분석 (NEW) --><div class="card"><h3>🔓 공망 해소 분석</h3><div id="gongmang-haeso"></div></div><!-- 신살 --><div class="card"><h3>⭐ 신살</h3><div class="sinsal-grid" id="sinsal"></div></div><!-- 신살 위치별 분석 (NEW) --><div class="card"><h3>📍 신살 위치별 해석</h3><div id="sinsal-position"></div></div><!-- AI 종합 해석 (NEW) --><div class="card" style="background:linear-gradient(145deg, rgba(156,39,176,0.15), rgba(103,58,183,0.08)); border-color:rgba(156,39,176,0.3);"><h3>🧠 AI 종합 해석</h3><div id="ai-interpretation"></div><p style="margin-top:15px;font-size:13px;color:#9C27B0;opacity:0.9;line-height:1.8;text-align:center;">
+            <strong style="color:#D4AF37;">Claude</strong> · <strong style="color:#10A37F;">ChatGPT</strong> · <strong style="color:#4285F4;">Gemini</strong> 에 결과를 넘기세요
+        </p></div><!-- 사주 결과 영역 --><div id="saju-result" style="display:none;"><!-- AI 빠른 전달 배너 (결과 최상단) --><div id="ai-quick-banner" style="background:linear-gradient(135deg,rgba(212,175,55,0.18),rgba(156,39,176,0.12));border:1.5px solid rgba(212,175,55,0.5);border-radius:14px;padding:16px 18px;margin-bottom:16px;text-align:center;"><p style="font-size:13px;color:#ccc;margin-bottom:10px;line-height:1.7;">📋 분석이 완성되었습니다! 버튼을 눌러 복사 후<br><strong style="color:#D4AF37;">Claude</strong> · <strong style="color:#10A37F;">ChatGPT</strong> · <strong style="color:#4285F4;">Gemini</strong> AI에 붙여넣으면<br>심층 해석을 받을 수 있습니다.</p><button class="btn" onclick="copySajuForAI()" style="background:linear-gradient(135deg,#D4AF37,#B8860B);color:#1a1a2e;font-weight:700;font-size:15px;padding:14px 28px;border-radius:50px;box-shadow:0 0 20px rgba(212,175,55,0.35);"><img src="taegeuk-icon.png" alt="☯" style="height:16px;width:16px;vertical-align:middle;margin-right:6px;">AI에게 내 사주 넘기기</button></div><!-- 사주 원국 --><div class="card"><h3>📜 사주 원국</h3><div class="pillars" id="pillars"></div><div id="twelve-states"></div><div class="strength-box" id="strength-box"></div></div><!-- 납음/명궁/태원 (NEW) --><div class="card"><h3>🎵 납음 · 명궁 · 태원</h3><div id="napeum-myunggung"></div></div><!-- 지장간 분석 (NEW) --><div class="card"><h3>🔍 지장간 분석</h3><div id="jijanggan-analysis"></div></div><!-- 통근/투간 분석 (NEW) --><div class="card"><h3>🌳 통근 · 투간</h3><div id="tonggeun-analysis"></div></div><!-- 용신/희신/기신 --><div class="card"><h3>🎯 용신 · 희신 · 기신</h3><div class="gods" id="gods"></div><div id="gods-detail"></div><div id="johu-detail"></div></div><!-- 육친 분석 (NEW) --><div class="card"><h3>👨‍👩‍👧‍👦 육친(六親) 분석</h3><div id="yukcheon-analysis"></div></div><!-- 격국 --><div class="card"><h3>📐 격국</h3><div id="format"></div></div><!-- 60갑자 일주론 --><div class="card"><h3>🎴 60갑자 일주론</h3><div id="ilju"></div></div><!-- 궁위 분석 (NEW) --><div class="card"><h3>🏛️ 궁위(宮位) 분석</h3><div id="gungwi-analysis"></div></div><!-- 12운성 완전 분석 (NEW) --><div class="card"><h3>🔄 12운성 완전 분석</h3><div id="twelve-states-full"></div></div><!-- 대운 통합 탭 --><div class="card"><h3>🌊 대운 · 운세</h3><div class="sub-tabs" id="daeun-tabs" style="flex-wrap:wrap;"><button class="sub-tab on" onclick="showDaeunTab('timeline')">대운표</button><button class="sub-tab" onclick="showDaeunTab('gyoungi')">교운기</button><button class="sub-tab" onclick="showDaeunTab('tenyears')">10년</button><button class="sub-tab" onclick="showDaeunTab('monthly')">월운</button><button class="sub-tab" onclick="showDaeunTab('detail')">상세</button></div><div id="daeun-tab-content"><div id="daeun-timeline" class="daeun-panel"><div id="luck-heatmap"></div><div id="luck-meta"></div><div class="luck-timeline" id="luck-timeline"></div></div><div id="daeun-gyoungi" class="daeun-panel" style="display:none;"><div id="gyoungi-analysis"></div></div><div id="daeun-tenyears" class="daeun-panel" style="display:none;"><div id="ten-years-luck"></div></div><div id="daeun-monthly" class="daeun-panel" style="display:none;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;"><span style="color:var(--gold);font-size:13px;font-weight:700;">📅 조회 연도</span><select id="target-year-select" onchange="renderTargetYearLuck(+this.value)" style="padding:8px 12px;background:#2a2a3d;border:1px solid var(--gold);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;cursor:pointer;"></select></div><div id="year-luck-summary"></div><div id="monthly-luck"></div></div><div id="daeun-detail" class="daeun-panel" style="display:none;"><div id="luck-detail"></div></div></div></div><!-- 통변 --><div class="card"><h3><img src="taegeuk-icon.png" alt="☯" style="height:18px;width:18px;vertical-align:middle;margin-right:4px;"> 통변</h3><div class="sub-tabs" id="fortune-tabs"><button class="sub-tab on" onclick="showFortune('total')">총운</button><button class="sub-tab" onclick="showFortune('today')">오늘</button><button class="sub-tab" onclick="showFortune('year')">연운</button><button class="sub-tab" onclick="showFortune('career')">직업</button><button class="sub-tab" onclick="showFortune('love')">연애</button><button class="sub-tab" onclick="showFortune('wealth')">재물</button><button class="sub-tab" onclick="showFortune('health')">건강</button></div><div id="fortune-content"></div></div><!-- 합충형파해 --><div class="card"><h3>💫 합충형파해</h3><div id="interactions"></div></div><!-- 방합/암합 분석 (NEW) --><div class="card"><h3>🌀 방합 · 암합</h3><div id="banghap-amhap"></div></div><!-- 합충 고급 분석 (NEW) --><div class="card"><h3>⚗️ 합화/충해소 분석</h3><div id="advanced-interactions"></div></div><!-- 공망 --><div class="card"><h3>🕳️ 공망</h3><div id="gongmang"></div></div><!-- 공망 해소 분석 (NEW) --><div class="card"><h3>🔓 공망 해소 분석</h3><div id="gongmang-haeso"></div></div><!-- 신살 --><div class="card"><h3>⭐ 신살</h3><div class="sinsal-grid" id="sinsal"></div></div><!-- 신살 위치별 분석 (NEW) --><div class="card"><h3>📍 신살 위치별 해석</h3><div id="sinsal-position"></div></div><!-- AI 종합 해석 (NEW) --><div class="card" style="background:linear-gradient(145deg, rgba(156,39,176,0.15), rgba(103,58,183,0.08)); border-color:rgba(156,39,176,0.3);"><h3>🧠 AI 종합 해석</h3><div id="ai-interpretation"></div><p style="margin-top:15px;font-size:13px;color:#9C27B0;opacity:0.9;line-height:1.8;text-align:center;">
                 ✨ 정밀한 명리 데이터와 AI의 심층 분석이 만나는<br><span style="color:var(--gold);font-weight:600;">현존하는 가장 완벽한 사주 해석의 조합</span>입니다
             </p><p style="margin-top:10px;font-size:12px;color:#aaa;line-height:1.7;text-align:center;">
                 고전 명리의 복잡한 수식은 단 한 치의 오차 없이 계산하고,<br>
@@ -1066,15 +1066,15 @@ function calcAuspiciousScore(y, m, d, purpose) {
   }
   // Layer 3: 결혼 — 지지 합 여부 (일지가 일간과 합 관계)
   if (purpose === 'wedding') {
-    const HAP_PAIRS = [[8,0],[0,4],[8,4],[5,9],[9,1],[5,1],[2,6],[6,10],[2,10],[11,3],[3,7],[11,7]]; // 자축, 인묘, 진해, 사오, 미신, 유술... 간략
+    const HAP_PAIRS = [[8,0],[0,4],[8,4],[5,9],[9,1],[5,1],[2,6],[6,10],[2,10],[11,3],[3,7],[11,7]];
     const bi = BRANCH.indexOf(dp.b);
     const dayBi = SAJU ? BRANCH.indexOf(SAJU.day.b) : -1;
-    if (bi >= 0 && dayBi >= 0 && HAP_PAIRS.some(p => (p.includes(bi) && p.includes(dayBi)))) {
+    const hapCheck = (pairs, a, b) => a >= 0 && b >= 0 && a !== b && pairs.some(p => (p[0]===a&&p[1]===b)||(p[1]===a&&p[0]===b));
+    if (hapCheck(HAP_PAIRS, bi, dayBi)) {
       score += 1; reasons.good.push('삼합합일');
     }
-    // 육합 체크
     const YUKHAP = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
-    if (YUKHAP.some(p => (p.includes(bi) && p.includes(dayBi)))) {
+    if (hapCheck(YUKHAP, bi, dayBi)) {
       score += 1; reasons.good.push('육합');
     }
   }
@@ -1082,6 +1082,12 @@ function calcAuspiciousScore(y, m, d, purpose) {
   if (purpose === 'open') {
     const state = getTwelveState(SAJU.day.s, dp.b);
     if (['건록','제왕'].includes(state.k)) { score += 1; reasons.good.push(state.k + '일'); }
+  }
+  if (purpose === 'exam' && SAJU) {
+    const god = getTenGod(dp.s, SAJU.day.s);
+    if (god && ['indirectSeal','directSeal'].includes(god.k)) { score += 1; reasons.good.push('인성일(학문)'); }
+    const state = getTwelveState(SAJU.day.s, dp.b);
+    if (['장생','관대','건록','제왕'].includes(state.k)) { score += 1; reasons.good.push(state.k + '일'); }
   }
   const grade = score === -99 ? 'worst' : score >= 3 ? 'best' : score >= 1 ? 'good' : score === 0 ? 'neutral' : 'bad';
   return { score, grade, dp, reasons };
@@ -2103,14 +2109,14 @@ score: cross.totalScore,
 daeun: cross.daeun,
 saeun: cross.saeun});}
 const bestYear = years.reduce((a, b) => a.score > b.score ? a : b);const worstYear = years.reduce((a, b) => a.score < b.score ? a : b);return { years, bestYear, worstYear };}
-function calcMonthLuck(year, month, saju, gods) {const mp = calcMonthPillar(year, month, 15);const dm = saju.day.s;const god = getTenGod(mp.s, dm);let score = 0;let climateClash = false;if ([mp.s.e, mp.b.e].includes(gods.yong)) score += 2;if ([mp.s.e, mp.b.e].includes(gods.hee)) score += 1;if ([mp.s.e, mp.b.e].includes(gods.gi)) score -= 2;if (gods.climate) {const monthEls = [mp.s.e, mp.b.e];if ((gods.climate.type.includes('건조') || gods.climate.type.includes('극건조') || gods.climate.type.includes('Dry') || gods.climate.type.includes('Extreme Dry')) && monthEls.filter(e => e === 'fire').length >= 1) {score -= 3;climateClash = true;}if ((gods.climate.type.includes('한랭') || gods.climate.type.includes('극한') || gods.climate.type.includes('Cold') || gods.climate.type.includes('Extreme Cold')) && monthEls.filter(e => e === 'water').length >= 1) {score -= 3;climateClash = true;}}return {month,
+function calcMonthLuck(year, month, saju, gods) {const mp = calcMonthPillar(year, month, 15);const dm = saju.day.s;const god = getTenGod(mp.s, dm);let score = 0;let climateClash = false;if ([mp.s.e, mp.b.e].includes(gods.yong)) score += 2;if ([mp.s.e, mp.b.e].includes(gods.hee)) score += 1;if ([mp.s.e, mp.b.e].includes(gods.gi)) score -= 2;if (gods.climate) {const monthEls = [mp.s.e, mp.b.e];const monthHasYongHee = monthEls.includes(gods.yong) || monthEls.includes(gods.hee);if (!monthHasYongHee && (gods.climate.type.includes('건조') || gods.climate.type.includes('극건조') || gods.climate.type.includes('Dry') || gods.climate.type.includes('Extreme Dry')) && monthEls.filter(e => e === 'fire').length >= 1) {score -= 3;climateClash = true;}if (!monthHasYongHee && (gods.climate.type.includes('한랭') || gods.climate.type.includes('극한') || gods.climate.type.includes('Cold') || gods.climate.type.includes('Extreme Cold')) && monthEls.filter(e => e === 'water').length >= 1) {score -= 3;climateClash = true;}}return {month,
 pillar: mp,
 god,
 score,
 climateClash,
 rating: score >= 2 ? 'good' : score <= -2 ? 'bad' : 'neutral'};}
 function getYearlyMonthLuck(year, saju, gods) {const months = [];const mbi = BRANCH.indexOf(saju.month.b);for (let m = 1; m <= 12; m++) {const monthData = calcMonthLuck(year, m, saju, gods);const monthBi = BRANCH.findIndex(br => br.c === monthData.pillar.b.c);const isWangClash = Math.abs(monthBi - mbi) === 6;if (isWangClash && gods.climate && (gods.climate.type.includes('건조') || gods.climate.type.includes('극건조') || gods.climate.type.includes('Dry') || gods.climate.type.includes('Extreme Dry'))) {if (monthData.pillar.b.e === 'water') {monthData.score -= 3;monthData.wangClash = true;monthData.wangClashDesc = '화수충돌! 심혈관 충격 주의.';}} months.push(monthData);}
-const safeBest = months.filter(m => !m.climateClash && !m.wangClash);const best = safeBest.length > 0 ? safeBest.reduce((a, b) => a.score > b.score ? a : b) : months.reduce((a, b) => a.score > b.score ? a : b);const worst = months.reduce((a, b) => a.score < b.score ? a : b);return { months, best, worst };}
+const safeBest = months.filter(m => !m.climateClash && !m.wangClash);const best = safeBest.length > 0 ? safeBest.reduce((a, b) => a.score > b.score ? a : b) : months.reduce((a, b) => a.score > b.score ? a : b);const worst = months.reduce((a, b) => a.score < b.score ? a : b);const wangClashMonths = months.filter(m => m.wangClash).map(m => m.month);return { months, best, worst, wangClashMonths };}
 function calcSinsal(saju) {const ss = [];const dmi = STEM.indexOf(saju.day.s);const ybi = BRANCH.indexOf(saju.year.b);const dbi = BRANCH.indexOf(saju.day.b);const mbi = BRANCH.indexOf(saju.month.b);const hbi = saju.hour ? BRANCH.indexOf(saju.hour.b) : -1;const brs = [ybi, mbi, dbi];if (hbi >= 0) brs.push(hbi);const ysi = STEM.indexOf(saju.year.s);const msi = STEM.indexOf(saju.month.s);const hsi = saju.hour ? STEM.indexOf(saju.hour.s) : -1;const guiren = {0:[1,7],1:[0,8],2:[11,9],3:[11,9],4:[1,7],5:[0,8],6:[7,1],7:[6,2],8:[5,3],9:[5,3]};if (guiren[dmi] && brs.some(b => guiren[dmi].includes(b))) ss.push({n:'천을귀인(天乙貴人)',t:'good',d:'최고의 길신! 위기에 꼭 귀인이 나타나요. 관직운, 시험운이 좋고 위험을 피해가요.',i:'👼',lv:'최상'});const tiande = [9,8,7,6,5,4,3,2,1,0,9,8];if (mbi < 12 && (dmi === tiande[mbi] || brs.some(b => b === tiande[mbi]))) ss.push({n:'천덕귀인(天德貴人)',t:'good',d:'하늘의 덕이 있어요! 착하게 살면 복이 와요. 흉한 일도 길하게 바뀌어요.',i:'🌟',lv:'상'});const yuede = [2,6,2,6,4,8,4,8,0,6,0,6];if (mbi < 12 && dmi === yuede[mbi]) ss.push({n:'월덕귀인(月德貴人)',t:'good',d:'달의 덕이 있어요! 인기가 많고 사람들에게 신뢰받아요. 공직에 유리해요.',i:'🌙',lv:'상'});const munchang = {0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};if (brs.includes(munchang[dmi])) ss.push({n:'문창귀인(文昌貴人)',t:'good',d:'공부 머리 최고! 시험운, 자격증운, 학위운이 좋아요. 글쓰기도 잘해요.',i:'📚',lv:'상'});const xuetang = {0:11,1:6,2:2,3:9,4:2,5:9,6:5,7:0,8:8,9:3};if (brs.includes(xuetang[dmi])) ss.push({n:'학당귀인(學堂貴人)',t:'good',d:'학자 기질! 연구, 교육 분야에서 성공해요. 교수, 박사, 전문가에 딱!',i:'🎓',lv:'상'});const jiangx = {0:0,1:9,2:6,3:3,4:0,5:9,6:6,7:3,8:0,9:9,10:6,11:3};if (brs.includes(jiangx[ybi])) ss.push({n:'장성(將星)',t:'good',d:'장군 기질! 리더십이 뛰어나고 사람들이 따라요. 조직의 수장이 될 수 있어요.',i:'🎖️',lv:'상'});const jinyu = {0:4,1:5,2:7,3:8,4:7,5:8,6:10,7:11,8:1,9:2};if (brs.includes(jinyu[dmi])) ss.push({n:'금여(金輿)',t:'good',d:'배우자복 최고! 결혼하면 운이 트이고, 좋은 짝을 만나요.',i:'💍',lv:'상'});const fuxing = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};if (brs.includes(fuxing[dmi])) ss.push({n:'복성귀인(福星貴人)',t:'good',d:'복이 많은 사주! 의식주 걱정 없고 평생 먹고 살 복이 있어요.',i:'🍀',lv:'상'});const anlu = {0:11,1:10,2:1,3:0,4:1,5:0,6:3,7:2,8:5,9:4};if (brs.includes(anlu[dmi])) ss.push({n:'암록(暗祿)',t:'good',d:'숨은 복이 있어요! 눈에 안 보이는 곳에서 도움을 받아요.',i:'🎁',lv:'중'});const jianlu = {0:2,1:3,2:5,3:6,4:5,5:6,6:8,7:9,8:11,9:0};if (brs.includes(jianlu[dmi])) ss.push({n:'건록(建祿)',t:'good',d:'자수성가형! 스스로 일어서서 성공하는 타입. 직업 안정적이에요.',i:'🏠',lv:'상'});const tianyi = [11,0,1,2,3,4,5,6,7,8,9,10];if (mbi < 12 && brs.includes(tianyi[mbi])) ss.push({n:'천의성(天醫星)',t:'good',d:'의료 적성! 의사, 간호사, 약사에 딱 맞아요. 건강 관련 직업 대길!',i:'💊',lv:'중'});const yima = {0:2,1:11,2:8,3:5,4:2,5:11,6:8,7:5,8:2,9:11,10:8,11:5};if (brs.includes(yima[ybi])) ss.push({n:'역마살(驛馬殺)',t:'neutral',d:'움직여야 운이 트여요! 여행, 출장, 이사, 해외 발령... 가만히 있으면 답답해요.',i:'🐎',lv:'중'});const taohua = {0:9,1:6,2:3,3:0,4:9,5:6,6:3,7:0,8:9,9:6,10:3,11:0};if (brs.includes(taohua[ybi])) ss.push({n:'도화살(桃花殺)',t:'neutral',d:'매력 폭발! 이성에게 인기 많아요. 연예인 기질! 단, 바람기 조심.',i:'🌸',lv:'중'});const huagai = {0:4,1:1,2:10,3:7,4:4,5:1,6:10,7:7,8:4,9:1,10:10,11:7};if (brs.includes(huagai[ybi])) ss.push({n:'화개살(華蓋殺)',t:'neutral',d:'예술가 기질! 음악, 그림, 글쓰기 재능. 종교, 철학에 관심 많아요.',i:'🎨',lv:'중'});const hongyan = {0:6,1:5,2:8,3:7,4:8,5:7,6:9,7:8,8:11,9:10};if (brs.includes(hongyan[dmi])) ss.push({n:'홍염살(紅艶殺)',t:'neutral',d:'섹시한 매력! 이성을 끄는 힘이 있어요. 연예계 적성, 바람기 주의!',i:'💋',lv:'중'});const kuigang = [[6,4],[],[6,4],[],[6,10],[],[6,10],[],[],[]];if (kuigang[dmi] && kuigang[dmi].includes(dbi)) ss.push({n:'괴강살(魁罡殺)',t:'bad',d:'성격이 불 같아요! 카리스마 있고 리더 자질, 하지만 독단적일 수 있어요.',i:'⚡',lv:'상'});const yangren = {0:3,1:2,2:6,3:5,4:6,5:5,6:9,7:8,8:0,9:11};if (dbi === yangren[dmi]) ss.push({n:'양인살(羊刃殺)',t:'bad',d:'칼날 같은 기운! 결단력 있지만 날카로워요. 군인, 외과의, 법조인에 적합.',i:'🗡️',lv:'상'});const baihu = [6,7,8,9,10,11,0,1,2,3,4,5];if (mbi < 12 && brs.includes(baihu[mbi])) ss.push({n:'백호살(白虎殺)',t:'bad',d:'사고, 수술 주의! 하지만 의료인, 요리사 등 피 보는 직업은 오히려 좋아요.',i:'🐯',lv:'중'});const baihuDaeSal = [
 [0, 4],
 [1, 7],
@@ -3488,6 +3494,94 @@ ${gaewunText}
 • 기신 오행 월 = 방어 모드
 • 해석 시 유리한 달을 구체적으로 명시하세요
 • 종합 조언에서 용신/희신/기신 각각의 활용법을 구체적으로 제시하세요.
+83. 【합충 동시 발생 (合沖相戰)】
+• 삼합 + 육충 공존 → 내부 전쟁 모드
+• "외부 압박(합) vs 개인 방어(충)" → 비판적 사고가 무기
+84. 【없는 육친 전략】
+• 식상=0: "스트레스 내재화. 창작/운동 발산 필수"
+• 재성=0: "축적보다 흐름. 기술→돈이 따라옴"
+• 관성=0: "규칙 싫어함. 자율적 커리어 필수"
+• 인성=0: "부모 의존 불가. 독학이 안전망"
+85. 【방합 에너지】
+• 亥子丑(북방수): 커리어 유연성 x10
+• 寅卯辰(동방목): 성장/확장 x10
+• 巳午未(남방화): 명예/열정 x10
+• 申酉戌(서방금): 정밀/권위 x10
+86. 【극강/극약 역전 원리】
+• 일간 강도 < 10% → 종격(從格) 검토
+• 일간 강도 > 85% → 극강 검토
+• 일반 "약자강/강자억" 로직이 역전됨
+87. 【배우자궁 분석】
+• 일지 = 배우자궁
+• 년주/월주와 충 → 이른 연애 어려움
+• 합 → 지지하는 결혼 에너지
+• 묘(墓) → "통제받는 배우자" 또는 만혼
+88. 【세운 배수 효과】
+• 세운이 삼합 완성 → 대박 해
+• 세운이 일지 충 → 배우자/자아 변화
+• 세운 = 일지(메아리) → 정체성 위기 해
+89. 【인생 주기별 커리어 타이밍】
+• 재성 대운(20-30대) → 창업 최적기
+• 관성 대운(30-40대) → 직장 승진 최적기
+• 인성 대운(40-50대) → 가르침/컨설팅 최적기
+90. 【오행별 건강 지도】
+• 목 = 간, 눈, 힘줄, 분노
+• 화 = 심장, 혈액, 불안
+• 토 = 비장, 위장, 걱정
+• 금 = 폐, 피부, 슬픔
+• 수 = 신장, 뼈, 두려움
+91. 【연애/결혼 타이밍】
+• 남성: 재성 세운 = 연애 기회
+• 여성: 관성 세운 = 연애 기회
+• 도화살 해 = 매력 에너지 상승
+92. 【투자 타이밍】
+• 재성 대운 + 유리한 세운 = 청신호
+• 겁재 해 = 적신호, 동업 회피
+• 편재 해 = 투기적이나 리스크 있음
+93. 【용신별 이름/브랜딩】
+• 화 → 빨강, 태양 이미지, 남쪽
+• 수 → 파랑/검정, 물결, 북쪽
+• 목 → 초록, 식물, 동쪽
+• 금 → 흰색/금색, 원형, 서쪽
+• 토 → 노랑/갈색, 사각형, 중앙
+94. 【인생 단계별 해석】
+• 년주(0-15): 조상, 유년기
+• 월주(15-30): 부모, 학업
+• 일주(30-45): 자아, 배우자, 절정기
+• 시주(45+): 자녀, 유산
+95. 【충 세운 생존 전략】
+• 일지 충 → "현재 프로젝트 마무리"
+• 충 + 역마살 → "이사 또는 직장 변화 가능"
+• 충 + 도화살 → "연애 파동"
+96. 【월별 리듬 활용】
+• 용신 오행 월 = 밀어붙일 때
+• 기신 오행 월 = 방어 모드
+• 해석 시 유리한 달 구체 명시 필수
+97. 【용신/희신/기신 필수 명시】 ⭐ 핵심
+• 반드시 다음 형식으로 명시하세요:
+┌─────────────────────────────────────────┐
+│ 용신(用神): ○○ - 가장 필요한 오행 │
+│ 희신(喜神): ○○ - 용신을 돕는 오행 │
+│ 기신(忌神): ○○ - 일간을 해치는 오행 │
+│ 한신(閑神): ○○ - 중립 오행 │
+└─────────────────────────────────────────┘
+• 7번 종합조언에서 구체적 활용법 제시:
+→ 색상, 방향, 직업, 관계, 계절
+
+【AI 오류 패턴 주의사항】
+1. ❌ 지지 십신 무시 - 지지도 십신이 있습니다. 단순 "에너지"가 아님
+2. ❌ 계절 강약 혼동 - 제공된 득령/실령 섹션 확인 (사전 계산됨)
+3. ❌ 대운 잘못 해석 - 제공된 [천간/지지] 십신 레이블 그대로 사용
+4. ❌ 음양 혼동 - 甲丙戊庚壬=양(陽), 乙丁己辛癸=음(陰)
+5. ❌ 편재/정재 미구분 - 제공된 전체 레이블 확인
+6. ❌ 월령(月令) 무시 - 월지 십신이 강약 판단의 핵심
+
+【해석 우선순위】
+1. 합(삼합/육합/방합) 먼저 확인 - 모든 것을 바꿈
+2. 계절 강약(득령/실령) - 강약 기본 판단
+3. 대운 + 세운 십신 - 현재 인생 테마
+4. 지지 십신 - 숨겨진 강한 영향
+5. 기타 요소(신살, 공망 등)
 [분석 요청사항]
 위 사주팔자 정보를 바탕으로 다음을 각각 상세히 서술형으로 해석해 주세요:
 1. 타고난 성격과 기질
@@ -3526,7 +3620,7 @@ ${gaewunText}
 선택 연도: ${(() => { const sel = document.getElementById('target-year-select'); return sel ? sel.value : currentYear; })()}년
 세운 간지: ${(() => { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const yp = calcYearPillar(yr, 6, 1); const sg = getTenGod(yp.s, dm); const bg = getTenGod({e: yp.b.e, y: BRANCH.findIndex(b=>b.c===yp.b.c)%2===0}, dm); return yp.s.c + yp.b.c + ' [천간:' + (sg?sg.k:'?') + '/지지:' + (bg?bg.k:'?') + ']'; })()}
 용신 관계: ${(() => { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const yp = calcYearPillar(yr, 6, 1); const isY = [yp.s.e, yp.b.e].includes(GODS.yong); const isH = [yp.s.e, yp.b.e].includes(GODS.hee); const isG = [yp.s.e, yp.b.e].includes(GODS.gi); return isY ? '✅ 용신年 (최길)' : isG ? '❌ 기신年 (주의)' : isH ? '🟡 희신年 (길)' : '⬜ 중립'; })()}
-월별 요약 점수범례(용신+2,희신+1,기신-2)(1~12월): ${(() => { try { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const ml = getYearlyMonthLuck(yr, SAJU, GODS); const ratingMark = {good:'🟢', neutral:'⬜', bad:'🔴'}; return ml.months.map(m => m.pillar.s.c + m.pillar.b.c + '(' + (ratingMark[m.rating]||'⬜') + '점수:' + m.score + ')').join(' '); } catch(e) { return '계산 불가'; } })()}
+월별 요약 점수범례(용신+2,희신+1,기신-2)(1~12월): ${(() => { try { const sel = document.getElementById('target-year-select'); const yr = sel ? parseInt(sel.value) : currentYear; const ml = getYearlyMonthLuck(yr, SAJU, GODS); const ratingMark = {good:'🟢', neutral:'⬜', bad:'🔴'}; const base = ml.months.map(m => m.pillar.s.c + m.pillar.b.c + '(' + (ratingMark[m.rating]||'⬜') + '점수:' + m.score + ')').join(' '); const cc = ml.months.filter(m=>m.climateClash).map(m=>m.month); const wc = ml.wangClashMonths||[]; const warn = [cc.length ? '⚠️ 기후충돌월: ' + cc.join(',') + '월 건강주의' : '', wc.length ? '🔥 왕충돌월: ' + wc.join(',') + '월 심혈관 주의' : ''].filter(Boolean).join(' | '); return base + (warn ? ' | ' + warn : ''); } catch(e) { return '계산 불가'; } })()}
 
 【10대운 점수 배열 — PHASE 4】
 ${(() => { try { const scores = luck.map(l => { const sg = getTenGod(l.s, dm); const bg = getTenGod({e: l.b.e, y: getBranchYang(l.b)}, dm); const isG = [l.s.e, l.b.e].includes(GODS.yong) || [l.s.e, l.b.e].includes(GODS.hee); const isBad = [l.s.e, l.b.e].includes(GODS.gi); const mark = isG ? '🟢' : isBad ? '🔴' : '⬜'; return l.s.c + l.b.c + '(' + l.startAge + '~' + l.endAge + '세)' + mark; }); return scores.join(' → '); } catch(e) { return '계산 불가'; } })()}
@@ -3554,7 +3648,7 @@ ${(() => { try { const today2 = new Date(); const days2 = []; for (let mo = 0; m
 3. 대운 + 세운 십신 - 현재 인생 테마
 4. 지지 십신 - 숨겨진 영향력
 5. 나머지 요소들
-`;safeClipboard(text, '📋 복사 완료! Gemini나 ChatGPT에 붙여넣기 하세요');} catch(err) {console.error('복사 오류:', err);toast('복사 중 오류가 발생했습니다');}}
+`;safeClipboard(text, '📋 복사 완료! Claude · ChatGPT · Gemini에 붙여넣기 하세요');} catch(err) {console.error('복사 오류:', err);toast('복사 중 오류가 발생했습니다');}}
 
 function analyzeMatchWrapped() {
   if (!SAJU) { toast('먼저 [사주분석]에서 사주를 분석하세요'); return; }
@@ -4418,7 +4512,7 @@ text += `
 - 반드시 조심해야 할 점
 - 한 줄 요약: "이 인연의 핵심 메시지"
 `;
-safeClipboard(text, '📋 복사 완료! Gemini나 ChatGPT에 붙여넣기 하세요');
+safeClipboard(text, '📋 복사 완료! Claude · ChatGPT · Gemini에 붙여넣기 하세요');
 }
 function openShareModal() {if (!currentNumbers.length) { toast('먼저 번호를 생성하세요'); return; }
 document.getElementById('share-balls').innerHTML = currentNumbers.map(n => createBall(n, true)).join('');document.getElementById('share-modal').classList.add('active');}
