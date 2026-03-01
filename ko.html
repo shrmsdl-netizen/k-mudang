@@ -1295,7 +1295,7 @@ function getTenGod(stem, dayStem) {const dEl = EL_ORDER.indexOf(dayStem.e);const
 function getTwelveState(dayStem, branch) {const starts = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];const dsi = STEM.indexOf(dayStem);const bi = BRANCH.indexOf(branch);const start = starts[dsi];const isYang = dayStem.y;const stateIdx = isYang ?
 (bi - start + 12) % 12 :
 (start - bi + 12) % 12;return TWELVE_STATES[stateIdx];}
-function calcNapeum(stem, branch) {const si = STEM.indexOf(stem);const bi = BRANCH.indexOf(branch);let idx60 = -1;for (let i = 0; i < 60; i++) {if (i % 10 === si && i % 12 === bi) {idx60 = i;break;}}
+function calcNapeum(stem, branch) {const sc = typeof stem === 'object' ? stem.c : stem;const bc = typeof branch === 'object' ? branch.c : branch;const si = STEM.findIndex(s => s.c === sc);const bi = BRANCH.findIndex(b => b.c === bc);let idx60 = -1;for (let i = 0; i < 60; i++) {if (i % 10 === si && i % 12 === bi) {idx60 = i;break;}}
 if (idx60 === -1) idx60 = 0;const idx = Math.floor(idx60 / 2);const napeum = SOUND_ELEMENT[idx];return {name: napeum.name,
 element: napeum.element,
 elementK: ELEMENT[napeum.element].k,
@@ -3144,29 +3144,30 @@ ${gaewunText}
 [응답 구조 — 원-코어 메타포] ← 본 지침은 사주 데이터 직후, 분석 요청사항 바로 앞에 위치함 (Lost-in-Middle 방어)
 ===== 🆕 업그레이드 규칙 블록 (v35.0) =====
 
-[🔍 해석 시작 전 — 3단계 자기교정 체크리스트 (MANDATORY)]
-⚠️ 아래 3개를 모든 해석 전에 반드시 순서대로 확인하라. 하나라도 YES면 아래 규칙 적용 전 재판단 필수.
+[🔍 해석 시작 전 — 3단계 데이터 참조 확인 (MANDATORY)]
+⚠️ 이 체크리스트는 AI가 직접 재계산하는 것이 아니다. JS 엔진이 모든 수치를 이미 계산하여 위에 제공했다. 아래는 제공된 데이터에서 특이사항을 "확인"하는 참조 가이드다. 직접 계산·재판단 금지.
 
-STEP 0 (PRE-CHECK) — 공망·신살·천간합 스캔:
-  → 일주(日柱) 기준 공망 간지 확인 → Rule 83 적용
-  → 도화(桃花殺)/양인(羊刃殺)/백호(白虎殺)/화개(華蓋殺) 존재 여부 → Rule 85 적용
-  → 천간합(天干合) 성립 여부 → Rule 84 적용. ⚠️ 합화(合化) 성립 시 변환된 오행을 기준으로 이후 STEP 1~3을 재계산할 것 (변환 전 오행으로 리셋 금지)
+STEP 0 (PRE-CHECK) — 제공된 데이터 내 확인:
+  → 【공망】 섹션에 일주 또는 시주가 포함되어 있는가? → 있으면 Rule 83 참조하여 해석에 반영
+  → 【신살】 섹션에 도화살/양인살/백호살/화개살이 있는가? → 있으면 Rule 85 참조
+  → 【합충형파해】 섹션에 천간합 표기가 있는가? → 있으면 Rule 84 참조
+  ⚠️ 합화 결과는 JS 엔진이 이미 반영한 상태다. 별도 재연산 불필요.
 
-STEP 1 — 삼합국(三合局) + 방합(方合) 완성 여부:
-  [삼합국] 인오술(火局) / 사유축(金局) / 신자진(水局) / 해묘미(木局) 중 3글자 모두 원국에 있는가?
-  [방합]   亥子丑(북방수국) / 寅卯辰(동방목국) / 巳午未(남방화국) / 申酉戌(서방금국) 중 3글자 모두 원국에 있는가?
-  → 둘 중 하나라도 YES: 해당 오행을 x10 배율로 재계산 후 격국/신강신약/용신 전면 재판단.
-  ⚠️ 특히 亥子丑 방합(북방수국) 사주는 신강도 계산 전 水 x10 적용 후 재판단 필수.
+STEP 1 — 삼합국·방합 완성 여부 (데이터 확인):
+  → 제공된 데이터에 【삼합국】 또는 【방합】 완성 표기가 있는가?
+  → 있으면: 해당 오행 세력이 x10 증폭된 상태임을 해석에 반영 (이미 신강도에 반영된 값)
+  → 없으면: 제공된 신강도/용신 수치를 그대로 신뢰
 
-STEP 2 — 종격 여부:
-  → 신강도 0~15% 미만인가? + 식상이 지지에 통근하지 않는가?
-  → YES: 용신이 역전됨. 억부용신이 아니라 종하는 오행이 용신. 이 판단 후 전체 해석 방향 반전.
+STEP 2 — 종격 여부 (데이터 확인):
+  → 제공된 신강도 수치가 15% 미만인가? (수치만 참조, 재계산 금지)
+  → 15% 미만: 종격 가능성을 해석에 언급. 용신 판정은 제공된 데이터 따름
+  → 15% 이상: 억부/조후 용신 그대로 적용
 
-STEP 3 — 격국 라벨 vs 실제 세력 불일치:
-  → 격국이 "재성격"인데 재성 오행의 실제 개수가 0개인가?
-  → YES: 격국 라벨 무시. 실제 세력 기반으로 해석.
+STEP 3 — 격국 라벨 일관성 (데이터 확인):
+  → 제공된 격국명과 오행 분포 개수가 논리적으로 일치하는가?
+  → 불일치(예: 재성격인데 해당 오행 0개): 격국 라벨보다 실제 오행 개수 기반으로 해석
 
-→ 위 3단계 통과 후 본 해석 시작.
+→ 위 3단계 확인 완료 후 본 해석 시작. ("재계산"이 아닌 "데이터 확인"임을 명심)
 
 [⚡ 조후 vs 억부 우선순위 — 최종 명문화]
 기본 원칙: 조후(계절 균형) > 억부(강약 균형)
@@ -3417,9 +3418,7 @@ STEP 3 — 격국 라벨 vs 실제 세력 불일치:
 - 양년 여자 / 음년 남자 = 역행 (지지 거꾸로)
 - 데이터의 대운이 이 법칙에 맞는지 확인 후 해석하세요.
 49. 백호대살(白虎大煞) - 피를 부르는 날:
-- 甲辰, 乙未, 丙戌, 丁丑, 戊辰, 己未, 庚戌, 辛丑, 壬辰, 癸未 일주. (Rule 85와 통일 — 乙巳·己巳·癸巳는 다른 유파, 본 서비스는 辰戌丑未 계열 적용)
-- "평소엔 온화하나 화나면 무섭다. 피 보는 일(수술, 사고, 출산)과 연관."
-- 직업: "의료, 군인, 종교, 무술 쪽에서 이 에너지가 순화됨."
+→ Rule 85의 【백호살(白虎殺)】 항목과 통합. 해석 시 Rule 85를 참조하라. (중복 생략)
 50. 12운성 재검증(十二運星):
 - 일지 12운성이 데이터와 실제 계산이 맞는지 확인하세요.
 - 화(火)일간: 寅=장생, 午=제왕, 戌=묘 / 수(水)일간: 申=장생, 子=제왕, 辰=묘
@@ -3657,6 +3656,7 @@ STEP 3 — 격국 라벨 vs 실제 세력 불일치:
 이 은유는 도입부, 핵심 2개 섹션(직업/재물 중심), 결론부에 집중 배치한다.
 나머지 섹션은 은유로 '첫 1~2문장만 열고' 이후 명확한 직설로 해석과 행동 조언을 전달한다.
 [절대 금지]: 8개 섹션 전체에 억지로 은유를 끌고 다니는 것. 비유가 넘치면 정보가 사라진다.
+[개별 룰 내 비유 처리]: 각 Rule에 포함된 비유(예: "다리 없는 강")는 상황 설명용 예시다. 메인 은유와 충돌할 경우, 해당 비유를 메인 은유의 세계관에 맞게 변형하거나 생략하고 직설 설명으로 대체하라. 메인 은유의 일관성이 항상 우선이다.
 
 ① 도입부 (환영과 시각적 관조)
 - 뻔한 인사 금지. 방문자의 원국 전체 풍경(계절·온도·날씨)을 한 폭의 그림처럼 묘사하며 시작.
@@ -3778,7 +3778,30 @@ ${(() => { try { const scores = luck.map(l => { const sg = getTenGod(l.s, dm); c
 【택일 TOP 3 — PHASE 5 (용신 기반 길일)】
 ${(() => { try { const today2 = new Date(); const days2 = []; for (let mo = 0; mo <= 1; mo++) { const base = new Date(today2.getFullYear(), today2.getMonth() + mo, 1); const y2 = base.getFullYear(), mIdx = base.getMonth(); const lastDay = new Date(y2, mIdx + 1, 0).getDate(); for (let d = 1; d <= lastDay; d++) { const dt = new Date(y2, mIdx, d); if (dt < new Date(today2.getFullYear(), today2.getMonth(), today2.getDate())) continue; const res = calcAuspiciousScore(y2, mIdx + 1, d, _taekilPurpose); days2.push({y: y2, m: mIdx + 1, d, ...res}); } } const top3 = days2.filter(d => d.grade === 'best' || d.grade === 'good').sort((a,b) => b.score - a.score).slice(0, 3); const purposeMap = {wedding:'결혼', move:'이사', open:'개업', exam:'수험'}; if (!top3.length) return '추천일 없음'; return '목적: ' + (purposeMap[_taekilPurpose] || _taekilPurpose) + '\n' + top3.map((d, i) => (i+1) + '위: ' + d.y + '/' + d.m + '/' + d.d + ' ' + d.dp.s.c + d.dp.b.c + ' (점수:' + d.score + ' ' + (d.grade==='best'?'🟡최길':'🟢길일') + ') 사유: ' + (d.reasons && d.reasons.good ? d.reasons.good.slice(0,2).join(', ') : '-')).join('\n'); } catch(e) { return '계산 불가'; } })()}
 
-===== ⚠️ AI 필수 지침 - 반드시 준수 ⚠️ =====
+===== ⚠️ PHASE 데이터 서사화 지침 ⚠️ =====
+【PHASE 3/4/5의 점수·수치를 절대 숫자 그대로 언급하지 말라】
+제공된 PHASE 데이터에는 스코어(+3, -2, 0 등)와 등급(🟢🔴⬜)이 있다.
+이것은 AI가 해석 방향을 결정하는 내부 참조값이다. 응답에 수치를 직접 노출하면 페르소나가 붕괴된다.
+
+점수 → 언어 변환 기준:
+  +2 이상: "하늘이 밀어주는 타이밍", "기운이 활짝 열린 시기", "움직이면 얻는 달"
+  +1:      "순풍이 부는 날", "조금씩 앞으로 나아가는 흐름", "평온하나 기회가 있는 시기"
+   0:      "고요한 달", "일상을 유지하는 시기", "쉬어가도 좋은 흐름"
+  -1:      "조심이 필요한 시기", "서두르지 말 것", "지출·결정 보류 권장"
+  -2 이하: "숨죽여야 할 때", "전진 대신 수비", "이 달은 참는 것이 이기는 것"
+
+🟢(good) → 해당 월에 적극 행동 추천
+⬜(neutral) → 유지/관망
+🔴(bad) → 수비·절제 강조
+
+적용 예시:
+  ❌ "3월은 스코어 +2라 대길입니다."
+  ✅ "3월은 하늘이 밀어주는 달이다. 이 흐름에 올라타라."
+  
+  ❌ "7월은 -2점으로 주의가 필요합니다."
+  ✅ "7월은 숨죽여야 할 때다. 새 일을 벌이지 말고, 지금 있는 것을 지켜라."
+
+=====  ⚠️ AI 필수 지침 - 반드시 준수 ⚠️ =====
 【제공된 데이터 사용 - 직접 계산 금지】
 1. 십신 매핑표가 미리 계산되어 있습니다. 이것을 사용하세요. 어떤 오행이 어떤 십신인지 직접 계산하지 마세요.
 2. 지지 십신이 제공됩니다. 각 지지의 오행에 따른 십신이 있습니다.

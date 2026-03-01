@@ -2359,7 +2359,7 @@ from: branchNames[bIdx],
 god: sIdx === 2 ? 'Day Master' : getTenGod(stem, dm).k});}}});});});return result;}
 function getTenGod(stem, dayStem) {const dEl = EL_ORDER.indexOf(dayStem.e);const sEl = EL_ORDER.indexOf(stem.e);const diff = (sEl - dEl + 5) % 5;const samePol = (dayStem.y === stem.y);const godKeys = ['peer','robWealth','eatingGod','hurtOfficer','indirectWealth','directWealth','indirectOfficer','directOfficer','indirectSeal','directSeal'];const godMap = { 0: samePol ? 0 : 1, 1: samePol ? 2 : 3, 2: samePol ? 4 : 5, 3: samePol ? 6 : 7, 4: samePol ? 8 : 9 };return TEN_GODS[godKeys[godMap[diff]]];}
 function getTwelveState(dayStem, branch) {const starts = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];const dsi = STEM.indexOf(dayStem);const bi = BRANCH.findIndex(br => br.c === branch.c);const start = starts[dsi];const idx = dayStem.y ? (bi - start + 12) % 12 : (start - bi + 12) % 12;return TWELVE_STATES[idx];}
-function calcNapeum(stem, branch) {const si = STEM.indexOf(stem);const bi = BRANCH.findIndex(br => br.c === branch.c);const diff = (bi - si + 12) % 12;if (diff % 2 !== 0) {console.warn('Napeum: 음양 불일치', stem.c, branch.c);return { name: 'Unknown', element: 'earth', elementK: '토', desc: '' };}
+function calcNapeum(stem, branch) {const sc = typeof stem === 'object' ? stem.c : stem;const si = STEM.findIndex(s => s.c === sc);const bi = BRANCH.findIndex(br => br.c === (typeof branch === 'object' ? branch.c : branch));const diff = (bi - si + 12) % 12;if (diff % 2 !== 0) {console.warn('Napeum: 음양 불일치', stem.c, branch.c);return { name: 'Unknown', element: 'earth', elementK: '토', desc: '' };}
 const idx60 = si + ((6 - diff / 2) % 6) * 10;const napeumIdx = Math.floor(idx60 / 2);const napeum = SOUND_ELEMENT[napeumIdx];return {name: napeum.name,
 element: napeum.element,
 elementK: ELEMENT[napeum.element].k,
@@ -4265,6 +4265,7 @@ Identify the visitor's [Day Master (日干 Day Master)] or [dominant Five Elemen
 Deploy this metaphor in: the Opening, 2 key sections (Career / Wealth focus), and the Closing.
 All other sections: open with 1~2 metaphor lines → then shift to clear, direct interpretation and actionable advice.
 [ABSOLUTE PROHIBITION]: Forcing the metaphor into all 8 sections. Excess metaphor destroys information.
+[HANDLING METAPHORS INSIDE INDIVIDUAL RULES]: Metaphors embedded within specific Rules (e.g., "a bridge-less river") are descriptive examples for that situation, not commands to use that exact phrase. When they conflict with the Core Metaphor, rephrase them within the Core Metaphor's framework, or replace with plain language. The Core Metaphor's consistency always takes priority.
 
 ① OPENING (Visual Observation)
 - No pleasantries. Paint the visitor's entire natal chart as a landscape — season, temperature, weather — in one cinematic frame.
@@ -4390,29 +4391,30 @@ These rules are ABSOLUTE and override ANY other interpretation logic. Apply in o
 - Strong Chart (Strong (身强), 70%+) + Peer/Rob-Wealth Year (比劫 Peer Year) = "Wealth Robbery Warning (群劫爭財 Wealth Robbery)" — wealth threatened by rivals, siblings, or co-investors
 ===== 🆕 UPGRADED RULE BLOCK (v35.0) =====
 
-[🔍 PRE-INTERPRETATION — 3-STEP SELF-CORRECTION CHECKLIST (MANDATORY)]
-⚠️ Before ANY interpretation, run these 3 checks in order. If ANY is YES, re-evaluate the entire chart before applying rules below.
+[🔍 PRE-INTERPRETATION — 3-STEP DATA REFERENCE CHECKLIST (MANDATORY)]
+⚠️ This is NOT a recalculation checklist. The JS engine has already calculated all values and provided them above. These 3 steps are a REFERENCE GUIDE to check for notable conditions in the provided data. Do NOT recalculate or override provided values.
 
-STEP 0 (PRE-CHECK) — Void, Spirit Killer, Stem Combination Scan:
-  → Identify void branches (空亡) based on Day Pillar → Apply Rule 83
-  → Check for Peach Blossom (桃花殺) / Sword Edge (羊刃殺) / White Tiger (白虎殺) / Canopy (華蓋殺) → Apply Rule 85
-  → Confirm Heavenly Stem Combination (天干合) formation → Apply Rule 84. ⚠️ If Combination (合化) materializes, recalculate STEP 1~3 using the TRANSFORMED element (never revert to pre-combination element)
+STEP 0 (PRE-CHECK) — Check provided data for:
+  → Is a void branch (空亡) listed in the [Void] section for the Day or Hour Pillar? → If yes, apply Rule 83 in interpretation
+  → Are Peach Blossom / Sword Edge / White Tiger / Canopy listed in the [Spirit Killers] section? → If yes, apply Rule 85
+  → Is a Heavenly Stem Combination (天干合) marked in the [Combinations] section? → If yes, apply Rule 84
+  ⚠️ Combination transformation results are already reflected in the data. No separate recalculation needed.
 
-STEP 1 — Three Harmony (三合局) + Directional Harmony (方合) Completion:
-  [THREE HARMONY] Do all 3 chars of Yin-Wu-Xu(Fire) / Si-You-Chou(Metal) / Shen-Zi-Chen(Water) / Hai-Mao-Wei(Wood) appear in the natal chart?
-  [DIR. HARMONY]  Do all 3 chars of Hai-Zi-Chou(N.Water) / Yin-Mao-Chen(E.Wood) / Si-Wu-Wei(S.Fire) / Shen-You-Xu(W.Metal) appear?
-  → If EITHER is YES: Recalculate that Element at x10 magnitude. Restart Pattern/Strength/Beneficial Element analysis from scratch.
-  ⚠️ Especially Hai-Zi-Chou (Northern Water Bureau) charts: apply Water x10 BEFORE calculating Day Master strength.
+STEP 1 — Three Harmony / Directional Harmony (check provided data only):
+  → Is a Three Harmony (三合局) or Directional Harmony (方合) completion marked in the provided data?
+  → If YES: The corresponding element's power is already x10 in the strength calculation. Reflect this in your interpretation tone.
+  → If NO: Trust the provided Day Master Strength percentage and Beneficial Element as-is.
 
-STEP 2 — Follower Pattern (從格) Check:
-  → Is Day Master Strength 0~15% AND Food/Output Stars NOT rooted in Earthly Branches?
-  → YES: Beneficial Element INVERTS. The dominant element becomes the Beneficial Element. Flip entire interpretation direction.
+STEP 2 — Follower Pattern check (reference only):
+  → Does the provided Day Master Strength show a value below 15%? (Read the number, do not recalculate)
+  → Below 15%: Note potential Follower Pattern in interpretation. Follow the provided Beneficial Element judgment.
+  → 15%+: Apply Suppression/Climate Beneficial Element as provided.
 
-STEP 3 — Pattern Label vs. Actual Power Mismatch:
-  → Does the chart show a "Wealth Pattern" but Wealth Element count is 0?
-  → YES: Ignore the Pattern label. Interpret from actual elemental distribution only.
+STEP 3 — Pattern Label consistency check:
+  → Does the provided Pattern name logically match the elemental distribution?
+  → Mismatch detected (e.g., "Wealth Pattern" but Wealth Element count is 0): Prioritize actual elemental count over the Pattern label.
 
-→ Pass all 3 steps, THEN begin interpretation.
+→ Complete all 3 reference checks, THEN begin interpretation. (These are "checks," not "recalculations.")
 
 [⚡ CLIMATE vs. STRENGTH PRIORITY — FINAL RULING]
 Default Rule: Climate Balance (調候) > Strength Balance (抑扶)
@@ -4955,7 +4957,33 @@ Negative Delivery Protocol:
 • Can use Naeum Element as supplementary metaphor when setting Core Metaphor — reinforcement only, never independent metaphor
 • ⚠️ ABSOLUTE PROHIBITION: Never set Naeum Element as the standalone Core Metaphor in the [Introduction]. The Core Metaphor must be the Day Master (日干) or dominant element. Naeum is described only as "the shadow hidden beneath" — never the main theme.
 • ⚠️ Naeum is SUPPLEMENTARY — never overrides Suppression/Seasonal balance (抑扶/調候) judgments
-• ⚠️ Include Naeum interpretation only when Naeum data is provided in the input`;safeClipboard(text, '📋 Copied! Paste into Claude, ChatGPT, or Gemini');} catch(err) {console.error('Copy error:', err);toast('Error copying to clipboard');}}
+• ⚠️ Include Naeum interpretation only when Naeum data is provided in the input
+
+===== ⚠️ PHASE DATA NARRATIVE CONVERSION GUIDE ⚠️ =====
+【NEVER output PHASE scores or numeric values directly in your response】
+The PHASE 3/4/5 data contains scores (+2, -1, 0, etc.) and grade markers (🟢🔴⬜).
+These are INTERNAL REFERENCE VALUES for the AI to determine interpretation direction.
+Outputting raw scores breaks the oracle persona entirely.
+
+Score → Language Conversion:
+  +2 or higher: "the heavens are pushing you forward", "energy is fully open", "move and you shall receive"
+  +1:           "a gentle tailwind", "a quiet window of opportunity", "steady and favorable"
+   0:           "a still season", "time to maintain, not advance", "rest is allowed"
+  -1:           "proceed with caution", "delay major decisions", "reduce spending and commitments"
+  -2 or lower:  "a time to hold your breath", "defense over offense", "endure — this is how you win"
+
+Grade markers:
+  🟢 (good)    → encourage active movement in this period
+  ⬜ (neutral) → watch and maintain
+  🔴 (bad)     → emphasize caution, restraint, protection
+
+Correct usage examples:
+  ❌ "March has a score of +2, which is very auspicious."
+  ✅ "March is when the heavens push. Ride this current."
+
+  ❌ "July scores -2. Caution advised."
+  ✅ "July demands stillness. Start nothing new. Guard what you have."`
+;safeClipboard(text, '📋 Copied! Paste into Claude, ChatGPT, or Gemini');} catch(err) {console.error('Copy error:', err);toast('Error copying to clipboard');}}
 /* ═══ Smart Lotto Engine v2.1 (US Dual-Pool) ═══ */
 const STRATEGY_NAMES_EN=['🔮 Saju Focus','🔥 Hot Numbers','❄️ Cold Reversion','⚖️ Balanced','💎 Anti-Popular'];
 let currentPbSmart=null,currentMegaSmart=null;
