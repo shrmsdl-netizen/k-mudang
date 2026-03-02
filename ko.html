@@ -2194,8 +2194,8 @@ const brHyung = [
 ];for (let [a,b,n,desc] of brHyung) {const ia = brs.indexOf(a), ib = brs.indexOf(b);if (ia >= 0 && ib >= 0) {if (!(brs.includes(2) && brs.includes(5) && brs.includes(8) && [2,5,8].includes(a) && [2,5,8].includes(b)) &&
 !(brs.includes(1) && brs.includes(10) && brs.includes(7) && [1,10,7].includes(a) && [1,10,7].includes(b))) {res.push({t:'刑',c:`${BRANCH[a].c}↔${BRANCH[b].c}`,m:n,d:desc});}}}
 const selfPunish = {4:'진진자형(辰辰自刑)',6:'오오자형(午午自刑)',9:'유유자형(酉酉自刑)',11:'해해자형(亥亥自刑)'};{const spCount={};brs.forEach(bi=>{if(selfPunish[bi])spCount[bi]=(spCount[bi]||0)+1;});Object.entries(spCount).forEach(([bi,cnt])=>{if(cnt>=2){const triple=cnt>=3;const bn=BRANCH[+bi].c;res.push({t:'自刑',c:bn+'+'+(triple?bn+'+'+bn:bn),m:selfPunish[+bi]+(triple?' (三重)':''),d:'자기 자신을 해치는 형. 자책, 우울 조심! 스스로를 사랑하세요.'});}});}
-const brPa = [[0,9,'자유파','관계 깨지기 쉬워요.'],[3,6,'묘오파','계획 틀어져요.'],[2,11,'인해파','마무리 잘 하세요.'],[4,1,'진축파','기반 흔들려요.']];for (let [a,b,n,desc] of brPa) {if (brs.includes(a) && brs.includes(b)) res.push({t:'破',c:`${BRANCH[a].c}↔${BRANCH[b].c}`,m:n,d:desc});}
-const brHae = [[0,7,'자미해','가까운 사람이 발목 잡아요.'],[1,6,'축오해','동업 조심!'],[2,5,'인사해','시기받아요. 너무 드러내지 마세요.'],[3,4,'묘진해','사소한 일로 큰 싸움 나요.']];for (let [a,b,n,desc] of brHae) {if (brs.includes(a) && brs.includes(b)) res.push({t:'害',c:`${BRANCH[a].c}↔${BRANCH[b].c}`,m:n,d:desc});}
+const brPa = [[0,9,'자유파','관계 깨지기 쉬워요.'],[3,6,'묘오파','계획 틀어져요.'],[2,11,'인해파','마무리 잘 하세요.'],[4,1,'진축파','기반 흔들려요.'],[5,8,'사신파','갑작스러운 변동! 계획이 꼬여요.'],[7,10,'미술파','숨겨진 갈등이 쌓여요.']];for (let [a,b,n,desc] of brPa) {if (brs.includes(a) && brs.includes(b)) res.push({t:'破',c:`${BRANCH[a].c}↔${BRANCH[b].c}`,m:n,d:desc});}
+const brHae = [[0,7,'자미해','가까운 사람이 발목 잡아요.'],[1,6,'축오해','동업 조심!'],[2,5,'인사해','시기받아요. 너무 드러내지 마세요.'],[3,4,'묘진해','사소한 일로 큰 싸움 나요.'],[8,11,'신해해','음지에서 발목 잡혀요. 뒤통수 조심!'],[9,10,'유술해','숨은 갈등으로 손해봐요. 경쟁자 주의!']];for (let [a,b,n,desc] of brHae) {if (brs.includes(a) && brs.includes(b)) res.push({t:'害',c:`${BRANCH[a].c}↔${BRANCH[b].c}`,m:n,d:desc});}
 const wonJin = [[0,7,'자미원진'],[1,6,'축오원진'],[2,5,'인사원진'],[3,4,'묘진원진'],[8,11,'신해원진'],[9,10,'유술원진']];for (let [a,b,n] of wonJin) {if (brs.includes(a) && brs.includes(b)) {res.push({t:'怨嗔',c:`${BRANCH[a].c}↔${BRANCH[b].c}`,m:n,d:'미워도 떨어질 수 없는 악연. 부부 사이면 갈등이 깊어요.'});}}
 const guiMen = [[2,7,'인미귀문'],[3,8,'묘신귀문'],[4,9,'진유귀문'],[5,10,'사술귀문'],[6,11,'오해귀문'],[1,6,'축오귀문']];const hapGuiMen = [[4,9,'진유']];for (let [a,b,n] of guiMen) {if (brs.includes(a) && brs.includes(b)) {const isHapGuiMen = hapGuiMen.some(([ha,hb]) => (a===ha && b===hb) || (a===hb && b===ha));if (isHapGuiMen) {res.push({t:'鬼門',c:`${BRANCH[a].c}↔${BRANCH[b].c}`,m:n + '(합귀문)',
 d:'합이면서 귀문! 겉으로는 좋아 보이지만 속으로 병드는 관계. 직장/조직에서 스트레스 누적 주의.'});} else {res.push({t:'鬼門',c:`${BRANCH[a].c}↔${BRANCH[b].c}`,m:n,d:'귀신의 문. 정신적 불안, 우울증 주의. 명상과 휴식이 필요해요.'});}}}
@@ -2846,8 +2846,7 @@ let ycText = '';try {const yukcheon = analyzeYukcheon(SAJU, GENDER);if (yukcheon
 • 부친(편재): ${yukcheon.parents?.father?.analysis || '-'}
 • 모친(정인): ${yukcheon.parents?.mother?.analysis || '-'}`;}} catch(e) { ycText = '• 육친 분석 데이터 없음'; }
 let gwText = '';try {const gungwi = analyzeGungwi(SAJU, BIRTH_YEAR);if (gungwi && Array.isArray(gungwi)) {gwText = gungwi.map(g => '• ' + g.name + '(' + g.ageRange + '): ' + (g.analysis?.substring(0, 50) || '') + '...' + (g.isCurrent ? ' ◀ 현재' : '')).join('\n');}} catch(e) { gwText = '• 궁위 분석 데이터 없음'; }
-let next10Text = '';try {const next10 = getNext10Years(SAJU, BIRTH_YEAR, GENDER, GODS, BIRTH_MONTH, BIRTH_DAY, BIRTH_HOUR);if (next10) {next10Text = `• 최고의 해: ${next10.bestYear?.year || '-'}년 (${next10.bestYear?.age || '-'}세)
-• 조심할 해: ${next10.worstYear?.year || '-'}년 (${next10.worstYear?.age || '-'}세)`;}} catch(e) { next10Text = '• 10년 운세 데이터 없음'; }
+let next10Text = '';try {const next10 = getNext10Years(SAJU, BIRTH_YEAR, GENDER, GODS, BIRTH_MONTH, BIRTH_DAY, BIRTH_HOUR);if (next10 && next10.years) {next10Text = next10.years.map(y => {const mark = y.score >= 3 ? '🚀' : y.score >= 1 ? '🟢' : y.score <= -2 ? '🔴' : '⬜';const daeunPillar = y.daeun ? y.daeun.s.c + y.daeun.b.c + '(' + y.daeun.startAge + '-' + y.daeun.endAge + ')' : '?';const saeunPillar = y.saeun?.pillar ? y.saeun.pillar.s.c + y.saeun.pillar.b.c : '?';const warns = [];if (y.saeun?.bureauFormed) warns.push('🔥삼합');if (y.saeun?.yongUnderAttack) warns.push('⚠️용신공격');if (y.saeun?.robWealthThreat) warns.push('⚔️겁재');if (y.saeun?.selfPunishment) warns.push('🔴자형');if (y.saeun?.harmBetrayalWarning) warns.push('⚠️해');if (y.saeun?.wangShinChungBal) warns.push('🚨왕지충');const warnStr = warns.length ? ' [' + warns.join(',') + ']' : '';return '• ' + y.year + '년 ' + y.age + '세: ' + daeunPillar + ' / ' + saeunPillar + ' ' + mark + warnStr;}).join('\n') + '\n★ 최고: ' + (next10.bestYear?.year || '-') + '년 (' + (next10.bestYear?.age || '-') + '세) | ⚠️ 조심: ' + (next10.worstYear?.year || '-') + '년 (' + (next10.worstYear?.age || '-') + '세)';} else if (next10) {next10Text = `• 최고의 해: ${next10.bestYear?.year || '-'}년 (${next10.bestYear?.age || '-'}세)\n• 조심할 해: ${next10.worstYear?.year || '-'}년 (${next10.worstYear?.age || '-'}세)`;}} catch(e) { next10Text = '• 10년 운세 데이터 없음'; }
 let tanghwaWarningText = '';try {const currentYear = new Date().getFullYear();const yp = calcYearPillar(currentYear, 6, 1);const sbi = BRANCH.indexOf(yp.b);const allBi = [BRANCH.indexOf(SAJU.year.b), BRANCH.indexOf(SAJU.month.b), BRANCH.indexOf(SAJU.day.b)];if (SAJU.hour) allBi.push(BRANCH.indexOf(SAJU.hour.b));const hasChu = allBi.includes(1);const hasO = allBi.includes(6);const hasIn = allBi.includes(2);const hasSa = allBi.includes(5);if (hasChu && hasO && sbi === 6) {tanghwaWarningText = `\n⚠️ ${currentYear}년 쌍탕화(雙湯火) 경고! 원국 축오 탕화 + 세운 午 중첩. 감정 폭발, 화병 특별 주의!`;}
 else if (hasChu && !hasO && sbi === 6) {tanghwaWarningText = `\n🔥 ${currentYear}년 탕화살(湯火殺) 발동! 원국의 丑과 세운 午가 만나 축오 탕화 형성. 화병, 감정 폭발, 정신적 스트레스 주의! 특히 일지가 축(丑)이면 배우자궁에 직접 영향.`;}
 else if (!hasChu && hasO && sbi === 1) {tanghwaWarningText = `\n🔥 ${currentYear}년 탕화살(湯火殺) 발동! 원국의 午와 세운 丑이 만나 탕화 형성. 화기 취급 주의, 열병 조심!`;}
@@ -2858,8 +2857,7 @@ if ((hasChu || hasO) && GODS.yong === 'fire' && yp.s.c === '丙' && yp.b.c === '
 const yearLuckResult = calcYearLuck(currentYear, SAJU, GODS);if (yearLuckResult.warnings && yearLuckResult.warnings.length > 0) {tanghwaWarningText += '\n' + yearLuckResult.warnings.join('\n');}
 const yearRatingChk = determineYearRating(yearLuckResult, SAJU, GODS);
 try {const crossAnalysis = analyzeCrossLuck(curLuck, yearLuckResult, SAJU, GODS);if (crossAnalysis && crossAnalysis.analysis && crossAnalysis.analysis.length > 0) {const dangerAnalysis = crossAnalysis.analysis.filter(a => a.type === 'danger' || a.type === 'bad' || a.type === 'warning');if (dangerAnalysis.length > 0) {tanghwaWarningText += '\n\n【대운-세운 교차 분석 경고】\n' + dangerAnalysis.map(a => a.text).join('\n');}}} catch(e) { }} catch(e) { }
-let monthText = '';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU, GODS);if (monthlyLuck) {monthText = `• 좋은 달: ${monthlyLuck.best?.month || '-'}월 (${monthlyLuck.best?.god?.k || '-'})
-• 조심할 달: ${monthlyLuck.worst?.month || '-'}월 (${monthlyLuck.worst?.god?.k || '-'})`;}} catch(e) { monthText = '• 월별 운세 데이터 없음'; }
+let monthText = '';try {const monthlyLuck = getYearlyMonthLuck(currentYear, SAJU, GODS);if (monthlyLuck) {const climateClashMonths = monthlyLuck.months?.filter(m => m.climateClash).map(m => m.month) || [];const wangClashMonths = monthlyLuck.wangClashMonths || [];monthText = `• 좋은 달: ${monthlyLuck.best?.month || '-'}월 (${monthlyLuck.best?.god?.k || '-'})\n• 조심할 달: ${monthlyLuck.worst?.month || '-'}월 (${monthlyLuck.worst?.god?.k || '-'})${climateClashMonths.length ? '\n• ⚠️ 조후 충돌 달: ' + climateClashMonths.join(', ') + '월 - 건강 특별 주의!' : ''}${wangClashMonths.length ? '\n• 🔥 수화충돌 달: ' + wangClashMonths.join(', ') + '월 - 심혈관 위험! 급격한 온도변화 피할 것.' : ''}`;}} catch(e) { monthText = '• 월별 운세 데이터 없음'; }
 const yongEl = GODS.yong;
 const heeEl = GODS.hee;
 const giEl = GODS.gi;
@@ -2869,16 +2867,18 @@ const envByEl = {wood:'숲·공원·학교·출판·성장형 스타트업·교�
 const actByEl = {wood:'꾸준한 성장·배움·새싹을 키우는 일·유연하게 확장하기',fire:'표현하기·사람과 부딪히기·빛나는 자리에 서기·드러내기',earth:'신뢰 쌓기·중심 잡기·한 우물 파기·묵묵히 지속하기',metal:'절제·구조 잡기·완성도 높이기·말보다 실행',water:'사색·흐름에 몸 맡기기·글쓰기·감이 오는 대로 움직이기'};
 const giStemsWarn = stemByEl[giEl]?.join('·') || '-';
 const giBranchWarn = branchByEl[giEl]?.join('·') || '-';
+const peopleByEl = {wood:{vibe:'성장 지향, 유연하고 공감 능력이 높으며 꾸준히 배우는 타입',animals:'호랑이·토끼년/일생(寅·卯)',archetypes:'스승형, 창조자형, 온화한 전략가형'},fire:{vibe:'표현력 풍부, 매력적, 열정적이며 현재를 사는 타입',animals:'뱀·말년/일생(巳·午)',archetypes:'무대인형, 비전가형, 연결자형'},earth:{vibe:'신뢰할 수 있고 안정적이며 약속을 지키는 타입',animals:'용·개·소·양년/일생(辰·戌·丑·未)',archetypes:'버팀목형, 건축가형, 보호자형'},metal:{vibe:'규율적이고 결단력 있으며 말보다 행동으로 보여주는 타입',animals:'원숭이·닭년/일생(申·酉)',archetypes:'전략가형, 설계자형, 실행자형'},water:{vibe:'직관력 강하고 적응력이 뛰어나며 깊이 사고하는 타입',animals:'돼지·쥐년/일생(亥·子)',archetypes:'철학자형, 예술가형, 조언자형'}};
 const gaewunText = `【개운 데이터 — AI 결론부 필수 반영】
 ▸ 이 사람의 용신(가장 필요한 기운): ${ELEMENT[yongEl].k}(${ELEMENT[yongEl].c})
 ▸ 희신(용신을 돕는 기운): ${ELEMENT[heeEl].k}(${ELEMENT[heeEl].c})
 ▸ 기신(피해야 할 기운): ${ELEMENT[giEl].k}(${ELEMENT[giEl].c})
 
 [1순위 개운 — 인연] 이런 사람 곁에 있으면 에너지가 보충된다 (가장 강력):
-• 일간이 이 천간인 사람과 자주 함께하면 좋다: ${stemByEl[yongEl]?.join(', ') || '-'}
-• 이 지지가 강한 사람(생년·일지 기준)도 좋다: ${branchByEl[yongEl]?.join(', ') || '-'}
-• 이 희신 천간을 가진 사람도 보완이 된다: ${stemByEl[heeEl]?.join(', ') || '-'}
-• 반면 기신 기운이 강한 사람(${giStemsWarn}, ${giBranchWarn} 일간·지지)과는 거리감을 두면 편해진다
+이런 느낌의 사람을 찾아라: ${peopleByEl[yongEl]?.vibe||'-'}
+생년/일지 기준: ${peopleByEl[yongEl]?.animals||'-'}
+이런 유형이 용신 에너지를 공급한다: ${peopleByEl[yongEl]?.archetypes||'-'}
+희신 타입도 보완이 된다: ${peopleByEl[heeEl]?.vibe||'-'}
+기신 타입과는 거리감을 두면 편해진다: ${peopleByEl[giEl]?.vibe||'-'} 타입 (천간 ${giStemsWarn}, 지지 ${giBranchWarn})
 
 [2순위 개운 — 환경] 이런 공간·직종에 자주 머무르면 기운이 보충된다:
 • 용신 환경: ${envByEl[yongEl] || '-'}
