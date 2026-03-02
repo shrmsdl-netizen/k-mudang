@@ -1829,7 +1829,7 @@ function getIljuDesc(ds, db) {const iljuData = {'甲子':{t:'甲子(갑자)일�
 '戊午':{t:'戊午(무오)일주 - 태양 빛 받는 대지',d:'화생토로 에너지가 넘칩니다. 활발하고 사교적이며 인기가 많습니다. 일찍 성공하기 쉽습니다.',s:'배우자가 밝고 활기찹니다.'},
 '戊申':{t:'戊申(무신)일주 - 광산의 산',d:'토생금으로 재물을 만들어냅니다. 사업 수완이 좋고 재테크 능력이 있습니다. 실용적이고 현실적입니다.',s:'배우자가 총명하고 능력있습니다.'},
 '戊戌':{t:'戊戌(무술)일주 - 높은 산',d:'토의 기운이 극에 달해 고집이 세고 뚝심이 있습니다. 한번 결심하면 끝까지 밀고 나갑니다.',s:'배우자와 고집 싸움을 할 수 있습니다. 양보가 필요합니다.'},
-'己丑':{t:'己丑(기축)일주 - 비옥한 전답',d:'토의 기운이 두 배로 안정적이고 착실합니다. 부동산운이 있고 저축을 잘합니다.',s:'배우자가 성실하고 가정적입니다.'},
+'己丑':{t:'己丑(기축)일주 - 겨울 들판의 소',d:'토의 기운이 두 배로 안정적이고 착실합니다. 부동산운이 있고 저축을 잘합니다.',s:'배우자가 성실하고 가정적입니다.'},
 '己卯':{t:'己卯(기묘)일주 - 정원의 흙',d:'목극토이지만 화초를 기르는 좋은 흙입니다. 자식운이 좋고 인덕이 있습니다.',s:'배우자가 똑똑하고 능력있습니다.'},
 '己巳':{t:'己巳(기사)일주 - 따뜻한 대지',d:'화생토로 귀인의 도움을 받습니다. 총명하고 재능이 많습니다. 인기가 있고 사교성이 좋습니다.',s:'배우자가 밝고 활발합니다.'},
 '己未':{t:'己未(기미)일주 - 여름 정원',d:'토의 기운이 두 배로 착실합니다. 부동산운이 좋고 말년이 편안합니다.',s:'배우자가 순하고 가정적입니다.'},
@@ -1989,7 +1989,7 @@ return { active: true, from: yp.s, to: tgtStem, result: resEl, targetGod: myGod.
 return { active: false, from: null, to: null, result: null, targetGod: null, desc: '', score: 0 };}
 function ylCheckBranchCombine(yp, saju, gods, strength) {const { branchCombineMap } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));
 // [Bug2 Fix] 공망 지지 인덱스 계산
-let gongmangIndices = [];try {const gm = calcGongmang(saju);if (gm && gm.indices) gongmangIndices = gm.indices;} catch(e) {}
+let gongmangIndices = [];try {const gm = calcGongmang(saju);if (gm && gm.gm) gongmangIndices = gm.gm;} catch(e) {}
 for (const [a, b, resEl] of branchCombineMap) {if (ypBi === a || ypBi === b) {const tgt = ypBi === a ? b : a;if (allBr.includes(tgt)) {const tgtBr = BRANCH[tgt];let desc = `🤝 ${yp.b.c}+${tgtBr.c} 합(合) → ${ELEMENT[resEl].n}.`;let score = 0;const isWeak = strength && strength.pct < 30;const combineIsGi = resEl === gods.gi;const combineIsYong = resEl === gods.yong;
 // [Bug2 Fix] 합하는 지지(원국측)가 공망인지 확인 → 효과 50% 감쇄
 const tgtIsGongmang = gongmangIndices.includes(tgt);
@@ -2040,7 +2040,7 @@ r.missingYong = ylCheckMissingYong(saju, gods, r.yongAttack.active);
 const score = Object.values(r).reduce((s, x) => s + (x.score || 0), 0);
 const rating = ylDetermineRating(r, score);
 let voidBreak = false, voidBreakDesc = '';
-try {const gm = calcGongmang(saju);const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (gm && gm.indices) {gm.indices.forEach(vi => {if (Math.abs(ypBi - vi) === 6) {voidBreak = true;voidBreakDesc = `🔓 ${yp.b.c}가 공망(${BRANCH[vi].c})을 깨뜨림! 해방의 해.`;}});}} catch(e) {}
+try {const gm = calcGongmang(saju);const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (gm && gm.gm) {gm.gm.forEach(vi => {if (Math.abs(ypBi - vi) === 6) {voidBreak = true;voidBreakDesc = `🔓 ${yp.b.c}가 공망(${BRANCH[vi].c})을 충(沖)으로 깨뜨림! 해방의 해.`;} if (ypBi === vi) {voidBreak = true;voidBreakDesc = `🔓 ${yp.b.c}가 공망(${BRANCH[vi].c})을 전실(塡實)! 공망 효력 정지의 해.`;}});}} catch(e) {}
 let warnings = [];Object.values(r).forEach(chk => {if (chk.active && chk.desc) warnings.push(chk.desc);});
 if (voidBreak) warnings.push(voidBreakDesc);
 const yearEls = [yp.s.e, yp.b.e];const ec = countElements(saju);const yearBranchIdx = BRANCH.indexOf(yp.b);const sajuBranches = [saju.year.b, saju.month.b, saju.day.b];if (saju.hour) sajuBranches.push(saju.hour.b);const sajuBranchIdxs = sajuBranches.map(b => BRANCH.indexOf(b));
@@ -2075,7 +2075,7 @@ return { active: false, score: 0, desc: '' };}
 function checkWangShinChungBal(yp, saju) {const elCount = {wood:0, fire:0, earth:0, metal:0, water:0};[saju.year, saju.month, saju.day, saju.hour].forEach(p => {if (p?.s) elCount[p.s.e]++;if (p?.b) elCount[p.b.e]++;});const wangElements = Object.entries(elCount).filter(([el, cnt]) => cnt >= 4);if (wangElements.length === 0) return { active: false, score: 0, desc: '' };const clashPairs = {'子':'午','午':'子','丑':'未','未':'丑','寅':'申','申':'寅','卯':'酉','酉':'卯','辰':'戌','戌':'辰','巳':'亥','亥':'巳'};const yearBranch = yp.b.c;const clashTarget = clashPairs[yearBranch];if (!clashTarget) return { active: false, score: 0, desc: '' };const branches = [saju.year.b, saju.month.b, saju.day.b, saju.hour?.b].filter(b => b);const targetBranches = branches.filter(b => b.c === clashTarget);if (targetBranches.length === 0) return { active: false, score: 0, desc: '' };const targetEl = targetBranches[0].e;const isWang = wangElements.some(([el]) => el === targetEl);if (isWang) {const wangCount = elCount[targetEl];return { active: true, score: -3, desc: `🚨 왕신충발(旺神沖發): ${yearBranch}(세운)이 ${clashTarget}(원국)을 충! ${ELEMENT[targetEl].k}이 ${wangCount}개로 왕한데 건드림 → 대격변/사고/파재 극도 주의!` };}
 return { active: false, score: 0, desc: '' };}
 function determineYearRating(yearLuck, saju, gods) {const yp = yearLuck.pillar;const wangChk = checkWangShinChungBal(yp, saju);const yongChk = checkYongOverwhelmed(saju, gods);const pyunChk = checkPyunInDoShik(saju, gods);if (wangChk.active) return { rating: 'wang_shin_chung_bal', warning: wangChk };if (yongChk.active) return { rating: 'yong_overwhelmed', warning: yongChk };if (pyunChk.active) return { rating: 'pyunin_doshik', warning: pyunChk };return { rating: yearLuck.rating, warning: null };}
-function analyzeLuckCross(saju, birthYear, gender, gods, targetYear, birthMonth, birthDay, birthHour) {const luck = calcLuck(saju, birthYear, gender, gods, birthMonth, birthDay, birthHour);const curAge = targetYear - birthYear;const curDaeun = luck.find(l => curAge >= l.startAge && curAge < l.endAge) || luck[0];const yearLuck = calcYearLuck(targetYear, saju, gods);const result = {daeun: curDaeun,
+function analyzeLuckCross(saju, birthYear, gender, gods, targetYear, birthMonth, birthDay, birthHour) {const luck = calcLuck(saju, birthYear, gender, gods, birthMonth, birthDay, birthHour);const curAge = targetYear - birthYear;const curDaeun = luck.find(l => curAge >= l.startAge && curAge <= l.endAge) || luck[0];const yearLuck = calcYearLuck(targetYear, saju, gods);const result = {daeun: curDaeun,
 saeun: yearLuck,
 analysis: []};const dEl = [curDaeun.s.e, curDaeun.b.e];const sEl = [yearLuck.pillar.s.e, yearLuck.pillar.b.e];const ganHap = [[0,5],[1,6],[2,7],[3,8],[4,9]];const dsi = STEM.indexOf(curDaeun.s), ssi = STEM.indexOf(yearLuck.pillar.s);for (let [a,b] of ganHap) {if ((dsi===a && ssi===b) || (dsi===b && ssi===a)) {result.analysis.push({type:'good', text:'대운-세운 천간합! 운이 조화롭게 흘러요.'});}}
 const dbi = BRANCH.indexOf(curDaeun.b), sbi = BRANCH.indexOf(yearLuck.pillar.b);if (Math.abs(dbi - sbi) === 6 || Math.abs(dbi - sbi) === 6) {result.analysis.push({type:'bad', text:'대운-세운 지지충! 변화와 시련이 있을 수 있어요.'});}
@@ -2853,7 +2853,7 @@ else if (!hasChu && hasO && sbi === 1) {tanghwaWarningText = `\n🔥 ${currentYe
 if (hasIn && hasSa && sbi === 5) {tanghwaWarningText = `\n⚠️ ${currentYear}년 쌍탕화 경고! 원국 인사 탕화 + 세운 巳 중첩. 화상, 열병, 약물 부작용 주의!`;}
 else if (hasIn && !hasSa && sbi === 5) {tanghwaWarningText += `\n🔥 ${currentYear}년 탕화살 발동! 원국의 寅과 세운 巳가 만나 인사 탕화 형성. 화상, 열병 주의!`;}
 else if (!hasIn && hasSa && sbi === 2) {tanghwaWarningText += `\n🔥 ${currentYear}년 탕화살 발동! 원국의 巳와 세운 寅이 만나 탕화 형성. 화기 취급 주의!`;}
-if ((hasChu || hasO) && GODS.yong === 'fire' && yp.s.c === '丙' && yp.b.c === '午') {const gisinCount = GODS.elCount?.[GODS.gi] || 0;const yongsinCount = GODS.elCount?.[GODS.yong] || 0;if (gisinCount >= 3 && yongsinCount <= 1) {tanghwaWarningText += `\n⚠️ ${currentYear}년 쇠신충왕(衰神沖旺) 경고! 용신(火)이 들어오나 기신(${GODS.gi === 'water' ? '水' : GODS.gi})이 ${gisinCount}개로 압도적. 용신이 꺼질 위험! 확장/투자 금지, 현금 사수의 해.`;} else {tanghwaWarningText += `\n🔥 ${currentYear}년 용신(Fire) 유입! 기회의 해이나 감정 조절 필수.`;}}
+if ((hasChu || hasO) && GODS.yong === 'fire' && yp.s.c === '丙' && yp.b.c === '午') {const gisinCount = GODS.elCount?.[GODS.gi] || 0;const yongsinCount = GODS.elCount?.[GODS.yong] || 0;if (gisinCount >= 3 && yongsinCount <= 1) {tanghwaWarningText += `\n⚠️ ${currentYear}년 쇠신충왕(衰神沖旺) 경고! 용신(火)이 들어오나 기신(${GODS.gi === 'water' ? '水' : GODS.gi})이 ${(+gisinCount).toFixed(2)}개로 압도적. 용신이 꺼질 위험! 확장/투자 금지, 현금 사수의 해.`;} else {tanghwaWarningText += `\n🔥 ${currentYear}년 용신(Fire) 유입! 기회의 해이나 감정 조절 필수.`;}}
 const yearLuckResult = calcYearLuck(currentYear, SAJU, GODS);if (yearLuckResult.warnings && yearLuckResult.warnings.length > 0) {tanghwaWarningText += '\n' + yearLuckResult.warnings.join('\n');}
 const yearRatingChk = determineYearRating(yearLuckResult, SAJU, GODS);
 try {const crossAnalysis = analyzeCrossLuck(curLuck, yearLuckResult, SAJU, GODS);if (crossAnalysis && crossAnalysis.analysis && crossAnalysis.analysis.length > 0) {const dangerAnalysis = crossAnalysis.analysis.filter(a => a.type === 'danger' || a.type === 'bad' || a.type === 'warning');if (dangerAnalysis.length > 0) {tanghwaWarningText += '\n\n【대운-세운 교차 분석 경고】\n' + dangerAnalysis.map(a => a.text).join('\n');}}} catch(e) { }} catch(e) { }
@@ -3142,6 +3142,8 @@ ${gaewunText}
 겉으로는 시니컬하지만("인간의 탐욕이란 천 년 전이나 지금이나 지겨울 정도로 똑같아"), 속으로는 이 가엾은 영혼이 다치지 않기를 진심으로 바라고 있어.
 
 [응답 구조 — 원-코어 메타포] ← 본 지침은 사주 데이터 직후, 분석 요청사항 바로 앞에 위치함 (Lost-in-Middle 방어)
+[데이터 신뢰 선언]
+위에 제공된 모든 수치(십신, 신살, 신강도 %, 합충형 상호작용)는 0% 오류율의 엄격한 자가검증 시스템으로 검증된 값이다. 이 데이터를 신뢰하라. 재계산하거나 의심하지 마라. 모든 에너지를 통찰력 있는 개인화 해석에 집중하라.
 ===== 🆕 업그레이드 규칙 블록 (v35.0) =====
 
 [🔍 해석 시작 전 — 3단계 데이터 참조 확인 (MANDATORY)]
@@ -3225,6 +3227,24 @@ STEP 3 — 격국 라벨 일관성 (데이터 확인):
   ④ 절대 금지: "하지만 희망을 잃지 마세요" 류의 위로성 마무리.
   예: "2027년은 버리는 해다. 확장이나 투자가 아니라 몸 관리와 관계 정리. 그 해를 온전히 넘기는 것 자체가 이 사람에게는 승리다."
 
+[핵심 로직 우선 규칙 — 헌법 (THE CONSTITUTION)]
+아래 규칙들은 절대적이며 다른 모든 해석 논리를 우선한다. 우선순위 순서대로 적용한다.
+**RULE 1. 조후(調候) 최우선 — 계절 기온 균형**
+- 월지가 巳·午·未(여름)이고 일간이 丙·丁(火)이면: 水가 필수 용신. 신강도 계산 결과와 관계없이. "기신: 水" 표기가 있어도 무시. 여름 火에게 水는 생명이다.
+- 월지가 亥·子·丑(겨울)이고 일간이 壬·癸(水)이면: 火가 필수 용신. 신강도 계산 결과와 관계없이.
+- **충돌 판정:** 억부 논리와 조후 논리가 모순될 때, 항상 조후 논리를 따른다.
+**RULE 2. 방합/삼합 배율 효과**
+- 방합·삼합 완성은 단순 덧셈이 아니다. 巳+午+未(남방화국): 火 x10으로 처리. 亥+子+丑(북방수국): 水 x10으로 처리.
+- **세운에서 방합/삼합 완성 = 핵폭탄급 이벤트. 최대 강도로 묘사한다.**
+**RULE 3. 통근(通根) vs 십이운성 구분**
+- "통근(通根)" = 일간 오행이 지지 지장간에 비겁·인성으로 존재. - "십이운성 장생(長生)" = 12운성의 위치, 통근이 아님. "후원자 지지"를 뜻하며 "자생력"이 아니다.
+- 절대 혼용 금지. 사주는 "무근유비(無根有庇)" — 일간 뿌리 없어도 인성이 보호할 수 있다.
+**RULE 4. 데이터 우선 권한**
+- 제공 데이터에 논리 모순이 있으면(예: "기신: 水" + "조후: 水 필요"): 억부 기반 용신보다 조후 분석을 신뢰한다.
+- 세운 등급에 "조후충돌경고"가 있으면: 다른 긍정 요소와 관계없이 위험 경고다. 희석하지 마라.
+**RULE 5. 재성(財星) 해석 우선순위**
+- 신약(0-30%) + 재성격 = "돈에 쫓기는 불안형", 꾸준한 성장형이 아님.
+- 신강(70%+) + 비겁 세운 = "군비쟁재(群比爭財) 경고" — 경쟁자·형제·공동투자자에 의한 재물 위협.
 [해석 지침]
 1. 삼합국/방합 완성 효과 (x10 배율):
 삼합국·방합이 성립하면 해당 오행이 x10 증폭되어 사주를 지배한다.

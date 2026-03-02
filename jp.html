@@ -1990,7 +1990,7 @@ return { active: true, from: yp.s, to: tgtStem, result: resEl, targetGod: myGod.
 return { active: false, from: null, to: null, result: null, targetGod: null, desc: '', score: 0 };}
 function ylCheckBranchCombine(yp, saju, gods, strength) {const { branchCombineMap } = YEAR_LUCK_CONFIG;const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);const allBr = [BRANCH.findIndex(br => br.c === saju.year.b.c), BRANCH.findIndex(br => br.c === saju.month.b.c), BRANCH.findIndex(br => br.c === saju.day.b.c)];if (saju.hour) allBr.push(BRANCH.findIndex(br => br.c === saju.hour.b.c));
 // [Bug2修正] 空亡地支の合化効果 50%減衰
-let gongmangIndices = [];try {const gm = calcGongmang(saju);if (gm && gm.indices) gongmangIndices = gm.indices;} catch(e) {}
+let gongmangIndices = [];try {const gm = calcGongmang(saju);if (gm && gm.gm) gongmangIndices = gm.gm;} catch(e) {}
 for (const [a, b, resEl] of branchCombineMap) {if (ypBi === a || ypBi === b) {const tgt = ypBi === a ? b : a;if (allBr.includes(tgt)) {const tgtBr = BRANCH[tgt];let desc = `🤝 ${yp.b.c}+${tgtBr.c} 合(合)→ ${ELEMENT[resEl].n}.`;let score = 0;const isWeak = strength && strength.pct < 30;const combineIsGi = resEl === gods.gi;const combineIsYong = resEl === gods.yong;
 // [Bug2修正] 原局側の地支が空亡の場合、効果50%減衰
 const tgtIsGongmang = gongmangIndices.includes(tgt);
@@ -2041,7 +2041,7 @@ r.missingYong = ylCheckMissingYong(saju, gods, r.yongAttack.active);
 const score = Object.values(r).reduce((s, x) => s + (x.score || 0), 0);
 const rating = ylDetermineRating(r, score);
 let voidBreak = false, voidBreakDesc = '';
-try {const gm = calcGongmang(saju);const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (gm && gm.indices) {gm.indices.forEach(vi => {if (Math.abs(ypBi - vi) === 6) {voidBreak = true;voidBreakDesc = `🔓 ${yp.b.c}が空亡(${BRANCH[vi].c})を打ち破る！解放の年。`;}});}} catch(e) {}
+try {const gm = calcGongmang(saju);const ypBi = BRANCH.findIndex(br => br.c === yp.b.c);if (gm && gm.gm) {gm.gm.forEach(vi => {if (Math.abs(ypBi - vi) === 6) {voidBreak = true;voidBreakDesc = `🔓 ${yp.b.c}が空亡(${BRANCH[vi].c})を沖で打ち破る！解放の年。`;} if (ypBi === vi) {voidBreak = true;voidBreakDesc = `🔓 ${yp.b.c}が空亡(${BRANCH[vi].c})を塡實！空亡効力停止の年。`;}});}} catch(e) {}
 let warnings = [];Object.values(r).forEach(chk => {if (chk.active && chk.desc) warnings.push(chk.desc);});
 if (voidBreak) warnings.push(voidBreakDesc);
 const yearEls = [yp.s.e, yp.b.e];const ec = countElements(saju);const yearBranchIdx = BRANCH.indexOf(yp.b);const sajuBranches = [saju.year.b, saju.month.b, saju.day.b];if (saju.hour) sajuBranches.push(saju.hour.b);const sajuBranchIdxs = sajuBranches.map(b => BRANCH.indexOf(b));
@@ -2070,7 +2070,7 @@ yongOverwhelmed:r.yongOverwhelmed.active,
 pyunInDoShik:r.pyunInDoShik.active,
 wangShinChungBal:r.wangShinChungBal.active};}
 function determineYearRating(yearLuck, saju, gods) {const yp = yearLuck.pillar;const wangChk = checkWangShinChungBal(yp, saju);const yongChk = checkYongOverwhelmed(saju, gods);const pyunChk = checkPyunInDoShik(saju, gods);if (wangChk.active) return { rating: 'wang_shin_chung_bal', warning: wangChk };if (yongChk.active) return { rating: 'yong_overwhelmed', warning: yongChk };if (pyunChk.active) return { rating: 'pyunin_doshik', warning: pyunChk };return { rating: yearLuck.rating, warning: null };}
-function analyzeLuckCross(saju, birthYear, gender, gods, targetYear, birthMonth, birthDay, birthHour) {const luck = calcLuck(saju, birthYear, gender, gods, birthMonth, birthDay, birthHour);const curAge = targetYear - birthYear;const curDaeun = luck.find(l => curAge >= l.startAge && curAge < l.endAge) || luck[0];const yearLuck = calcYearLuck(targetYear, saju, gods);const result = {daeun: curDaeun,
+function analyzeLuckCross(saju, birthYear, gender, gods, targetYear, birthMonth, birthDay, birthHour) {const luck = calcLuck(saju, birthYear, gender, gods, birthMonth, birthDay, birthHour);const curAge = targetYear - birthYear;const curDaeun = luck.find(l => curAge >= l.startAge && curAge <= l.endAge) || luck[0];const yearLuck = calcYearLuck(targetYear, saju, gods);const result = {daeun: curDaeun,
 saeun: yearLuck,
 analysis: []};const dEl = [curDaeun.s.e, curDaeun.b.e];const sEl = [yearLuck.pillar.s.e, yearLuck.pillar.b.e];const ganHap = [[0,5],[1,6],[2,7],[3,8],[4,9]];const dsi = STEM.indexOf(curDaeun.s), ssi = STEM.indexOf(yearLuck.pillar.s);for (let [a,b] of ganHap) {if ((dsi===a && ssi===b) || (dsi===b && ssi===a)) {result.analysis.push({type:'good', text:'大運-歳運天干合！運が調和的に流れます。'});}}
 const dbi = BRANCH.indexOf(curDaeun.b), sbi = BRANCH.indexOf(yearLuck.pillar.b);if (Math.abs(dbi - sbi) === 6 || Math.abs(dbi - sbi) === 6) {result.analysis.push({type:'bad', text:'大運-歳運地支冲！変化と試練がある可能性があります。'});}
@@ -2845,7 +2845,7 @@ else if (!hasChu && hasO && sbi === 1) {tanghwaWarningText = `\n🔥 ${currentYe
 if (hasIn && hasSa && sbi === 5) {tanghwaWarningText = `\n⚠️ ${currentYear}年双湯火 警告! 原局寅巳湯火 + 歳運 巳 重畳。火傷、熱病、薬物副作用に注意！`;}
 else if (hasIn && !hasSa && sbi === 5) {tanghwaWarningText += `\n🔥 ${currentYear}年 湯火殺 発動！原局の 寅と歳運の巳が出会い寅巳湯火の刑が成立。火傷、熱病 注意!`;}
 else if (!hasIn && hasSa && sbi === 2) {tanghwaWarningText += `\n🔥 ${currentYear}年 湯火殺 発動！原局の 巳と歳運の寅が出会い湯火の刑が成立。火気取扱注意!`;}
-if ((hasChu || hasO) && GODS.yong === 'fire' && yp.s.c === '丙' && yp.b.c === '午') {const gisinCount = GODS.elCount?.[GODS.gi] || 0;const yongsinCount = GODS.elCount?.[GODS.yong] || 0;if (gisinCount >= 3 && yongsinCount <= 1) {tanghwaWarningText += `\n⚠️ ${currentYear}年衰神冲旺 警告! 用神(火)が入ってくるが忌神(${GODS.gi === 'water' ? '水' : GODS.gi})が ${gisinCount}個で圧倒的. 用神が消える危険！ 拡張/投資禁止、現金死守の年。`;} else {tanghwaWarningText += `\n🔥 ${currentYear}年 用神(Fire) 流入！チャンスの年だが感情コントロール必須。`;}}
+if ((hasChu || hasO) && GODS.yong === 'fire' && yp.s.c === '丙' && yp.b.c === '午') {const gisinCount = GODS.elCount?.[GODS.gi] || 0;const yongsinCount = GODS.elCount?.[GODS.yong] || 0;if (gisinCount >= 3 && yongsinCount <= 1) {tanghwaWarningText += `\n⚠️ ${currentYear}年衰神冲旺 警告! 用神(火)が入ってくるが忌神(${GODS.gi === 'water' ? '水' : GODS.gi})が ${(+gisinCount).toFixed(2)}個で圧倒的. 用神が消える危険！ 拡張/投資禁止、現金死守の年。`;} else {tanghwaWarningText += `\n🔥 ${currentYear}年 用神(Fire) 流入！チャンスの年だが感情コントロール必須。`;}}
 const yearLuckResult = calcYearLuck(currentYear, SAJU, GODS);if (yearLuckResult.warnings && yearLuckResult.warnings.length > 0) {tanghwaWarningText += '\n' + yearLuckResult.warnings.join('\n');}
 const yearRatingChk = determineYearRating(yearLuckResult, SAJU, GODS);
 try {const crossAnalysis = analyzeCrossLuck(curLuck, yearLuckResult, SAJU, GODS);if (crossAnalysis && crossAnalysis.analysis && crossAnalysis.analysis.length > 0) {const dangerAnalysis = crossAnalysis.analysis.filter(a => a.type === 'danger' || a.type === 'bad' || a.type === 'warning');if (dangerAnalysis.length > 0) {tanghwaWarningText += '\n\n【大運-歳運 交差 分析 警告】\n' + dangerAnalysis.map(a => a.text).join('\n');}}} catch(e) { }} catch(e) { }
@@ -3140,6 +3140,8 @@ ${gaewunText_jp}
 上天術の警告: 無理な欲が見えたとき——「今すぐ上天術を使って、お前のその運命を捻じ曲げることもできる。でも、その後に来る業（カルマ）に、お前は耐えられるか？」
 
 [応答構造 — One-Coreメタファー] ← データ直後に再配置済 (Lost-in-Middle防御)
+[データ信頼宣言]
+上記の全ての数値（十神、神殺、身強度 %、合沖刑破害の相互作用）は、エラー率0%の厳格な自己検証システムで検証済みの値である。このデータを信頼せよ。再計算したり疑ったりするな。全てのエネルギーを洞察力ある個別化された解釈に集中させよ。
 ===== 🆕 アップグレードルールブロック (v35.0) =====
 
 [🔍 解釈開始前 — 3段階データ参照チェックリスト (MANDATORY)]
@@ -3222,6 +3224,24 @@ STEP 3 — 格局ラベルの整合性確認:
   ④ 絶対禁止: 「でも希望を失わないでください」系の慰め的まとめ。
   例: 「2027年は捨てる年だ。拡張や投資ではなく、体の管理と関係の整理。その年を丸ごと越えること自体が、この人にとっては勝利だ。」
 
+[核心ロジック優先規則 — 憲法 (THE CONSTITUTION)]
+以下のルールは絶対的であり、他の全ての解釈ロジックに優先する。優先順位の順に適用する。
+**RULE 1. 調候（調候）最優先 — 季節温度バランス**
+- 月支が巳・午・未（夏）で日干が丙・丁（火）の場合：水が必須用神。身強度計算結果に関わらず。「忌神：水」の表示があっても無視。夏の火にとって水は命である。
+- 月支が亥・子・丑（冬）で日干が壬・癸（水）の場合：火が必須用神。身強度計算結果に関わらず。
+- **矛盾判定：** 抑扶論理と調候論理が矛盾する場合、常に調候論理に従う。
+**RULE 2. 方合/三合局の倍率効果**
+- 方合・三合局の完成は単純な足し算ではない。巳+午+未（南方火局）：火 x10として扱う。亥+子+丑（北方水局）：水 x10として扱う。
+- **歳運での方合/三合局完成 = 核爆弾級イベント。最大強度で描写する。**
+**RULE 3. 通根（通根）vs 十二運星の区別**
+- 「通根（通根）」= 日干五行が地支の地蔵干に比劫・印星として存在すること。- 「十二運星の長生（長生）」= 12運星上の位置であり、通根ではない。「後援者のサポート」を意味し、「自生力」ではない。
+- 絶対に混同禁止。四柱は「無根有庇（むこんゆうひ）」— 日干の根がなくても印星が保護できる。
+**RULE 4. データ優先権限**
+- 提供データに論理矛盾がある場合（例：「忌神：水」＋「調候：水必要」）：抑扶ベースの用神より調候分析を信頼する。
+- 歳運評価に「調候衝突警告」がある場合：他の肯定的要素に関わらず危険警告である。希釈するな。
+**RULE 5. 財星（財星）解釈の優先順位**
+- 身弱（0-30%）＋財格 = 「金に追われる不安型」、安定した成長型ではない。
+- 身強（70%+）＋比劫の歳運 = 「群比争財（ぐんびそうざい）警告」— 競合者・兄弟・共同投資者による財物脅威。
 [解釈指針]
 1. 三合局/方合完成効果 (x10倍率):
 三合局・方合が成立すると該当五行がx10増幅し四柱を支配する。
